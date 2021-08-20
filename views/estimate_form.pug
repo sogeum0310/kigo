@@ -1,0 +1,56 @@
+extends layout 
+
+block content
+  h1= title
+
+  form(action="" method="POST")
+    h3 Platforms
+    for platform in platforms
+      div.form-group
+        input(type="radio", name="platform", value=platform._id)
+        label(for="") #{platform.name}
+  
+    h3 Business 
+    for business in businesses
+      div.form-group
+        input(type="checkbox", name="business", value=business._id)
+        label(for="") #{business.name}
+
+    h3 Goal 
+    for goal in goals 
+      div.form-group
+        input(type="checkbox", name="goal", value=goal._id)
+        label(for="") #{goal.name}
+
+    h3 Start day 
+    for start_day in start_days 
+      div.form-group
+        input(type="radio", name="start_day", value=start_day._id)
+        label(for="") #{start_day.name}
+    
+    h3 how long
+    for how_long in how_longs 
+      div.form-group
+        input(type="radio", name="how_long", value=how_long._id)
+        label(for="") #{how_long.name}
+
+    h3 cost
+    for cost in costs 
+      div.form-group
+        input(type="radio", name="cost", value=cost._id)
+        label(for="") #{cost.name}
+
+    h3 city
+    for city in cities 
+      div.form-group
+        input(type="checkbox", name="city", value=city._id)
+        label(for="") #{city.name}
+
+    h3 feedback 
+    for feedback in feedbacks 
+      div.form-group
+        input(type="checkbox", name="feedback", value=feedback._id)
+        label(for="") #{feedback.name}
+
+    p 
+      button(type="submit") confirm

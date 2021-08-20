@@ -1,0 +1,44 @@
+extends layout 
+
+block content 
+  h1= title
+
+  form(action="" method="POST") 
+    div.form-group
+      label(for="") id
+      input(type="text" name="user_id" value=(undefined==user_company ? '':user_company.user_id))
+    div.form-group
+      label(for="") password
+      input(type="text" name="password") 
+    div.form-group
+      label(for="") password confirm 
+      input(type="text" name="password_confirm")  
+    div.form-group
+      label(for="") company name 
+      input(type="text" name="name" value=(undefined==user_company ? '' : user_company.name)) 
+    div.form-group
+      label(for="") phone
+      input(type="text" name="phone" value=(undefined==user_company ? '' : user_company.phone))
+    div.form-group
+      label(for="") email 
+      input(type="text" name="email" value=(undefined==user_company ? '' : user_company.email))
+    div.form-group
+      textarea#policy(name="about", cols="30", rows="10")=(undefined==user_company ? '' : user_company.about)
+
+    //- div.form-group
+    //-   input(type="file")
+
+    div.form-group
+      h3 Platforms
+      for platform in platforms
+        div
+          input(type="checkbox", name="platform", value=platform._id, checked=platform.checked)  
+          label(for=platform._id) #{platform.name}
+    p
+      button(type="submit") confirm
+
+
+
+
+
+       

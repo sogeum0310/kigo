@@ -1,0 +1,47 @@
+extends layout 
+
+block content 
+  h1= title
+
+  form(action="" method="POST") 
+    div.form-group
+      label(for="") id
+      input(type="text", name="user_id" value=(undefined==user ? '' : user.user_id ))
+    div.form-group
+      label(for="") password
+      input(type="text" name="password") 
+    div.form-group
+      label(for="") password confirm 
+      input(type="text" name="password_confirm")  
+    div.form-group
+      label(for="") name 
+      input(type="text" name="name" value=(undefined==user ? '' : user.name )) 
+    div.form-group
+      label(for="") gender 
+      label(for="") male   
+      input(type="radio" name="gender" value="male" checked=(undefined==user || user.gender!='male' ? false:'checked'))
+      label(for="") female 
+      input(type="radio" name="gender" value="female" checked=(undefined==user || user.gender!='female' ? false:'checked')) 
+    div.form-group
+      label(for="") birth 
+      input(type="date" name="birth_date" value=(undefined==user ? '' : user.date_of_birth_yyyy_mm_dd)) 
+    div.form-group
+      label(for="") city
+      select#region(name="city")
+        option(value="Seoul" selected=(undefined==user || user.city!='Seoul' ? false:'selected')) Seoul 
+        option(value="Incheon" selected=(undefined==user || user.city!='Incheon' ? false:'selected')) Incheon
+        option(value="Busan" selected=(undefined==user || user.city!='Busan' ? false:'selected')) Busan
+    div.form-group
+      label(for="") phone
+      input(type="text" name="phone" value=(undefined==user ? '' : user.phone))
+    div.form-group
+      label(for="") email 
+      input(type="text" name="email" value=(undefined==user ? '': user.email))
+    div.form-group
+      textarea#policy(name="", cols="30", rows="10") 
+    button(type="submit") confirm 
+
+
+
+
+       

@@ -1,0 +1,34 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    nav 
+      a(href="/") 회사소개 / 
+      a(href="") 공지사항 / 
+      a(href="/login") 회원가입 및 로그인 / 
+      a(href="") 이용방법 / 
+      a(href="") 자주묻는질문 / 
+      a(href="") 키고이벤트 / 
+      a(href="") 친구에게 앱 추천하기 / 
+      a(href="") 고객센터 
+    
+    div.wrap
+      block content
+
+    footer 
+      h3 일반사용자
+      a(href="") 홈 / 
+      a(href="/estimateForm") 견적 요청하기 / 
+      a(href="/estimateList") 받은 견적 / 
+      a(href="") 채팅 / 
+      a(href="/mypage/" + "611c93f672d552190ceef179") 마이페이지
+      hr
+      h3 업체
+      a(href="") 홈 / 
+      a(href="/estimateList") 받은 견적요청 / 
+      a(href="") 보낸 견적 / 
+      a(href="") 채팅 / 
+      a(href="/mypageCompany/" + "611cb02de195412248e28f27") 마이페이지
+

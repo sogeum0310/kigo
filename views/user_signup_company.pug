@@ -3,6 +3,9 @@ extends layout
 block content 
   h1= title
 
+  each val in platforms[0].detail
+    p= val.name
+
   form(action="" method="POST") 
     div.form-group
       label(for="") id
@@ -36,6 +39,8 @@ block content
           label(for=platform._id) #{platform.name}
     p
       button(type="submit") confirm
+
+
 
 
 

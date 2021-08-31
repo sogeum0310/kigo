@@ -3,18 +3,151 @@ var router = express.Router();
 var async = require('async');
 
 /* For controller */
-var User = require('../models/user')
-var UserCompany = require('../models/user_company')
-var Item = require('../models/item')
-var Estimate = require('../models/estimate');
-var EstimateCompany = require('../models/estimate_company');
-const { findById } = require('../models/user');
+var Model = require('../models/model')
+
+/* Temporary user and company user */
+var bunny = '612845b73ee69214177b350d'
+var strawberry = '612845b83ee69214177b351b'
 
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+
+  Model.EstimateItem.find().populate('detail').exec(function (err, results) {
+    console.log(results[0].detail)
+  })
+
   res.render('index', { title: 'KIGO' });
 });
+
+
+/* Estimate Routing */
+router.get('/estimates', function (req, res, next) {
+
+  async.parallel({
+    estimate: function (callback) {
+      Model.Estimate.find().exec(callback)
+    }, 
+    estimate_company: function (callback) {
+      Model.EstimateCompany.find().exec(callback)
+    }
+  }, function (err, results) {
+    if (err) { return next(err) }
+
+    console.log(results.estimate)
+    
+    res.render('estimate_list', { 
+      title: 'Estimates', 
+      results: results.estimate,
+      count: 0
+    })
+    
+  })
+
+})
+
+router.get('/estimate/:id', function (req, res, next) {
+
+  async.parallel({
+    estimate: function (callback) {
+
+      Model.Estimate.findById(req.params.id)
+      .populate('platform')
+      .populate('business')
+      .populate('goal')
+      .populate('start_day')
+      .populate('how_long')
+      .populate('cost')
+      .populate('city')
+      .populate('feedback')
+      .exec(callback)
+    },
+    estimate_company: function (callback) {
+      Model.EstimateCompany.find({ 'estimate': req.params.id }).populate('company').exec(callback)
+    }
+  }, function (err, results) {
+    if (err) { return next(err) }
+
+    res.render('estimate_detail', { 
+      title: 'Estimate', 
+      estimate: results.estimate, 
+      estimate_companies: results.estimate_company,
+    })
+  })
+})
+
+router.get('/estimate/:id/:id2', function (req, res, next) {
+  Model.EstimateCompany.findById(req.params.id2).populate('company').exec(function (err, results) {
+    if (err) { return next(err) }
+    res.render('estimate_detail_company', { title: 'Estimate detail for company', results: results})
+    console.log(results)
+  })
+})
+
+
+/* Estimate Routing for Company */
+router.get('/estimatesCompany', function (req, res, next) {
+  Model.Estimate.find().populate('user_id').populate('platform').exec(function (err, list_estimates) {
+    if (err) {return next(err)}
+    else {
+      res.render('estimate_list_company', { title: 'Estimate List for Company', estimate_list: list_estimates })
+      console.log(list_estimates)
+    }
+  })
+})
+
+router.get('/estimateCompany/:id', function (req, res, next) {
+
+  Model.Estimate.findById(req.params.id)
+  .populate('platform')
+  .populate('business')
+  .populate('goal')
+  .populate('start_day')
+  .populate('how_long')
+  .populate('cost')
+  .populate('city')
+  .populate('feedback')
+  .exec(function (err, results) {
+    // console.log(results)
+    res.render( 'estimate_detail_company', { title: 'Estimate for company', results: results} )
+  })
+})
+
+router.get('/estimateForm', function(req, res, next) {
+
+  Model.EstimateItem.find({}).populate('detail').exec(function (err, results) {
+    // console.log(results)
+    res.render('estimate_form', { title: 'Estimate form', results: results })
+  })
+});
+
+router.post('/estimateForm', function (req, res, next) {
+  var estimate = new Estimate({
+    // user_id: req.session.user_id
+    platform: req.body.platform,
+    business: req.body.business,
+    goal: req.body.goal,
+    start_day: req.body.startday,
+    how_long: req.body.howlong,
+    cost: req.body.cost,
+    city: req.body.city,
+    feedback: req.body.feedback
+  })
+
+  estimate.save(function (err) {
+    if (err) { return next(err) }
+    res.render('success', { title: 'form submitted!' })
+  })
+})
+
+
+
+
+
+
+
+
+
 
 
 /* User Routing */
@@ -53,7 +186,7 @@ router.get('/signupCompany', function(req, res, next) {
 
   async.parallel({
     platforms: function (callback) {
-      Item.Platform.find(callback)
+      Model.EstimateItem.find(callback).populate('detail')
     }, 
   }, function (err, results) {
     if (err) {return next(err)}
@@ -159,203 +292,39 @@ router.get('/myreview', function(req, res, next) {
 
 
 /* Company Routing */
-router.get('/about', function(req, res, next) {
-  res.render('company_about', { title: 'About' });
-});
-router.get('/cs', function(req, res, next) {
-  res.render('company_cs', { title: 'Customer Center' });
-});
-router.get('/event', function(req, res, next) {
-  res.render('compant_event', { title: 'Event' });
-});
-router.get('/faqCompany', function(req, res, next) {
-  res.render('company_faq_company', { title: 'FAQ company' });
-});
-router.get('/faq', function(req, res, next) {
-  res.render('company_faq', { title: 'FAQ' });
-});
-router.get('/manualCompany', function(req, res, next) {
-  res.render('company_manual_company', { title: 'Manual for company' });
-});
-router.get('/manual', function(req, res, next) {
-  res.render('company_manual', { title: 'Manual for user' });
-});
-router.get('/notice', function(req, res, next) {
-  res.render('company_notice', { title: 'Notice' });
-});
-router.get('/qna', function(req, res, next) {
-  res.render('company_qna', { title: 'QnA' });
-});
-router.get('/sendMessage', function(req, res, next) {
-  res.render('company_send_message', { title: 'Send message' });
-});
-router.get('/share', function(req, res, next) {
-  res.render('company_share', { title: 'Share' });
-});
-
-
-/* Estimate Routing */
-router.get('/estimateList', function (req, res, next) {
-  Estimate.find()
-  .populate('platform').exec(function (err, list_estimates) {
-    if (err) {return next(err)}
-    else {
-      res.render('estimate_list', { title: 'Estimate List', estimate_list: list_estimates })
-      console.log(list_estimates)
-    }
-  })
-})
-
-router.get('/estimateDetail/:id', function (req, res, next) {
-
-  // Estimate.findById(req.params.id)
-  // .populate('platform')
-  // .populate('business')
-  // .populate('goal')
-  // .populate('start_day')
-  // .populate('how_long')
-  // .populate('cost')
-  // .populate('city')
-  // .populate('feedback')
-  // .exec(function (err, estimate) {
-  //   if (err) { return next(err) }
-  //   res.render('estimate_detail', { title: 'Estimate Detail', estimate: estimate })
-  // })
-
-  async.parallel(
-    {
-      estimate: function (callback) {
-        Estimate.findById(req.params.id)
-        .populate('platform')
-        .populate('business')
-        .populate('goal')
-        .populate('start_day')
-        .populate('how_long')
-        .populate('cost')
-        .populate('city')
-        .populate('feedback')
-        .exec(callback)
-      },
-      estimate_company: function (callback) {
-        EstimateCompany.find({ 'estimate': req.params.id })
-        .exec(callback)
-      }
-    },
-
-    function (err, results) {
-      if (err) {return next(err)}
-      res.render('estimate_detail', { title: 'Estimate detail', estimate: results.estimate, estimate_company: results.estimate_company })
-    }
-  )
-})
-
-router.get('/estimateForm', function(req, res, next) {
-
-  async.parallel({
-    platforms: function (callback) {
-      Item.Platform.find(callback)
-    }, 
-    businesses: function (callback) {
-      Item.Business.find(callback)
-    }, 
-    goals: function (callback) {
-      Item.Goal.find(callback)
-    }, 
-    start_days: function (callback) {
-      Item.Start_day.find(callback)
-    }, 
-    how_longs: function (callback) {
-      Item.How_long.find(callback)
-    },
-    costs: function (callback) {
-      Item.Cost.find(callback)
-    },
-    cities: function (callback) {
-      Item.City.find(callback)
-    },
-    feedbacks: function (callback) {
-      Item.Feedback.find(callback)
-    }
-  }, 
-  
-  function (err, results) {
-    if (err) {return next(err)}
-    res.render('estimate_form', { 
-      title: 'Estimate form', 
-      platforms: results.platforms,
-      businesses: results.businesses,
-      goals: results.goals,
-      start_days: results.start_days,
-      how_longs: results.how_longs,
-      costs: results.costs,
-      cities: results.cities,
-      feedbacks: results.feedbacks
-    })
-    // console.log(results)
-  })
-
-});
-
-router.post('/estimateForm', function (req, res, next) {
-  var estimate = new Estimate({
-    platform: req.body.platform,
-    business: req.body.business,
-    goal: req.body.goal,
-    start_day: req.body.start_day,
-    how_long: req.body.how_long,
-    cost: req.body.cost,
-    city: req.body.city,
-    feedback: req.body.feedback
-  })
-
-  estimate.save(function (err) {
-    if (err) { return next(err) }
-    res.render('success', { title: 'form submitted!' })
-  })
-})
-
-router.get('/estimateDetail/:id/estimateFormCompany', function (req, res, next) {
-  res.render('estimate_form_company', { title: 'Estimate for Company' })
-})
-
-router.get('/estimateDetail/:id/estimateDetailCompany/:id_2', function (req, res, next) {
-  // console.log(req.params.id) 
-  // console.log(req.params.id_2)
-  // id = estimate detail of user
-  // id_2 = estimate detail of company
-
-  EstimateCompany.findById(req.params.id_2).exec(function (err, results) {
-    if (err) { return next(err) }
-
-    UserCompany.findById(results.company).exec(function (err, results) {
-      if (err) { return next(err) }
-      console.log(results)
-    })
-  
-    res.render('estimate_detail_company', { title: 'Estimate detail for Company', estimate_detail: results })
-  })
-})
-
-router.post('/estimateDetail/:id/estimateFormCompany', function (req, res, next) {
-
-  var estimate_company = new EstimateCompany({
-    estimate: req.params.id,
-    company: '611cb02de195412248e28f27', // sogeum 
-    unit: req.body.unit,
-    cost: req.body.cost,
-    msg: req.body.msg
-  })
-
-  estimate_company.save(function(err) {
-    if (err) { next(err) }
-    res.render('success', { title: 'Estimate for company is completed!' })
-  })
-
-  console.log(req.params.id)
-  console.log(req.body.unit)
-  console.log(req.body.cost)
-  console.log(req.body.msg)
-})
+// router.get('/about', function(req, res, next) {
+//   res.render('company_about', { title: 'About' });
+// });
+// router.get('/cs', function(req, res, next) {
+//   res.render('company_cs', { title: 'Customer Center' });
+// });
+// router.get('/event', function(req, res, next) {
+//   res.render('compant_event', { title: 'Event' });
+// });
+// router.get('/faqCompany', function(req, res, next) {
+//   res.render('company_faq_company', { title: 'FAQ company' });
+// });
+// router.get('/faq', function(req, res, next) {
+//   res.render('company_faq', { title: 'FAQ' });
+// });
+// router.get('/manualCompany', function(req, res, next) {
+//   res.render('company_manual_company', { title: 'Manual for company' });
+// });
+// router.get('/manual', function(req, res, next) {
+//   res.render('company_manual', { title: 'Manual for user' });
+// });
+// router.get('/notice', function(req, res, next) {
+//   res.render('company_notice', { title: 'Notice' });
+// });
+// router.get('/qna', function(req, res, next) {
+//   res.render('company_qna', { title: 'QnA' });
+// });
+// router.get('/sendMessage', function(req, res, next) {
+//   res.render('company_send_message', { title: 'Send message' });
+// });
+// router.get('/share', function(req, res, next) {
+//   res.render('company_share', { title: 'Share' });
+// });
 
 
 module.exports = router;

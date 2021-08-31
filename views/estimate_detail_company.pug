@@ -3,13 +3,6 @@ extends layout
 block content 
   h1= title
 
-  pre= estimate_detail
+  pre= results
 
-  //- span= estimate_detail.unit[0]
-  //- span= estimate_detail.cost[0]
-  //- span= estimate_detail.msg[0]
-  //- br
-  //- br
-  //- span= estimate_detail.unit[1]
-  //- span= estimate_detail.cost[1]
-  //- span= estimate_detail.msg[1]
+  a(href="/estimate/" + results.estimate) list

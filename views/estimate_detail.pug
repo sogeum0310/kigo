@@ -3,46 +3,15 @@ extends layout
 block content 
   h1= title
 
-
-  h3 Platform
-  each val in estimate.platform 
-    span= val.name
-
-  h3 Business
-  each val in estimate.business
-    span= val.name
-
-  h3 Goal
-  each val in estimate.goal
-    span= val.name
-
-  h3 Start day
-  each val in estimate.start_day 
-    span= val.name
-
-  h3 How long 
-  each val in estimate.how_long
-    span= val.name
-
-  h3 Cost 
-  each val in estimate.cost 
-    span= val.name
-
-  h3 City 
-  each val in estimate.city 
-    span= val.name
-
-  h3 Feedback
-  each val in estimate.feedback 
-    span= val.name
+  pre= estimate 
 
   hr
-  a(href="/estimateDetail/" + estimate._id + "/estimateFormCompany") write estimate 
 
-  h3 Estimate list
-  ul 
-    each val in estimate_company 
-      li
-        a(href="/estimateDetail/" + estimate._id + "/estimateDetailCompany/" + val._id) #{val._id} 
-    
+  each val in estimate_companies 
+    a(href=`/estimate/${val.estimate}/${val._id}`)= val.company.user_id
+    p= val.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)
+    p - - -
 
+
+  //- pre= estimate_companies
+  

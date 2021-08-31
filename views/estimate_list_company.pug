@@ -1,0 +1,10 @@
+extends layout 
+
+block content 
+  h1= title
+
+  ul 
+  each estimate in estimate_list 
+    li
+      a(href="/estimateCompany/" + estimate._id) #{estimate.platform[0].name}  
+      span (#{estimate.user_id.user_id})

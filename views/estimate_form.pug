@@ -9,7 +9,7 @@ block content
       h3= results[0].name
       each val in results[0].detail
         div.form-group
-          input(type="radio", name="platform" value=val._id)
+          input(type="radio", name="platform[]" value=val._id)
           label(for="")= val.name
     div
       h3= results[1].name
@@ -27,19 +27,19 @@ block content
       h3= results[3].name
       each val in results[3].detail
         div.form-group  
-          input(type="radio", name="startday" value=val._id)
+          input(type="radio", name="startday[]" value=val._id)
           label(for="")= val.name
     div
       h3= results[4].name
       each val in results[4].detail
         div.form-group  
-          input(type="radio", name="howlong" value=val._id)
+          input(type="radio", name="howlong[]" value=val._id)
           label(for="")= val.name
     div
       h3= results[5].name
       each val in results[5].detail
         div.form-group  
-          input(type="radio", name="cost" value=val._id)
+          input(type="radio", name="cost[]" value=val._id)
           label(for="")= val.name
     div
       h3= results[6].name

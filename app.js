@@ -8,7 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 
-// var pizza = require('./populate-estimate-company')
+// var pizza = require('./populate-review')
 
 var app = express();
 

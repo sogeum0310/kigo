@@ -12,11 +12,6 @@ var strawberry = '612845b83ee69214177b351b'
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-
-  Model.EstimateItem.find().populate('detail').exec(function (err, results) {
-    console.log(results[0].detail)
-  })
-
   res.render('index', { title: 'KIGO' });
 });
 
@@ -24,26 +19,15 @@ router.get('/', function(req, res, next) {
 /* Estimate Routing */
 router.get('/estimates', function (req, res, next) {
 
-  async.parallel({
-    estimate: function (callback) {
-      Model.Estimate.find().exec(callback)
-    }, 
-    estimate_company: function (callback) {
-      Model.EstimateCompany.find().exec(callback)
-    }
-  }, function (err, results) {
-    if (err) { return next(err) }
-
-    console.log(results.estimate)
-    
+  Model.Estimate.find().populate('platform').exec(function (err, results) {
     res.render('estimate_list', { 
       title: 'Estimates', 
-      results: results.estimate,
-      count: 0
+      estimates: results,
     })
-    
-  })
 
+    console.log(results)
+  })
+  
 })
 
 router.get('/estimate/:id', function (req, res, next) {
@@ -68,20 +52,38 @@ router.get('/estimate/:id', function (req, res, next) {
   }, function (err, results) {
     if (err) { return next(err) }
 
-    res.render('estimate_detail', { 
+    res.render('estimate', { 
       title: 'Estimate', 
       estimate: results.estimate, 
       estimate_companies: results.estimate_company,
     })
+    console.log(results.estimate_company.length)
   })
 })
 
 router.get('/estimate/:id/:id2', function (req, res, next) {
-  Model.EstimateCompany.findById(req.params.id2).populate('company').exec(function (err, results) {
-    if (err) { return next(err) }
-    res.render('estimate_detail_company', { title: 'Estimate detail for company', results: results})
-    console.log(results)
-  })
+
+  // async.parallel({
+  //   estimate_companies: function (callback) {
+  //     Model.EstimateCompany.findById(req.params.id2).exec(callback)
+  //   },
+  //   company_reviews: function (callback) {
+  //     Model.CompanyReview.find({ 'company': strawberry}).exec(callback)
+  //   }
+  // }, function (err, results) {
+  //   console.log(results)
+  // })
+
+  function myFunction(data) {
+    console.log(data)
+  }
+
+  async.series([
+    setTimeout(function () { myFunction(1) }, 0),
+    setTimeout(function () { myFunction(2) }, 0),
+    setTimeout(function () { myFunction(3) }, 0),
+  ], function (err, results) { return results })
+
 })
 
 
@@ -89,6 +91,7 @@ router.get('/estimate/:id/:id2', function (req, res, next) {
 router.get('/estimatesCompany', function (req, res, next) {
   Model.Estimate.find().populate('user_id').populate('platform').exec(function (err, list_estimates) {
     if (err) {return next(err)}
+
     else {
       res.render('estimate_list_company', { title: 'Estimate List for Company', estimate_list: list_estimates })
       console.log(list_estimates)
@@ -113,10 +116,57 @@ router.get('/estimateCompany/:id', function (req, res, next) {
   })
 })
 
+router.get('/estimatesComplete', function (req, res, next) {
+
+  async.parallel({
+    estimate: function (callback) {
+      Model.Estimate.find().exec(callback)
+    },
+    estimate_company: function (callback) {
+      Model.EstimateCompany.find({ 'company': strawberry })
+      .populate({
+        path: 'estimate', populate: {
+          path: 'platform'
+        }
+      })
+      .populate({
+        path: 'estimate', populate: {
+          path: 'user_id'
+        }
+      })
+      .exec(callback)
+    }
+  }, function (err, results) {
+    res.render('estimates_complete', { 
+      title: "Estimates completed", 
+      estimates: results.estimate,
+      estimate_companies: results.estimate_company
+    })
+    console.log(results)
+  })
+})
+
+router.get('/estimateComplete/:id', function (req, res, next) {
+
+  async.parallel({
+    estimate: function (callback) {
+      Model.Estimate.find().exec(callback)
+    },
+    estimate_company: function (callback) {
+      Model.EstimateCompany.findById(req.params.id).exec(callback)
+    }
+  }, function (err, results) {
+    res.render('estimate_complete', { 
+      title: "Estimate completed", 
+      results: results.estimate_company
+    })
+  })
+})
+
 router.get('/estimateForm', function(req, res, next) {
 
   Model.EstimateItem.find({}).populate('detail').exec(function (err, results) {
-    // console.log(results)
+    console.log(results)
     res.render('estimate_form', { title: 'Estimate form', results: results })
   })
 });
@@ -225,7 +275,7 @@ router.get('/alarm', function(req, res, next) {
 });
 
 router.get('/mypage/:id', function(req, res, next) {
-  User.findById(req.params.id).exec(function(err, results) {
+  Model.User.findById(req.params.id).exec(function(err, results) {
     if (err) {return next(err)}
   res.render('user_signup', { title: 'My page', user: results});
   })
@@ -235,37 +285,38 @@ router.get('/mypageCompany/:id', function(req, res, next) {
   async.parallel(
     {
       user_company: function (callback) {
-        UserCompany.findById(req.params.id).populate('platform').exec(callback);
+        Model.UserCompany.findById(req.params.id).populate('detail').exec(callback);
       },
       platforms: function (callback) {
-        Item.Platform.find(callback)
+        Model.EstimateItem.find(callback).populate('detail')
       },  
     },
     function (err, results) {
       if (err) { return next(err) }
 
-      for (var all_g_iter = 0; all_g_iter < results.platforms.length; all_g_iter++) {
-        for (var user_company_g_iter = 0; user_company_g_iter < results.user_company.platform.length; user_company_g_iter++) {
-          if (results.platforms[all_g_iter]._id.toString()===results.user_company.platform[user_company_g_iter]._id.toString()) {
-            results.platforms[all_g_iter].checked='true'
+      for (var i=0; i<results.platforms[0].detail.length; i++) {
+        for (var j=0; j<results.user_company.platform.length; j++) {
+          if (results.platforms[0].detail[i]._id.toString()===results.user_company.platform[j]._id.toString()) {
+            results.platforms[0].detail[i].checked='true'
           }
         }
       }
-      res.render('user_signup_company', { title: 'Mypage for Company', user_company: results.user_company, platforms: results.platforms })
+
+      res.render('user_signup_company', { title: 'Mypage for Company', user_company: results.user_company, platforms: results.platforms[0].detail })
     }
   )
 });
 
 router.post('/mypageCompany/:id', function (req, res, next) {
 
-  if (!(req.body.platform instanceof Array)) {
-    if (typeof req.body.platform==='undefined')
-    req.body.platform=[]
-    else
-    req.body.platform=new Array(req.body.platform)
-  }
+  // if (!(req.body.platform instanceof Array)) {
+  //   if (typeof req.body.platform==='undefined')
+  //   req.body.platform=[]
+  //   else
+  //   req.body.platform=new Array(req.body.platform)
+  // }
 
-  var userCompany = new UserCompany({
+  var userCompany = new Model.UserCompany({
     user_id : req.body.user_id,
     password : req.body.password,
     name: req.body.name,
@@ -276,10 +327,13 @@ router.post('/mypageCompany/:id', function (req, res, next) {
     _id: req.params.id
   })
 
-  UserCompany.findByIdAndUpdate(req.params.id, userCompany, {}, function (err, theuserCompany) {
-    if (err) {return next(err)}
-    res.render('success', { title: 'user for company is updated!' })
-  })
+  console.log('pizza steve')
+  console.log(userCompany)
+
+  // Model.UserCompany.findByIdAndUpdate(req.params.id, userCompany, {}, function (err, theuserCompany) {
+  //   if (err) {return next(err)}
+  //   res.render('success', { title: 'user for company is updated!' })
+  // })
 })
 
 router.get('/myqna', function(req, res, next) {

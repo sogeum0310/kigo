@@ -1,7 +1,7 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
-
+// to personal or business account
 var UserSchema = new Schema({
   user_id : { type: String, required: true, maxLength: 100 },
   password : { type: String, required: true, maxLength: 100 },
@@ -52,12 +52,20 @@ var EstimateCompanySchema = new Schema({
   note: [{ type: String }],
 }) 
 
+var CompanyReviewSchema = new Schema({
+  company: { type: Schema.ObjectId, ref: 'UserCompany' },
+  user: { type: Schema.ObjectId, ref: 'User' },
+  content: { type: String },
+})
+
+
 var User = mongoose.model('User', UserSchema)
 var UserCompany = mongoose.model('UserCompany', UserCompanySchema)
 var EstimateItem = mongoose.model('EstimateItem', EstimateItemSchema)
 var EstimateItemDetail = mongoose.model('EstimateItemDetail', EstimateItemDetailSchema)
 var Estimate = mongoose.model('Estimate', EstimateSchema)
 var EstimateCompany = mongoose.model('EstimateCompany', EstimateCompanySchema)
+var CompanyReview = mongoose.model('CompanyReview', CompanyReviewSchema);
 
 
 exports.User = User
@@ -66,3 +74,4 @@ exports.EstimateItem = EstimateItem
 exports.EstimateItemDetail = EstimateItemDetail
 exports.Estimate = Estimate
 exports.EstimateCompany = EstimateCompany
+exports.CompanyReview = CompanyReview

@@ -3,6 +3,9 @@ extends layout
 block content 
   h1= title
 
-  each x in results 
-    p= x.platform[0]
-    p= count
+  ul
+  each estimate in estimates
+    li 
+      a(href="estimate/" + estimate._id) #{estimate.platform[0].name}
+
+    

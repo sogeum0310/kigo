@@ -1,18 +1,18 @@
 extends layout 
 
 block content
-  form(action="") 
+  form(action="" method="POST") 
     h1= title
-    input(type="text", placeholder="id")
+    input(type="text", name="login_id", placeholder="id")
     br
-    input(type="text", placeholder="password")
+    input(type="text", name="login_password", placeholder="password")
     br
-    button login 
-    br
-    label(for="") user 
-    input(type="radio") 
-    label(for="") company 
-    input(type="radio") 
-    br
-    a(href="/signupOption") sign up 
+    button(type="submit")  confirm
+    div.form-group
+      label(for="") user 
+      input(type="radio", name="login_type", value="personal", checked) 
+      label(for="") company 
+      input(type="radio", name="login_type", value="business") 
+    p 
+      a(href="/signupOption") sign up 
         

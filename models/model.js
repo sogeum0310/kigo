@@ -58,6 +58,12 @@ var CompanyReviewSchema = new Schema({
   content: { type: String },
 })
 
+var ChatContentSchema = new Schema({
+  user_id: { type: Schema.ObjectId, ref: 'User' },
+  content: { type: String },
+  room: { type: Schema.ObjectId }
+})
+
 
 var User = mongoose.model('User', UserSchema)
 var UserCompany = mongoose.model('UserCompany', UserCompanySchema)
@@ -66,6 +72,7 @@ var EstimateItemDetail = mongoose.model('EstimateItemDetail', EstimateItemDetail
 var Estimate = mongoose.model('Estimate', EstimateSchema)
 var EstimateCompany = mongoose.model('EstimateCompany', EstimateCompanySchema)
 var CompanyReview = mongoose.model('CompanyReview', CompanyReviewSchema);
+var ChatContent = mongoose.model('ChatContent', ChatContentSchema)
 
 
 exports.User = User
@@ -75,3 +82,4 @@ exports.EstimateItemDetail = EstimateItemDetail
 exports.Estimate = Estimate
 exports.EstimateCompany = EstimateCompany
 exports.CompanyReview = CompanyReview
+exports.ChatContent = ChatContent

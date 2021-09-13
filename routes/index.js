@@ -3,32 +3,59 @@ var router = express.Router();
 var async = require('async');
 
 /* For controller */
-var Model = require('../models/model')
+var Model = require('../models/model');
+const { Mongoose } = require('mongoose');
 
-/* Temporary user and company user */
-var bunny = '612845b73ee69214177b350d'
-var strawberry = '612845b83ee69214177b351b'
-
+var steve = 'Pizza steve';
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'KIGO' });
 });
 
+router.get('/test', function (res, res, next) {
+
+  function doSomething(callback) {
+    Model.EstimateCompany.findById('612db970e49ade1a3d78c29b').exec(function (err, results) {
+      callback(results, results.company)
+    })
+  }
+
+  function doSomethingElse(data1, data2) {
+    Model.CompanyReview.find({'company': data2}).exec(function (err, results) {
+      console.log(data1)
+      console.log(results)
+      res.render('test', { title: 'test', results: results })
+    })
+  }
+
+  doSomething(doSomethingElse)
+})
+
 
 /* Estimate Routing */
 router.get('/estimates', function (req, res, next) {
 
-  Model.Estimate.find().populate('platform').exec(function (err, results) {
-    res.render('estimate_list', { 
-      title: 'Estimates', 
-      estimates: results,
-    })
+  // estimates  -  estimate_company
 
-    console.log(results)
-  })
-  
+  function doSomething(callback) {
+    Model.Estimate.find().exec(function (err, results) {
+      callback(results)
+    })
+  }
+
+  function doSomethingElse(estimates) {
+    Model.EstimateCompany.find().exec(function (err, results) {
+      console.log(estimates)
+      res.render('estimate_list', { title: 'Estimate list', results: estimates })
+    })
+  }
+
+  doSomething(doSomethingElse)
+
+
 })
+
 
 router.get('/estimate/:id', function (req, res, next) {
 
@@ -61,28 +88,28 @@ router.get('/estimate/:id', function (req, res, next) {
   })
 })
 
+
 router.get('/estimate/:id/:id2', function (req, res, next) {
 
-  // async.parallel({
-  //   estimate_companies: function (callback) {
-  //     Model.EstimateCompany.findById(req.params.id2).exec(callback)
-  //   },
-  //   company_reviews: function (callback) {
-  //     Model.CompanyReview.find({ 'company': strawberry}).exec(callback)
-  //   }
-  // }, function (err, results) {
-  //   console.log(results)
-  // })
-
-  function myFunction(data) {
-    console.log(data)
+  function doSomething(callback) {
+    Model.EstimateCompany.findById(req.params.id2).exec(function (err, results) {
+      callback(results, results.company)
+    })
   }
 
-  async.series([
-    setTimeout(function () { myFunction(1) }, 0),
-    setTimeout(function () { myFunction(2) }, 0),
-    setTimeout(function () { myFunction(3) }, 0),
-  ], function (err, results) { return results })
+  function doSomethingElse(data1, data2) {
+    Model.CompanyReview.find({'company': data2}).exec(function (err, results) {
+      console.log(data1)
+      console.log(results)
+      res.render('estimate_detail', { 
+        title: 'Estimate for company', 
+        estimate_companies: data1, 
+        company_reviews: results 
+      })
+    })
+  }
+
+  doSomething(doSomethingElse)
 
 })
 
@@ -123,7 +150,7 @@ router.get('/estimatesComplete', function (req, res, next) {
       Model.Estimate.find().exec(callback)
     },
     estimate_company: function (callback) {
-      Model.EstimateCompany.find({ 'company': strawberry })
+      Model.EstimateCompany.find({ 'company': req.session.user })
       .populate({
         path: 'estimate', populate: {
           path: 'platform'
@@ -193,16 +220,81 @@ router.post('/estimateForm', function (req, res, next) {
 
 
 
+/* Chat routing */
+router.get('/chatUser', function (req, res, next) {
 
+  async.parallel({
+    chat_content: function (callback) {
+      Model.ChatContent.find().exec(callback)
+    },
+    user: function (callback) {
+      Model.User.findById(req.session.user).exec(callback)
+    }
+  }, function (err, results) {
+    console.log(results)
+    res.render('chat_user', { title: 'Chat', user: results.user, chat_contents: results.chat_content })
+  })
+})
 
+router.post('/chatAjax', function (req, res, next) {
 
+  var chat = new Model.ChatContent({
+    user_id: req.body.chat_user,
+    content: req.body.chat_content,
+    room: '6127581b3eef7c51a40956d2'
+  })
 
+  console.log(chat)
 
+  chat.save(function (err) {
+    if (err) { return next(err) }
+    console.log('so good')
+  })
+
+})
 
 
 /* User Routing */
 router.get('/login', function(req, res, next) {
-  res.render('user_login', { title: 'Login' });
+  if (req.session.user) {
+    // console.log(req.session.user.user_id)
+    res.render('success', { title: 'Hi ' + req.session.user })
+  } else {
+    res.render('user_login', { title: 'Login' });
+  }
+});
+
+router.post('/login', function(req, res, next) {
+  if (req.body.login_type == 'personal') {
+    Model.User.findOne({'user_id': req.body.login_id}).exec(function (err, results) {
+      if (!results) {
+        console.log('no user')
+      } else {
+        if (req.body.login_password != results.password) {
+          console.log('wrong password')
+        } else {
+          console.log(results)
+          req.session.user = results._id
+          res.render('success', { title: 'Hi ' + req.session.user_id })
+        }
+      }
+    })
+  }
+  if (req.body.login_type == 'business') {
+    Model.UserCompany.findOne({'user_id': req.body.login_id}).exec(function (err, results) {
+      if (!results) {
+        console.log('no user')
+      } else {
+        if (req.body.login_password != results.password) {
+          console.log('wrong password')
+        } else {
+          console.log('login success')
+          req.session.user = results._id
+          res.render('success', { title: 'Hi ' + results.user_id })
+        }
+      }
+    })
+  }
 });
 
 router.get('/signupOption', function(req, res, next) {
@@ -343,42 +435,6 @@ router.get('/myqna', function(req, res, next) {
 router.get('/myreview', function(req, res, next) {
   res.render('user_myreview', { title: 'My review' });
 });
-
-
-/* Company Routing */
-// router.get('/about', function(req, res, next) {
-//   res.render('company_about', { title: 'About' });
-// });
-// router.get('/cs', function(req, res, next) {
-//   res.render('company_cs', { title: 'Customer Center' });
-// });
-// router.get('/event', function(req, res, next) {
-//   res.render('compant_event', { title: 'Event' });
-// });
-// router.get('/faqCompany', function(req, res, next) {
-//   res.render('company_faq_company', { title: 'FAQ company' });
-// });
-// router.get('/faq', function(req, res, next) {
-//   res.render('company_faq', { title: 'FAQ' });
-// });
-// router.get('/manualCompany', function(req, res, next) {
-//   res.render('company_manual_company', { title: 'Manual for company' });
-// });
-// router.get('/manual', function(req, res, next) {
-//   res.render('company_manual', { title: 'Manual for user' });
-// });
-// router.get('/notice', function(req, res, next) {
-//   res.render('company_notice', { title: 'Notice' });
-// });
-// router.get('/qna', function(req, res, next) {
-//   res.render('company_qna', { title: 'QnA' });
-// });
-// router.get('/sendMessage', function(req, res, next) {
-//   res.render('company_send_message', { title: 'Send message' });
-// });
-// router.get('/share', function(req, res, next) {
-//   res.render('company_share', { title: 'Share' });
-// });
 
 
 module.exports = router;

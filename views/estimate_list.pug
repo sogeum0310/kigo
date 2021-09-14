@@ -8,6 +8,8 @@ block content
   //-   li 
   //-     a(href="estimate/" + estimate._id) #{estimate.platform[0].name}
 
-  pre= results
+  each val in results
+    pre= val
+    p= val.count
 
     

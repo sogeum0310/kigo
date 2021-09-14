@@ -36,24 +36,37 @@ router.get('/test', function (res, res, next) {
 /* Estimate Routing */
 router.get('/estimates', function (req, res, next) {
 
-  // estimates  -  estimate_company
+  // function doSomething(callback) {
+  //   Model.EstimateCompany.countDocuments({estimate: '61288ee9e9f6434b360e4776'}, function (err, results) {
+  //     callback(results)
+  //   })
+  // }
 
-  function doSomething(callback) {
-    Model.Estimate.find().exec(function (err, results) {
-      callback(results)
+  // function doSomethingElse(data) {
+  //   console.log(data)
+  // }
+
+  // doSomething(doSomethingElse)
+
+  async.parallel({
+    estimates: function (callback) {
+      Model.Estimate.find().exec(callback)
+    }
+  }, function (err, results) {
+    res.render('estimate_list', { 
+      title: 'Estimate list', 
+      get results() {
+        for (i=0; i<results.estimates.length; i++) {
+
+          Model.EstimateCompany.countDocuments({estimate: results.estimates[i]._id}, function (err, results) { 
+            // results.estimates[i].count = results
+            console.log(results)
+          })
+        }
+        return results.estimates
+      }
     })
-  }
-
-  function doSomethingElse(estimates) {
-    Model.EstimateCompany.find().exec(function (err, results) {
-      console.log(estimates)
-      res.render('estimate_list', { title: 'Estimate list', results: estimates })
-    })
-  }
-
-  doSomething(doSomethingElse)
-
-
+  })
 })
 
 

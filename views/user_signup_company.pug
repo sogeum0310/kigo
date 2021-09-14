@@ -25,17 +25,28 @@ block content
     div.form-group
       textarea#policy(name="about", cols="30", rows="10")=(undefined==user_company ? '' : user_company.about)
 
+    div.form-group
+      input(type="file")
+
     //- div.form-group
-    //-   input(type="file")
+    //-   h3 Platforms
+    //-   for platform in platforms
+    //-     div
+    //-       input(type="checkbox", name="platform", value=platform._id, checked=platform.checked)  
+    //-       label(for=platform._id) #{platform.name}
+    //- p
+    //-   button(type="submit") confirm
 
     div.form-group
-      h3 Platforms
-      for platform in platforms
+      each platform in platforms 
         div
-          input(type="checkbox", name="platform", value=platform._id, checked=platform.checked)  
-          label(for=platform._id) #{platform.name}
-    p
+          input(type="checkbox", name="platform", value=platform._id, checked=platform.checked) 
+          label(for="") #{platform.name}
+
+    p 
       button(type="submit") confirm
+
+
 
 
 

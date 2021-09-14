@@ -4,13 +4,32 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var session = require('express-session')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 
-// var model = require('./models/item')
+// var pizza = require('./populate-review')
+const FileStore = require('session-file-store')
 
 var app = express();
+
+
+const Server = require('socket.io')
+app.io = require('socket.io')()
+
+app.io.on('connection', (socket) => {
+  // console.log('socket connect')
+
+  socket.on('disconnect', () => {
+    // console.log('socket disconnect')
+  })
+
+  socket.on('chat-msg-1', (msg) => {
+    app.io.emit('chat-msg-2', msg)
+  })
+})
+
 
 // mongoose connection 
 const mongoose = require('mongoose');
@@ -24,6 +43,13 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+// express session
+app.use(session({
+  secret: 'Keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+}))
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);

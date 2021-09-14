@@ -3,54 +3,55 @@ extends layout
 block content
   h1= title
 
-  form(action="" method="POST")
-    h3 Platforms
-    for platform in platforms
-      div.form-group
-        input(type="radio", name="platform", value=platform._id)
-        label(for="") #{platform.name}
-  
-    h3 Business 
-    for business in businesses
-      div.form-group
-        input(type="checkbox", name="business", value=business._id)
-        label(for="") #{business.name}
 
-    h3 Goal 
-    for goal in goals 
-      div.form-group
-        input(type="checkbox", name="goal", value=goal._id)
-        label(for="") #{goal.name}
+  form(action="" method="POST") 
+    div
+      h3= results[0].name
+      each val in results[0].detail
+        div.form-group
+          input(type="radio", name="platform[]" value=val._id)
+          label(for="")= val.name
+    div
+      h3= results[1].name
+      each val in results[1].detail
+        div.form-group
+          input(type="checkbox", name="business[]" value=val._id)
+          label(for="")= val.name
+    div
+      h3= results[2].name
+      each val in results[2].detail
+        div.form-group  
+          input(type="checkbox", name="goal[]" value=val._id)
+          label(for="")= val.name
+    div
+      h3= results[3].name
+      each val in results[3].detail
+        div.form-group  
+          input(type="radio", name="startday[]" value=val._id)
+          label(for="")= val.name
+    div
+      h3= results[4].name
+      each val in results[4].detail
+        div.form-group  
+          input(type="radio", name="howlong[]" value=val._id)
+          label(for="")= val.name
+    div
+      h3= results[5].name
+      each val in results[5].detail
+        div.form-group  
+          input(type="radio", name="cost[]" value=val._id)
+          label(for="")= val.name
+    div
+      h3= results[6].name
+      each val in results[6].detail
+        div.form-group  
+          input(type="checkbox", name="city[]" value=val._id)
+          label(for="")= val.name
+    div
+      h3= results[7].name
+      each val in results[7].detail
+        div.form-group  
+          input(type="checkbox", name="feedback[]" value=val._id)
+          label(for="")= val.name
 
-    h3 Start day 
-    for start_day in start_days 
-      div.form-group
-        input(type="radio", name="start_day", value=start_day._id)
-        label(for="") #{start_day.name}
     
-    h3 how long
-    for how_long in how_longs 
-      div.form-group
-        input(type="radio", name="how_long", value=how_long._id)
-        label(for="") #{how_long.name}
-
-    h3 cost
-    for cost in costs 
-      div.form-group
-        input(type="radio", name="cost", value=cost._id)
-        label(for="") #{cost.name}
-
-    h3 city
-    for city in cities 
-      div.form-group
-        input(type="checkbox", name="city", value=city._id)
-        label(for="") #{city.name}
-
-    h3 feedback 
-    for feedback in feedbacks 
-      div.form-group
-        input(type="checkbox", name="feedback", value=feedback._id)
-        label(for="") #{feedback.name}
-
-    p 
-      button(type="submit") confirm

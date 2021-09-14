@@ -1,0 +1,11 @@
+extends layout 
+
+block content
+  h1= title 
+  
+  ul
+  each estimate_company in estimate_companies
+    li
+      a(href="/estimateComplete/" + estimate_company._id) #{estimate_company.estimate.platform[0].name}
+      |  (#{estimate_company.estimate.user_id.user_id})
+

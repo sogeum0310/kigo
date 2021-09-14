@@ -4,4 +4,14 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/admin.css')
   body
+
+    block nav 
+      a(href="/admin") home / 
+      a(href="") 공지 등록 / 
+      a(href="/admin/personal_members") 일반회원 / 
+      a(href="/admin/business_members") 기업회원 / 
+      a(href="/admin/estimates") 견적서 목록 / 
+      a(href="") 이벤트 관리 / 
+      a(href="") 고객센터
+
     block content

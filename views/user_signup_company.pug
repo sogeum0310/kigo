@@ -28,14 +28,11 @@ block content
     div.form-group
       input(type="file")
 
-    //- div.form-group
-    //-   h3 Platforms
-    //-   for platform in platforms
-    //-     div
-    //-       input(type="checkbox", name="platform", value=platform._id, checked=platform.checked)  
-    //-       label(for=platform._id) #{platform.name}
-    //- p
-    //-   button(type="submit") confirm
+    div.form-group
+      label(for="") city 
+      select(name="city") 
+        each city in cities 
+          option(value=city._id)= city.name 
 
     div.form-group
       each platform in platforms 

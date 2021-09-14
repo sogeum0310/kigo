@@ -26,11 +26,10 @@ block content
       label(for="") birth 
       input(type="date" name="birth_date" value=(undefined==user ? '' : user.date_of_birth_yyyy_mm_dd)) 
     div.form-group
-      label(for="") city
-      select#region(name="city")
-        option(value="Seoul" selected=(undefined==user || user.city!='Seoul' ? false:'selected')) Seoul 
-        option(value="Incheon" selected=(undefined==user || user.city!='Incheon' ? false:'selected')) Incheon
-        option(value="Busan" selected=(undefined==user || user.city!='Busan' ? false:'selected')) Busan
+        each city in cities
+          div
+            input(type="checkbox", name="city", value=city._id, checked=city.checked) 
+            label(for="") #{city.name}
     div.form-group
       label(for="") phone
       input(type="text" name="phone" value=(undefined==user ? '' : user.phone))

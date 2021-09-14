@@ -3,3 +3,9 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}   
+
+  b= results
+
+  if (results)
+    p
+      a(href="/logout") logout 

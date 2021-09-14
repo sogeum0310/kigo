@@ -8,7 +8,7 @@ var UserSchema = new Schema({
   name: { type: String },
   gender: { type: String },
   date_of_birth: { type: Date },
-  city: { type: String },
+  city: [{ type: Schema.ObjectId }],
   phone: { type: String },
   email: { type: String }
 });
@@ -20,7 +20,8 @@ var UserCompanySchema = new Schema({
   phone: { type: String },
   email: { type: String },
   about: { type: String },
-  platform: [{ type: Schema.ObjectId, ref: 'Platform'}]
+  city: [{ type:Schema.ObjectId }],
+  platform: [{ type: Schema.ObjectId }]
 });
 
 var EstimateItemSchema = new Schema({

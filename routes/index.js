@@ -10,63 +10,70 @@ var steve = 'Pizza steve';
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'KIGO' });
+  res.render('index', { title: 'KIGO',  results: req.session.user});
 });
 
-router.get('/test', function (res, res, next) {
+router.get('/test', function (req, res, next) {
 
-  function doSomething(callback) {
-    Model.EstimateCompany.findById('612db970e49ade1a3d78c29b').exec(function (err, results) {
-      callback(results, results.company)
-    })
-  }
+  // function doSomething(callback) {
+  //   Model.EstimateCompany.findById('612db970e49ade1a3d78c29b').exec(function (err, results) {
+  //     callback(results, results.company)
+  //   })
+  // }
 
-  function doSomethingElse(data1, data2) {
-    Model.CompanyReview.find({'company': data2}).exec(function (err, results) {
-      console.log(data1)
-      console.log(results)
-      res.render('test', { title: 'test', results: results })
-    })
-  }
+  // function doSomethingElse(data1, data2) {
+  //   Model.CompanyReview.find({'company': data2}).exec(function (err, results) {
+  //     console.log(data1)
+  //     console.log(results)
+  //     res.render('test', { title: 'test', results: results })
+  //   })
+  // }
 
-  doSomething(doSomethingElse)
+  // doSomething(doSomethingElse)
+
+  // var bunny = new Model.User({
+  //   city: '6127581b3eef7c51a4095713',
+  //   _id: req.session.user
+  // })
+
+  // Model.User.findByIdAndUpdate(req.session.user, bunny, {}, function (err, results) {
+  //   if (err) { return next(err) }
+  //   console.log('so good')
+  // })
+
+  // Model.User.updateMany({ city: '6127581b3eef7c51a4095715' }, function (err, results) {
+  //   console.log('so good')
+  // })
 })
 
 
 /* Estimate Routing */
 router.get('/estimates', function (req, res, next) {
 
-  // function doSomething(callback) {
-  //   Model.EstimateCompany.countDocuments({estimate: '61288ee9e9f6434b360e4776'}, function (err, results) {
-  //     callback(results)
-  //   })
-  // }
-
-  // function doSomethingElse(data) {
-  //   console.log(data)
-  // }
-
-  // doSomething(doSomethingElse)
-
-  async.parallel({ // 안녕 랩탑, 안녕 데스크탑, 이제 그만
-    estimates: function (callback) {
-      Model.Estimate.find().exec(callback)
-    }
-  }, function (err, results) {
-    res.render('estimate_list', { 
-      title: 'Estimate list', 
-      get results() {
-        for (i=0; i<results.estimates.length; i++) {
-
-          Model.EstimateCompany.countDocuments({estimate: results.estimates[i]._id}, function (err, results) { 
-            // results.estimates[i].count = results
-            console.log(results)
-          })
-        }
-        return results.estimates
-      }
-    })
+  Model.Estimate.find().populate('platform').exec(function (err, results) {
+    console.log(results)
+    res.render('estimate_list', { title: 'Estimate list', results: results })
   })
+
+  // async.parallel({ // 안녕 랩탑, 안녕 데스크탑, 이제 그만
+  //   estimates: function (callback) {
+  //     Model.Estimate.find().exec(callback)
+  //   }
+  // }, function (err, results) {
+  //   res.render('estimate_list', { 
+  //     title: 'Estimate list', 
+  //     get results() {
+  //       for (i=0; i<results.estimates.length; i++) {
+
+  //         Model.EstimateCompany.countDocuments({estimate: results.estimates[i]._id}, function (err, results) { 
+  //           // results.estimates[i].count = results
+  //           console.log(results)
+  //         })
+  //       }
+  //       return results.estimates
+  //     }
+  //   })
+  // })
 })
 
 
@@ -288,7 +295,7 @@ router.post('/login', function(req, res, next) {
         } else {
           console.log(results)
           req.session.user = results._id
-          res.render('success', { title: 'Hi ' + req.session.user_id })
+          res.redirect('/login')
         }
       }
     })
@@ -303,12 +310,17 @@ router.post('/login', function(req, res, next) {
         } else {
           console.log('login success')
           req.session.user = results._id
-          res.render('success', { title: 'Hi ' + results.user_id })
+          res.redirect('/login')
         }
       }
     })
   }
 });
+
+router.get('/logout', function (req, res, next) {
+  req.session.destroy()
+  res.redirect('/')
+})
 
 router.get('/signupOption', function(req, res, next) {
   res.render('user_signup_option', { title: 'Signup option' });
@@ -379,18 +391,46 @@ router.get('/alarm', function(req, res, next) {
   res.render('user_alarm', { title: 'Alarm' });
 });
 
-router.get('/mypage/:id', function(req, res, next) {
-  Model.User.findById(req.params.id).exec(function(err, results) {
-    if (err) {return next(err)}
-  res.render('user_signup', { title: 'My page', user: results});
-  })
+router.get('/mypage', function(req, res, next) {
+  if (!req.session.user) {
+    console.log('no user')
+    return
+  }
+
+  async.parallel({
+      user: function (callback) {
+        Model.User.findById(req.session.user).populate('detail').exec(callback);
+      },
+      cities: function (callback) {
+        Model.EstimateItem.find(callback).populate('detail')
+      },  
+    },
+    function (err, results) {
+      console.log(results)
+      if (err) { return next(err) }
+
+      for (var i=0; i<results.cities[6].detail.length; i++) {
+        for (var j=0; j<results.user.city.length; j++) {
+          if (results.cities[6].detail[i]._id.toString()===results.user.city[j]._id.toString()) {
+            results.cities[6].detail[i].checked='true'
+          }
+        }
+      }
+
+      res.render('user_signup', { title: 'Mypage', user: results.user, cities: results.cities[6].detail })
+    }
+  )
 });
 
-router.get('/mypageCompany/:id', function(req, res, next) {
-  async.parallel(
-    {
+router.get('/mypageCompany', function(req, res, next) {
+  if (!req.session.user) {
+    console.log('no user')
+    return
+  }
+
+  async.parallel({
       user_company: function (callback) {
-        Model.UserCompany.findById(req.params.id).populate('detail').exec(callback);
+        Model.UserCompany.findById(req.session.user).populate('detail').exec(callback);
       },
       platforms: function (callback) {
         Model.EstimateItem.find(callback).populate('detail')
@@ -407,12 +447,19 @@ router.get('/mypageCompany/:id', function(req, res, next) {
         }
       }
 
-      res.render('user_signup_company', { title: 'Mypage for Company', user_company: results.user_company, platforms: results.platforms[0].detail })
+      console.log(results)
+
+      res.render('user_signup_company', { 
+        title: 'Mypage for Company', 
+        user_company: results.user_company, 
+        cities: results.platforms[6].detail,
+        platforms: results.platforms[0].detail 
+      })
     }
   )
 });
 
-router.post('/mypageCompany/:id', function (req, res, next) {
+router.post('/mypageCompany', function (req, res, next) {
 
   // if (!(req.body.platform instanceof Array)) {
   //   if (typeof req.body.platform==='undefined')
@@ -428,17 +475,17 @@ router.post('/mypageCompany/:id', function (req, res, next) {
     phone: req.body.phone,
     email: req.body.email,
     about: req.body.about,
+    city: req.body.city,
     platform: req.body.platform,
-    _id: req.params.id
+    _id: req.session.user
   })
 
-  console.log('pizza steve')
   console.log(userCompany)
 
-  // Model.UserCompany.findByIdAndUpdate(req.params.id, userCompany, {}, function (err, theuserCompany) {
-  //   if (err) {return next(err)}
-  //   res.render('success', { title: 'user for company is updated!' })
-  // })
+  Model.UserCompany.findByIdAndUpdate(req.session.user, userCompany, {}, function (err, theuserCompany) {
+    if (err) {return next(err)}
+    res.render('success', { title: 'user for company is updated!' })
+  })
 })
 
 router.get('/myqna', function(req, res, next) {

@@ -48,7 +48,7 @@ router.get('/estimates', function (req, res, next) {
 
   // doSomething(doSomethingElse)
 
-  async.parallel({ // 안녕 랩탑, 안녕 데스크탑
+  async.parallel({ // 안녕 랩탑, 안녕 데스크탑, 이제 그만
     estimates: function (callback) {
       Model.Estimate.find().exec(callback)
     }

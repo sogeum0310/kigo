@@ -25,11 +25,11 @@ block content
     div.form-group
       label(for="") birth 
       input(type="date" name="birth_date" value=(undefined==user ? '' : user.date_of_birth_yyyy_mm_dd)) 
-    div.form-group
-        each city in cities
-          div
-            input(type="checkbox", name="city", value=city._id, checked=city.checked) 
-            label(for="") #{city.name}
+    //- div.form-group
+    //-     each city in cities
+    //-       div
+    //-         input(type="checkbox", name="city", value=city._id, checked=city.checked) 
+    //-         label(for="") #{city.name}
     div.form-group
       label(for="") phone
       input(type="text" name="phone" value=(undefined==user ? '' : user.phone))

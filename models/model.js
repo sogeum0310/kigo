@@ -1,8 +1,19 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
+
+var EstimateItemSchema = new Schema({
+  name: { type: String }
+})
+
+var EstimateItemDetailSchema = new Schema({
+  name: { type: String },
+  estimate_item: { type: Schema.ObjectId, ref: 'EstimateItem' }
+})
+
+
 // to personal or business account
-var UserSchema = new Schema({
+var UserPersonalSchema = new Schema({
   user_id : { type: String, required: true, maxLength: 100 },
   password : { type: String, required: true, maxLength: 100 },
   name: { type: String },
@@ -13,7 +24,7 @@ var UserSchema = new Schema({
   email: { type: String }
 });
 
-var UserCompanySchema = new Schema({
+var UserBusinessSchema = new Schema({
   user_id : { type: String, required: true, maxLength: 100 },
   password : { type: String, required: true, maxLength: 100 },
   name: { type: String },
@@ -24,17 +35,9 @@ var UserCompanySchema = new Schema({
   platform: [{ type: Schema.ObjectId }]
 });
 
-var EstimateItemSchema = new Schema({
-  name: { type: String },
-  detail: [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }]
-})
 
-var EstimateItemDetailSchema = new Schema({
-  name: { type: String },
-})
-
-var EstimateSchema = new Schema({
-  user_id: { type: Schema.ObjectId, ref: 'User' },
+var EstimateRequestSchema = new Schema({
+  user_id: { type: Schema.ObjectId, ref: 'UserPersonal' },
   platform : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   business : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   goal : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
@@ -45,42 +48,57 @@ var EstimateSchema = new Schema({
   feedback : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }]
 });
 
-var EstimateCompanySchema = new Schema({
-  estimate: { type: Schema.ObjectId, ref: 'Estimate', required: true },
-  company: { type: Schema.ObjectId, ref: 'UserCompany', required: true },
+var EstimateResponseSchema = new Schema({
+  estimate_request: { type: Schema.ObjectId, ref: 'EstimateRequest', required: true },
+  user_id: { type: Schema.ObjectId, ref: 'UserBusiness', required: true },
   item: [{ type: String }],
   cost: [{ type: String }],
   note: [{ type: String }],
 }) 
 
-var CompanyReviewSchema = new Schema({
-  company: { type: Schema.ObjectId, ref: 'UserCompany' },
-  user: { type: Schema.ObjectId, ref: 'User' },
+
+var BusinessReviewSchema = new Schema({
+  user_business: { type: Schema.ObjectId, ref: 'UserBusiness' },
+  user_personal: { type: Schema.ObjectId, ref: 'UserPersonal' },
   content: { type: String },
 })
 
 var ChatContentSchema = new Schema({
-  user_id: { type: Schema.ObjectId, ref: 'User' },
+  user_id: { type: Schema.ObjectId, ref: '' },
   content: { type: String },
   room: { type: Schema.ObjectId }
 })
 
 
-var User = mongoose.model('User', UserSchema)
-var UserCompany = mongoose.model('UserCompany', UserCompanySchema)
+var UserPersonal = mongoose.model('User', UserPersonalSchema)
+var UserBusiness = mongoose.model('UserBusiness', UserBusinessSchema)
+
 var EstimateItem = mongoose.model('EstimateItem', EstimateItemSchema)
 var EstimateItemDetail = mongoose.model('EstimateItemDetail', EstimateItemDetailSchema)
-var Estimate = mongoose.model('Estimate', EstimateSchema)
-var EstimateCompany = mongoose.model('EstimateCompany', EstimateCompanySchema)
-var CompanyReview = mongoose.model('CompanyReview', CompanyReviewSchema);
+
+var EstimateRequest = mongoose.model('EstimateRequest', EstimateRequestSchema)
+var EstimateResponse = mongoose.model('EstimateResponse', EstimateResponseSchema)
+
+var BusinessReview = mongoose.model('BusinessReview', BusinessReviewSchema);
 var ChatContent = mongoose.model('ChatContent', ChatContentSchema)
 
 
-exports.User = User
-exports.UserCompany = UserCompany
+exports.UserPersonal = UserPersonal
+exports.UserBusiness = UserBusiness
+
 exports.EstimateItem = EstimateItem
 exports.EstimateItemDetail = EstimateItemDetail
-exports.Estimate = Estimate
-exports.EstimateCompany = EstimateCompany
-exports.CompanyReview = CompanyReview
+
+exports.EstimateRequest = EstimateRequest
+exports.EstimateResponse = EstimateResponse
+
+exports.BusinessReview = BusinessReview
+
 exports.ChatContent = ChatContent
+
+// 자주묻는 질문 - Faq, 
+// 공지사항 - Notice
+// 이벤트 - Event
+// 문의 - Ask
+// 키고에 의견 주기 - Opinion
+

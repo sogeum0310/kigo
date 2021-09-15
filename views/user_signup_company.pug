@@ -32,7 +32,7 @@ block content
       label(for="") city 
       select(name="city") 
         each city in cities 
-          option(value=city._id)= city.name 
+          option(value=city._id, selected=(user_company.city==city._id.toString() ? 'selected' : false))= city.name 
 
     div.form-group
       each platform in platforms 

@@ -8,6 +8,11 @@ const { Mongoose } = require('mongoose');
 
 var steve = 'Pizza steve';
 
+// router.get(['/', '/*'], function (req, res, next) {
+//   console.log('Look at me: ' + req.session.user)
+//   next()
+// })
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'KIGO',  results: req.session.user});
@@ -50,7 +55,7 @@ router.get('/test', function (req, res, next) {
 /* Estimate Routing */
 router.get('/estimates', function (req, res, next) {
 
-  Model.Estimate.find().populate('platform').exec(function (err, results) {
+  Model.EstimateRequest.find().populate('platform').exec(function (err, results) {
     console.log(results)
     res.render('estimate_list', { title: 'Estimate list', results: results })
   })
@@ -80,9 +85,9 @@ router.get('/estimates', function (req, res, next) {
 router.get('/estimate/:id', function (req, res, next) {
 
   async.parallel({
-    estimate: function (callback) {
+    estimate_request: function (callback) {
 
-      Model.Estimate.findById(req.params.id)
+      Model.EstimateRequest.findById(req.params.id)
       .populate('platform')
       .populate('business')
       .populate('goal')
@@ -93,18 +98,18 @@ router.get('/estimate/:id', function (req, res, next) {
       .populate('feedback')
       .exec(callback)
     },
-    estimate_company: function (callback) {
-      Model.EstimateCompany.find({ 'estimate': req.params.id }).populate('company').exec(callback)
+    estimate_responses: function (callback) {
+      Model.EstimateResponse.find({ 'estimate_request': req.params.id }).populate('user_id').exec(callback)
     }
   }, function (err, results) {
     if (err) { return next(err) }
 
     res.render('estimate', { 
       title: 'Estimate', 
-      estimate: results.estimate, 
-      estimate_companies: results.estimate_company,
+      estimate_request: results.estimate_request, 
+      estimate_responses: results.estimate_responses,
     })
-    console.log(results.estimate_company.length)
+    console.log(results.estimate_responses.length)
   })
 })
 
@@ -112,19 +117,19 @@ router.get('/estimate/:id', function (req, res, next) {
 router.get('/estimate/:id/:id2', function (req, res, next) {
 
   function doSomething(callback) {
-    Model.EstimateCompany.findById(req.params.id2).exec(function (err, results) {
-      callback(results, results.company)
+    Model.EstimateResponse.findById(req.params.id2).exec(function (err, results) {
+      callback(results, results.user_id)
     })
   }
 
   function doSomethingElse(data1, data2) {
-    Model.CompanyReview.find({'company': data2}).exec(function (err, results) {
+    Model.BusinessReview.find({'company': data2}).exec(function (err, results) {
       console.log(data1)
       console.log(results)
       res.render('estimate_detail', { 
-        title: 'Estimate for company', 
+        title: 'Estimate Response', 
         estimate_companies: data1, 
-        company_reviews: results 
+        business_reviews: results 
       })
     })
   }
@@ -136,19 +141,19 @@ router.get('/estimate/:id/:id2', function (req, res, next) {
 
 /* Estimate Routing for Company */
 router.get('/estimatesCompany', function (req, res, next) {
-  Model.Estimate.find().populate('user_id').populate('platform').exec(function (err, list_estimates) {
+  Model.EstimateRequest.find().populate('user_id').populate('platform').exec(function (err, results) {
     if (err) {return next(err)}
 
     else {
-      res.render('estimate_list_company', { title: 'Estimate List for Company', estimate_list: list_estimates })
-      console.log(list_estimates)
+      res.render('estimate_list_company', { title: 'Estimate Requests', estimate_list: results })
+      console.log(results)
     }
   })
 })
 
 router.get('/estimateCompany/:id', function (req, res, next) {
 
-  Model.Estimate.findById(req.params.id)
+  Model.EstimateRequest.findById(req.params.id)
   .populate('platform')
   .populate('business')
   .populate('goal')
@@ -167,10 +172,10 @@ router.get('/estimatesComplete', function (req, res, next) {
 
   async.parallel({
     estimate: function (callback) {
-      Model.Estimate.find().exec(callback)
+      Model.EstimateRequest.find().exec(callback)
     },
     estimate_company: function (callback) {
-      Model.EstimateCompany.find({ 'company': req.session.user })
+      Model.EstimateResponse.find({ 'company': req.session.user })
       .populate({
         path: 'estimate', populate: {
           path: 'platform'
@@ -197,10 +202,10 @@ router.get('/estimateComplete/:id', function (req, res, next) {
 
   async.parallel({
     estimate: function (callback) {
-      Model.Estimate.find().exec(callback)
+      Model.EstimateRequest.find().exec(callback)
     },
     estimate_company: function (callback) {
-      Model.EstimateCompany.findById(req.params.id).exec(callback)
+      Model.EstimateResponse.findById(req.params.id).exec(callback)
     }
   }, function (err, results) {
     res.render('estimate_complete', { 
@@ -219,8 +224,8 @@ router.get('/estimateForm', function(req, res, next) {
 });
 
 router.post('/estimateForm', function (req, res, next) {
-  var estimate = new Estimate({
-    // user_id: req.session.user_id
+  var estimate = new Model.EstimateRequest({
+    user_id: req.session.user,
     platform: req.body.platform,
     business: req.body.business,
     goal: req.body.goal,
@@ -248,7 +253,7 @@ router.get('/chatUser', function (req, res, next) {
       Model.ChatContent.find().exec(callback)
     },
     user: function (callback) {
-      Model.User.findById(req.session.user).exec(callback)
+      Model.UserPersonal.findById(req.session.user).exec(callback)
     }
   }, function (err, results) {
     console.log(results)
@@ -286,7 +291,7 @@ router.get('/login', function(req, res, next) {
 
 router.post('/login', function(req, res, next) {
   if (req.body.login_type == 'personal') {
-    Model.User.findOne({'user_id': req.body.login_id}).exec(function (err, results) {
+    Model.UserPersonal.findOne({'user_id': req.body.login_id}).exec(function (err, results) {
       if (!results) {
         console.log('no user')
       } else {
@@ -301,7 +306,7 @@ router.post('/login', function(req, res, next) {
     })
   }
   if (req.body.login_type == 'business') {
-    Model.UserCompany.findOne({'user_id': req.body.login_id}).exec(function (err, results) {
+    Model.UserBusiness.findOne({'user_id': req.body.login_id}).exec(function (err, results) {
       if (!results) {
         console.log('no user')
       } else {
@@ -392,14 +397,10 @@ router.get('/alarm', function(req, res, next) {
 });
 
 router.get('/mypage', function(req, res, next) {
-  if (!req.session.user) {
-    console.log('no user')
-    return
-  }
 
   async.parallel({
       user: function (callback) {
-        Model.User.findById(req.session.user).populate('detail').exec(callback);
+        Model.UserPersonal.findById(req.session.user).populate('detail').exec(callback);
       },
       cities: function (callback) {
         Model.EstimateItem.find(callback).populate('detail')
@@ -409,15 +410,19 @@ router.get('/mypage', function(req, res, next) {
       console.log(results)
       if (err) { return next(err) }
 
-      for (var i=0; i<results.cities[6].detail.length; i++) {
-        for (var j=0; j<results.user.city.length; j++) {
-          if (results.cities[6].detail[i]._id.toString()===results.user.city[j]._id.toString()) {
-            results.cities[6].detail[i].checked='true'
-          }
-        }
-      }
+      // for (var i=0; i<results.cities[6].detail.length; i++) {
+      //   for (var j=0; j<results.user.city.length; j++) {
+      //     if (results.cities[6].detail[i]._id.toString()===results.user.city[j]._id.toString()) {
+      //       results.cities[6].detail[i].checked='true'
+      //     }
+      //   }
+      // }
 
-      res.render('user_signup', { title: 'Mypage', user: results.user, cities: results.cities[6].detail })
+      res.render('user_signup', { 
+        title: 'Mypage', 
+        user: results.user, 
+        // cities: results.cities[6].detail 
+      })
     }
   )
 });
@@ -430,7 +435,7 @@ router.get('/mypageCompany', function(req, res, next) {
 
   async.parallel({
       user_company: function (callback) {
-        Model.UserCompany.findById(req.session.user).populate('detail').exec(callback);
+        Model.UserBusiness.findById(req.session.user).populate('detail').exec(callback);
       },
       platforms: function (callback) {
         Model.EstimateItem.find(callback).populate('detail')
@@ -447,7 +452,8 @@ router.get('/mypageCompany', function(req, res, next) {
         }
       }
 
-      console.log(results)
+      console.log(results.user_company.city)
+      console.log(results.platforms[6])
 
       res.render('user_signup_company', { 
         title: 'Mypage for Company', 
@@ -482,7 +488,7 @@ router.post('/mypageCompany', function (req, res, next) {
 
   console.log(userCompany)
 
-  Model.UserCompany.findByIdAndUpdate(req.session.user, userCompany, {}, function (err, theuserCompany) {
+  Model.UserBusiness.findByIdAndUpdate(req.session.user, userCompany, {}, function (err, theuserCompany) {
     if (err) {return next(err)}
     res.render('success', { title: 'user for company is updated!' })
   })

@@ -5,14 +5,15 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var session = require('express-session')
+var MongoStore = require('connect-mongo')
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 
-// var pizza = require('./populate-review')
-const FileStore = require('session-file-store')
-
 var app = express();
+
+// var kigo = require('./populatedb.js')
 
 
 const Server = require('socket.io')
@@ -33,7 +34,7 @@ app.io.on('connection', (socket) => {
 
 // mongoose connection 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://localhost:27017/kigo', {useNewUrlParser: true, useUnifiedTopology: true});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -48,6 +49,9 @@ app.use(session({
   secret: 'Keyboard cat',
   resave: false,
   saveUninitialized: true,
+  store: MongoStore.create({
+    mongoUrl: 'mongodb://localhost:27017/test'
+  })
 }))
 
 app.use(express.static(path.join(__dirname, 'public')));

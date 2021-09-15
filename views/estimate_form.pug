@@ -9,49 +9,52 @@ block content
       h3= results[0].name
       each val in results[0].detail
         div.form-group
-          input(type="radio", name="platform[]" value=val._id)
+          input(type="radio", name="platform" value=val._id)
           label(for="")= val.name
     div
       h3= results[1].name
       each val in results[1].detail
         div.form-group
-          input(type="checkbox", name="business[]" value=val._id)
+          input(type="checkbox", name="business" value=val._id)
           label(for="")= val.name
     div
       h3= results[2].name
       each val in results[2].detail
         div.form-group  
-          input(type="checkbox", name="goal[]" value=val._id)
+          input(type="checkbox", name="goal" value=val._id)
           label(for="")= val.name
     div
       h3= results[3].name
       each val in results[3].detail
         div.form-group  
-          input(type="radio", name="startday[]" value=val._id)
+          input(type="radio", name="startday" value=val._id)
           label(for="")= val.name
     div
       h3= results[4].name
       each val in results[4].detail
         div.form-group  
-          input(type="radio", name="howlong[]" value=val._id)
+          input(type="radio", name="howlong" value=val._id)
           label(for="")= val.name
     div
       h3= results[5].name
       each val in results[5].detail
         div.form-group  
-          input(type="radio", name="cost[]" value=val._id)
+          input(type="radio", name="cost" value=val._id)
           label(for="")= val.name
     div
       h3= results[6].name
       each val in results[6].detail
         div.form-group  
-          input(type="checkbox", name="city[]" value=val._id)
+          input(type="checkbox", name="city" value=val._id)
           label(for="")= val.name
     div
       h3= results[7].name
       each val in results[7].detail
         div.form-group  
-          input(type="checkbox", name="feedback[]" value=val._id)
+          input(type="checkbox", name="feedback" value=val._id)
           label(for="")= val.name
+
+    p 
+      button(type="submit") confirm
 
     

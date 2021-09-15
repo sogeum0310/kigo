@@ -15,7 +15,6 @@ var app = express();
 
 // var kigo = require('./populatedb.js')
 
-
 const Server = require('socket.io')
 app.io = require('socket.io')()
 
@@ -50,7 +49,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   store: MongoStore.create({
-    mongoUrl: 'mongodb://localhost:27017/test'
+    mongoUrl: 'mongodb://localhost:27017/kigo'
   })
 }))
 

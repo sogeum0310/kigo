@@ -217,10 +217,12 @@ router.get('/estimateComplete/:id', function (req, res, next) {
 
 router.get('/estimateForm', function(req, res, next) {
 
-  Model.EstimateItem.find({}).populate('detail').exec(function (err, results) {
-    console.log(results)
-    res.render('estimate_form', { title: 'Estimate form', results: results })
+  res.render('estimate_form', {
+    title: 'Estimate form',
+    platforms: '',
+    businesses: ''
   })
+
 });
 
 router.post('/estimateForm', function (req, res, next) {
@@ -418,10 +420,10 @@ router.get('/mypage', function(req, res, next) {
       //   }
       // }
 
-      res.render('user_signup', { 
+      res.render('user_signup_personal', { 
         title: 'Mypage', 
         user: results.user, 
-        // cities: results.cities[6].detail 
+        // cities: results.cities[6].detail
       })
     }
   )
@@ -455,7 +457,7 @@ router.get('/mypageCompany', function(req, res, next) {
       console.log(results.user_company.city)
       console.log(results.platforms[6])
 
-      res.render('user_signup_company', { 
+      res.render('user_signup_business', { 
         title: 'Mypage for Company', 
         user_company: results.user_company, 
         cities: results.platforms[6].detail,

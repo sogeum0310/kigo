@@ -9,7 +9,14 @@ mongoose.connect('mongodb://localhost:27017/kigo', { useNewUrlParser: true, useU
 var estimate_items = [];
 var estimate_item_details = [];
 
-var cities = [];
+var platforms = []
+var businesses = []
+var goals = []
+var start_days = []
+var how_longs = []
+var costs = []
+var cities = []
+var feedbacks = []
 
 var user_personals = []
 var user_businesses = []
@@ -51,8 +58,31 @@ function estimateItemDetailCreate(name, estimate_item, cb) {
 
 
     estimate_item_details.push(estimate_item_detail)
-    cities.push()
 
+    if (estimate_item_detail.estimate_item == estimate_items[0]) {
+      platforms.push(estimate_item_detail)
+    }
+    if (estimate_item_detail.estimate_item == estimate_items[1]) {
+      businesses.push(estimate_item_detail)
+    }
+    if (estimate_item_detail.estimate_item == estimate_items[2]) {
+      goals.push(estimate_item_detail)
+    }
+    if (estimate_item_detail.estimate_item == estimate_items[3]) {
+      start_days.push(estimate_item_detail)
+    }
+    if (estimate_item_detail.estimate_item == estimate_items[4]) {
+      how_longs.push(estimate_item_detail)
+    }
+    if (estimate_item_detail.estimate_item == estimate_items[5]) {
+      costs.push(estimate_item_detail)
+    }
+    if (estimate_item_detail.estimate_item == estimate_items[6]) {
+      cities.push(estimate_item_detail)
+    }
+    if (estimate_item_detail.estimate_item == estimate_items[7]) {
+      feedbacks.push(estimate_item_detail)
+    }
 
     cb(null, estimate_item_detail)
   })
@@ -113,7 +143,7 @@ function userBusinessCreate(user_id, password, name, phone, email, about, city, 
 }
 
 function estimateRequestCreate(user_id, platform, business, goal, start_day, how_long, cost, city, feedback, cb) {
-  estimate_detail = {
+  estimate_request_detail = {
     user_id: user_id,
     platform: platform,
     business: business,
@@ -125,7 +155,7 @@ function estimateRequestCreate(user_id, platform, business, goal, start_day, how
     feedback: feedback
   }
 
-  var estimate_request = new Model.EstimatePersonal(estimate_detail)
+  var estimate_request = new Model.EstimateRequest(estimate_request_detail)
 
   estimate_request.save(function (err) {
     if (err) {
@@ -133,7 +163,7 @@ function estimateRequestCreate(user_id, platform, business, goal, start_day, how
       cb(err, null)
       return
     }
-    console.log('New Estimate: ' + estimatepersonal)
+    console.log('New Estimate: ' + estimate_request)
     estimate_requests.push(estimate_request)
     cb(null, estimate_request)
   })
@@ -148,7 +178,7 @@ function estimateResponseCreate(estimate_request, user_id, item, cost, note, cb)
     note: note,
   }
 
-  var estimate_response = new Model.EstimateBusiness(estimate_responsedetail)
+  var estimate_response = new Model.EstimateResponse(estimate_response_detail)
 
   estimate_response.save(function (err) {
     if (err) {
@@ -162,13 +192,13 @@ function estimateResponseCreate(estimate_request, user_id, item, cost, note, cb)
 }
 
 function businessReviewCreate(user_business, user_personal, content, cb) {
-  business_reviewdetail = {
+  business_review_detail = {
     user_business: user_business,
     user_personal: user_personal,
     content: content
   }
 
-  var business_review = new Model.BusinessReview(business_reviewdetail)
+  var business_review = new Model.BusinessReview(business_review_detail)
 
   business_review.save(function (err) {
     if (err) {
@@ -340,16 +370,16 @@ function createEstimateItemDetails(cb) {
 function createUserPersonals(cb) {
   async.parallel([
     function (callback) {
-      userPersonalCreate('bunny', '123', 'so cute', 'male', '1990-12-13', false, '01022223333', 'bunny@example.com', callback)
+      userPersonalCreate('bunny', '123', 'so cute', 'male', '1990-12-13', [cities[1]._id,], '01022223333', 'bunny@example.com', callback)
     }, 
     function (callback) {
-      userPersonalCreate('bird', '123', 'fly high', 'male', '1988-06-24', false, '01022223333', 'bird@example.com', callback)
+      userPersonalCreate('bird', '123', 'fly high', 'male', '1988-06-24', [cities[0]._id,], '01022223333', 'bird@example.com', callback)
     }, 
     function (callback) {
-      userPersonalCreate('monkey', '123', 'love tree', 'female', '1996-03-11', false, '01022223333', 'monkey@example.com', callback)
+      userPersonalCreate('monkey', '123', 'love tree', 'female', '1996-03-11', [cities[0]._id,], '01022223333', 'monkey@example.com', callback)
     }, 
     function (callback) {
-      userPersonalCreate('dog', '123', 'bark again', 'male', '2001-11-04', false, '01022223333', 'dog@example.com', callback)
+      userPersonalCreate('dog', '123', 'bark again', 'male', '2001-11-04', [cities[0]._id,], '01022223333', 'dog@example.com', callback)
     }, 
   ],
   cb)
@@ -358,13 +388,13 @@ function createUserPersonals(cb) {
 function createUserBusinesses(cb) {
   async.parallel([
     function (callback) {
-      userBusinessCreate('apple', '123', 'red green', '01011112222', 'apple@example.com', 'We are selling apple', false, false, callback)
+      userBusinessCreate('apple', '123', 'red green', '01011112222', 'apple@example.com', 'We are selling apple', [cities[0]._id,], [platforms[0]._id,], callback)
     },
     function (callback) {
-      userBusinessCreate('banana', '123', 'yellow gold', '01011112222', 'banana@example.com', 'We are selling banana', false, false, callback)
+      userBusinessCreate('banana', '123', 'yellow gold', '01011112222', 'banana@example.com', 'We are selling banana', [cities[0]._id,], [platforms[0]._id,], callback)
     },
     function (callback) {
-      userBusinessCreate('strawberry', '123', 'deep red', '01011112222', 'strawberry@example.com', 'We are selling strawberry', false, false, callback)
+      userBusinessCreate('strawberry', '123', 'deep red', '01011112222', 'strawberry@example.com', 'We are selling strawberry', [cities[1]._id], [platforms[1]._id,], callback)
     },
   ], 
   cb)
@@ -378,8 +408,8 @@ function createEstimateRequests(cb) {
         [platforms[0]._id,], 
         [businesses[0]._id, businesses[2]._id,], 
         [goals[0]._id, goals[3],], 
-        [startdays[1]._id,], 
-        [howlongs[2]._id,], 
+        [start_days[1]._id,], 
+        [how_longs[2]._id,], 
         [costs[0]._id,], 
         [cities[3]._id,], 
         [feedbacks[0]._id,], 
@@ -392,8 +422,8 @@ function createEstimateRequests(cb) {
         [platforms[2]._id,], 
         [businesses[5]._id, businesses[6]._id,], 
         [goals[2]._id, goals[3]._id,], 
-        [startdays[1]._id,], 
-        [howlongs[2]._id,], 
+        [start_days[1]._id,], 
+        [how_longs[2]._id,], 
         [costs[2]._id,], 
         [cities[1]._id,], 
         [feedbacks[1]._id,], 
@@ -406,8 +436,8 @@ function createEstimateRequests(cb) {
         [platforms[4]._id,], 
         [businesses[1]._id,businesses[3]._id,businesses[4]._id,], 
         [goals[1]._id, goals[3]._id,], 
-        [startdays[0]._id,], 
-        [howlongs[2]._id,], 
+        [start_days[0]._id,], 
+        [how_longs[2]._id,], 
         [costs[1]._id,], 
         [cities[1]._id,], 
         [feedbacks[1]._id,], 
@@ -420,8 +450,8 @@ function createEstimateRequests(cb) {
         [platforms[7]._id,], 
         [businesses[5]._id, businesses[6]._id,], 
         [goals[1]._id,], 
-        [startdays[0]._id,], 
-        [howlongs[3]._id,], 
+        [start_days[0]._id,], 
+        [how_longs[3]._id,], 
         [costs[1]._id,], 
         [cities[0]._id,], 
         [feedbacks[1]._id,], 
@@ -435,10 +465,10 @@ function createEstimateRequests(cb) {
 function createEstimateResponses(cb) {
   async.series([
     function (callback) {
-      estimateResponseCreate(estimates[0], user_businesses[0], ['take a photo', 'blog posting', 'TV commercial'], ['500', '300', '600'], ['We use a DSLR Camera', '', 'including YouTube'], callback)
+      estimateResponseCreate(estimate_requests[0], user_businesses[0], ['take a photo', 'blog posting', 'TV commercial'], ['500', '300', '600'], ['We use a DSLR Camera', '', 'including YouTube'], callback)
     },
     function (callback) {
-      estimateResponseCreate(estimates[0], user_businesses[1], ['blog posting', 'increasing SNS follower'], ['400', '550'], ['per 10 blogs', 'Our main target is Instagram'], callback)
+      estimateResponseCreate(estimate_requests[0], user_businesses[1], ['blog posting', 'increasing SNS follower'], ['400', '550'], ['per 10 blogs', 'Our main target is Instagram'], callback)
     },
   ],
   cb)

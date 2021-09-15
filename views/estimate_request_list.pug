@@ -1,0 +1,13 @@
+extends layout 
+
+block content 
+  h1= title
+
+  ul
+  each estimate_request in estimate_requests
+    li 
+      a(href="estimate/" + estimate_request._id) #{estimate_request.platform[0].name}
+        span= estimate_request.count
+
+
+    

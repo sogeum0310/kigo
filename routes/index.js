@@ -55,32 +55,39 @@ router.get('/test', function (req, res, next) {
 /* Estimate Routing */
 router.get('/estimates', function (req, res, next) {
 
-  Model.EstimateRequest.find().populate('platform').exec(function (err, results) {
-    console.log(results)
-    res.render('estimate_list', { title: 'Estimate list', results: results })
-  })
 
-  // async.parallel({ // 안녕 랩탑, 안녕 데스크탑, 이제 그만
-  //   estimates: function (callback) {
-  //     Model.Estimate.find().exec(callback)
-  //   }
-  // }, function (err, results) {
-  //   res.render('estimate_list', { 
-  //     title: 'Estimate list', 
-  //     get results() {
-  //       for (i=0; i<results.estimates.length; i++) {
+  function first(callback) {
+    var estimate_requests;
 
-  //         Model.EstimateCompany.countDocuments({estimate: results.estimates[i]._id}, function (err, results) { 
-  //           // results.estimates[i].count = results
-  //           console.log(results)
-  //         })
-  //       }
-  //       return results.estimates
-  //     }
-  //   })
-  // })
+    Model.EstimateRequest.find().populate('platform').exec(function (err, results) {
+      // estimate_requests = results
+      // callback(estimate_requests)
+      console.log(results[0])
+    })
+  }
+
+  function second(estimate_requests, callback) {
+    for (i=0; i<estimate_requests.length; i++) {
+      Model.EstimateResponse.countDocuments({ 'estimate_request': estimate_requests[i]._id }, function (err, results) {
+        estimate_requests[i].count = results
+        if (i===3) {
+          callback(estimate_requests)
+        }
+      })
+    }
+  }
+
+  function third(data) {
+    res.render('estimate_request_list', { 
+      title: 'Estimate requests', 
+      estimate_requests: data
+    })
+  }
+
+
+  first(function (result) { second(result, third) })
+
 })
-
 
 router.get('/estimate/:id', function (req, res, next) {
 
@@ -102,14 +109,16 @@ router.get('/estimate/:id', function (req, res, next) {
       Model.EstimateResponse.find({ 'estimate_request': req.params.id }).populate('user_id').exec(callback)
     }
   }, function (err, results) {
+
+    // console.log(results)
+    
     if (err) { return next(err) }
 
-    res.render('estimate', { 
+    res.render('estimate_request_detail', { 
       title: 'Estimate', 
       estimate_request: results.estimate_request, 
       estimate_responses: results.estimate_responses,
     })
-    console.log(results.estimate_responses.length)
   })
 })
 
@@ -123,10 +132,9 @@ router.get('/estimate/:id/:id2', function (req, res, next) {
   }
 
   function doSomethingElse(data1, data2) {
-    Model.BusinessReview.find({'company': data2}).exec(function (err, results) {
-      console.log(data1)
-      console.log(results)
-      res.render('estimate_detail', { 
+    Model.BusinessReview.find({ 'user_business': data2 }).exec(function (err, results) {
+      
+      res.render('estimate_response_detail', { 
         title: 'Estimate Response', 
         estimate_companies: data1, 
         business_reviews: results 
@@ -135,7 +143,6 @@ router.get('/estimate/:id/:id2', function (req, res, next) {
   }
 
   doSomething(doSomethingElse)
-
 })
 
 
@@ -217,25 +224,99 @@ router.get('/estimateComplete/:id', function (req, res, next) {
 
 router.get('/estimateForm', function(req, res, next) {
 
-  async.parallel({
-    estimate_items: function (callback) {
-      Model.EstimateItem.find().exec(callback)
-    },
-  }, function (err, results) {
+  var estimate_items = []
+  var platforms = []
+  var businesses = []
+  var goals = []
+  var start_days = []
+  var how_longs = []
+  var costs = []
+  var cities = []
+  var feedbacks = []
 
-    console.log(results)
-    Model.EstimateItemDetail.find({ 'estimate_item': results.estimate_items[0] }).exec(function (err, results) {
-      console.log(results)
+  function getEstimateItem(callback) {
+    Model.EstimateItem.find().exec(function (err, results) {
+      estimate_items = results
+      callback()
     })
+  }
 
-    res.render('estimate_form', { 
-      title: 'Estimate form', 
-      platforms:  '',
-      businesses: '',
-      
+  function getPlatform(callback) {
+    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[0] }).exec(function (err, results) {
+      platforms = results
+      callback()
     })
+  }
+  function getBusiness(callback) {
+    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[1] }).exec(function (err, results) {
+      businesses = results
+      callback()
+    })
+  }
+  function getGoal(callback) {
+    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[2] }).exec(function (err, results) {
+      goals = results
+      callback()
+    })
+  }
+  function getStartDay(callback) {
+    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[3] }).exec(function (err, results) {
+      start_days = results
+      callback()
+    })
+  }
+  function getHowLong(callback) {
+    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[4] }).exec(function (err, results) {
+      how_longs = results
+      callback()
+    })
+  }
+  function getCost(callback) {
+    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[5] }).exec(function (err, results) {
+      costs = results
+      callback()
+    })
+  }
+  function getCity(callback) {
+    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[6] }).exec(function (err, results) {
+      cities = results
+      callback()
+    })
+  }
+  function getFeedback(callback) {
+    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[7] }).exec(function (err, results) {
+      feedbacks = results
+      callback()
+    })
+  }
+  function nowRender() {
+    res.render('estimate_request_form', { 
+      title: 'Estimate form',
+      platforms: platforms,
+      businesses: businesses,
+      goals: goals,
+      start_days: start_days,
+      how_longs: how_longs,
+      costs: costs,
+      cities: cities,
+      feedbacks: feedbacks
+    })
+  }
+
+  async.series([
+    getEstimateItem,
+    getPlatform, 
+    getBusiness, 
+    getGoal, 
+    getStartDay,
+    getHowLong,
+    getCost,
+    getCity,
+    getFeedback,
+    nowRender
+  ], function (err, results) {
+    if (err) { console.log(results) }
   })
-
 });
 
 router.post('/estimateForm', function (req, res, next) {

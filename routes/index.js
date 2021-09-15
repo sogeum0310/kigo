@@ -227,6 +227,13 @@ router.get('/estimateForm', function(req, res, next) {
     Model.EstimateItemDetail.find({ 'estimate_item': results.estimate_items[0] }).exec(function (err, results) {
       console.log(results)
     })
+
+    res.render('estimate_form', { 
+      title: 'Estimate form', 
+      platforms:  '',
+      businesses: '',
+      
+    })
   })
 
 });

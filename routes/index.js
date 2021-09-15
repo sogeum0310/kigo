@@ -217,10 +217,16 @@ router.get('/estimateComplete/:id', function (req, res, next) {
 
 router.get('/estimateForm', function(req, res, next) {
 
-  res.render('estimate_form', {
-    title: 'Estimate form',
-    platforms: '',
-    businesses: ''
+  async.parallel({
+    estimate_items: function (callback) {
+      Model.EstimateItem.find().exec(callback)
+    },
+  }, function (err, results) {
+
+    console.log(results)
+    Model.EstimateItemDetail.find({ 'estimate_item': results.estimate_items[0] }).exec(function (err, results) {
+      console.log(results)
+    })
   })
 
 });

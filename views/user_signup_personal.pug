@@ -6,36 +6,36 @@ block content
   form(action="" method="POST") 
     div.form-group
       label(for="") id
-      input(type="text", name="user_id" value=(undefined==user ? '' : user.user_id ))
+      input(type="text", name="user_id" value=(undefined==user_personal ? '' : user_personal.user_id))
     div.form-group
       label(for="") password
-      input(type="text" name="password") 
+      input(type="text" name="password" value=(undefined==user_personal ? '' : user_personal.password)) 
     div.form-group
       label(for="") password confirm 
-      input(type="text" name="password_confirm")  
+      input(type="text" name="password_confirm" value=(undefined==user_personal ? '' : user_personal.password))  
     div.form-group
       label(for="") name 
-      input(type="text" name="name" value=(undefined==user ? '' : user.name )) 
+      input(type="text" name="name" value=(undefined==user_personal ? '' : user_personal.name)) 
     div.form-group
       label(for="") gender 
       label(for="") male   
-      input(type="radio" name="gender" value="male" checked=(undefined==user || user.gender!='male' ? false:'checked'))
+      input(type="radio" name="gender" value="male" checked=(undefined==user_personal || user_personal.gender!='male' ? false:'checked'))
       label(for="") female 
-      input(type="radio" name="gender" value="female" checked=(undefined==user || user.gender!='female' ? false:'checked')) 
+      input(type="radio" name="gender" value="female" checked=(undefined==user_personal || user_personal.gender!='female' ? false:'checked')) 
     div.form-group
       label(for="") birth 
-      input(type="date" name="birth_date" value=(undefined==user ? '' : user.date_of_birth_yyyy_mm_dd)) 
-    //- div.form-group
-    //-     each city in cities
-    //-       div
-    //-         input(type="checkbox", name="city", value=city._id, checked=city.checked) 
-    //-         label(for="") #{city.name}
+      input(type="date" name="birth_date" value=(undefined==user_personal ? '' : user_personal.date_of_birth_yyyy_mm_dd)) 
+    div.form-group
+      label(for="") city 
+      select(name="city") 
+        each city in cities 
+          option(value=city._id, selected=(undefined!=user_personal && user_personal.city==city._id.toString() ? 'selected' : false))= city.name 
     div.form-group
       label(for="") phone
-      input(type="text" name="phone" value=(undefined==user ? '' : user.phone))
+      input(type="text" name="phone" value=(undefined==user_personal ? '' : user_personal.phone))
     div.form-group
       label(for="") email 
-      input(type="text" name="email" value=(undefined==user ? '': user.email))
+      input(type="text" name="email" value=(undefined==user_personal ? '': user_personal.email))
     div.form-group
       textarea#policy(name="", cols="30", rows="10") 
     button(type="submit") confirm 

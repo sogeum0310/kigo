@@ -1,5 +1,6 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
+const { DateTime } = require("luxon");  //for date handling
 
 
 var EstimateItemSchema = new Schema({
@@ -20,6 +21,10 @@ var UserPersonalSchema = new Schema({
   city: [{ type: Schema.ObjectId }],
   phone: { type: String },
   email: { type: String }
+});
+
+UserPersonalSchema.virtual('date_of_birth_yyyy_mm_dd').get(function() {
+  return DateTime.fromJSDate(this.date_of_birth).toISODate(); //format 'YYYY-MM-DD'
 });
 
 var UserBusinessSchema = new Schema({

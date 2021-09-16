@@ -53,7 +53,7 @@ router.get('/test', function (req, res, next) {
 
 
 /* Estimate Routing */
-router.get('/estimates', function (req, res, next) {
+router.get('/estimate/request/list', function (req, res, next) {
   Model.EstimateRequest.find({ 'user_id': req.session.user }).populate('platform').exec(function (err, results) {
     console.log(results)
     res.render('estimate_request_list', { title: 'Estimate Requests', estimate_requests: results })
@@ -61,7 +61,7 @@ router.get('/estimates', function (req, res, next) {
 })
 
 
-router.get('/estimate/:id', function (req, res, next) {
+router.get('/estimate/request/:id', function (req, res, next) {
 
   async.parallel({
     estimate_request: function (callback) {
@@ -95,16 +95,14 @@ router.get('/estimate/:id', function (req, res, next) {
 })
 
 
-router.get('/estimate/:id/:id2', function (req, res, next) {
-
-  // estimate response -> review, portfolio -> render
+router.get('/estimate/response/:id', function (req, res, next) {
 
   var estimate_response;
   var file;
   var business_reviews;
 
   function getEstimateResponse(callback) {
-    Model.EstimateResponse.findById(req.params.id2).exec(function (err, results) {
+    Model.EstimateResponse.findById(req.params.id).exec(function (err, results) {
       estimate_response = results
       console.log(estimate_response)
       callback()
@@ -169,7 +167,7 @@ router.get('/estimateCompany/:id', function (req, res, next) {
   .populate('feedback')
   .exec(function (err, results) {
     // console.log(results)
-    res.render( 'estimate_detail_company', { title: 'Estimate for company', results: results} )
+    res.render( 'estimate_received_detail', { title: 'Estimate for company', results: results} )
   })
 })
 
@@ -212,7 +210,7 @@ router.get('/estimateComplete/:id', function (req, res, next) {
 
 })
 
-router.get('/estimateForm', function(req, res, next) {
+router.get('/estimate/request/form', function(req, res, next) {
 
   var estimate_items = []
   var platforms = []
@@ -546,42 +544,74 @@ router.get('/alarm', function(req, res, next) {
 
 
 router.get('/mypage', function(req, res, next) {
+  var estimate_items;
+  var user_personal;
+  var cities;
 
-  async.parallel({
-      user: function (callback) {
-        Model.UserPersonal.findById(req.session.user).populate('detail').exec(callback);
-      },
-      cities: function (callback) {
-        Model.EstimateItem.find(callback).populate('detail')
-      },  
-    },
-    function (err, results) {
-      console.log(results)
-      if (err) { return next(err) }
+  function getEstimateItem(callback) {
+    Model.EstimateItem.find().exec(function (err, results) {
+      estimate_items = results
+      callback()
+    })
+  }  
+  function getCity(callback) {
+    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[6] }).exec(function (err, results) {
+      cities = results
+      callback()
+    })
+  }
 
-      // for (var i=0; i<results.cities[6].detail.length; i++) {
-      //   for (var j=0; j<results.user.city.length; j++) {
-      //     if (results.cities[6].detail[i]._id.toString()===results.user.city[j]._id.toString()) {
-      //       results.cities[6].detail[i].checked='true'
-      //     }
-      //   }
-      // }
+  function getUserPersonal(callback) {
+    Model.UserPersonal.findById(req.session.user).exec(function (err, results) {
+      user_personal = results
+      console.log(user_personal)
+      callback()
+    })
+  }
 
-      res.render('user_signup_personal', { 
-        title: 'Mypage', 
-        user: results.user, 
-        // cities: results.cities[6].detail
-      })
-    }
-  )
+  function nowRender() {
+    res.render('user_signup_personal', { 
+      title: 'Mypage for personal account',
+      user_personal: user_personal,
+      cities: cities,
+    })
+  }
+  
+  async.series([
+    getEstimateItem,
+    getCity,
+    getUserPersonal,
+    nowRender
+  ])
+
 });
+
+router.post('/mypage', function (req, res, next) {
+  var user_personal = new Model.UserPersonal({
+    user_id: req.body.user_id,
+    password: req.body.password,
+    name: req.body.name,
+    gender: req.body.gender,
+    date_of_birth: req.body.birth_date,
+    city: req.body.city,
+    phone: req.body.phone,
+    email: req.body.email,
+    _id: req.session.user
+  })
+  console.log(user_personal)
+
+  Model.UserPersonal.findByIdAndUpdate(req.session.user, user_personal, {}, function (err, results) {
+    if (err) { return next(err) }
+    res.render('success', { title: 'user for personal is updated!' })
+  })
+
+})
 
 router.get('/mypageCompany', function(req, res, next) {
 
   var estimate_items = []
   var cities = []
   var platforms = []
-
 
   function getEstimateItem(callback) {
     Model.EstimateItem.find().exec(function (err, results) {

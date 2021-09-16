@@ -6,5 +6,5 @@ block content
   ul 
   each estimate in estimate_list 
     li
-      a(href="/estimateCompany/" + estimate._id) #{estimate.platform[0].name}  
+      a(href="/estimate/received/" + estimate._id) #{estimate.platform[0].name}  
       span (#{estimate.user_id.user_id})

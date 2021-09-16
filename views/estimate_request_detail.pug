@@ -9,8 +9,7 @@ block content
   p
 
   each estimate_response in estimate_responses 
-    a(href="/estimate/response/" + estimate_response._id) hello world 
-    //- a(href=`/estimate/${estimate_response.estimate_request}/${estimate_response._id}`)= estimate_response.user_id.user_id
+    a(href="/estimate/response/" + estimate_response._id)= estimate_response.user_id.user_id
     p= estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)
 
   

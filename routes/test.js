@@ -11,7 +11,6 @@ function doSomethingElse(data, callback) {
 function doThirdThing(data) {
   res.render('estimate_form', { 
     title: 'Estimate form', 
-    platforms: data
   })
 }
 doSomething(function (result) { doSomethingElse(result, doThirdThing) })
@@ -48,3 +47,36 @@ function third(data) {
 }
 
 first(function (result) { second(result, third) })
+
+// function (req, res, next) {
+
+  // function doSomething(callback) {
+  //   Model.EstimateCompany.findById('612db970e49ade1a3d78c29b').exec(function (err, results) {
+  //     callback(results, results.company)
+  //   })
+  // }
+
+  // function doSomethingElse(data1, data2) {
+  //   Model.CompanyReview.find({'company': data2}).exec(function (err, results) {
+  //     console.log(data1)
+  //     console.log(results)
+  //     res.render('test', { title: 'test', results: results })
+  //   })
+  // }
+
+  // doSomething(doSomethingElse)
+
+  // var bunny = new Model.User({
+  //   city: '6127581b3eef7c51a4095713',
+  //   _id: req.session.user
+  // })
+
+  // Model.User.findByIdAndUpdate(req.session.user, bunny, {}, function (err, results) {
+  //   if (err) { return next(err) }
+  //   console.log('so good')
+  // })
+
+  // Model.User.updateMany({ city: '6127581b3eef7c51a4095715' }, function (err, results) {
+  //   console.log('so good')
+  // })
+// }

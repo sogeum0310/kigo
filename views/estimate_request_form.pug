@@ -12,55 +12,57 @@ block content
   //- pre= cities 
   //- pre= feedbacks
 
-  h3 Platform
-  each platform in platforms 
-    div.form-group
-      label(for="")= platform.name 
-      input(type="checkbox", value=platform._id)
+  form(action="", method="POST") 
+
+    h3 Platform
+    each platform in platforms 
+      div.form-group
+        label(for="")= platform.name 
+        input(type="checkbox", name="platform", value=platform._id)
 
 
-  h3 Business
-  each business in businesses 
-    div.form-group
-      label(for="")= business.name 
-      input(type="checkbox", value=business._id) 
+    h3 Business
+    each business in businesses 
+      div.form-group
+        label(for="")= business.name 
+        input(type="checkbox", name="business", value=business._id) 
 
-  h3 Goal 
-  each goal in goals 
-    div.form-group
-      label(for="")= goal.name 
-      input(type="checkbox", value=goal._id)
+    h3 Goal 
+    each goal in goals 
+      div.form-group
+        label(for="")= goal.name 
+        input(type="checkbox", name="goal", value=goal._id)
 
-  h3 Start day 
-  each start_day in start_days 
-    div.form-group
-      label(for="")= start_day.name 
-      input(type="checkbox", value=start_day._id) 
+    h3 Start day 
+    each start_day in start_days 
+      div.form-group
+        label(for="")= start_day.name 
+        input(type="checkbox", name="start_day", value=start_day._id) 
 
-  h3 How long 
-  each how_long in how_longs 
-    div.form-group
-      label(for="")= how_long.name 
-      input(type="checkbox", value=how_long._id) 
+    h3 How long 
+    each how_long in how_longs 
+      div.form-group
+        label(for="")= how_long.name 
+        input(type="checkbox", name="how_long", value=how_long._id) 
 
-  h3 Cost 
-  each cost in costs 
-    div.form-group
-      label(for="")= cost.name 
-      input(type="checkbox", value=cost._id)
+    h3 Cost 
+    each cost in costs 
+      div.form-group
+        label(for="")= cost.name 
+        input(type="checkbox", name="cost", value=cost._id)
 
-  h3 City 
-  each city in cities 
-    div.form-group
-      label(for="")= city.name 
-      input(type="checkbox", value=city._id)
+    h3 City 
+    each city in cities 
+      div.form-group
+        label(for="")= city.name 
+        input(type="checkbox", name="city", value=city._id)
 
-  h3 Feedback 
-  each feedback in feedbacks 
-    div.form-group
-      label(for="")= feedback.name 
-      input(type="checkbox", value=feedback._id)   
+    h3 Feedback 
+    each feedback in feedbacks 
+      div.form-group
+        label(for="")= feedback.name 
+        input(type="checkbox", name="feedback", value=feedback._id)   
 
-  p 
-    button(type="submit") confirm
+    p 
+      button(type="submit") confirm
     

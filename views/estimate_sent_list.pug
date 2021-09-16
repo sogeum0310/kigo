@@ -8,5 +8,5 @@ block content
   ul
   each estimate_sent in results 
     li
-      a(href="/estimateComplete/" + estimate_sent._id)= estimate_sent.estimate_request.platform[0].name
+      a(href="/estimate/sent/" + estimate_sent._id)= estimate_sent.estimate_request.platform[0].name
       | (#{results[0].estimate_request.user_id})

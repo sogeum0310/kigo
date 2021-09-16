@@ -11,8 +11,6 @@ var EstimateItemDetailSchema = new Schema({
   estimate_item: { type: Schema.ObjectId, ref: 'EstimateItem' }
 })
 
-
-// to personal or business account
 var UserPersonalSchema = new Schema({
   user_id : { type: String, required: true, maxLength: 100 },
   password : { type: String, required: true, maxLength: 100 },
@@ -35,9 +33,8 @@ var UserBusinessSchema = new Schema({
   platform: [{ type: Schema.ObjectId }]
 });
 
-
 var EstimateRequestSchema = new Schema({
-  user_id: { type: Schema.ObjectId, ref: 'UserPersonal' },
+  user_id: { type: Schema.ObjectId, ref: 'User' },
   platform : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   business : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   goal : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
@@ -56,7 +53,6 @@ var EstimateResponseSchema = new Schema({
   note: [{ type: String }],
 }) 
 
-
 var BusinessReviewSchema = new Schema({
   user_business: { type: Schema.ObjectId, ref: 'UserBusiness' },
   user_personal: { type: Schema.ObjectId, ref: 'UserPersonal' },
@@ -69,6 +65,11 @@ var ChatContentSchema = new Schema({
   room: { type: Schema.ObjectId }
 })
 
+var FileSchema = new Schema({
+  parent: { type: Schema.ObjectId },
+  name: { type: String },
+  md_name: { type: String }
+}) 
 
 var UserPersonal = mongoose.model('User', UserPersonalSchema)
 var UserBusiness = mongoose.model('UserBusiness', UserBusinessSchema)
@@ -79,8 +80,10 @@ var EstimateItemDetail = mongoose.model('EstimateItemDetail', EstimateItemDetail
 var EstimateRequest = mongoose.model('EstimateRequest', EstimateRequestSchema)
 var EstimateResponse = mongoose.model('EstimateResponse', EstimateResponseSchema)
 
-var BusinessReview = mongoose.model('BusinessReview', BusinessReviewSchema);
+var BusinessReview = mongoose.model('BusinessReview', BusinessReviewSchema)
 var ChatContent = mongoose.model('ChatContent', ChatContentSchema)
+
+var File = mongoose.model('File', FileSchema)
 
 
 exports.UserPersonal = UserPersonal
@@ -95,6 +98,8 @@ exports.EstimateResponse = EstimateResponse
 exports.BusinessReview = BusinessReview
 
 exports.ChatContent = ChatContent
+
+exports.File = File
 
 // 자주묻는 질문 - Faq, 
 // 공지사항 - Notice

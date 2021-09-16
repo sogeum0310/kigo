@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var session = require('express-session')
 var MongoStore = require('connect-mongo')
+var fileUpload = require('express-fileupload')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -52,8 +53,10 @@ app.use(session({
     mongoUrl: 'mongodb://localhost:27017/kigo'
   })
 }))
+app.use(fileUpload())
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/files', express.static('files'));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

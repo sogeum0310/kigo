@@ -3,36 +3,37 @@ extends layout
 block content 
   h1= title
 
-  form(action="" method="POST") 
+  form(action="" method="POST" enctype="multipart/form-data") 
     div.form-group
       label(for="") id
-      input(type="text" name="user_id" value=(undefined==user_company ? '':user_company.user_id))
+      input(type="text" name="user_id" value=(undefined==user_business ? '':user_business.user_id))
     div.form-group
       label(for="") password
-      input(type="text" name="password") 
+      input(type="text" name="password" value=(undefined==user_business ? '':user_business.password)) 
     div.form-group
       label(for="") password confirm 
-      input(type="text" name="password_confirm")  
+      input(type="text" name="password_confirm" value=(undefined==user_business ? '':user_business.password))  
     div.form-group
       label(for="") company name 
-      input(type="text" name="name" value=(undefined==user_company ? '' : user_company.name)) 
+      input(type="text" name="name" value=(undefined==user_business ? '' : user_business.name)) 
     div.form-group
       label(for="") phone
-      input(type="text" name="phone" value=(undefined==user_company ? '' : user_company.phone))
+      input(type="text" name="phone" value=(undefined==user_business ? '' : user_business.phone))
     div.form-group
       label(for="") email 
-      input(type="text" name="email" value=(undefined==user_company ? '' : user_company.email))
+      input(type="text" name="email" value=(undefined==user_business ? '' : user_business.email))
     div.form-group
-      textarea#policy(name="about", cols="30", rows="10")=(undefined==user_company ? '' : user_company.about)
+      textarea#policy(name="about", cols="30", rows="10")=(undefined==user_business ? '' : user_business.about)
 
     div.form-group
-      input(type="file")
+      label(for="") portfolio 
+      input(type="file", name="sampleFile")
 
     div.form-group
       label(for="") city 
       select(name="city") 
         each city in cities 
-          option(value=city._id, selected=(user_company.city==city._id.toString() ? 'selected' : false))= city.name 
+          option(value=city._id, selected=(undefined!=user_business && user_business.city==city._id.toString() ? 'selected' : false))= city.name 
 
     div.form-group
       each platform in platforms 

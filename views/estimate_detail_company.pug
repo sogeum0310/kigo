@@ -5,12 +5,36 @@ block content
 
   pre= results
 
-  input(type="text")
-  input(type="text")
-  input(type="text")
-  input(type="text")
-  input(type="text")
-  input(type="text")
+  form(action="", method="POST") 
+    table 
+      tr 
+        th item 
+        th cost 
+        th note 
+      tr 
+        td 
+          input(type="text", name="item")
+        td
+          input(type="text", name="cost")
+        td
+          input(type="text", name="note")
+      tr 
+        td 
+          input(type="text", name="item")
+        td
+          input(type="text", name="cost")
+        td
+          input(type="text", name="note")
+      tr 
+        td 
+          input(type="text", name="item")
+        td
+          input(type="text", name="cost")
+        td
+          input(type="text", name="note")
+  
+    p
+      button(type="submit") confirm
 
   p 
     a(href="/estimatesCompany/") list

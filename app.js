@@ -14,7 +14,8 @@ var adminRouter = require('./routes/admin');
 
 var app = express();
 
-// var kigo = require('./populatedb.js')
+
+// var populatedb = require('./populatedb')
 
 const Server = require('socket.io')
 app.io = require('socket.io')()

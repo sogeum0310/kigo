@@ -7,10 +7,6 @@ var other_controller = require('../controllers/otherController')
 
 
 /* GET home page. */
-// router.get(['/', '/*'], function (req, res, next) {
-//   console.log('Look at me: ' + req.session.user)
-//   next()
-// })
 router.get('/', other_controller.index)
 router.get('/test', other_controller.test)
 

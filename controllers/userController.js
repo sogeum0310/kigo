@@ -335,33 +335,6 @@ exports.user_business_get = function(req, res, next) {
 
 exports.user_business_post = function (req, res, next) {
 
-  // if (!(req.body.platform instanceof Array)) {
-  //   if (typeof req.body.platform==='undefined')
-  //   req.body.platform=[]
-  //   else
-  //   req.body.platform=new Array(req.body.platform)
-  // }
-
-  let sampleFile
-  let uploadPath
-
-  // if (!req.files || Object.keys(req.files).length === 0) {
-  //   return res.status(400).send('No files were uploaded.')
-  // }
-
-  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-  sampleFile = req.files.sampleFile
-  // uploadPath = __dirname + '/somewhere/on/your/server/' + sampleFile.name
-  var newFile = sampleFile.md5 + '.' + sampleFile.name.split('.').pop()
-
-  uploadPath = 'files/' + newFile
-
-  // Use the mv() method to place the file somewhere on your server
-  sampleFile.mv(uploadPath, function(err) {
-    if (err)
-      return res.status(500).send(err)
-  })
-
   var user_business = new Model.UserBusiness({
     user_id : req.body.user_id,
     password : req.body.password,
@@ -374,16 +347,34 @@ exports.user_business_post = function (req, res, next) {
     _id: req.session.user
   })
 
-  var file = new Model.File({
-    parent: req.session.user,
-    name: sampleFile.name,
-    md_name: newFile
-  })
-
-  file.save()
+  if (req.files) {
+    let sampleFile
+    let uploadPath
+    // if (!req.files || Object.keys(req.files).length === 0) {
+    //   return res.status(400).send('No files were uploaded.')
+    // }
+    // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+    sampleFile = req.files.sampleFile
+    // uploadPath = __dirname + '/somewhere/on/your/server/' + sampleFile.name
+    var newFile = sampleFile.md5 + '.' + sampleFile.name.split('.').pop()
+    uploadPath = 'files/' + newFile
+    // Use the mv() method to place the file somewhere on your server
+    sampleFile.mv(uploadPath, function(err) {
+      if (err)
+        return res.status(500).send(err)
+    })
+    var file = new Model.File({
+      parent: req.session.user,
+      name: sampleFile.name,
+      md_name: newFile
+    })
+    file.save()
+  }
+  
 
   Model.UserBusiness.findByIdAndUpdate(req.session.user, user_business, {}, function (err, results) {
     if (err) {return next(err)}
     res.render('success', { title: 'user for business is updated!' })
   })
+
 }

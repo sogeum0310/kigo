@@ -15,8 +15,6 @@ function doThirdThing(data) {
 }
 doSomething(function (result) { doSomethingElse(result, doThirdThing) })
 
-// hey
-
 
 function first(callback) {
   var estimate_requests;
@@ -46,7 +44,12 @@ function third(data) {
   })
 }
 
-first(function (result) { second(result, third) })
+  // if (!(req.body.platform instanceof Array)) {
+  //   if (typeof req.body.platform==='undefined')
+  //   req.body.platform=[]
+  //   else
+  //   req.body.platform=new Array(req.body.platform)
+  // }
 
 // function (req, res, next) {
 
@@ -80,3 +83,93 @@ first(function (result) { second(result, third) })
   //   console.log('so good')
   // })
 // }
+
+function estimateRequestCreate(user_id, platform, business, goal, start_day, how_long, cost, city, feedback, cb) {
+  estimate_request_detail = {
+    user_id: user_id,
+    platform: platform,
+    business: business,
+    goal: goal,
+    start_day: start_day,
+    how_long: how_long,
+    cost: cost,
+    city: city,
+    feedback: feedback
+  }
+
+  var estimate_request = new Model.EstimateRequest(estimate_request_detail)
+
+  estimate_request.save(function (err) {
+    if (err) {
+      console.log('ERROR CREATING Estimate: ' + estimate_request)
+      cb(err, null)
+      return
+    }
+    console.log('New Estimate: ' + estimate_request)
+    estimate_requests.push(estimate_request)
+    cb(null, estimate_request)
+  })
+}
+
+
+function createEstimateRequests(cb) {
+  async.parallel([
+    function (callback) {
+      estimateRequestCreate(
+        user_personals[0]._id, 
+        [platforms[0]._id,], 
+        [businesses[0]._id, businesses[2]._id,], 
+        [goals[0]._id, goals[3],], 
+        [start_days[1]._id,], 
+        [how_longs[2]._id,], 
+        [costs[0]._id,], 
+        [cities[3]._id,], 
+        [feedbacks[0]._id,], 
+        callback
+      )
+    },
+    function (callback) {
+      estimateRequestCreate(
+        user_personals[0]._id, 
+        [platforms[2]._id,], 
+        [businesses[5]._id, businesses[6]._id,], 
+        [goals[2]._id, goals[3]._id,], 
+        [start_days[1]._id,], 
+        [how_longs[2]._id,], 
+        [costs[2]._id,], 
+        [cities[1]._id,], 
+        [feedbacks[1]._id,], 
+        callback
+      )
+    },
+    function (callback) {
+      estimateRequestCreate(
+        user_personals[0]._id, 
+        [platforms[4]._id,], 
+        [businesses[1]._id,businesses[3]._id,businesses[4]._id,], 
+        [goals[1]._id, goals[3]._id,], 
+        [start_days[0]._id,], 
+        [how_longs[2]._id,], 
+        [costs[1]._id,], 
+        [cities[1]._id,], 
+        [feedbacks[1]._id,], 
+        callback
+        )
+    },
+    function (callback) {
+      estimateRequestCreate(
+        user_personals[1]._id, 
+        [platforms[7]._id,], 
+        [businesses[5]._id, businesses[6]._id,], 
+        [goals[1]._id,], 
+        [start_days[0]._id,], 
+        [how_longs[3]._id,], 
+        [costs[1]._id,], 
+        [cities[0]._id,], 
+        [feedbacks[1]._id,], 
+        callback
+        )
+    },
+  ], 
+  cb);
+}

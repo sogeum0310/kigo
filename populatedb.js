@@ -2,8 +2,8 @@ var async = require('async')
 var Model = require('./models/model')
 
 
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/kigo', { useNewUrlParser: true, useUnifiedTopology: true });
+// const mongoose = require('mongoose');
+// mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 var estimate_items = [];

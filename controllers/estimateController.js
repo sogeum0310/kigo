@@ -57,13 +57,65 @@ exports.estimate_response_detail = function (req, res, next) {
 }
 
 exports.estimate_received_list = function (req, res, next) {
-  Model.EstimateRequest.find().populate('user_id').populate('platform').exec(function (err, results) {
-    if (err) {return next(err)}
 
-    res.render('estimate_received_list', { title: 'Estimate Received', estimate_list: results })
-    console.log(results)
-  })
+  var estimate_requests
+  var user_business_platform = []
+  var user_business_city = []
+
+  function getUserBusiness(callback) {
+    Model.UserBusiness.findById(req.session.user).exec(function (err, user_business) {
+
+      for (i=0; i<user_business.platform.length; i++) {
+        var obj = {}
+        obj.platform = user_business.platform[i]
+        user_business_platform.push(obj)
+      }
+
+      for (i=0; i<user_business.city.length; i++) {
+        var obj = {}
+        obj.city = user_business.city[i]
+        user_business_city.push(obj)
+      }
+
+      callback()
+    })
+  }
+
+  function getEstimateRequest(callback) {
+    // Model.EstimateRequest.find({ $or: user_business_platform }, function (err, results) {
+    //   estimate_requests = results
+    //   callback()
+    // }).populate('platform').populate('user_id')
+    
+    console.log(user_business_platform)
+    console.log(user_business_city)
+
+    Model.EstimateRequest.find({
+      $and: [
+        { $or: user_business_platform },
+        { $or: user_business_city }
+      ]
+    }, function (err, results) {
+      estimate_requests = results
+      callback()
+    }).populate('platform').populate('user_id')
+
+  }
+
+  function nowRender() {
+    res.render('estimate_received_list', { 
+      title: 'Estimate received list', 
+      estimate_received_list: estimate_requests 
+    })
+  }
+  
+  async.series([
+    getUserBusiness,
+    getEstimateRequest,
+    nowRender
+  ])
 }
+
 
 exports.estimate_received_detail_get = function (req, res, next) {
 

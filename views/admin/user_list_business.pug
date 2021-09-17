@@ -1,0 +1,17 @@
+extends layout 
+
+block content 
+  h1= title
+
+  ul
+    each user_business in user_businesses
+      li
+        a(href="/admin/user/business/" + user_business._id)= user_business.user_id
+
+  hr
+
+  pre= user_businesses
+
+  hr
+
+  pre= user_businesss

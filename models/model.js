@@ -2,8 +2,6 @@ var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 const { DateTime } = require("luxon");  //for date handling
 
-// for test
-
 var EstimateItemSchema = new Schema({
   name: { type: String }
 })

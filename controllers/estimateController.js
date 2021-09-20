@@ -10,50 +10,23 @@ exports.estimate_request_list = function (req, res, next) {
 }
 
 exports.estimate_response_detail = function (req, res, next) {
-
-  var estimate_response
-  var file
-  var business_reviews
-
-  function getEstimateResponse(callback) {
-    Model.EstimateResponse.findById(req.params.id).exec(function (err, results) {
-      estimate_response = results
-      console.log(estimate_response)
-      callback()
+  Model.EstimateResponse.findById(req.params.id).exec(function (err, estimate_response) {
+    async.parallel({
+      portfolio: function (callback) {
+        Model.File.findOne({ parent: estimate_response.user_id }).exec(callback)
+      },
+      business_reviews: function (callback) {
+        Model.BusinessReview.find({ user_business: estimate_response.user_id }).exec(callback)
+      }
+    }, function (err, results) {
+      res.render('estimate_response_detail', { 
+        title: 'Estimate Response', 
+        estimate_response: estimate_response,
+        portfolio: results.portfolio,
+        business_reviews: results.business_reviews
+      })
     })
-  }
-
-  function getFile(callback) {
-    Model.File.findOne({ 'parent': estimate_response.user_id }).exec(function (err, results) {
-      file = results
-      console.log(file)
-      callback()
-    })
-  }
-
-  function getBusinessReview(callback) {
-    Model.BusinessReview.find({ 'user_business': estimate_response.user_id }).exec(function (err, results) {
-      business_reviews = results
-      console.log(business_reviews)
-      callback()
-    })
-  }
-
-  function nowRender() {
-    res.render('estimate_response_detail', { 
-      title: 'Estimate Response', 
-      estimate_response: estimate_response,
-      portfolio: file,
-      business_reviews: business_reviews
-    })
-  }
-
-  async.series([
-    getEstimateResponse,
-    getFile,
-    getBusinessReview,
-    nowRender
-  ])
+  })
 }
 
 exports.estimate_received_list = function (req, res, next) {
@@ -82,10 +55,6 @@ exports.estimate_received_list = function (req, res, next) {
   }
 
   function getEstimateRequest(callback) {
-    // Model.EstimateRequest.find({ $or: user_business_platform }, function (err, results) {
-    //   estimate_requests = results
-    //   callback()
-    // }).populate('platform').populate('user_id')
     
     console.log(user_business_platform)
     console.log(user_business_city)
@@ -116,26 +85,13 @@ exports.estimate_received_list = function (req, res, next) {
   ])
 }
 
-
 exports.estimate_received_detail_get = function (req, res, next) {
-
-  Model.EstimateRequest.findById(req.params.id)
-  .populate('platform')
-  .populate('business')
-  .populate('goal')
-  .populate('start_day')
-  .populate('how_long')
-  .populate('cost')
-  .populate('city')
-  .populate('feedback')
-  .exec(function (err, results) {
-    // console.log(results)
+  Model.EstimateRequest.findById(req.params.id).populate('platform').populate('business').populate('goal').populate('start_day').populate('how_long').populate('cost').populate('city').populate('feedback').exec(function (err, results) {
     res.render( 'estimate_received_detail', { title: 'Estimate for company', results: results} )
   })
 }
 
 exports.estimate_received_detail_post = function (req, res, next) {
-
   var estimate_response = new Model.EstimateResponse({
     estimate_request: req.params.id,
     user_id: req.session.user,
@@ -143,13 +99,11 @@ exports.estimate_received_detail_post = function (req, res, next) {
     cost: req.body.cost,
     note: req.body.note
   })
-
   console.log(estimate_response)
 }
 
 exports.estimate_sent_list = function (req, res, next) {
-
-  Model.EstimateResponse.find({ 'user_id': req.session.user })
+  Model.EstimateResponse.find({ user_id: req.session.user })
   .populate({
     path: 'estimate_request',
     populate: {
@@ -162,7 +116,6 @@ exports.estimate_sent_list = function (req, res, next) {
 }
 
 exports.estimate_sent_detail = function (req, res, next) {
-
   Model.EstimateResponse.findById(req.params.id)
   .populate({
     path: 'estimate_request',
@@ -176,127 +129,58 @@ exports.estimate_sent_detail = function (req, res, next) {
 }
 
 exports.estimate_request_create_get = function(req, res, next) {
-
-  var estimate_items = []
-  var platforms = []
-  var businesses = []
-  var goals = []
-  var start_days = []
-  var how_longs = []
-  var costs = []
-  var cities = []
-  var feedbacks = []
-
-  function getEstimateItem(callback) {
-    Model.EstimateItem.find().exec(function (err, results) {
-      estimate_items = results
-      callback()
+  Model.EstimateItem.find().exec(function (err, estimate_items) {
+    async.parallel({
+      platforms: function (callback) {
+        Model.EstimateItemDetail.find({ estimate_item: estimate_items[0]._id }).exec(callback)
+      },
+      businesses: function (callback) {
+        Model.EstimateItemDetail.find({ estimate_item: estimate_items[1]._id }).exec(callback)
+      },
+      goals: function (callback) {
+        Model.EstimateItemDetail.find({ estimate_item: estimate_items[2]._id }).exec(callback)
+      },
+      start_days: function (callback) {
+        Model.EstimateItemDetail.find({ estimate_item: estimate_items[3]._id }).exec(callback)
+      },
+      how_longs: function (callback) {
+        Model.EstimateItemDetail.find({ estimate_item: estimate_items[4]._id }).exec(callback)
+      },
+      costs: function (callback) {
+        Model.EstimateItemDetail.find({ estimate_item: estimate_items[5]._id }).exec(callback)
+      },
+      cities: function (callback) {
+        Model.EstimateItemDetail.find({ estimate_item: estimate_items[6]._id }).exec(callback)
+      },
+      feedbacks: function (callback) {
+        Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec(callback)
+      },
+    }, function (err, results) {
+      res.render('estimate_request_form', { 
+        title: 'Estimate form',
+        platforms: results.platforms,
+        businesses: results.businesses,
+        goals: results.goals,
+        start_days: results.start_days,
+        how_longs: results.how_longs,
+        costs: results.costs,
+        cities: results.cities,
+        feedbacks: results.feedbacks
+      })
     })
-  }
-
-  function getPlatform(callback) {
-    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[0] }).exec(function (err, results) {
-      platforms = results
-      callback()
-    })
-  }
-  function getBusiness(callback) {
-    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[1] }).exec(function (err, results) {
-      businesses = results
-      callback()
-    })
-  }
-  function getGoal(callback) {
-    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[2] }).exec(function (err, results) {
-      goals = results
-      callback()
-    })
-  }
-  function getStartDay(callback) {
-    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[3] }).exec(function (err, results) {
-      start_days = results
-      callback()
-    })
-  }
-  function getHowLong(callback) {
-    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[4] }).exec(function (err, results) {
-      how_longs = results
-      callback()
-    })
-  }
-  function getCost(callback) {
-    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[5] }).exec(function (err, results) {
-      costs = results
-      callback()
-    })
-  }
-  function getCity(callback) {
-    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[6] }).exec(function (err, results) {
-      cities = results
-      callback()
-    })
-  }
-  function getFeedback(callback) {
-    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[7] }).exec(function (err, results) {
-      feedbacks = results
-      callback()
-    })
-  }
-  function nowRender() {
-    res.render('estimate_request_form', { 
-      title: 'Estimate form',
-      platforms: platforms,
-      businesses: businesses,
-      goals: goals,
-      start_days: start_days,
-      how_longs: how_longs,
-      costs: costs,
-      cities: cities,
-      feedbacks: feedbacks
-    })
-  }
-
-  async.series([
-    getEstimateItem,
-    getPlatform, 
-    getBusiness, 
-    getGoal, 
-    getStartDay,
-    getHowLong,
-    getCost,
-    getCity,
-    getFeedback,
-    nowRender
-  ], function (err, results) {
-    if (err) { console.log(results) }
   })
 }
 
 exports.estimate_request_detail = function (req, res, next) {
-
   async.parallel({
     estimate_request: function (callback) {
-
-      Model.EstimateRequest.findById(req.params.id)
-      .populate('platform')
-      .populate('business')
-      .populate('goal')
-      .populate('start_day')
-      .populate('how_long')
-      .populate('cost')
-      .populate('city')
-      .populate('feedback')
-      .exec(callback)
+      Model.EstimateRequest.findById(req.params.id).populate('platform').populate('business').populate('goal').populate('start_day').populate('how_long').populate('cost').populate('city').populate('feedback').exec(callback)
     },
     estimate_responses: function (callback) {
-      Model.EstimateResponse.find({ 'estimate_request': req.params.id }).populate('user_id').exec(callback)
+      Model.EstimateResponse.find({ estimate_request: req.params.id }).populate('user_id').exec(callback)
     }
   }, function (err, results) {
-
-    // console.log(results)
-    
     if (err) { return next(err) }
-
     res.render('estimate_request_detail', { 
       title: 'Estimate', 
       estimate_request: results.estimate_request, 
@@ -317,13 +201,7 @@ exports.estimate_request_create_post = function (req, res, next) {
     city: req.body.city,
     feedback: req.body.feedback
   })
-
   console.log(estimate)
-
-  // estimate.save(function (err) {
-  //   if (err) { return next(err) }
-  //   res.render('success', { title: 'form submitted!' })
-  // })
 }
 
 

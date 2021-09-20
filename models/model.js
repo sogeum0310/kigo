@@ -2,6 +2,7 @@ var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 const { DateTime } = require("luxon");  //for date handling
 
+// here we go
 
 var EstimateItemSchema = new Schema({
   name: { type: String }
@@ -65,7 +66,7 @@ var BusinessReviewSchema = new Schema({
 })
 
 var ChatContentSchema = new Schema({
-  user_id: { type: Schema.ObjectId, ref: '' },
+  user_id: { type: Schema.ObjectId },
   content: { type: String },
   room: { type: Schema.ObjectId }
 })

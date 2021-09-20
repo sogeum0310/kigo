@@ -54,39 +54,21 @@ exports.signup_option = function(req, res, next) {
 }
 
 exports.signup_personal_get = function(req, res, next) {
-  
-  var estimate_items
-  var cities
-
-  function getEstimateItem(callback) {
-    Model.EstimateItem.find().exec(function (err, results) {
-      estimate_items = results
-      callback()
+  Model.EstimateItem.find().exec(function (err, estimate_items) {
+    async.parallel({
+      cities: function (callback) {
+        Model.EstimateItemDetail.find({ estimate_item: estimate_items[6]._id }).exec(callback)
+      },
+    }, function (err, results) {
+      res.render('user_signup_personal', { 
+        title: 'Signup for personal',
+        cities: results.cities,
+      })
     })
-  }  
-  function getCity(callback) {
-    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[6] }).exec(function (err, results) {
-      cities = results
-      callback()
-    })
-  }
-  function nowRender() {
-    res.render('user_signup_personal', { 
-      title: 'Signup for personal',
-      cities: cities,
-    })
-  }
-  
-  async.series([
-    getEstimateItem,
-    getCity,
-    nowRender
-  ])
-  
+  })
 }
 
 exports.signup_personal_post = function(req, res, next) {
-  
   var user = new User({
     user_id : req.body.user_id,
     password : req.body.password,
@@ -97,77 +79,42 @@ exports.signup_personal_post = function(req, res, next) {
     phone: req.body.phone,
     email: req.body.email
   })
-
   user.save(function (err) {
     if (err) { return next(err) }
     res.render('success', { title: 'Signup success!' })
   })
-
 }
 
 exports.signup_business_get = function(req, res, next) {
-
-  var estimate_items = []
-  var cities = []
-  var platforms = []
-
-  function getEstimateItem(callback) {
-    Model.EstimateItem.find().exec(function (err, results) {
-      estimate_items = results
-      callback()
+  Model.EstimateItem.find().exec(function (err, estimate_items) {
+    async.parallel({
+      platforms: function (callback) {
+        Model.EstimateItemDetail.find({ estimate_item: estimate_items[0]._id }).exec(callback)
+      },
+      cities: function (callback) {
+        Model.EstimateItemDetail.find({ estimate_item: estimate_items[6]._id }).exec(callback)
+      },
+    }, function (err, results) {
+      res.render('user_signup_business', { 
+        title: 'Signup for business',
+        cities: results.cities,
+        platforms: results.platforms,
+      })
     })
-  }  
-  function getCity(callback) {
-    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[6] }).exec(function (err, results) {
-      cities = results
-      callback()
-    })
-  }
-  function getPlatform(callback) {
-    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[0] }).exec(function (err, results) {
-      platforms = results
-      callback()
-    })
-  }
-  function nowRender() {
-    res.render('user_signup_business', { 
-      title: 'Signup for business',
-      cities: cities,
-      platforms: platforms,
-    })
-  }
-  
-  async.series([
-    getEstimateItem,
-    getCity,
-    getPlatform, 
-    nowRender
-  ])
-  
+  })  
 }
 
 exports.signup_business_post = function(req, res, next) {
-
-  // if(!(req.body.platform instanceof Array)){
-  //   if(typeof req.body.platform==='undefined')
-  //   req.body.platform=[]
-  //   else
-  //   req.body.platform=new Array(req.body.platform)
-  // }
-
   let sampleFile
   let uploadPath
-
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send('No files were uploaded.')
   }
-
   // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
   sampleFile = req.files.sampleFile
   // uploadPath = __dirname + '/somewhere/on/your/server/' + sampleFile.name
   uploadPath = 'files/' + sampleFile.name
   var newFile = sampleFile.md5 + '.' + sampleFile.name.split('.').pop()
-
   // Use the mv() method to place the file somewhere on your server
   // sampleFile.mv(uploadPath, function(err) {
   //   if (err)
@@ -175,7 +122,6 @@ exports.signup_business_post = function(req, res, next) {
 
   //   res.send('File uploaded!')
   // })
-  
   var user_business = new Model.UserBusiness({
     user_id : req.body.user_id,
     password : req.body.password,
@@ -186,17 +132,11 @@ exports.signup_business_post = function(req, res, next) {
     city: req.body.city,
     platform: req.body.platform
   })
-
-  console.log(user_business)
-
   var file = new Model.File({
     parent: user_business._id,
     name: sampleFile.name,
     md_name: newFile
   })
-
-  console.log(file)
-
   // userCompany.save(function (err) {
   //   if (err) { return next(err) }
   //   res.render('success', { title: 'Signup for company success!' })
@@ -204,46 +144,22 @@ exports.signup_business_post = function(req, res, next) {
 }
 
 exports.user_personal_get = function(req, res, next) {
-  var estimate_items
-  var user_personal
-  var cities
-
-  function getEstimateItem(callback) {
-    Model.EstimateItem.find().exec(function (err, results) {
-      estimate_items = results
-      callback()
+  Model.EstimateItem.find().exec(function (err, estimate_items) {
+    async.parallel({
+      cities: function (callback) {
+        Model.EstimateItemDetail.find({ estimate_item: estimate_items[6] }).exec(callback)
+      },
+      user_personal: function (callback) {
+        Model.UserPersonal.findById(req.session.user).exec(callback)
+      }
+    }, function (err, results) {
+      res.render('user_signup_personal', { 
+        title: 'Mypage for personal account',
+        user_personal: results.user_personal,
+        cities: results.cities,
+      })
     })
-  }  
-  function getCity(callback) {
-    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[6] }).exec(function (err, results) {
-      cities = results
-      callback()
-    })
-  }
-
-  function getUserPersonal(callback) {
-    Model.UserPersonal.findById(req.session.user).exec(function (err, results) {
-      user_personal = results
-      console.log(user_personal)
-      callback()
-    })
-  }
-
-  function nowRender() {
-    res.render('user_signup_personal', { 
-      title: 'Mypage for personal account',
-      user_personal: user_personal,
-      cities: cities,
-    })
-  }
-  
-  async.series([
-    getEstimateItem,
-    getCity,
-    getUserPersonal,
-    nowRender
-  ])
-
+  })
 }
 
 exports.user_personal_post = function (req, res, next) {
@@ -258,83 +174,47 @@ exports.user_personal_post = function (req, res, next) {
     email: req.body.email,
     _id: req.session.user
   })
-  console.log(user_personal)
-
   Model.UserPersonal.findByIdAndUpdate(req.session.user, user_personal, {}, function (err, results) {
     if (err) { return next(err) }
     res.render('success', { title: 'user for personal is updated!' })
   })
-
 }
 
 exports.user_business_get = function(req, res, next) {
-
-  var estimate_items
-  var file
-  var cities
-  var platforms
-
-  function getEstimateItem(callback) {
-    Model.EstimateItem.find().exec(function (err, results) {
-      estimate_items = results
-      callback()
-    })
-  }  
-  function getFile(callback) {
-    Model.File.findOne({ 'parent': req.session.user }).exec(function (err, results) {
-      file = results
-      console.log(file)
-      callback()
-    })
-  }
-  function getCity(callback) {
-    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[6] }).exec(function (err, results) {
-      cities = results
-      callback()
-    })
-  }
-  function getPlatform(callback) {
-    Model.EstimateItemDetail.find({ 'estimate_item': estimate_items[0] }).exec(function (err, results) {
-      platforms = results
-      callback()
-    })
-  }
-  function nowRender() {
-    Model.UserBusiness.findById(req.session.user).exec(function (err, user_business) {
-
-      for (var i=0; i<platforms.length; i++) {
-        for (var j=0; j<user_business.platform.length; j++) {
-          if (platforms[i]._id.toString()===user_business.platform[j]._id.toString()) {
-            platforms[i].checked='true'
+  Model.EstimateItem.find().exec(function (err, estimate_items) {
+    async.parallel({
+      platforms: function (callback) {
+        Model.EstimateItemDetail.find({ estimate_item: estimate_items[0]._id }).exec(callback)
+      },
+      cities: function (callback) {
+        Model.EstimateItemDetail.find({ estimate_item: estimate_items[6]._id }).exec(callback)
+      },
+      portfolio: function (callback) {
+        Model.File.findOne({ parent: req.session.user }).exec(callback)
+      },
+      user_business: function (callback) {
+        Model.UserBusiness.findById(req.session.user).exec(callback)
+      }
+    }, function (err, results) {
+      for (var i=0; i<results.platforms.length; i++) {
+        for (var j=0; j<results.user_business.platform.length; j++) {
+          if (results.platforms[i]._id.toString()===results.user_business.platform[j]._id.toString()) {
+            results.platforms[i].checked='true'
           }
         }
-      }
-
+      } 
       res.render('user_signup_business', { 
         title: 'Mypage for business account',
-        user_business: user_business,
-        file: file,
-        cities: cities,
-        platforms: platforms,
+        user_business: results.user_business,
+        file: results.file,
+        cities: results.cities,
+        platforms: results.platforms,
       })
     })
-  }
-  
-  async.series([
-    getEstimateItem,
-    getFile,
-    getCity,
-    getPlatform, 
-    nowRender
-  ], function (err, results) {  
-    if (err) { console.log(err) }
-    console.log(results)
-  })
-
+  })  
 }
 
 exports.user_business_post = function (req, res, next) {
-
   var user_business = new Model.UserBusiness({
     user_id : req.body.user_id,
     password : req.body.password,
@@ -346,7 +226,6 @@ exports.user_business_post = function (req, res, next) {
     platform: req.body.platform,
     _id: req.session.user
   })
-
   if (req.files) {
     let sampleFile
     let uploadPath
@@ -370,11 +249,8 @@ exports.user_business_post = function (req, res, next) {
     })
     file.save()
   }
-  
-
   Model.UserBusiness.findByIdAndUpdate(req.session.user, user_business, {}, function (err, results) {
     if (err) {return next(err)}
     res.render('success', { title: 'user for business is updated!' })
   })
-
 }

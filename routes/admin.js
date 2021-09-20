@@ -4,7 +4,6 @@ var async = require('async');
 
 /* For controller */
 var Model = require('../models/model');
-const { Mongoose } = require('mongoose');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -36,62 +35,33 @@ router.get('/user/business/:id', function (req, res, next) {
 })
 
 router.get('/estimate/request/list', function (req, res, next) {
-
-  var estimate_requests;
-
-  function doSomething(callback) {
-    Model.EstimateRequest.find().exec(function (err, results) {
-      estimate_requests = results
-      callback()
+  var estimate_requests_with_count = []
+  function countEstimateResponse(estimate_request, estimate_requests_length) {
+    Model.EstimateResponse.countDocuments({ estimate_request: estimate_request._id }, function (err, count) {
+      estimate_request.count = count
+      estimate_requests_with_count.push(estimate_request)
+      if (estimate_requests_with_count.length===estimate_requests_length) {
+        res.render('admin/estimate_request_list', { title: '', estimate_requests: estimate_requests_with_count })
+      }
     })
   }
-
-  function doSomethingElse(callback) {
-    for (i=0; i<estimate_requests.length; i++) {
-      Model.EstimateResponse.countDocuments({ 'estimate_request': estimate_requests[i]._id }, function (err, results) {
-        estimate_requests[i].count = results
-        if (i == 3) {
-          callback()
-        }
-      })
+  Model.EstimateRequest.find().populate('platform').exec(function (err, estimate_requests) {
+    for (estimate_request of estimate_requests) {
+      countEstimateResponse(estimate_request, estimate_requests.length)
     }
-  }
-
-  function nowRender() {
-    res.render('admin/estimate_request_list', { title: 'Estimate List', estimate_requests: estimate_requests })
-  }    
-
-  async.series([
-    doSomething, doSomethingElse, nowRender
-  ])
-
+  })
 })
 
 router.get('/estimate/request/:id', function (req, res, next) {
-
   async.parallel({
     estimate_request: function (callback) {
-
-      Model.EstimateRequest.findById(req.params.id)
-      .populate('platform')
-      .populate('business')
-      .populate('goal')
-      .populate('start_day')
-      .populate('how_long')
-      .populate('cost')
-      .populate('city')
-      .populate('feedback')
-      .exec(callback)
+      Model.EstimateRequest.findById(req.params.id).populate('platform').populate('business').populate('goal').populate('start_day').populate('how_long').populate('cost').populate('city').populate('feedback').exec(callback)
     },
     estimate_responses: function (callback) {
       Model.EstimateResponse.find({ 'estimate_request': req.params.id }).populate('user_id').exec(callback)
     }
   }, function (err, results) {
-
-    // console.log(results)
-    
     if (err) { return next(err) }
-
     res.render('admin/estimate_request_detail', { 
       title: 'Estimate', 
       estimate_request: results.estimate_request, 
@@ -100,52 +70,21 @@ router.get('/estimate/request/:id', function (req, res, next) {
   })
 })
 
-
 router.get('/estimate/response/:id', function (req, res, next) {
-
-  var estimate_response
-  var file
-  var business_reviews
-
-  function getEstimateResponse(callback) {
-    Model.EstimateResponse.findById(req.params.id).exec(function (err, results) {
-      estimate_response = results
-      console.log(estimate_response)
-      callback()
+  Model.EstimateResponse.findById(req.params.id).exec(function (err, estimate_response) {
+    async.parallel({
+      portfolio: function (callback) {
+        Model.File.findOne({ 'parent': estimate_response.user_id }).exec(callback)
+      },
+      business_reviews: function (callback) {
+        Model.BusinessReview.find({ 'user_business': estimate_response.user_id }).exec(callback)
+      }
+    }, function (err, results) {
+      res.render('admin/estimate_response_detail', { 
+        title: 'Estimate Response', estimate_response: estimate_response, portfolio: results.portfolio, business_reviews: results.business_reviews
+      })
     })
-  }
-
-  function getFile(callback) {
-    Model.File.findOne({ 'parent': estimate_response.user_id }).exec(function (err, results) {
-      file = results
-      console.log(file)
-      callback()
-    })
-  }
-
-  function getBusinessReview(callback) {
-    Model.BusinessReview.find({ 'user_business': estimate_response.user_id }).exec(function (err, results) {
-      business_reviews = results
-      console.log(business_reviews)
-      callback()
-    })
-  }
-
-  function nowRender() {
-    res.render('admin/estimate_response_detail', { 
-      title: 'Estimate Response', 
-      estimate_response: estimate_response,
-      portfolio: file,
-      business_reviews: business_reviews
-    })
-  }
-
-  async.series([
-    getEstimateResponse,
-    getFile,
-    getBusinessReview,
-    nowRender
-  ])
+  })
 })
 
 

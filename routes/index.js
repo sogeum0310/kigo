@@ -11,11 +11,6 @@ router.get('/', other_controller.index)
 router.get('/test', other_controller.test)
 
 
-/* Chat */
-router.get('/chatUser', other_controller.chat)
-router.post('/chatAjax', other_controller.chat_ajax)
-
-
 /* Estimate */
 router.get('/estimate/request/list', estimate_controller.estimate_request_list)
 router.get('/estimate/request/form', estimate_controller.estimate_request_create_get)
@@ -50,6 +45,11 @@ router.post('/user/personal', user_controller.user_personal_post)
 
 router.get('/user/business', user_controller.user_business_get)
 router.post('/user/business', user_controller.user_business_post)
+
+
+/* Chat */
+router.get('/chatUser', other_controller.chat)
+router.post('/chatAjax', other_controller.chat_ajax)
 
 
 module.exports = router

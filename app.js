@@ -3,39 +3,31 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
 var session = require('express-session')
 var MongoStore = require('connect-mongo')
 var fileUpload = require('express-fileupload')
-
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
-
+const Server = require('socket.io')
 var app = express();
-
-
 // var populatedb = require('./populatedb')
 
-const Server = require('socket.io')
-app.io = require('socket.io')()
 
+app.io = require('socket.io')()
 app.io.on('connection', (socket) => {
   // console.log('socket connect')
-
   socket.on('disconnect', () => {
     // console.log('socket disconnect')
   })
-
   socket.on('chat-msg-1', (msg) => {
     app.io.emit('chat-msg-2', msg)
   })
 })
 
-
 // mongoose connection 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/kigo', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://localhost:27017/kigo', { useNewUrlParser: true, useUnifiedTopology: true });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -76,7 +68,13 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+
+  if (req.url.match(/^\/admin\//)) {
+    res.render('admin/error');
+  } else {
+    res.render('error');
+  }
+
 });
 
 module.exports = app;

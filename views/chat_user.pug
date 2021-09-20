@@ -13,40 +13,29 @@ block content
 
   script(src="/socket.io/socket.io.js")
   script.
-    var pizza = '!{user}';
-    console.log(pizza)
-
+    var user = '!{user._id}'
+    var name = '!{user.user_id}';
     var socket = io()
 
     document.querySelector('form').addEventListener('submit', function (e) {
       e.preventDefault()
-
-      var msg = { user: userid, name:name, message: document.getElementById('msg').value }
+      var msg = { user: user, name: name, message: document.getElementById('msg').value }
       socket.emit('chat-msg-1', msg)
       document.getElementById('msg').value = ''
-
       var xhttp = new XMLHttpRequest()
       xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
           console.log(this.responseText)
         }
       }
-
       xhttp.open('POST', 'chatAjax', true)
       xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xhttp.send(`chat_user=${msg.user}&chat_content=${msg.message}`)
-
-      console.log(msg)
-
-      return false
     })
-
     socket.on('chat-msg-2', function (msg) {
       var newMessage = document.createElement('li')
       newMessage.innerHTML = msg.name + ' : ' + msg.message
       document.getElementById('messages').append(newMessage)
-
-      console.log(msg)
     })
 
 

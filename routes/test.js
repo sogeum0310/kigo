@@ -1,3 +1,5 @@
+const { Model } = require("mongoose")
+
 function doSomething(callback) {
   Model.EstimateItem.find().exec(function (err, results) {
     callback(results[0])
@@ -173,3 +175,58 @@ function createEstimateRequests(cb) {
   ], 
   cb);
 }
+
+domain.User.find({ userName: new RegExp(findtext, 'i') }).sort('-created').skip(skip).limit(limit).exec(function(err, result) {
+  var cameraCountFunctions = [];
+  result.forEach(function(user) {
+      if (user && user.id) {
+        console.log("result is ", user.id);
+        var camera = null; //What is this for?
+        cameraCountFunctions.push( function(callback) {
+          domain.Cameras.count({"userId": user.id}, function (err, cameraCount) {
+            if (err) return callback(err);
+            callback(null, cameraCount); 
+          });
+        });
+      }
+  })
+  Async.parallel(cameraCountFunctions, function (err, cameraCounts) {
+    console.log(err, cameraCounts);
+    //CameraCounts is an array with the counts for each user.
+    //Evaluate and return the results here.
+  }); 
+});
+
+Model.EstimateItem.find().exec(function (err, estimate_items) {
+  async.parallel({
+    platforms: function (callback) {
+      Model.EstimateItemDetail.find({ estimate_item: estimate_items[0]._id }).exec(callback)
+    },
+    cities: function (callback) {
+      Model.EstimateItemDetail.find({ estimate_item: estimate_items[6]._id }).exec(callback)
+    },
+    portfolio: function (callback) {
+      Model.File.findOne({ parent: req.session.user }).exec(callback)
+    },
+    user_business: function (callback) {
+      Model.UserBusiness.findById(req.session.user).exec(callback)
+    }
+  }, function (err, results) {
+
+    for (var i=0; i<results.platforms.length; i++) {
+      for (var j=0; j<results.user_business.platform.length; j++) {
+        if (results.platforms[i]._id.toString()===results.user_business.platform[j]._id.toString()) {
+          results.platforms[i].checked='true'
+        }
+      }
+    }
+
+    res.render('user_signup_business', { 
+      title: 'Mypage for business account',
+      user_business: results.user_business,
+      file: results.file,
+      cities: results.cities,
+      platforms: results.platforms,
+    })
+  })
+})  

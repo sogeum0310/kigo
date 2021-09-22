@@ -14,50 +14,55 @@ block content
 
   form(action="", method="POST") 
 
-    h3 Platform
+    h3= estimate_items[0].name
     each platform in platforms 
       div.form-group
         label(for="")= platform.name 
         input(type="checkbox", name="platform", value=platform._id)
 
+    h3= estimate_items[1].name
+    each how_many in how_manys
+      div.form-group
+        label(for="")= how_many.name 
+        input(type="checkbox", name="feedback", value=how_many._id)   
 
-    h3 Business
+    h3= estimate_items[2].name
     each business in businesses 
       div.form-group
         label(for="")= business.name 
         input(type="checkbox", name="business", value=business._id) 
 
-    h3 Goal 
+    h3= estimate_items[3].name
     each goal in goals 
       div.form-group
         label(for="")= goal.name 
         input(type="checkbox", name="goal", value=goal._id)
 
-    h3 Start day 
+    h3= estimate_items[4].name
     each start_day in start_days 
       div.form-group
         label(for="")= start_day.name 
         input(type="checkbox", name="start_day", value=start_day._id) 
 
-    h3 How long 
+    h3= estimate_items[5].name
     each how_long in how_longs 
       div.form-group
         label(for="")= how_long.name 
         input(type="checkbox", name="how_long", value=how_long._id) 
 
-    h3 Cost 
+    h3= estimate_items[6].name
     each cost in costs 
       div.form-group
         label(for="")= cost.name 
         input(type="checkbox", name="cost", value=cost._id)
 
-    h3 City 
+    h3= estimate_items[7].name
     each city in cities 
       div.form-group
         label(for="")= city.name 
         input(type="checkbox", name="city", value=city._id)
 
-    h3 Feedback 
+    h3= estimate_items[8].name
     each feedback in feedbacks 
       div.form-group
         label(for="")= feedback.name 

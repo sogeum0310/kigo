@@ -7,8 +7,8 @@ var EstimateItemSchema = new Schema({
 })
 
 var EstimateItemDetailSchema = new Schema({
+  estimate_item: { type: Schema.ObjectId, ref: 'EstimateItem' },
   name: { type: String },
-  estimate_item: { type: Schema.ObjectId, ref: 'EstimateItem' }
 })
 
 var UserPersonalSchema = new Schema({
@@ -49,6 +49,7 @@ var EstimateRequestSchema = new Schema({
   feedback : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }]
 });
 
+
 var EstimateResponseSchema = new Schema({
   estimate_request: { type: Schema.ObjectId, ref: 'EstimateRequest', required: true },
   user_id: { type: Schema.ObjectId, ref: 'UserBusiness', required: true },
@@ -66,7 +67,7 @@ var BusinessReviewSchema = new Schema({
 var ChatContentSchema = new Schema({
   user_id: { type: Schema.ObjectId },
   content: { type: String },
-  room: { type: Schema.ObjectId }
+  room: { type: Schema.ObjectId },
 })
 
 var FileSchema = new Schema({
@@ -75,35 +76,43 @@ var FileSchema = new Schema({
   md_name: { type: String }
 }) 
 
-var UserPersonal = mongoose.model('User', UserPersonalSchema)
-var UserBusiness = mongoose.model('UserBusiness', UserBusinessSchema)
 
+var UserPersonal = mongoose.model('UserPersonal', UserPersonalSchema)
+var UserBusiness = mongoose.model('UserBusiness', UserBusinessSchema)
 var EstimateItem = mongoose.model('EstimateItem', EstimateItemSchema)
 var EstimateItemDetail = mongoose.model('EstimateItemDetail', EstimateItemDetailSchema)
-
 var EstimateRequest = mongoose.model('EstimateRequest', EstimateRequestSchema)
 var EstimateResponse = mongoose.model('EstimateResponse', EstimateResponseSchema)
-
 var BusinessReview = mongoose.model('BusinessReview', BusinessReviewSchema)
 var ChatContent = mongoose.model('ChatContent', ChatContentSchema)
-
 var File = mongoose.model('File', FileSchema)
 
 
+ChatContentSchema.virtual('user_personal', {
+  ref: 'UserPersonal',
+  localField: 'user_id',
+  foreignField: '_id',
+  justOne: true,
+})
+
+ChatContentSchema.virtual('user_business', {
+  ref: 'UserBusiness',
+  localField: 'user_id',
+  foreignField: '_id',
+  justOne: true,
+})
+
 exports.UserPersonal = UserPersonal
 exports.UserBusiness = UserBusiness
-
 exports.EstimateItem = EstimateItem
 exports.EstimateItemDetail = EstimateItemDetail
-
 exports.EstimateRequest = EstimateRequest
 exports.EstimateResponse = EstimateResponse
-
 exports.BusinessReview = BusinessReview
-
 exports.ChatContent = ChatContent
-
 exports.File = File
+
+
 
 // 자주묻는 질문 - Faq, 
 // 공지사항 - Notice

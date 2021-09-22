@@ -12,42 +12,18 @@ exports.index = function(req, res, next) {
 
 exports.chat = function (req, res, next) {
   async.parallel({
-    user_personal_chat: function (callback) {
-      Model.ChatContent.find().populate({
-        path: 'user_id', 
-        model: 'User'
-      }).exec(callback)
+    chat_contents: function (callback) {
+      Model.ChatContent.find()
+      .populate('user_personal')
+      .populate('user_business')
+      .exec(callback)
     },
-    user_business_chat: function (callback) {
-      Model.ChatContent.find().populate({
-        path: 'user_id',
-        model: 'UserBusiness'
-      }).exec(callback)
-    },
-    user_personal: function (callback) {
-      Model.UserPersonal.findById(req.session.user).exec(callback)
-    },
-    user_business: function (callback) {
-      Model.UserBusiness.findById(req.session.user).exec(callback)
-    }
   }, function (err, results) {
-    console.log(results)
+    console.log(results.chat_contents[0].user_personal)
     res.render('chat_user', { 
       title: 'Chat', 
-      get user() {
-        if (results.user_personal) {
-          return results.user_personal
-        } else {
-          return results.user_business
-        }
-      },
-      get chat_contents() {
-        if (results.user_personal) {
-          return results.user_personal_chat
-        } else {
-          return results.user_business_chat
-        }
-      }
+      user: req.session.user,
+      chat_contents: results.chat_contents,
     })
   })
 }

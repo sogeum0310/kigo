@@ -10,7 +10,6 @@ var other_controller = require('../controllers/otherController')
 router.get('/', other_controller.index)
 router.get('/test', other_controller.test)
 
-
 /* Estimate */
 router.get('/estimate/request/list', estimate_controller.estimate_request_list)
 router.get('/estimate/request/form', estimate_controller.estimate_request_create_get)
@@ -25,7 +24,6 @@ router.post('/estimate/received/:id', estimate_controller.estimate_received_deta
 
 router.get('/estimate/sent/list', estimate_controller.estimate_sent_list)
 router.get('/estimate/sent/:id', estimate_controller.estimate_sent_detail)
-
 
 /* User */
 router.get('/login', user_controller.login_get)

@@ -59,6 +59,7 @@ var EstimateResponseSchema = new Schema({
   item: [{ type: String }],
   cost: [{ type: String }],
   note: [{ type: String }],
+  reg_date: { type: Date, default: Date.now }
 }) 
 
 var BusinessReviewSchema = new Schema({

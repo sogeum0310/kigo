@@ -3,18 +3,8 @@ var async = require('async')
 
 
 exports.estimate_request_list = async (req, res, next) => {
-  var estimate_requests_with_count = []
-  async function countEstimateResponse(estimate_request, estimate_requests_length) {
-    estimate_request.count = await Model.EstimateResponse.countDocuments({ estimate_request: estimate_request._id })
-    estimate_requests_with_count.push(estimate_request)
-    if (estimate_requests_with_count.length===estimate_requests_length) {
-      res.render('estimate_request_list', { title: 'Estimate requests', estimate_requests: estimate_requests_with_count })
-    }
-  }
-  var estimate_requests = await Model.EstimateRequest.find({ 'user_id': req.session.user }).populate('platform').populate('city').exec()
-  for (estimate_request of estimate_requests) {
-    countEstimateResponse(estimate_request, estimate_requests.length)
-  }
+  var estimate_requests = await Model.EstimateRequest.find({ 'user_id': req.session.user }).populate('platform').exec()
+  res.render('estimate_request_list', { title: 'Estimate requests', estimate_requests: estimate_requests })
 }
 
 exports.estimate_response_detail = async (req, res, next) => {
@@ -41,10 +31,24 @@ exports.estimate_received_list = async (req, res, next) => {
     user_business_city.push(obj)
   }
 
+  var x = await Model.EstimateResponse.findOne({ $and: [{ estimate_request: estimate_request._id }, { user_id:req.session.user._id}] }).exec()
+  var something = [{ _id: '' }]
+  
+  console.log('- - - - -')
   console.log(user_business_platform)
   console.log(user_business_city)
 
-  var estimate_requests = await Model.EstimateRequest.find({ $and: [{ $or: user_business_platform }, { $or: user_business_city }] }).populate('platform').populate('user_id')
+  var estimate_requests = await Model.EstimateRequest.find({ $and: [{ $or: user_business_platform }, { $or: user_business_city }, { $or: something }] }).populate('platform').populate('user_id')
+
+  // for (estimate_request of estimate_requests) {
+  //   Model.EstimateResponse.countDocuments({ $and: [{ estimate_request: estimate_request._id }, { user_id:req.session.user._id }] }, function (err, count) {
+  //     console.log(count)
+  //     if (count > 0) {
+  //       estimate_request.x = 'sent!'
+  //     }
+  //   })
+  // }
+
   res.render('estimate_received_list', { title: 'Estimate received list', estimate_received_list: estimate_requests })
 }
 
@@ -61,8 +65,14 @@ exports.estimate_received_detail_post = async (req, res, next) => {
     cost: req.body.cost,
     note: req.body.note
   })
-  console.log(estimate_response)
-  await Model.EstimateRequest.findByIdAndUpdate(req.params.id, { count: 'hey' })
+
+  var estimate_request = await Model.EstimateRequest.findById({ _id: req.params.id }, 'count').exec()
+  var count = estimate_request.count + 1
+
+  await estimate_response.save()
+  await Model.EstimateRequest.findByIdAndUpdate(req.params.id, { count: count })
+
+  res.render('success', { title: 'Estimate response are successfully registered' })
 }
 
 exports.estimate_sent_list = async (req, res, next) => {
@@ -70,7 +80,7 @@ exports.estimate_sent_list = async (req, res, next) => {
   .populate({ path: 'estimate_request', populate: { path: 'user_id' } })
   .populate({ path: 'estimate_request', populate: { path: 'platform' } })
   .exec()
-  res.render('estimate_sent_list', { title: 'Estimate sent', results: estimate_responses })
+  res.render('estimate_sent_list', { title: 'Estimate sent', estimate_responses: estimate_responses })
 }
 
 exports.estimate_sent_detail = async (req, res, next) => {
@@ -127,8 +137,8 @@ exports.estimate_request_create_post = async (req, res, next) => {
   })
   console.log(estimate)
 
-  // estimate.save()j
-  // res.render('succeess', { title: 'Estimate are requested succefully' })
+  estimate.save()
+  res.render('success', { title: 'Estimate are requested succefully' })
 }
 
 

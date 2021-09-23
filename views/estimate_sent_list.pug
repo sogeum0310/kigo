@@ -6,7 +6,13 @@ block content
   //- pre= results
 
   ul
-    each estimate_sent in results 
+    each estimate_sent in estimate_responses
       li
         a(href="/estimate/sent/" + estimate_sent._id)= estimate_sent.estimate_request.platform[0].name
-        | (#{results[0].estimate_request.user_id.user_id})
+        |  (#{estimate_sent.estimate_request.user_id.user_id})
+        if (estimate_sent.estimate_request.count < 3)
+          span  견적요청중
+        else 
+          span  견적요청완료
+
+  //- pre= estimate_responses

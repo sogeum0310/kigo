@@ -33,20 +33,23 @@ var UserBusinessSchema = new Schema({
   phone: { type: String },
   email: { type: String },
   about: { type: String },
-  city: [{ type:Schema.ObjectId }],
-  platform: [{ type: Schema.ObjectId }]
+  city: [{ type:Schema.ObjectId, ref: 'EstimateItemDetail'  }],
+  platform: [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }]
 });
 
 var EstimateRequestSchema = new Schema({
-  user_id: { type: Schema.ObjectId, ref: 'User' },
+  user_id: { type: Schema.ObjectId, ref: 'UserPersonal' },
   platform : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
+  how_many : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   business : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   goal : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   start_day : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   how_long : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   cost : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   city : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
-  feedback : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }]
+  feedback : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
+  count:  { type: Number, default: 0 },
+  reg_date: { type: Date, default: Date.now }
 });
 
 

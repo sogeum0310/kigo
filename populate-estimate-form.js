@@ -1,6 +1,5 @@
 var Model = require('./models/model')
 
-
 var estimate_items = []
 
 function createEstimateItem(name) {
@@ -31,7 +30,13 @@ createEstimateItem('원하시는 대략적인 예상 금액을 입력해주세�
 createEstimateItem('고객님이 계신 지역을 선택해주세요. (중복선택 가능)')
 createEstimateItem('원하시는 피드백 서비스를 선택해주세요. (중복선택 가능)')
 
-createEstimateItemDetail(estimate_items[0]._id, '온라인 광고')
+createEstimateItemDetail(estimate_items[0]._id, '검색엔진 최적화')
+createEstimateItemDetail(estimate_items[0]._id, '바이럴 마케팅')
+createEstimateItemDetail(estimate_items[0]._id, 'SNS 계정관리 대행')
+createEstimateItemDetail(estimate_items[0]._id, '인플루언서')
+createEstimateItemDetail(estimate_items[0]._id, '언론홍보')
+createEstimateItemDetail(estimate_items[0]._id, '배너광고')
+createEstimateItemDetail(estimate_items[0]._id, '해외/글로벌 마케팅')
 createEstimateItemDetail(estimate_items[0]._id, '오프라인 광고')
 createEstimateItemDetail(estimate_items[0]._id, '판촉물 제작/배포')
 

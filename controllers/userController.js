@@ -130,7 +130,7 @@ exports.user_business_get = async (req, res, next) => {
       }
     }
   } 
-  res.render('ser_signup_business', { title: 'Mypage for business account', user_business: user_business, file: file, cities: cities, platforms: platforms, })
+  res.render('user_signup_business', { title: 'Mypage for business account', user_business: user_business, file: file, cities: cities, platforms: platforms, })
 }
 
 exports.user_business_post = async (req, res, next) => {
@@ -146,10 +146,10 @@ exports.user_business_post = async (req, res, next) => {
     _id: req.session.user._id
   })
 
-  if (!req.files) {
-    console.log(res)
-    return res.status(500).send('error 500!')
-  }
+  // if (!req.files) {
+  //   console.log(res)
+  //   return res.status(500).send('error 500!')
+  // }
 
   if (req.files) {
     portfolio = req.files.portfolio

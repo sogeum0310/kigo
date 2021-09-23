@@ -7,7 +7,7 @@ block content
     each estimate_request in estimate_requests
       li 
         a(href=estimate_request._id) #{estimate_request.platform[0].name}
-          //- span= estimate_request.count
+        |  (#{estimate_request.count})
 
 
     

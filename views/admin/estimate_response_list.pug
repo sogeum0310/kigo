@@ -1,0 +1,15 @@
+extends layout 
+
+block content 
+  h1= title 
+
+
+  each estimate_response in estimate_responses
+    h3= estimate_response.user_id.user_id
+    pre= estimate_response.estimate_request.city
+    pre= estimate_response.estimate_request.platform
+    
+
+  hr
+
+  pre= estimate_responses

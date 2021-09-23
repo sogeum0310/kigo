@@ -36,8 +36,9 @@ router.get('/user/personal/:id', async (req, res, next) => {
 })
 
 router.get('/user/business/list', async (req, res, next) => {
-  var results = await Model.UserBusiness.find().exec()
-  res.render('admin/user_list_business', { title: 'Business members', user_businesses: results })
+  var user_businesses = await Model.UserBusiness.find().populate('city').populate('platform').exec()
+  res.render('admin/user_list_business', { title: 'Business members', user_businesses: user_businesses })
+  console.log(user_businesses)
 })
 
 router.get('/user/business/:id', async (req, res, next) => {
@@ -54,7 +55,7 @@ router.get('/estimate/request/list', async (req, res, next) => {
       res.render('admin/estimate_request_list', { title: 'Estimate requests', estimate_requests: estimate_requests_with_count })
     }
   }
-  var estimate_requests = await Model.EstimateRequest.find().populate('platform').exec()
+  var estimate_requests = await Model.EstimateRequest.find().populate('platform').populate('city').exec()
   for (estimate_request of estimate_requests) {
     countEstimateResponse(estimate_request, estimate_requests.length)
   }
@@ -64,6 +65,15 @@ router.get('/estimate/request/:id', async (req, res, next) => {
   var estimate_request = await Model.EstimateRequest.findById(req.params.id).populate('platform').populate('business').populate('goal').populate('start_day').populate('how_long').populate('cost').populate('city').populate('feedback').exec()
   var estimate_responses = await Model.EstimateResponse.find({ 'estimate_request': req.params.id }).populate('user_id').exec()
   res.render('admin/estimate_request_detail', { title: 'Estimate', estimate_request: estimate_request, estimate_responses: estimate_responses })
+})
+
+router.get('/estimate/response/list', async (req, res, next) => {
+  var estimate_responses = await Model.EstimateResponse.find()
+  .populate('user_id')
+  .populate({ path: 'estimate_request', populate: { path: 'city' } })
+  .populate({ path: 'estimate_request', populate: { path: 'platform' } })
+  .exec()
+  res.render('admin/estimate_response_list', { title: 'Estimate responses', estimate_responses: estimate_responses })
 })
 
 router.get('/estimate/response/:id', async (req, res, next) => {

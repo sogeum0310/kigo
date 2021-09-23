@@ -5,10 +5,11 @@ block content
 
   ul 
     each estimate_received in estimate_received_list 
-      li
-        a(href="/estimate/received/" + estimate_received._id) #{estimate_received.platform[0].name}  
-        span (#{estimate_received.user_id.user_id})
+      if (estimate_received.sent < 1)
+        li
+          a(href="/estimate/received/" + estimate_received._id) #{estimate_received.platform[0].name}  
+          span (#{estimate_received.user_id.user_id})
 
-  pre= estimate_received_list
+  //- pre= estimate_received_list
 
 

@@ -8,6 +8,9 @@ block content
       li 
         a(href=estimate_request._id) #{estimate_request.platform[0].name}
         |  (#{estimate_request.count})
-
+        if (estimate_request.count < 3)
+          span  견적요청중
+        else 
+          span  견적요청완료
 
     

@@ -47,18 +47,8 @@ router.get('/user/business/:id', async (req, res, next) => {
 })
 
 router.get('/estimate/request/list', async (req, res, next) => {
-  var estimate_requests_with_count = []
-  async function countEstimateResponse(estimate_request, estimate_requests_length) {
-    estimate_request.count = await Model.EstimateResponse.countDocuments({ estimate_request: estimate_request._id })
-    estimate_requests_with_count.push(estimate_request)
-    if (estimate_requests_with_count.length===estimate_requests_length) {
-      res.render('admin/estimate_request_list', { title: 'Estimate requests', estimate_requests: estimate_requests_with_count })
-    }
-  }
-  var estimate_requests = await Model.EstimateRequest.find().populate('platform').populate('city').exec()
-  for (estimate_request of estimate_requests) {
-    countEstimateResponse(estimate_request, estimate_requests.length)
-  }
+  var estimate_requests = await Model.EstimateRequest.find().populate('platform').exec()
+  res.render('admin/estimate_request_list', { title: 'Estimate requests', estimate_requests: estimate_requests })
 })
 
 router.get('/estimate/request/:id', async (req, res, next) => {

@@ -31,23 +31,23 @@ exports.estimate_received_list = async (req, res, next) => {
     user_business_city.push(obj)
   }
 
-  var x = await Model.EstimateResponse.findOne({ $and: [{ estimate_request: estimate_request._id }, { user_id:req.session.user._id}] }).exec()
-  var something = [{ _id: '' }]
-  
-  console.log('- - - - -')
-  console.log(user_business_platform)
-  console.log(user_business_city)
+  var estimate_requests = await Model.EstimateRequest.find({
+     $and: [
+       { $or: user_business_platform },
+       { $or: user_business_city },
+       { count: { $lte: 2 } }
+     ] 
+    })
+    .populate('platform').populate('user_id')
 
-  var estimate_requests = await Model.EstimateRequest.find({ $and: [{ $or: user_business_platform }, { $or: user_business_city }, { $or: something }] }).populate('platform').populate('user_id')
-
-  // for (estimate_request of estimate_requests) {
-  //   Model.EstimateResponse.countDocuments({ $and: [{ estimate_request: estimate_request._id }, { user_id:req.session.user._id }] }, function (err, count) {
-  //     console.log(count)
-  //     if (count > 0) {
-  //       estimate_request.x = 'sent!'
-  //     }
-  //   })
-  // }
+  for (estimate_request of estimate_requests) {
+    estimate_request.sent = await Model.EstimateResponse.countDocuments({ 
+      $and: [
+        { estimate_request: estimate_request._id }, 
+        { user_id: req.session.user._id }
+      ] 
+    }).exec()
+  }
 
   res.render('estimate_received_list', { title: 'Estimate received list', estimate_received_list: estimate_requests })
 }

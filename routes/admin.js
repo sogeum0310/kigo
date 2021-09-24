@@ -1,77 +1,47 @@
 var express = require('express');
 var router = express.Router();
-var async = require('async');
+var admin_controller = require('../controllers/adminController')
 
-/* For controller */
-var Model = require('../models/model');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('admin/index', { title: 'Admin' });
-});
+router.get('/', admin_controller.index);
 
-router.get('/user/personal/list', (req, res, next) => {
-  
-  // var user_personals = Promise.resolve(Model.UserPersonal.find().exec())
+router.get('/user/personal/list', admin_controller.user_personal_list)
+router.get('/user/personal/:id', admin_controller.user_personal_detail)
+router.get('/user/business/list', admin_controller.user_business_list)
+router.get('/user/business/:id', admin_controller.user_business_detail)
+router.get('/estimate/request/list', admin_controller.estimate_request_list)
+router.get('/estimate/request/:id', admin_controller.estimate_request_detail)
+router.get('/estimate/response/list', admin_controller.estimate_response_list)
+router.get('/estimate/response/:id', admin_controller.estimate_response_detail)
 
-  // var user_personals = new Promise(function (resolve) {
-  //   Model.UserPersonal.find().exec(function (err, results) {
-  //     resolve(results)
-  //   })
-  // })
+router.get('/notice/list', admin_controller.notice_list)
+router.get('/notice/create', admin_controller.notice_create_get)
+router.post('/notice/create', admin_controller.notice_create_post)
+router.get('/notice/:id', admin_controller.notice_detail)
+router.get('/notice/:id/update', admin_controller.notice_update_get)
+router.post('/notice/:id/update', admin_controller.notice_update_post)
 
-  var user_personals = Model.UserPersonal.find().exec()
-  console.log(user_personals)
+router.get('/event/list', admin_controller.event_list)
+router.get('/event/create', admin_controller.event_create_get)
+router.post('/event/create', admin_controller.event_create_post)
+router.get('/event/:id', admin_controller.event_detail)
+router.get('/event/:id/update', admin_controller.event_update_get)
+router.post('/event/:id/update', admin_controller.event_update_post)
 
-  user_personals.then(function (user_personals) {
-    console.log(user_personals)
-    res.render('admin/user_list_personal', { title: '', user_personals: user_personals })
-  })
+router.get('/faq/list', admin_controller.faq_list)
+router.get('/faq/create', admin_controller.faq_create_get)
+router.post('/faq/create', admin_controller.faq_create_post)
+router.get('/faq/:id', admin_controller.faq_detail)
+router.get('/faq/:id/update', admin_controller.faq_update_get)
+router.post('/faq/:id/update', admin_controller.faq_update_post)
 
-})
+router.get('/qna/list', admin_controller.qna_list)
+router.get('/qna/:id', admin_controller.qna_detail_get)
+router.post('/qna/:id', admin_controller.qna_detail_post)
 
-router.get('/user/personal/:id', async (req, res, next) => {
-  var results = await Model.UserPersonal.findById(req.params.id).exec()
-  res.render('admin/user_detail_personal', { title: 'User detail for personal', results: results })
-})
-
-router.get('/user/business/list', async (req, res, next) => {
-  var user_businesses = await Model.UserBusiness.find().populate('city').populate('platform').exec()
-  res.render('admin/user_list_business', { title: 'Business members', user_businesses: user_businesses })
-  console.log(user_businesses)
-})
-
-router.get('/user/business/:id', async (req, res, next) => {
-  var results = await Model.UserBusiness.findById(req.params.id).exec()
-  res.render('admin/user_detail_business', { title: 'User detail for business', results: results })
-})
-
-router.get('/estimate/request/list', async (req, res, next) => {
-  var estimate_requests = await Model.EstimateRequest.find().populate('platform').exec()
-  res.render('admin/estimate_request_list', { title: 'Estimate requests', estimate_requests: estimate_requests })
-})
-
-router.get('/estimate/request/:id', async (req, res, next) => {
-  var estimate_request = await Model.EstimateRequest.findById(req.params.id).populate('platform').populate('business').populate('goal').populate('start_day').populate('how_long').populate('cost').populate('city').populate('feedback').exec()
-  var estimate_responses = await Model.EstimateResponse.find({ 'estimate_request': req.params.id }).populate('user_id').exec()
-  res.render('admin/estimate_request_detail', { title: 'Estimate', estimate_request: estimate_request, estimate_responses: estimate_responses })
-})
-
-router.get('/estimate/response/list', async (req, res, next) => {
-  var estimate_responses = await Model.EstimateResponse.find()
-  .populate('user_id')
-  .populate({ path: 'estimate_request', populate: { path: 'city' } })
-  .populate({ path: 'estimate_request', populate: { path: 'platform' } })
-  .exec()
-  res.render('admin/estimate_response_list', { title: 'Estimate responses', estimate_responses: estimate_responses })
-})
-
-router.get('/estimate/response/:id', async (req, res, next) => {
-  var estimate_response = await Model.EstimateResponse.findById(req.params.id).exec()
-  var portfolio = await Model.File.findOne({ 'parent': estimate_response.user_id }).exec()
-  var business_reviews = await Model.BusinessReview.find({ 'user_business': estimate_response.user_id }).exec()
-  res.render('admin/estimate_response_detail', { title: 'Estimate Response', estimate_response: estimate_response, portfolio: portfolio, business_reviews: business_reviews })
-})
+router.get('/message/list', admin_controller.message_list)
+router.get('/message/:id', admin_controller.message_detail)
 
 
 module.exports = router;

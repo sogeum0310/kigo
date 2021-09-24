@@ -32,15 +32,28 @@ router.get('/logout', user_controller.logout)
 
 router.get('/signup/option', user_controller.signup_option)
 
+
 router.get('/signup/personal', user_controller.signup_personal_get)
 router.post('/signup/personal', user_controller.signup_personal_post)
 
+router.get('/mypage/personal', user_controller.mypage_personal)
+router.get('/mypage/personal/account', user_controller.mypage_personal_account_get)
+// router.post('/mypage/personal/account', user_controller.mypage_personal_account_post)
+router.get('/mypage/personal/review/list', user_controller.mypage_personal_review_list)
+router.get('/mypage/personal/qna/list', user_controller.mypage_personal_qna_list)
+router.get('/mypage/personal/qna/create', user_controller.mypage_personal_qna_create_get)
+router.post('/mypage/personal/qna/create', user_controller.mypage_personal_qna_create_post)
+
+router.get('/contact/list', other_controller.contact_list)
+
+router.get('/contact/qna/create', other_controller.qna_create_get)
+router.post('/contact/qna/create', other_controller.qna_create_post)
+router.get('/contact/message/create', other_controller.message_create_get)
+router.post('/contact/message/create', other_controller.message_create_post)
+
+
 router.get('/signup/business', user_controller.signup_business_get)
 router.post('/signup/business', user_controller.signup_business_post)
-
-router.get('/user/personal', user_controller.user_personal_get)
-router.post('/user/personal', user_controller.user_personal_post)
-
 router.get('/user/business', user_controller.user_business_get)
 router.post('/user/business', user_controller.user_business_post)
 

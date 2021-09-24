@@ -1,0 +1,24 @@
+extends layout 
+
+block content 
+  h1= title 
+  form(action="", method="POST") 
+    div.form-group
+      label(for="") 
+      input(type="text", name="title", value=(undefined===blog_detail? '' : blog_detail.title))
+    div.form-group
+      textarea(name="content", cols="30", rows="10")=(undefined===blog_detail? '' : blog_detail.content)
+
+    if (url === 'faq')
+      h3 account
+      div.form-group
+        label(for="") personal
+        input(type="radio", name="account", value="personal", checked=(blog_detail && blog_detail.account==='personal' ? 'checked' : false)) 
+        label(for="") business
+        input(type="radio", name="account", value="business", checked=(blog_detail && blog_detail.account==='business' ? 'checked' : false)) 
+
+    p 
+      button(type="submit") confirm
+    a(href="/admin/"+url+"/list") list 
+
+  pre= blog_detail

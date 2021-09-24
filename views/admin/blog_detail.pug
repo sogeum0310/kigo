@@ -1,0 +1,20 @@
+extends layout 
+
+block content 
+  h1= title
+
+  pre= blog_detail
+
+  a(href="/admin/"+url+"/list") list / 
+  a(href="/admin/"+url+"/create") create / 
+  a(href="/admin/"+url+"/" + blog_detail._id + "/update") update / 
+  a(href="") delete
+
+  if (url==='qna')
+    pre= blog_comment
+    h3 Answer
+    form(action="", method="POST") 
+      div.form-group
+        textarea(name="content", cols="30", rows="10") 
+      p 
+        button(type="submit") confirm

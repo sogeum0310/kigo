@@ -77,11 +77,6 @@ app.use(function(err, req, res, next) {
   } else {
     res.render('error');
   }
-  console.log('- - - - -')
-  console.log(res.locals.message)
-  console.log('- - - - -')
-  console.log(res.locals.error.stack)
-  console.log('- - - - -')
 });
 
 module.exports = app;

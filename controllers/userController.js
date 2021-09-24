@@ -93,14 +93,18 @@ exports.signup_business_post = async (req, res, next) => {
   res.render('success', { title: 'Signup for company success!' })
 }
 
-exports.user_personal_get = async (req, res, next) => {
+exports.mypage_personal = async (req, res, next) => {
+  res.render('user_mypage_personal', { title: 'User personal' })
+}
+
+exports.mypage_personal_account_get = async (req, res, next) => {
   var estimate_items = await Model.EstimateItem.find().exec()
   var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
   var user_personal = await Model.UserPersonal.findById(req.session.user._id).exec()
   res.render('user_signup_personal', { title: 'Mypage for personal account', user_personal: user_personal, cities: cities, })
 }
 
-exports.user_personal_post = async (req, res, next) => {
+exports.mypage_personal_account_post = async (req, res, next) => {
   var user_personal = new Model.UserPersonal({
     user_id: req.body.user_id,
     password: req.body.password,
@@ -114,6 +118,22 @@ exports.user_personal_post = async (req, res, next) => {
   })
   await Model.UserPersonal.findByIdAndUpdate(req.session.user._id, user_personal, {})
   res.render('success', { title: 'user for personal is updated!' })
+}
+
+exports.mypage_personal_review_list = async (req, res, next) => {
+  res.render('mypage_personal_review_list', { title: 'My review list' })
+}
+
+exports.mypage_personal_qna_create_get = async (req, res, next) => {
+  res.render('mypage_personal_qna_form', { title: 'Qna create', })
+}
+
+exports.mypage_personal_qna_create_post = async (req, res, next) => {
+  console.log('hey')
+}
+
+exports.mypage_personal_qna_list = async (req, res, next) => {
+  res.render('mypage_personal_qna_list', { title: 'Qna list' })
 }
 
 exports.user_business_get = async (req, res, next) => {

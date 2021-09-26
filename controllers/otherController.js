@@ -7,29 +7,20 @@ exports.test = async (req, res, next) => {
 }
 
 exports.index = async (req, res, next)  => {
+  console.log(req)
   res.render('index', { title: 'KIGO',  results: req.session.user})
 }
 
 exports.chat = async (req, res, next) => { 
-  async.parallel({
-    chat_contents: function (callback) {
-      Model.ChatContent.find()
-      .populate('user_personal')
-      .populate('user_business')
-      .exec(callback)
-    },
-  }, function (err, results) {
-    console.log(results.chat_contents[0].user_personal)
-    res.render('chat_user', { 
-      title: 'Chat', 
-      user: req.session.user,
-      chat_contents: results.chat_contents,
-    })
+  var chat_contents = await Model.ChatContent.find().populate('user_personal').populate('user_business').exec()
+  res.render('chat_user', { 
+    title: 'Chat', 
+    user: req.session.user,
+    chat_contents: chat_contents,
   })
 }
 
 exports.chat_ajax = async (req, res, next) => {
-  console.log('hi chat')
   var chat = new Model.ChatContent({
     user_id: req.body.chat_user,
     content: req.body.chat_content,

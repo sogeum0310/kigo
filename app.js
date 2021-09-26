@@ -36,6 +36,13 @@ mongoose.connect('mongodb://localhost:27017/kigo', { useNewUrlParser: true, useU
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+
+// My middleware !!
+// app.use(function (req, res, next) {
+//   console.log('app Time: ', Date.now())
+//   next()
+// })
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -78,5 +85,6 @@ app.use(function(err, req, res, next) {
     res.render('error');
   }
 });
+
 
 module.exports = app;

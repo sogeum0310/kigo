@@ -1,14 +1,13 @@
 <ref *2> IncomingMessage {
-
   _readableState: ReadableState {
     objectMode: false,
     highWaterMark: 16384,
     buffer: BufferList { head: null, tail: null, length: 0 },
     length: 0,
     pipes: [],
-    flowing: false,
+    flowing: null,
     ended: true,
-    endEmitted: true,
+    endEmitted: false,
     reading: false,
     constructed: true,
     sync: true,
@@ -19,23 +18,21 @@
     errorEmitted: false,
     emitClose: true,
     autoDestroy: true,
-    destroyed: true,
+    destroyed: false,
     errored: null,
-    closed: true,
-    closeEmitted: true,
+    closed: false,
+    closeEmitted: false,
     defaultEncoding: 'utf8',
     awaitDrainWriters: null,
     multiAwaitDrain: false,
     readingMore: true,
     decoder: null,
     encoding: null,
-    [Symbol(kPaused)]: true
+    [Symbol(kPaused)]: null
   },
-
   _events: [Object: null prototype] { end: [Function: clearRequestTimeout] },
   _eventsCount: 1,
   _maxListeners: undefined,
-
   socket: <ref *1> Socket {
     connecting: false,
     _hadError: false,
@@ -98,7 +95,7 @@
       length: 0,
       writing: false,
       corked: 0,
-      sync: false,
+      sync: true,
       bufferProcessing: false,
       onwrite: [Function: bound onwrite],
       writecb: null,
@@ -146,7 +143,7 @@
       [Symbol(IncomingMessage)]: [Function: IncomingMessage],
       [Symbol(ServerResponse)]: [Function: ServerResponse],
       [Symbol(kCapture)]: false,
-      [Symbol(async_id_symbol)]: 28
+      [Symbol(async_id_symbol)]: 34
     },
     _server: Server {
       maxHeaderSize: undefined,
@@ -171,7 +168,7 @@
       [Symbol(IncomingMessage)]: [Function: IncomingMessage],
       [Symbol(ServerResponse)]: [Function: ServerResponse],
       [Symbol(kCapture)]: false,
-      [Symbol(async_id_symbol)]: 28
+      [Symbol(async_id_symbol)]: 34
     },
     parser: HTTPParser {
       '0': [Function: bound setRequestTimeout],
@@ -237,9 +234,8 @@
       [Symbol(corked)]: 0,
       [Symbol(kOutHeaders)]: [Object: null prototype]
     },
-    _peername: { address: '::1', family: 'IPv6', port: 60173 },
-    timeout: 0,
-    [Symbol(async_id_symbol)]: 109,
+    _peername: { address: '::1', family: 'IPv6', port: 60708 },
+    [Symbol(async_id_symbol)]: 133,
     [Symbol(kHandle)]: TCP {
       reading: true,
       onconnection: null,
@@ -248,20 +244,7 @@
     },
     [Symbol(kSetNoDelay)]: false,
     [Symbol(lastWriteQueueSize)]: 0,
-    [Symbol(timeout)]: Timeout {
-      _idleTimeout: -1,
-      _idlePrev: null,
-      _idleNext: null,
-      _idleStart: 2378,
-      _onTimeout: null,
-      _timerArgs: undefined,
-      _repeat: null,
-      _destroyed: true,
-      [Symbol(refed)]: false,
-      [Symbol(kHasPrimitive)]: false,
-      [Symbol(asyncId)]: 231,
-      [Symbol(triggerId)]: 228
-    },
+    [Symbol(timeout)]: null,
     [Symbol(kBuffer)]: null,
     [Symbol(kBufferCb)]: null,
     [Symbol(kBufferGen)]: null,
@@ -270,19 +253,15 @@
     [Symbol(kBytesWritten)]: 0,
     [Symbol(RequestTimeout)]: undefined
   },
-
   httpVersionMajor: 1,
   httpVersionMinor: 1,
   httpVersion: '1.1',
   complete: true,
-
   rawHeaders: [
     'Host',
     'localhost:3000',
     'Connection',
     'keep-alive',
-    'Content-Length',
-    '1168',
     'Cache-Control',
     'max-age=0',
     'sec-ch-ua',
@@ -293,10 +272,6 @@
     '"macOS"',
     'Upgrade-Insecure-Requests',
     '1',
-    'Origin',
-    'http://localhost:3000',
-    'Content-Type',
-    'multipart/form-data; boundary=----WebKitFormBoundary3HGjunNKFd3drIrf',
     'User-Agent',
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36',
     'Accept',
@@ -310,23 +285,23 @@
     'Sec-Fetch-Dest',
     'document',
     'Referer',
-    'http://localhost:3000/user/business',
+    'http://localhost:3000/mypage/personal',
     'Accept-Encoding',
     'gzip, deflate, br',
     'Accept-Language',
     'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7,la;q=0.6',
     'Cookie',
-    '_ga=GA1.1.1660297901.1630141271; connect.sid=s%3Ash6rlc2z20GuuWvv6u7QNu3pnxVIfRSn.YiqEqi%2FnLu7%2Fe6HehrzFKHXSjmjUEB7sbxjJoVpJ7vI'
+    '_ga=GA1.1.1660297901.1630141271; connect.sid=s%3AXCrdkWRLmcqB9FbjctuQrfWGG2UTaCMv.Nm3GLv5Ohty8fb2ZqGjiK6T5G8LfWEX3Uc0C91aEivw',
+    'If-None-Match',
+    'W/"3f9-7T69LFteh/0kkDb6qiFXL4UaRpo"'
   ],
-
   rawTrailers: [],
   aborted: false,
   upgrade: false,
-  url: '/user/business',
-  method: 'POST',
+  url: '/',
+  method: 'GET',
   statusCode: null,
   statusMessage: null,
-
   client: <ref *1> Socket {
     connecting: false,
     _hadError: false,
@@ -389,7 +364,7 @@
       length: 0,
       writing: false,
       corked: 0,
-      sync: false,
+      sync: true,
       bufferProcessing: false,
       onwrite: [Function: bound onwrite],
       writecb: null,
@@ -437,7 +412,7 @@
       [Symbol(IncomingMessage)]: [Function: IncomingMessage],
       [Symbol(ServerResponse)]: [Function: ServerResponse],
       [Symbol(kCapture)]: false,
-      [Symbol(async_id_symbol)]: 28
+      [Symbol(async_id_symbol)]: 34
     },
     _server: Server {
       maxHeaderSize: undefined,
@@ -462,7 +437,7 @@
       [Symbol(IncomingMessage)]: [Function: IncomingMessage],
       [Symbol(ServerResponse)]: [Function: ServerResponse],
       [Symbol(kCapture)]: false,
-      [Symbol(async_id_symbol)]: 28
+      [Symbol(async_id_symbol)]: 34
     },
     parser: HTTPParser {
       '0': [Function: bound setRequestTimeout],
@@ -528,9 +503,8 @@
       [Symbol(corked)]: 0,
       [Symbol(kOutHeaders)]: [Object: null prototype]
     },
-    _peername: { address: '::1', family: 'IPv6', port: 60173 },
-    timeout: 0,
-    [Symbol(async_id_symbol)]: 109,
+    _peername: { address: '::1', family: 'IPv6', port: 60708 },
+    [Symbol(async_id_symbol)]: 133,
     [Symbol(kHandle)]: TCP {
       reading: true,
       onconnection: null,
@@ -539,20 +513,7 @@
     },
     [Symbol(kSetNoDelay)]: false,
     [Symbol(lastWriteQueueSize)]: 0,
-    [Symbol(timeout)]: Timeout {
-      _idleTimeout: -1,
-      _idlePrev: null,
-      _idleNext: null,
-      _idleStart: 2378,
-      _onTimeout: null,
-      _timerArgs: undefined,
-      _repeat: null,
-      _destroyed: true,
-      [Symbol(refed)]: false,
-      [Symbol(kHasPrimitive)]: false,
-      [Symbol(asyncId)]: 231,
-      [Symbol(triggerId)]: 228
-    },
+    [Symbol(timeout)]: null,
     [Symbol(kBuffer)]: null,
     [Symbol(kBufferCb)]: null,
     [Symbol(kBufferGen)]: null,
@@ -561,13 +522,11 @@
     [Symbol(kBytesWritten)]: 0,
     [Symbol(RequestTimeout)]: undefined
   },
-
   _consuming: false,
   _dumped: false,
   next: [Function: next],
   baseUrl: '',
-  originalUrl: '/user/business',
-
+  originalUrl: '/',
   _parsedUrl: Url {
     protocol: null,
     slashes: null,
@@ -578,15 +537,13 @@
     hash: null,
     search: null,
     query: null,
-    pathname: '/user/business',
-    path: '/user/business',
-    href: '/user/business',
-    _raw: '/user/business'
+    pathname: '/',
+    path: '/',
+    href: '/',
+    _raw: '/'
   },
-
   params: {},
   query: {},
-
   res: <ref *3> ServerResponse {
     _events: [Object: null prototype] {
       finish: [Array],
@@ -637,25 +594,11 @@
       _paused: false,
       _httpMessage: [Circular *3],
       _peername: [Object],
-      timeout: 0,
-      [Symbol(async_id_symbol)]: 109,
+      [Symbol(async_id_symbol)]: 133,
       [Symbol(kHandle)]: [TCP],
       [Symbol(kSetNoDelay)]: false,
       [Symbol(lastWriteQueueSize)]: 0,
-      [Symbol(timeout)]: Timeout {
-        _idleTimeout: -1,
-        _idlePrev: null,
-        _idleNext: null,
-        _idleStart: 2378,
-        _onTimeout: null,
-        _timerArgs: undefined,
-        _repeat: null,
-        _destroyed: true,
-        [Symbol(refed)]: false,
-        [Symbol(kHasPrimitive)]: false,
-        [Symbol(asyncId)]: 231,
-        [Symbol(triggerId)]: 228
-      },
+      [Symbol(timeout)]: null,
       [Symbol(kBuffer)]: null,
       [Symbol(kBufferCb)]: null,
       [Symbol(kBufferGen)]: null,
@@ -681,27 +624,14 @@
     [Symbol(corked)]: 0,
     [Symbol(kOutHeaders)]: [Object: null prototype] { 'x-powered-by': [Array] }
   },
-
-  _startAt: [ 10534222, 17152781 ],
-  _startTime: 2021-09-22T08:28:21.514Z,
+  _startAt: [ 10871137, 260840987 ],
+  _startTime: 2021-09-26T06:03:43.051Z,
   _remoteAddress: '::1',
-
-  body: {
-    user_id: 'strawberry',
-    password: '123',
-    password_confirm: '123',
-    name: 'so sweet',
-    phone: '01088889999',
-    email: 'strawberry@example.com',
-    about: 'we are selling strawberry',
-    city: '614994c9db1fa36346090d33',
-    platform: '614994c9db1fa36346090cff'
-  },
-
+  body: {},
   secret: undefined,
   cookies: {
     _ga: 'GA1.1.1660297901.1630141271',
-    'connect.sid': 's:sh6rlc2z20GuuWvv6u7QNu3pnxVIfRSn.YiqEqi/nLu7/e6HehrzFKHXSjmjUEB7sbxjJoVpJ7vI'
+    'connect.sid': 's:XCrdkWRLmcqB9FbjctuQrfWGG2UTaCMv.Nm3GLv5Ohty8fb2ZqGjiK6T5G8LfWEX3Uc0C91aEivw'
   },
   signedCookies: [Object: null prototype] {},
   _parsedOriginalUrl: Url {
@@ -714,12 +644,11 @@
     hash: null,
     search: null,
     query: null,
-    pathname: '/user/business',
-    path: '/user/business',
-    href: '/user/business',
-    _raw: '/user/business'
+    pathname: '/',
+    path: '/',
+    href: '/',
+    _raw: '/'
   },
-
   sessionStore: MongoStore {
     _events: [Object: null prototype] {
       disconnect: [Function: ondisconnect],
@@ -748,57 +677,33 @@
     generate: [Function (anonymous)],
     [Symbol(kCapture)]: false
   },
-
-  sessionID: 'sh6rlc2z20GuuWvv6u7QNu3pnxVIfRSn',
+  sessionID: 'XCrdkWRLmcqB9FbjctuQrfWGG2UTaCMv',
   session: Session {
-    cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true },
-    user: {
-      city: [Array],
-      platform: [Array],
-      _id: '6149d3c37b4be17e746a1fd5',
-      user_id: 'strawberry',
-      password: '123',
-      name: 'so sweet',
-      phone: '01088889999',
-      email: 'strawberry@example.com',
-      about: 'we are selling strawberry',
-      __v: 0
-    }
+    cookie: { path: '/', _expires: null, originalMaxAge: null, httpOnly: true }
   },
-  files: null,
-
-  route: Route {
-    path: '/user/business',
-    stack: [ [Layer] ],
-    methods: { post: true }
-  },
-
+  route: Route { path: '/', stack: [ [Layer] ], methods: { get: true } },
   [Symbol(kCapture)]: false,
-  
   [Symbol(kHeaders)]: {
     host: 'localhost:3000',
     connection: 'keep-alive',
-    'content-length': '1168',
     'cache-control': 'max-age=0',
     'sec-ch-ua': '"Google Chrome";v="93", " Not;A Brand";v="99", "Chromium";v="93"',
     'sec-ch-ua-mobile': '?0',
     'sec-ch-ua-platform': '"macOS"',
     'upgrade-insecure-requests': '1',
-    origin: 'http://localhost:3000',
-    'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary3HGjunNKFd3drIrf',
     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36',
     accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
     'sec-fetch-site': 'same-origin',
     'sec-fetch-mode': 'navigate',
     'sec-fetch-user': '?1',
     'sec-fetch-dest': 'document',
-    referer: 'http://localhost:3000/user/business',
+    referer: 'http://localhost:3000/mypage/personal',
     'accept-encoding': 'gzip, deflate, br',
     'accept-language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7,la;q=0.6',
-    cookie: '_ga=GA1.1.1660297901.1630141271; connect.sid=s%3Ash6rlc2z20GuuWvv6u7QNu3pnxVIfRSn.YiqEqi%2FnLu7%2Fe6HehrzFKHXSjmjUEB7sbxjJoVpJ7vI'
+    cookie: '_ga=GA1.1.1660297901.1630141271; connect.sid=s%3AXCrdkWRLmcqB9FbjctuQrfWGG2UTaCMv.Nm3GLv5Ohty8fb2ZqGjiK6T5G8LfWEX3Uc0C91aEivw',
+    'if-none-match': 'W/"3f9-7T69LFteh/0kkDb6qiFXL4UaRpo"'
   },
-
-  [Symbol(kHeadersCount)]: 40,
+  [Symbol(kHeadersCount)]: 36,
   [Symbol(kTrailers)]: null,
   [Symbol(kTrailersCount)]: 0,
   [Symbol(RequestTimeout)]: undefined

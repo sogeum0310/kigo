@@ -5,6 +5,10 @@ var estimate_controller = require('../controllers/estimateController')
 var user_controller = require('../controllers/userController')
 var other_controller = require('../controllers/otherController')
 
+// router.use(function (req, res, next) {
+//   console.log('router Time: ', Date.now())
+//   next()
+// })
 
 /* GET home page. */
 router.get('/', other_controller.index)

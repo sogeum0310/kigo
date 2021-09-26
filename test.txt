@@ -39,3 +39,14 @@
 
 # 원하시는 피드백 서비스를 선택해주세요(중복선택 가능)
 전화상담, 채팅상담, 방문상담
+
+HTTP
+  # 웹에서 이루어지는 모든 데이터 교환의 기초
+  # 클라이언트 - 서버
+  # Requests - Responses
+  # HTTP Requests
+    시작줄(head) - HTTP Method, URL, HTTP version
+    헤더(head) - 
+    본문(body) - 
+
+

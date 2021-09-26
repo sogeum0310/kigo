@@ -3,9 +3,14 @@ extends layout
 block content 
   h1= title
 
-  pre= chat_contents 
-
   ul#messages
+    each chat_content in chat_contents 
+      if (chat_content.user_personal)
+        li #{chat_content.user_personal.user_id} : #{chat_content.content}
+      if (chat_content.user_business)
+        li #{chat_content.user_business.user_id} : #{chat_content.content}
+
+  //- pre= chat_contents
 
   form
     input(id="msg" type="text")

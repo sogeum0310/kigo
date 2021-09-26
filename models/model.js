@@ -71,6 +71,20 @@ var ChatContentSchema = new Schema({
   room: { type: Schema.ObjectId },
 })
 
+ChatContentSchema.virtual('user_personal', {
+  ref: 'UserPersonal',
+  localField: 'user_id',
+  foreignField: '_id',
+  justOne: true,
+})
+
+ChatContentSchema.virtual('user_business', {
+  ref: 'UserBusiness',
+  localField: 'user_id',
+  foreignField: '_id',
+  justOne: true,
+})
+
 var FileSchema = new Schema({
   parent: { type: Schema.ObjectId },
   name: { type: String },
@@ -109,20 +123,6 @@ var Message = mongoose.model('Message', BlogPostSchema)
 var QnaQuestion = mongoose.model('QnaQuestion', BlogPostSchema)
 var QnaAnswer = mongoose.model('QnaAnswer', BlogCommentSchema)
 
-
-ChatContentSchema.virtual('user_personal', {
-  ref: 'UserPersonal',
-  localField: 'user_id',
-  foreignField: '_id',
-  justOne: true,
-})
-
-ChatContentSchema.virtual('user_business', {
-  ref: 'UserBusiness',
-  localField: 'user_id',
-  foreignField: '_id',
-  justOne: true,
-})
 
 exports.UserPersonal = UserPersonal
 exports.UserBusiness = UserBusiness

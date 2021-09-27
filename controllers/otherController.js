@@ -2,12 +2,15 @@ var Model = require('../models/model')
 var async = require('async')
 
 
+exports.success = async (req, res, next) => {
+  res.render('success', { title: req.query.message })
+}
+
 exports.test = async (req, res, next) => {
   console.log('hi controller')
 }
 
 exports.index = async (req, res, next)  => {
-  console.log(req)
   res.render('index', { title: 'KIGO',  results: req.session.user})
 }
 

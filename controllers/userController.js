@@ -55,7 +55,8 @@ exports.signup_personal_post = async (req, res, next) => {
     email: req.body.email
   })
   await user.save()
-  res.render('success', { title: 'Signup success!' })
+  var message = 'Signup success'
+  res.redirect('/success/?message=' + message)
 }
 
 exports.signup_business_get = async (req, res, next) => {
@@ -90,7 +91,9 @@ exports.signup_business_post = async (req, res, next) => {
 
   await file.save()
   await user_business.save()
-  res.render('success', { title: 'Signup for company success!' })
+  
+  var message = 'Signup for company success!' 
+  res.redirect('/success/?message=' + message)
 }
 
 exports.mypage_personal = async (req, res, next) => {
@@ -117,7 +120,8 @@ exports.mypage_personal_account_post = async (req, res, next) => {
     _id: req.session.user._id
   })
   await Model.UserPersonal.findByIdAndUpdate(req.session.user._id, user_personal, {})
-  res.render('success', { title: 'user for personal is updated!' })
+  var message = 'user for personal is updated!'
+  res.redirect('/success/?message=' + message)
 }
 
 exports.mypage_personal_review_list = async (req, res, next) => {
@@ -133,7 +137,11 @@ exports.mypage_personal_qna_create_post = async (req, res, next) => {
 }
 
 exports.mypage_personal_qna_list = async (req, res, next) => {
-  res.render('mypage_personal_qna_list', { title: 'Qna list' })
+  var qna_questions = await Model.QnaQuestion.find({ user_id: req.session.user._id }).exec()
+  for (qna_question of qna_questions) {
+    qna_question.qna_answer = await Model.QnaAnswer.findOne({ parent: qna_question._id }).exec()
+  }
+  res.render('mypage_personal_qna_list', { title: 'Qna list', qna_list: qna_questions })
 }
 
 exports.user_business_get = async (req, res, next) => {
@@ -186,5 +194,6 @@ exports.user_business_post = async (req, res, next) => {
   }
 
   await Model.UserBusiness.findByIdAndUpdate(req.session.user._id, user_business, {}) 
-  res.render('success', { title: 'user for business is updated!' })
+  var message = 'user for business is updated!'
+  res.redirect('/success/?message=' + message)
 }

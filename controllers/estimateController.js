@@ -72,7 +72,8 @@ exports.estimate_received_detail_post = async (req, res, next) => {
   await estimate_response.save()
   await Model.EstimateRequest.findByIdAndUpdate(req.params.id, { count: count })
 
-  res.render('success', { title: 'Estimate response are successfully registered' })
+  var message = 'Estimate response are successfully registered'
+  res.redirect('/success/?message=' + message)
 }
 
 exports.estimate_sent_list = async (req, res, next) => {
@@ -138,7 +139,9 @@ exports.estimate_request_create_post = async (req, res, next) => {
   console.log(estimate)
 
   estimate.save()
-  res.render('success', { title: 'Estimate are requested succefully' })
+
+  var message = 'Estimate are requested succefully'
+  res.redirect('/success/?message=' + message)
 }
 
 

@@ -32,6 +32,8 @@ app.io.on('connection', (socket) => {
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:27017/kigo', { useNewUrlParser: true, useUnifiedTopology: true });
 
+// mini
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

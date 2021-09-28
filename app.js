@@ -17,6 +17,7 @@ var app = express();
 // var populate_estimate = require('./populate-estimate')
 // var populate_estimate_response = require('./populate-estimate-response')
 // 나는 맥미니
+// 나는 AWS
 
 
 app.io = require('socket.io')()

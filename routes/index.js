@@ -64,7 +64,8 @@ router.post('/user/business', user_controller.user_business_post)
 router.get('/success', other_controller.success)
 
 /* Chat */
-router.get('/chatUser', other_controller.chat)
+router.get('/chat/list', other_controller.chat_list)
+router.get('/chat', other_controller.chat)
 router.post('/chatAjax', other_controller.chat_ajax)
 
 

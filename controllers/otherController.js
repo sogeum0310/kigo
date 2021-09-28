@@ -14,6 +14,10 @@ exports.index = async (req, res, next)  => {
   res.render('index', { title: 'KIGO',  results: req.session.user})
 }
 
+exports.chat_list = async (req, res, next) => {
+  res.render('chat_list', { title: 'Chat list' })
+}
+
 exports.chat = async (req, res, next) => { 
   var chat_contents = await Model.ChatContent.find().populate('user_personal').populate('user_business').exec()
   res.render('chat_user', { 

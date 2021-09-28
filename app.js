@@ -30,7 +30,7 @@ app.io.on('connection', (socket) => {
 
 // mongoose connection 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/kigo', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://helloworld:27017/kigo', { useNewUrlParser: true, useUnifiedTopology: true });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

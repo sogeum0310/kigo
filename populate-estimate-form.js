@@ -23,35 +23,35 @@ function createEstimateItemDetail(estimate_item, name, ) {
 }
 
 
-async.series([
-  function (callback) {
-    createEstimateItem('원하시는 광고 방법을 선택해주세요.', callback)
-  },
-  function (callback) {
-    createEstimateItem('월간 몇회 정도의 작업(포스팅)을 생각하고 계신가요?', callback)
-  },
-  function (callback) {
-    createEstimateItem('광고 하실 업종 또는 상품을 선택해주세요. (중복선택 가능)', callback)
-  },
-  function (callback) {
-    createEstimateItem('광고 목적을 선택해주세요. (중복선택 가능)', callback)
-  },
-  function (callback) {
-    createEstimateItem('원하시는 광고 시작 날짜를 선택해주세요.', callback)
-  },
-  function (callback) {
-    createEstimateItem('원하시는 광고 집행 기간을 선택해주세요.', callback)
-  },
-  function (callback) {
-    createEstimateItem('원하시는 대략적인 예상 금액을 입력해주세요.', callback)
-  },
-  function (callback) {
-    createEstimateItem('고객님이 계신 지역을 선택해주세요. (중복선택 가능)', callback)
-  },
-  function (callback) {
-    createEstimateItem('원하시는 피드백 서비스를 선택해주세요. (중복선택 가능)', callback)
-  },
-])
+// async.series([
+//   function (callback) {
+//     createEstimateItem('원하시는 광고 방법을 선택해주세요.', callback)
+//   },
+//   function (callback) {
+//     createEstimateItem('월간 몇회 정도의 작업(포스팅)을 생각하고 계신가요?', callback)
+//   },
+//   function (callback) {
+//     createEstimateItem('광고 하실 업종 또는 상품을 선택해주세요. (중복선택 가능)', callback)
+//   },
+//   function (callback) {
+//     createEstimateItem('광고 목적을 선택해주세요. (중복선택 가능)', callback)
+//   },
+//   function (callback) {
+//     createEstimateItem('원하시는 광고 시작 날짜를 선택해주세요.', callback)
+//   },
+//   function (callback) {
+//     createEstimateItem('원하시는 광고 집행 기간을 선택해주세요.', callback)
+//   },
+//   function (callback) {
+//     createEstimateItem('원하시는 대략적인 예상 금액을 입력해주세요.', callback)
+//   },
+//   function (callback) {
+//     createEstimateItem('고객님이 계신 지역을 선택해주세요. (중복선택 가능)', callback)
+//   },
+//   function (callback) {
+//     createEstimateItem('원하시는 피드백 서비스를 선택해주세요. (중복선택 가능)', callback)
+//   },
+// ])
 
 // console.log(estimate_items)
 async function doSomething() {
@@ -142,4 +142,4 @@ async function doSomething() {
 }
 
 
-// doSomething()
+doSomething()

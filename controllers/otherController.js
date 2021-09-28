@@ -7,24 +7,40 @@ exports.test = async (req, res, next) => {
 }
 
 exports.index = async (req, res, next)  => {
-  console.log(req)
+  // console.log(req)
   res.render('index', { title: 'KIGO',  results: req.session.user})
 }
 
-exports.chat = async (req, res, next) => { 
-  var chat_contents = await Model.ChatContent.find().populate('user_personal').populate('user_business').exec()
-  res.render('chat_user', { 
-    title: 'Chat', 
-    user: req.session.user,
-    chat_contents: chat_contents,
+exports.chat_list = async (req, res, next) => {
+
+  var room = new Model.ChatRoom({
+    user_personal: '614c0a47c27bef9cb6126fbe',
+    user_business: '614c0a47c27bef9cb6126fc3'
   })
+
+  // chat.save()
+
+  var chat_list = await Model.ChatRoom.find().exec()
+  res.render('chat_list', { title: 'Chat list', chat_list: chat_list })
+}
+
+exports.chat_detail = async (req, res, next) => { 
+  // var chat_contents = await Model.ChatContent.find({ room: req.params.id }).populate('user_personal').populate('user_business').exec()
+  // res.render('chat_user', { 
+  //   title: 'Chat', 
+  //   user: req.session.user,
+  //   chat_contents: chat_contents,
+  //   room: req.params.id
+  // })
+  console.log('me: ' + req.session.user._id)
+  console.log('you: ' + req.query.you)
 }
 
 exports.chat_ajax = async (req, res, next) => {
   var chat = new Model.ChatContent({
     user_id: req.body.chat_user,
     content: req.body.chat_content,
-    room: '6127581b3eef7c51a40956d2'
+    room: req.body.room
   })
   chat.save(function (err) {
     if (err) { return next(err) }

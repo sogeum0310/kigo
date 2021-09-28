@@ -5,6 +5,9 @@ block content
 
   pre= estimate_response
 
+  p 
+    a(href="/chat/?you=" + estimate_response.user_id) chat 
+
   h3 Portfolio
   pre= portfolio
   //- img(src="/files/" + portfolio.md_name, alt="")

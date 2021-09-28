@@ -30,7 +30,7 @@ app.io.on('connection', (socket) => {
 
 // mongoose connection 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/kigo', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:27017/kigo', { useNewUrlParser: true, useUnifiedTopology: true });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -53,7 +53,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   store: MongoStore.create({
-    mongoUrl: 'mongodb://localhost:27017/kigo'
+    mongoUrl: 'mongodb://ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:27017/kigo'
   })
 }))
 app.use(fileUpload())

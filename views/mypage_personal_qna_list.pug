@@ -3,3 +3,12 @@ extends layout
 block content 
   h1= title 
   
+  ul
+    each qna in qna_list 
+      li= qna.content
+        if (qna.qna_answer)
+          p= qna.qna_answer
+        else 
+          p 대기중입니다
+
+    

@@ -2,20 +2,28 @@ var Model = require('../models/model')
 var async = require('async')
 
 
+exports.success = async (req, res, next) => {
+  res.render('success', { title: req.query.message })
+}
+
 exports.test = async (req, res, next) => {
   console.log('hi controller')
 }
 
 exports.index = async (req, res, next)  => {
-  // console.log(req)
   res.render('index', { title: 'KIGO',  results: req.session.user})
 }
 
 exports.chat_list = async (req, res, next) => {
+  res.render('chat_list', { title: 'Chat list' })
+}
 
-  var room = new Model.ChatRoom({
-    user_personal: '614c0a47c27bef9cb6126fbe',
-    user_business: '614c0a47c27bef9cb6126fc3'
+exports.chat = async (req, res, next) => { 
+  var chat_contents = await Model.ChatContent.find().populate('user_personal').populate('user_business').exec()
+  res.render('chat_user', { 
+    title: 'Chat', 
+    user: req.session.user,
+    chat_contents: chat_contents,
   })
 
   // chat.save()

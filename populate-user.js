@@ -13,6 +13,8 @@ async function populateUser() {
   var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
   var feedbacks = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[8]._id }).exec()
 
+  console.log(estimate_items)
+
   function createUserPersonal(user_id, password, name, gender, date_of_birth, city, phone, email) {
     user_personal_detail = {
       user_id: user_id,
@@ -26,7 +28,6 @@ async function populateUser() {
     }
     var user_personal = new Model.UserPersonal(user_personal_detail)
     user_personal.save()
-    console.log(user_personal)
   }
 
   function createUserBusiness(user_id, password, name, phone, email, about, city, platform) {
@@ -42,7 +43,6 @@ async function populateUser() {
     }
     var user_business = new Model.UserBusiness(user_business_detail)
     user_business.save()
-    console.log(user_business)
   }
 
 
@@ -65,5 +65,6 @@ async function populateUser() {
   createUserBusiness('orange', '123', '오렌지', '01088889999', 'orange@example.com', 'We are selling orange', [cities[2]._id,], [platforms[0]._id,])
   createUserBusiness('tomato', '123', '토마토', '01088889999', 'tomato@example.com', 'We are selling tomato', [cities[2]._id,], [platforms[1]._id,])
 }
+
 
 populateUser()

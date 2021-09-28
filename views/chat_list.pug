@@ -1,13 +1,6 @@
 extends layout 
 
 block content 
-  h1= title 
+  h1= title
 
-  ul 
-    each chat in chat_list 
-      li
-        a(href="/chat/" + chat._id)= chat._id 
-
-  hr
   
-  pre= chat_list

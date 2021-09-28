@@ -42,7 +42,7 @@ router.post('/signup/personal', user_controller.signup_personal_post)
 
 router.get('/mypage/personal', user_controller.mypage_personal)
 router.get('/mypage/personal/account', user_controller.mypage_personal_account_get)
-// router.post('/mypage/personal/account', user_controller.mypage_personal_account_post)
+router.post('/mypage/personal/account', user_controller.mypage_personal_account_post)
 router.get('/mypage/personal/review/list', user_controller.mypage_personal_review_list)
 router.get('/mypage/personal/qna/list', user_controller.mypage_personal_qna_list)
 router.get('/mypage/personal/qna/create', user_controller.mypage_personal_qna_create_get)
@@ -61,10 +61,11 @@ router.post('/signup/business', user_controller.signup_business_post)
 router.get('/user/business', user_controller.user_business_get)
 router.post('/user/business', user_controller.user_business_post)
 
+router.get('/success', other_controller.success)
 
 /* Chat */
 router.get('/chat/list', other_controller.chat_list)
-router.get('/chat', other_controller.chat_detail)
+router.get('/chat', other_controller.chat)
 router.post('/chatAjax', other_controller.chat_ajax)
 
 

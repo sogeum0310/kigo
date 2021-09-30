@@ -153,6 +153,7 @@ exports.faq_update_post = async (req, res, next) => {
   var faq_detail = new Model.Faq({
     title: req.body.title,
     content: req.body.content,
+    account: req.body.account,
     _id: req.params.id
   })
   await Model.Faq.findByIdAndUpdate(req.params.id, faq_detail)

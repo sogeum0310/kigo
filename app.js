@@ -59,13 +59,13 @@ app.use(session({
 }))
 
 app.use(function (req, res, next) {
-  var user = req.session.user
-  // console.log(user)
-  if (user) {
-    if (user.platform) {
-      app.locals.user_account = 'business'
+  var user_global = req.session.user
+  console.log(user_global)
+  if (user_global) {
+    if (user_global.platform) {
+      app.locals.user_global_account = 'business'
     } else {
-      app.locals.user_account = 'personal'
+      app.locals.user_global_account = 'personal'
     }
   }
   next()

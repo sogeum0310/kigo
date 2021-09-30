@@ -12,7 +12,6 @@ var adminRouter = require('./routes/admin');
 const Server = require('socket.io')
 var app = express();
 
-// test branch is activate
 
 // var populate_esimate_form = require('./populate-estimate-form')
 // var populate_user = require('./populate-user.js')

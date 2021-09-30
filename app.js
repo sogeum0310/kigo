@@ -57,7 +57,7 @@ app.use(session({
 
 app.use(function (req, res, next) {
   var user = req.session.user
-  if (user.platform) {
+  if (user && user.platform) {
     app.locals.user_account = 'business'
   } else {
     app.locals.user_account = 'personal'

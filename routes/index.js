@@ -54,8 +54,6 @@ router.get('/mypage/personal/account', user_controller.mypage_personal_account_g
 router.post('/mypage/personal/account', user_controller.mypage_personal_account_post)
 router.get('/mypage/personal/review/list', user_controller.mypage_personal_review_list)
 router.get('/mypage/personal/qna/list', user_controller.mypage_personal_qna_list)
-router.get('/mypage/personal/qna/create', user_controller.mypage_personal_qna_create_get)
-router.post('/mypage/personal/qna/create', user_controller.mypage_personal_qna_create_post)
 
 router.get('/signup/business', user_controller.signup_business_get)
 router.post('/signup/business', user_controller.signup_business_post)

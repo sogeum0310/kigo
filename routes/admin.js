@@ -5,6 +5,7 @@ var admin_controller = require('../controllers/adminController')
 
 /* GET home page. */
 router.get('/', admin_controller.index);
+router.get('/success', admin_controller.success)
 
 router.get('/user/personal/list', admin_controller.user_personal_list)
 router.get('/user/personal/:id', admin_controller.user_personal_detail)

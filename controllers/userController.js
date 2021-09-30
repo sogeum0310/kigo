@@ -5,7 +5,7 @@ const createHttpError = require('http-errors')
 
 exports.login_get = (req, res, next) => {
   if (req.session.user) {
-    res.render('success', { title: 'Hi ' + req.session.user.user_id })
+    res.render('success', { title: 'on ' + req.session.user.user_id })
   } else {
     res.render('user_login', { title: 'Login' })
   }
@@ -128,13 +128,6 @@ exports.mypage_personal_review_list = async (req, res, next) => {
   res.render('mypage_personal_review_list', { title: 'My review list' })
 }
 
-exports.mypage_personal_qna_create_get = async (req, res, next) => {
-  res.render('mypage_personal_qna_form', { title: 'Qna create', })
-}
-
-exports.mypage_personal_qna_create_post = async (req, res, next) => {
-  console.log('hey')
-}
 
 exports.mypage_personal_qna_list = async (req, res, next) => {
   var qna_questions = await Model.QnaQuestion.find({ user_id: req.session.user._id }).exec()

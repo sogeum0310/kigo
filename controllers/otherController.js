@@ -4,7 +4,7 @@ const { faq_list } = require('./adminController')
 
 
 exports.index = async (req, res, next)  => {
-  res.render('index', { title: 'KIGO',  results: req.session.user})
+  res.render('index', { title: 'KIGO' })
 }
 
 exports.company_about = async (req, res, next) => {
@@ -57,10 +57,13 @@ exports.company_qna_create_post = async (req, res, next) => {
     user_id: req.session.user._id
   })
   qna_detail.save()
+
+  var message = 'A question is successfully posted'
+  res.redirect('/success/?message=' + message)
 }
 
 exports.company_message_create_get = async (req, res, next) => {
-  res.render('contact_form', { title: 'Message create' })
+  res.render('company_contact_form', { title: 'Message create' })
 }
 
 exports.company_message_create_post = async (req, res, next) => {
@@ -70,6 +73,9 @@ exports.company_message_create_post = async (req, res, next) => {
     user_id: req.session.user._id
   })
   message.save()
+  
+  var message = 'A message is successfully sent'
+  res.redirect('/success/?message=' + message)
 }
 
 

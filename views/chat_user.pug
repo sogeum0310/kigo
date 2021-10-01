@@ -12,35 +12,35 @@ block content
 
   //- pre= chat_contents
 
-  form
-    input(id="msg" type="text")
+  form#form
+    input(id="input" type="text")
     button SEND
 
   script(src="/socket.io/socket.io.js")
   script.
+    var socket = io()
     var user = '!{user._id}'
     var name = '!{user.user_id}';
-    var socket = io()
+    var messages = document.getElementById('messages')
+    var form = document.getElementById('form')
+    var input = document.getElementById('input')
 
-    document.querySelector('form').addEventListener('submit', function (e) {
+
+    form.addEventListener('submit', function (e) {
       e.preventDefault()
-      var msg = { user: user, name: name, message: document.getElementById('msg').value }
-      socket.emit('chat-msg-1', msg)
-      document.getElementById('msg').value = ''
-      var xhttp = new XMLHttpRequest()
-      xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-          console.log(this.responseText)
-        }
+      if (input.value) {
+        var data = { user: user, name: name, msg: input.value }
+
+        socket.emit('chat-emit', data)
+        input.value = ''
       }
-      xhttp.open('POST', 'chatAjax', true)
-      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xhttp.send(`chat_user=${msg.user}&chat_content=${msg.message}`)
     })
-    socket.on('chat-msg-2', function (msg) {
-      var newMessage = document.createElement('li')
-      newMessage.innerHTML = msg.name + ' : ' + msg.message
-      document.getElementById('messages').append(newMessage)
+
+    socket.on('chat-on', function (data) {
+      var item = document.createElement('li')
+      item.textContent = data.name + ' : ' +  data.msg
+      messages.appendChild(item)
     })
+
 
 

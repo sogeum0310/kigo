@@ -45,9 +45,10 @@ router.post('/login', user_controller.login_post)
 router.get('/logout', user_controller.logout)
 
 router.get('/signup/option', user_controller.signup_option)
-
 router.get('/signup/personal', user_controller.signup_personal_get)
 router.post('/signup/personal', user_controller.signup_personal_post)
+router.get('/signup/business', user_controller.signup_business_get)
+router.post('/signup/business', user_controller.signup_business_post)
 
 router.get('/mypage/personal', user_controller.mypage_personal)
 router.get('/mypage/personal/account', user_controller.mypage_personal_account_get)
@@ -55,10 +56,10 @@ router.post('/mypage/personal/account', user_controller.mypage_personal_account_
 router.get('/mypage/personal/review/list', user_controller.mypage_personal_review_list)
 router.get('/mypage/personal/qna/list', user_controller.mypage_personal_qna_list)
 
-router.get('/signup/business', user_controller.signup_business_get)
-router.post('/signup/business', user_controller.signup_business_post)
-router.get('/user/business', user_controller.user_business_get)
-router.post('/user/business', user_controller.user_business_post)
+router.get('/mypage/business', user_controller.mypage_business)
+router.get('/mypage/business/account', user_controller.mypage_business_account_get)
+router.post('/mypage/business/account', user_controller.mypage_business_account_post)
+router.get('/mypage/business/qna/list', user_controller.mypage_business_qna_list)
 
 router.get('/success', other_controller.success)
 

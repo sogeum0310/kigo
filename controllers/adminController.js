@@ -42,7 +42,7 @@ exports.estimate_request_list = async (req, res, next) => {
   res.render('admin/estimate_request_list', { title: 'Estimate requests', estimate_requests: estimate_requests })
 }
 exports.estimate_request_detail = async (req, res, next) => {
-  var estimate_request = await Model.EstimateRequest.findById(req.params.id).populate('platform').populate('business').populate('goal').populate('start_day').populate('how_long').populate('cost').populate('city').populate('feedback').exec()
+  var estimate_request = await Model.EstimateRequest.findById(req.params.id).populate('platform').populate('how_many').populate('business').populate('goal').populate('start_day').populate('how_long').populate('cost').populate('city').populate('feedback').exec()
   var estimate_responses = await Model.EstimateResponse.find({ 'estimate_request': req.params.id }).populate('user_id').exec()
   res.render('admin/estimate_request_detail', { title: 'Estimate', estimate_request: estimate_request, estimate_responses: estimate_responses })
 }

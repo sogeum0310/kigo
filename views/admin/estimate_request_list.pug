@@ -4,7 +4,6 @@ block content
   h1= title
 
   ul
-    - estimate_requests.sort(function(a, b) { let textA = a._id; let textB = b._id; return (textA < textB) ? -1 : (textA > textB) ? 1 : 0; });
     each estimate_request in estimate_requests
       li 
         a(href=estimate_request._id) #{estimate_request.platform[0].name}

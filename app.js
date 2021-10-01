@@ -23,8 +23,9 @@ var app = express();
 app.io = require('socket.io')()
 
 app.io.on('connection', (socket) => {
-  socket.on('chat-msg-1', (msg) => {
-    app.io.emit('chat-msg-2', msg)
+  socket.on('chat-emit', (data) => {
+    console.log(data)
+    app.io.emit('chat-on', data)
   })
 })
 
@@ -60,12 +61,12 @@ app.use(session({
 
 app.use(function (req, res, next) {
   var user_global = req.session.user
-  console.log(user_global)
+  // console.log(user_global)
   if (user_global) {
     if (user_global.platform) {
-      app.locals.user_global_account = 'business'
+      res.locals.user_global_account = 'business'
     } else {
-      app.locals.user_global_account = 'personal'
+      res.locals.user_global_account = 'personal'
     }
   }
   next()

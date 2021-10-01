@@ -99,10 +99,13 @@ exports.chat_ajax = async (req, res, next) => {
     content: req.body.chat_content,
     room: '6127581b3eef7c51a40956d2'
   })
-  chat.save(function (err) {
-    if (err) { return next(err) }
-    console.log('so good')
-  })
+
+  console.log(chat)
+
+  // chat.save(function (err) {
+  //   if (err) { return next(err) }
+  //   console.log('so good')
+  // })
 }
 
 

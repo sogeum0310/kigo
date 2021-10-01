@@ -53,7 +53,7 @@ exports.estimate_received_list = async (req, res, next) => {
 }
 
 exports.estimate_received_detail_get = async (req, res, next) => {
-  var estimate_request = await Model.EstimateRequest.findById(req.params.id).populate('platform').populate('business').populate('goal').populate('start_day').populate('how_long').populate('cost').populate('city').populate('feedback').exec() 
+  var estimate_request = await Model.EstimateRequest.findById(req.params.id).populate('platform').populate('how_many').populate('business').populate('goal').populate('start_day').populate('how_long').populate('cost').populate('city').populate('feedback').exec() 
   res.render( 'estimate_received_detail', { title: 'Estimate for company', results: estimate_request} )
 }
 
@@ -117,7 +117,7 @@ exports.estimate_request_create_get = async (req, res, next) => {
 }
 
 exports.estimate_request_detail = async (req, res, next) => {
-  var estimate_request = await Model.EstimateRequest.findById(req.params.id).populate('platform').populate('business').populate('goal').populate('start_day').populate('how_long').populate('cost').populate('city').populate('feedback').exec()
+  var estimate_request = await Model.EstimateRequest.findById(req.params.id).populate('platform').populate('how_many').populate('business').populate('goal').populate('start_day').populate('how_long').populate('cost').populate('city').populate('feedback').exec()
   var estimate_responses = await Model.EstimateResponse.find({ estimate_request: req.params.id }).populate('user_id').exec()
   res.render('estimate_request_detail', { title: 'Estimate', estimate_request: estimate_request, estimate_responses: estimate_responses, })
 }

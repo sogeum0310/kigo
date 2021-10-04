@@ -66,8 +66,7 @@ var BusinessReviewSchema = new Schema({
 })
 
 var ChatRoomSchema = new Schema({
-  user_personal: { type: Schema.ObjectId },
-  user_business: { type: Schema.ObjectId },
+  member:[{ type: Schema.ObjectId }]
 })
 
 var ChatContentSchema = new Schema({

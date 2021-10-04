@@ -1,0 +1,52 @@
+extends layout 
+
+block content 
+  h1= title
+
+  ul#messages(style="background: whitesmoke; height: 400px; overflow: auto")
+    if (chat_contents)
+      pre= chat_contents
+
+  form#form
+    input#input(type="text")
+    button SEND
+
+  p 
+    a(href="#" onclick="outRoom()") Out 
+
+  script(src="/socket.io/socket.io.js")
+  script.
+    var socket = io()
+    var messages = document.getElementById('messages')
+    var form = document.getElementById('form')
+    var input = document.getElementById('input')
+    var user = '!{user}'
+    var room = '!{room}'
+
+    socket.emit('join', room)
+
+    function outRoom() {
+      socket.emit('out', room)
+      location.href = '/chat/list'
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault()
+      if (input.value) {
+        var message = { user: user, content: input.value }
+        socket.emit('chat message', room, message)
+        input.value = ''
+      }
+    })
+
+    socket.on('chat message', function (msg) {
+      console.log(msg)
+      var item = document.createElement('li')
+      item.textContent = msg.user + ' : ' + msg.content
+      messages.appendChild(item)
+    })
+
+
+
+
+    

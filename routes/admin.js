@@ -3,8 +3,35 @@ var router = express.Router();
 var admin_controller = require('../controllers/adminController')
 
 
+router.get(['/', '/*'], async (req, res, next) => {
+  if (req.session.admin) {
+    next()
+  } else {
+    res.render('admin/login', { title: 'Admin login' })
+  }
+})
+
+router.post('/login', async (req, res, next) => {
+  if (req.body.admin==='admin') {
+    req.session.admin = 'admin'
+    res.redirect('/admin')
+  } else {
+    res.send('something is wrong')
+  }
+})
+
+router.get('/mypage', async (req, res, next) => {
+  res.render('admin/mypage', { title: 'Mypage for admin' })
+})
+
+router.get('/logout', async (req, res, next) => {
+  req.session.destroy()
+  res.redirect('/admin')
+})
+
 /* GET home page. */
 router.get('/', admin_controller.index);
+router.get('/success', admin_controller.success)
 
 router.get('/user/personal/list', admin_controller.user_personal_list)
 router.get('/user/personal/:id', admin_controller.user_personal_detail)

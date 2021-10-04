@@ -1,0 +1,25 @@
+extends layout 
+
+block content 
+  h1= title 
+
+  if (user_account==='personal')
+    ul 
+      li
+        a(href="/mypage/personal/account") account 
+      li 
+        a(href="/mypage/personal/review/list") my review 
+      li
+        a(href="/mypage/personal/qna/list") my qna 
+      li
+        a(href="/logout") logout 
+  if (user_account==='business')
+    ul 
+      li
+        a(href="/mypage/business/account") account 
+      li
+        a(href="/mypage/business/qna/list") my qna 
+      li
+        a(href="/logout") logout 
+
+    

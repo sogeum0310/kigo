@@ -18,13 +18,13 @@ block content
     each platform in platforms 
       div.form-group
         label(for="")= platform.name 
-        input(type="checkbox", name="platform", value=platform._id)
+        input(type="radio", name="platform", value=platform._id)
 
     h3= estimate_items[1].name
     each how_many in how_manys
       div.form-group
         label(for="")= how_many.name 
-        input(type="checkbox", name="how_many", value=how_many._id)   
+        input(type="radio", name="how_many", value=how_many._id)   
 
     h3= estimate_items[2].name
     each business in businesses 
@@ -42,19 +42,19 @@ block content
     each start_day in start_days 
       div.form-group
         label(for="")= start_day.name 
-        input(type="checkbox", name="start_day", value=start_day._id) 
+        input(type="radio", name="start_day", value=start_day._id) 
 
     h3= estimate_items[5].name
     each how_long in how_longs 
       div.form-group
         label(for="")= how_long.name 
-        input(type="checkbox", name="how_long", value=how_long._id) 
+        input(type="radio", name="how_long", value=how_long._id) 
 
     h3= estimate_items[6].name
     each cost in costs 
       div.form-group
         label(for="")= cost.name 
-        input(type="checkbox", name="cost", value=cost._id)
+        input(type="radio", name="cost", value=cost._id)
 
     h3= estimate_items[7].name
     each city in cities 

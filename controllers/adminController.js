@@ -6,7 +6,6 @@ exports.index = async (req, res, next) => {
   res.render('admin/index', { title: 'Admin' });
 }
 
-
 exports.user_personal_list = async (req, res, next) => {
   // var user_personals = Promise.resolve(Model.UserPersonal.find().exec())
 
@@ -42,7 +41,7 @@ exports.estimate_request_list = async (req, res, next) => {
   res.render('admin/estimate_request_list', { title: 'Estimate requests', estimate_requests: estimate_requests })
 }
 exports.estimate_request_detail = async (req, res, next) => {
-  var estimate_request = await Model.EstimateRequest.findById(req.params.id).populate('platform').populate('business').populate('goal').populate('start_day').populate('how_long').populate('cost').populate('city').populate('feedback').exec()
+  var estimate_request = await Model.EstimateRequest.findById(req.params.id).populate('platform').populate('how_many').populate('business').populate('goal').populate('start_day').populate('how_long').populate('cost').populate('city').populate('feedback').exec()
   var estimate_responses = await Model.EstimateResponse.find({ 'estimate_request': req.params.id }).populate('user_id').exec()
   res.render('admin/estimate_request_detail', { title: 'Estimate', estimate_request: estimate_request, estimate_responses: estimate_responses })
 }
@@ -75,6 +74,10 @@ exports.notice_create_post = async (req, res, next) => {
     content: req.body.content
   })
   notice.save()
+  var message = 'A notice is successfully posted'
+  res.redirect('/admin/success/?message=' + message)
+
+  console.log('foo bar')
 }
 exports.notice_detail = async (req, res, next) => {
   var notice_detail = await Model.Notice.findById(req.params.id).exec()
@@ -91,6 +94,8 @@ exports.notice_update_post = async (req, res, next) => {
     _id: req.params.id
   })
   await Model.Notice.findByIdAndUpdate(req.params.id, notice_detail)
+  var message = 'A notice is successfully updated'
+  res.redirect('/admin/success/?message=' + message)
 }
 
 
@@ -107,6 +112,8 @@ exports.event_create_post = async (req, res, next) => {
     content: req.body.content
   })
   event.save()
+  var message = 'A event is successfully posted'
+  res.redirect('/admin/success/?message=' + message)
 }
 exports.event_detail = async (req, res, next) => {
   var event_detail = await Model.Event.findById(req.params.id).exec()
@@ -123,6 +130,8 @@ exports.event_update_post = async (req, res, next) => {
     _id: req.params.id
   })
   await Model.Event.findByIdAndUpdate(req.params.id, event_detail)
+  var message = 'A event is successfully updated'
+  res.redirect('/admin/success/?message=' + message)
 }
 
 
@@ -140,6 +149,8 @@ exports.faq_create_post = async (req, res, next) => {
     account: req.body.account
   })
   faq.save()
+  var message = 'A faq is successfully posted'
+  res.redirect('/admin/success/?message=' + message)
 }
 exports.faq_detail = async (req, res, next) => {
   var faq_detail = await Model.Faq.findById(req.params.id).exec()
@@ -153,9 +164,12 @@ exports.faq_update_post = async (req, res, next) => {
   var faq_detail = new Model.Faq({
     title: req.body.title,
     content: req.body.content,
+    account: req.body.account,
     _id: req.params.id
   })
   await Model.Faq.findByIdAndUpdate(req.params.id, faq_detail)
+  var message = 'A faq is successfully updated'
+  res.redirect('/admin/success/?message=' + message)
 }
 
 exports.qna_list = async (req, res, next) => {
@@ -175,6 +189,8 @@ exports.qna_detail_post = async (req, res, next) => {
     content: req.body.content
   })
   qna_detail.save()
+  var message = 'An answer is successfully posted'
+  res.redirect('/admin/success/?message=' + message)
 }
 
 exports.message_list = async (req, res, next) => {
@@ -185,4 +201,8 @@ exports.message_list = async (req, res, next) => {
 exports.message_detail = async (req, res, next) => {
   var message_detail = await Model.Message.findById(req.params.id).exec()
   res.render('admin/blog_detail', { title: 'Message detail', blog_detail: message_detail, url: 'message' })
+}
+
+exports.success = async (req, res, next) => {
+  res.render('admin/success', { title: req.query.message })
 }

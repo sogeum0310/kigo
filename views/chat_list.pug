@@ -9,21 +9,20 @@ block content
       li 
         a(href="/chat/" + chat_room._id) #{chat_room._id} 
 
-  h3 Begin with
-  ul
-    each user_business in user.user_business
-      li 
-        p= user_business.user_id
-        form(action="/chat/create", method="POST") 
-          input(type="hidden", name="member", value=user_business._id)
-          button(type="submit") chat
-  hr
+  //- h3 Begin with
+  //- ul
+  //-   each user_business in user.user_business
+  //-     li 
+  //-       p= user_business.user_id
+  //-       form(action="/chat/create", method="POST") 
+  //-         input(type="hidden", name="member", value=user_business._id)
+  //-         button(type="submit") chat
+  //- hr
 
-  ul
-    each user_personal in user.user_personal
-      li 
-        p= user_personal.user_id
-        form(action="/chat/init", method="POST") 
-          input(type="hidden", name="member", value=user_personal._id)
-          button(type="submit") chat
-
+  //- ul
+  //-   each user_personal in user.user_personal
+  //-     li 
+  //-       p= user_personal.user_id
+  //-       form(action="/chat/init", method="POST") 
+  //-         input(type="hidden", name="member", value=user_personal._id)
+  //-         button(type="submit") chat

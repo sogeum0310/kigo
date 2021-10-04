@@ -44,6 +44,9 @@ router.get('/login', user_controller.login_get)
 router.post('/login', user_controller.login_post)
 router.get('/logout', user_controller.logout)
 
+router.get('/user/lostpassword', user_controller.lost_password_get)
+router.post('/user/lostpassword', user_controller.lost_password_post)
+
 router.get('/signup/option', user_controller.signup_option)
 router.get('/signup/personal', user_controller.signup_personal_get)
 router.post('/signup/personal', user_controller.signup_personal_post)

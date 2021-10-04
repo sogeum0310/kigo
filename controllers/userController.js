@@ -1,6 +1,6 @@
 var Model = require('../models/model')
 var async = require('async')
-const createHttpError = require('http-errors')
+var nodemailer = require('nodemailer')
 
 
 exports.login_get = (req, res, next) => {
@@ -31,7 +31,37 @@ exports.logout = (req, res, next) => {
   res.redirect('/')
 }
 
+exports.lost_password_get = async (req, res, next ) => {
+  res.render('user_lost_password', { title: 'Lost password?' })
+}
 
+exports.lost_password_post = async (req, res, next) => {
+
+  var email = req.body.email
+
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'sogeum0310@gmail.com',
+      pass: 'hyun0831**'
+    }
+  });
+
+  var mailOptions = {
+    from: 'sogeum0310@gmail.com',
+    to: email,
+    subject: 'Sending Email using Node.js',
+    text: 'That was easy!'
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+}
 
 exports.signup_option = (req, res, next) => {
   res.render('user_signup_option', { title: 'Signup option' })
@@ -187,5 +217,5 @@ exports.mypage_personal_qna_list = async (req, res, next) => {
 
 exports.mypage_business_qna_list = async (req, res, next) => {
   res.render('mypage_qna_list', { title: 'Qna list for business', qna_list: '' })
-
 }
+

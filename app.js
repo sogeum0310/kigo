@@ -10,16 +10,19 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 const Server = require('socket.io')
+var nodemailer = require('nodemailer')
 var Model = require('./models/model')
 var app = express();
 
+
+// mongoose connection 
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://sogeum0310:hyun0831**@ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:27017/kigo', { useNewUrlParser: true, useUnifiedTopology: true });
 
 // var populate_esimate_form = require('./populate-estimate-form')
 // var populate_user = require('./populate-user.js')
 // var populate_estimate = require('./populate-estimate')
 // var populate_estimate_response = require('./populate-estimate-response')
-
-// hi
 
 app.io = require('socket.io')()
 
@@ -41,21 +44,9 @@ app.io.on('connection', (socket) => {
   });
 })
 
-// mongoose connection 
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://sogeum0310:hyun0831**@ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:27017/kigo', { useNewUrlParser: true, useUnifiedTopology: true });
-
-// mini
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-
-// My middleware !!
-// app.use(function (req, res, next) {
-//   console.log('app Time: ', Date.now())
-//   next()
-// })
 
 app.use(logger('dev'));
 app.use(express.json());

@@ -6,7 +6,6 @@ exports.index = async (req, res, next) => {
   res.render('admin/index', { title: 'Admin' });
 }
 
-
 exports.user_personal_list = async (req, res, next) => {
   // var user_personals = Promise.resolve(Model.UserPersonal.find().exec())
 

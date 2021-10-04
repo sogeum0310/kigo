@@ -10,6 +10,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRouter = require('./routes/admin');
 const Server = require('socket.io')
+var Model = require('./models/model')
 var app = express();
 
 
@@ -23,10 +24,21 @@ var app = express();
 app.io = require('socket.io')()
 
 app.io.on('connection', (socket) => {
-  socket.on('chat-emit', (data) => {
-    console.log(data)
-    app.io.emit('chat-on', data)
+  socket.on('join', (room) => {
+    socket.join(room)
   })
+  socket.on('out', (city) => {
+    socket.leave(city)
+  })
+  socket.on('chat message', async (room, msg) => {
+    var message = new Model.ChatContent({
+      user_id: msg.user,
+      content: msg.content,
+      room: room
+    }) 
+    message.save()
+    app.io.to(room).emit('chat message', msg);
+  });
 })
 
 // mongoose connection 

@@ -78,37 +78,36 @@ exports.company_message_create_post = async (req, res, next) => {
   res.redirect('/success/?message=' + message)
 }
 
-
-
 exports.chat_list = async (req, res, next) => {
-  res.render('chat_list', { title: 'Chat list' })
+  var chat_list = await Model.ChatRoom.find({ member: req.session.user._id }).exec()
+  var user_personal = await Model.UserPersonal.find().exec()
+  var user_business = await Model.UserBusiness.find().exec()
+  var user = { user_personal: user_personal, user_business: user_business }  
+
+  res.render('chat_list', { title: 'Chat list', user: user, chat_list: chat_list })
 }
 
-exports.chat = async (req, res, next) => { 
-  var chat_contents = await Model.ChatContent.find().populate('user_personal').populate('user_business').exec()
-  res.render('chat_user', { 
-    title: 'Chat', 
-    user: req.session.user,
-    chat_contents: chat_contents,
+exports.chat_create = async (req, res, next) => {
+  var member = []
+  member.push(req.session.user._id)
+  member.push(req.body.member)  
+
+  var room = new Model.ChatRoom({
+    member: member
+  })
+  room.save()
+  res.redirect('/chat/' + room._id)
+}
+
+exports.chat_detail = async (req, res, next) => { 
+  var chat_contents = await Model.ChatContent.find({ room: req.params.id }).exec()
+  res.render('chat_detail', { 
+    title: 'Chat detail',
+    chat_contents: chat_contents, 
+    user: req.session.user._id,
+    room: req.params.id,
   })
 }
-
-exports.chat_ajax = async (req, res, next) => {
-  var chat = new Model.ChatContent({
-    user_id: req.body.chat_user,
-    content: req.body.chat_content,
-    room: '6127581b3eef7c51a40956d2'
-  })
-
-  console.log(chat)
-
-  // chat.save(function (err) {
-  //   if (err) { return next(err) }
-  //   console.log('so good')
-  // })
-}
-
-
 
 exports.success = async (req, res, next) => {
   res.render('success', { title: req.query.message })

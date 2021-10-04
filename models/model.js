@@ -65,6 +65,10 @@ var BusinessReviewSchema = new Schema({
   content: { type: String },
 })
 
+var ChatRoomSchema = new Schema({
+  member:[{ type: Schema.ObjectId }]
+})
+
 var ChatContentSchema = new Schema({
   user_id: { type: Schema.ObjectId },
   content: { type: String },
@@ -113,6 +117,7 @@ var EstimateItemDetail = mongoose.model('EstimateItemDetail', EstimateItemDetail
 var EstimateRequest = mongoose.model('EstimateRequest', EstimateRequestSchema)
 var EstimateResponse = mongoose.model('EstimateResponse', EstimateResponseSchema)
 var BusinessReview = mongoose.model('BusinessReview', BusinessReviewSchema)
+var ChatRoom = mongoose.model('ChatRoom', ChatRoomSchema)
 var ChatContent = mongoose.model('ChatContent', ChatContentSchema)
 var File = mongoose.model('File', FileSchema)
 
@@ -131,6 +136,7 @@ exports.EstimateItemDetail = EstimateItemDetail
 exports.EstimateRequest = EstimateRequest
 exports.EstimateResponse = EstimateResponse
 exports.BusinessReview = BusinessReview
+exports.ChatRoom = ChatRoom
 exports.ChatContent = ChatContent
 exports.File = File
 

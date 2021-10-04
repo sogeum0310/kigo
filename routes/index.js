@@ -66,8 +66,8 @@ router.get('/success', other_controller.success)
 
 /* Chat */
 router.get('/chat/list', other_controller.chat_list)
-router.get('/chat', other_controller.chat)
-router.post('/chatAjax', other_controller.chat_ajax)
+router.get('/chat/:id', other_controller.chat_detail)
+router.post('/chat/create', other_controller.chat_create)
 
 
 module.exports = router

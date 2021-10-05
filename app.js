@@ -15,7 +15,7 @@ var Model = require('./models/model')
 var app = express();
 var Model = require('./models/model')
 
-var myLocalMongo = 'mongodb://localhost:27017/kigo'
+var localMongo = 'mongodb://localhost:27017/kigo'
 var awsMongo = 'mongodb://sogeum0310:hyun0831**@ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:27017/kigo'
 
 // mongoose connection 

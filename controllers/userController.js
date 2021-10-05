@@ -2,6 +2,7 @@ var Model = require('../models/model')
 var async = require('async')
 var nodemailer = require('nodemailer')
 var { body, checkSchema, validationResult } = require('express-validator')
+var crypto = require('crypto')
 
 
 exports.login_get = (req, res, next) => {
@@ -17,6 +18,7 @@ const loginSchema = {
     custom: {
       options: async (value) => {
         var user = await Model.UserPersonal.findOne({ user_id: value }).exec()
+        console.log(value)
         if (!user) {
           return Promise.reject('no user')
         } 
@@ -25,20 +27,22 @@ const loginSchema = {
   },
 }
 
+
 exports.login_post = [ 
-  checkSchema(loginSchema),
+  // checkSchema(loginSchema),
 
-  async (req, res, next) => {
+  // async (req, res, next) => {
 
-    const errors = validationResult(req)
+  //   const errors = validationResult(req)
 
-    if (!errors.isEmpty()) {
-      res.render('user_login', { title: 'Login', errors: errors.array() })
-    } 
+  //   if (!errors.isEmpty()) {
+  //     res.render('user_login', { title: 'Login', errors: errors.array() })
+  //   } 
 
-    console.log('good')
+  //   console.log('so far so good')
 
-  }
+  // }
+  req.session.user = 
 ]
 
 exports.logout = (req, res, next) => {
@@ -51,31 +55,7 @@ exports.lost_password_get = async (req, res, next ) => {
 }
 
 exports.lost_password_post = async (req, res, next) => {
-
-  var email = req.body.email
-
-  var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'sogeum0310@gmail.com',
-      pass: 'hyun0831**'
-    }
-  });
-
-  var mailOptions = {
-    from: 'sogeum0310@gmail.com',
-    to: email,
-    subject: 'Sending Email using Node.js',
-    text: 'That was easy!'
-  };
-
-  transporter.sendMail(mailOptions, function(error, info){
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Email sent: ' + info.response);
-    }
-  });
+  
 }
 
 exports.signup_option = (req, res, next) => {

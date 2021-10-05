@@ -20,7 +20,8 @@ var UserPersonalSchema = new Schema({
   date_of_birth: { type: Date },
   city: [{ type: Schema.ObjectId }],
   phone: { type: String },
-  email: { type: String }
+  email: { type: String },
+  auth: { type: Number, default: 1 }
 });
 UserPersonalSchema.virtual('date_of_birth_yyyy_mm_dd').get(function() {
   return DateTime.fromJSDate(this.date_of_birth).toISODate(); //format 'YYYY-MM-DD'
@@ -33,7 +34,8 @@ var UserBusinessSchema = new Schema({
   email: { type: String },
   about: { type: String },
   city: [{ type:Schema.ObjectId, ref: 'EstimateItemDetail'  }],
-  platform: [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }]
+  platform: [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
+  auth: { type: Number, default: 0 }
 });
 var EstimateRequestSchema = new Schema({
   user_id: { type: Schema.ObjectId, ref: 'UserPersonal' },

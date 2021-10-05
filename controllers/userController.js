@@ -9,19 +9,24 @@ exports.login_get = (req, res, next) => {
   } else {
     res.render('user_login', { title: 'Login' })
   }
+
+  Model.UserPersonal.updateMany({ auth: 1 }).exec()
+
+
 }
 exports.login_post = async (req, res, next) => {
-  if (req.body.login_type=='personal') {
+  if (req.body.login_type==='personal') {
     var user = await Model.UserPersonal.findOne({'user_id': req.body.login_id}).exec()
     loginProcess(user)
   }
-  if (req.body.login_type=='business') {
+  if (req.body.login_type==='business') {
     var user = await Model.UserBusiness.findOne({'user_id': req.body.login_id}).exec()
     loginProcess(user)
   }
   function loginProcess(user) {
     if (!user) { return console.log('no user') } 
     if (req.body.login_password != user.password) { return console.log('wrong password') } 
+    if (user.auth===0) { return console.log('Wait for authorization') }
     req.session.user = user
     res.redirect('/login')
   }
@@ -29,6 +34,18 @@ exports.login_post = async (req, res, next) => {
 exports.logout = (req, res, next) => {
   req.session.destroy()
   res.redirect('/')
+}
+
+exports.user_id_check = async (req, res, next) => {
+  var user_id = req.body.user_id
+  var user = await Model.UserPersonal.findOne({ user_id: req.body.user_id }).exec()
+  if (!user_id.match(/[a-z]/)) {
+    res.send('lowercase alphabet only')
+  } else if (user) {
+    res.send('already signed up')
+  } else {
+    res.send('success')
+  }
 }
 
 exports.lost_password_get = async (req, res, next ) => {
@@ -101,7 +118,7 @@ exports.signup_business_post = async (req, res, next) => {
     email: req.body.email,
     about: req.body.about,
     city: req.body.city,
-    platform: req.body.platform
+    platform: req.body.platform,
   })
   
   portfolio = req.files.portfolio
@@ -118,7 +135,7 @@ exports.signup_business_post = async (req, res, next) => {
   await file.save()
   await user_business.save()
   
-  var message = 'Signup for company success!' 
+  var message = 'Request for signing up has been accepted successfully' 
   res.redirect('/success/?message=' + message)
 }
 

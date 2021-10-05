@@ -111,7 +111,6 @@ var BlogCommentSchema = new Schema({
 })
 
 
-
 var UserPersonal = mongoose.model('UserPersonal', UserPersonalSchema)
 var UserBusiness = mongoose.model('UserBusiness', UserBusinessSchema)
 var EstimateItem = mongoose.model('EstimateItem', EstimateItemSchema)
@@ -130,6 +129,27 @@ var Message = mongoose.model('Message', BlogPostSchema)
 var QnaQuestion = mongoose.model('QnaQuestion', BlogPostSchema)
 var QnaAnswer = mongoose.model('QnaAnswer', BlogCommentSchema)
 
+
+var tokenSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'UserPersonal'
+  },
+  token: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    expires: 3600
+  }
+})
+
+var Token = mongoose.model('Token', tokenSchema)
+
+exports.Token = Token
 
 exports.UserPersonal = UserPersonal
 exports.UserBusiness = UserBusiness
@@ -150,10 +170,11 @@ exports.QnaAnswer = QnaAnswer
 exports.Message = Message
 
 
-
 // 자주묻는 질문 2타입 - FaqPersonal, FaqBusiness 
 // 공지사항 - Notice
 // 이벤트 - Event
 // 1:1 문의 - QnaQuestion QnaAnswer
 // 키고에 의견 주기 - Opinion
+
+
 

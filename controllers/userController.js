@@ -13,52 +13,117 @@ exports.login_get = (req, res, next) => {
   }
 }
 
-const loginSchema = {
-  username: {
-    custom: {
-      options: async (value) => {
-        var user = await Model.UserPersonal.findOne({ user_id: value }).exec()
-        console.log(value)
-        if (!user) {
-          return Promise.reject('no user')
-        } 
-      }
-    }
-  },
+exports.login_post = async (req, res, next) => {
+  if (req.body.login_type=='personal') {
+    var user = await Model.UserPersonal.findOne({'user_id': req.body.username}).exec()
+    loginProcess(user)
+  }
+  if (req.body.login_type=='business') {
+    var user = await Model.UserBusiness.findOne({'user_id': req.body.username}).exec()
+    loginProcess(user)
+  }
+  function loginProcess(user) {
+    if (!user) { return console.log('no user') } 
+    if (req.body.password != user.password) { return console.log('wrong password') } 
+    req.session.user = user
+    res.redirect('/login')
+  }
 }
 
-
-exports.login_post = [ 
-  // checkSchema(loginSchema),
-
-  // async (req, res, next) => {
-
-  //   const errors = validationResult(req)
-
-  //   if (!errors.isEmpty()) {
-  //     res.render('user_login', { title: 'Login', errors: errors.array() })
-  //   } 
-
-  //   console.log('so far so good')
-
-  // }
-  req.session.user = 
-]
 
 exports.logout = (req, res, next) => {
   req.session.destroy()
   res.redirect('/')
 }
 
+
+
+
+const sendEmail = async (email, subject, text) => {
+  try {
+      const transporter = nodemailer.createTransport({
+          host: process.env.HOST,
+          service: process.env.SERVICE,
+          port: 587,
+          secure: true,
+          auth: {
+              user: process.env.USER,
+              pass: process.env.PASS,
+          },
+      });
+
+      await transporter.sendMail({
+          from: process.env.USER,
+          to: email,
+          subject: subject,
+          text: text,
+      });
+
+      console.log("email sent sucessfully");
+  } catch (error) {
+      console.log(error, "email not sent");
+  } 
+}
+
+
+
 exports.lost_password_get = async (req, res, next ) => {
   res.render('user_lost_password', { title: 'Lost password?' })
 }
 
 exports.lost_password_post = async (req, res, next) => {
-  
+
+    const user = await Model.UserPersonal.findOne({ email: req.body.email })
+    return console.log(user)
+    
+    try {
+        const user = await Model.UserPersonal.findOne({ email: req.body.email });
+
+        let token = await Token.findOne({ userId: user._id });
+        if (!token) {
+            token = await new Token({
+                userId: user._id,
+                token: crypto.randomBytes(32).toString("hex"),
+            }).save();
+        }
+
+        const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.token}`;
+        await sendEmail(user.email, "Password reset", link);
+
+        res.send("password reset link sent to your email account");
+    } catch (error) {
+        res.send("An error occured");
+        console.log(error);
+    }
 }
 
-exports.signup_option = (req, res, next) => {
+exports.user_reset_password_get = async (req, res, next) => {
+  // res.render('user_reset_password', { 
+  //   title: 'Password reset', token: req.params.token 
+  // })
+  console.log(req.params.a)
+  console.log(req.params.b)
+}
+
+exports.user_reset_password_post = async (req, res, next) => {
+  console.log(req.body.token)
+
+  var results = await Model.Auth.findOne({
+      token: req.body.token,
+    }).exec()
+
+  console.log(results)
+
+}
+
+
+
+
+
+
+
+
+exports.signup_option = async (req, res, next) => {
   res.render('user_signup_option', { title: 'Signup option' })
 }
 exports.signup_personal_get = async (req, res, next) => {

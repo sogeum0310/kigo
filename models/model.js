@@ -23,9 +23,11 @@ var UserPersonalSchema = new Schema({
   email: { type: String },
   auth: { type: Number, default: 1 }
 });
+
 UserPersonalSchema.virtual('date_of_birth_yyyy_mm_dd').get(function() {
   return DateTime.fromJSDate(this.date_of_birth).toISODate(); //format 'YYYY-MM-DD'
 });
+
 var UserBusinessSchema = new Schema({
   user_id : { type: String, required: true, maxLength: 100 },
   password : { type: String, required: true, maxLength: 100 },

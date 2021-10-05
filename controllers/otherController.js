@@ -1,7 +1,7 @@
 var Model = require('../models/model')
 var async = require('async')
 const { faq_list } = require('./adminController')
-
+var nodemailer = require('nodemailer');
 
 exports.index = async (req, res, next)  => {
   res.render('index', { title: 'KIGO' })
@@ -114,5 +114,27 @@ exports.success = async (req, res, next) => {
 }
 
 exports.test = async (req, res, next) => {
-  console.log('hi controller')
+
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'sogeum0310@gmail.com',
+      pass: 'hyun0831**'
+    }
+  });
+  
+  var mailOptions = {
+    from: 'sogeum0310@gmail.com',
+    to: 'tvvmvn@gmail.com',
+    subject: 'Sending Email using Node.js',
+    text: 'That was easy!'
+  };
+  
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
 }

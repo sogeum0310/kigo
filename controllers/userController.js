@@ -39,21 +39,19 @@ exports.logout = (req, res, next) => {
 
 
 
+
 const sendEmail = async (email, subject, text) => {
   try {
       const transporter = nodemailer.createTransport({
-          host: process.env.HOST,
-          service: process.env.SERVICE,
-          port: 587,
-          secure: true,
+          service: 'gmail',
           auth: {
-              user: process.env.USER,
-              pass: process.env.PASS,
+              user: 'sogeum0310@gmail.com',
+              pass: 'hyun0831**'
           },
       });
 
       await transporter.sendMail({
-          from: process.env.USER,
+          from: 'sogeum0310@gmail.com',
           to: email,
           subject: subject,
           text: text,
@@ -65,30 +63,27 @@ const sendEmail = async (email, subject, text) => {
   } 
 }
 
-
-
 exports.lost_password_get = async (req, res, next ) => {
   res.render('user_lost_password', { title: 'Lost password?' })
 }
 
 exports.lost_password_post = async (req, res, next) => {
-
-    const user = await Model.UserPersonal.findOne({ email: req.body.email })
-    return console.log(user)
-    
     try {
         const user = await Model.UserPersonal.findOne({ email: req.body.email });
 
-        let token = await Token.findOne({ userId: user._id });
+        let token = await Model.Token.findOne({ userId: user._id });
         if (!token) {
-            token = await new Token({
+            token = await new Model.Token({
                 userId: user._id,
                 token: crypto.randomBytes(32).toString("hex"),
             }).save();
         }
 
-        const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.token}`;
+        const link = `http://ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:3000/password-reset/${user._id}/${token.token}`;
         await sendEmail(user.email, "Password reset", link);
+
+        console.log(link)
+        console.log(user)
 
         res.send("password reset link sent to your email account");
     } catch (error) {
@@ -98,25 +93,31 @@ exports.lost_password_post = async (req, res, next) => {
 }
 
 exports.user_reset_password_get = async (req, res, next) => {
-  // res.render('user_reset_password', { 
-  //   title: 'Password reset', token: req.params.token 
-  // })
-  console.log(req.params.a)
-  console.log(req.params.b)
+  res.render('user_reset_password', { title: 'password reset', a: req.params.userId, b: req.params.token })
 }
 
 exports.user_reset_password_post = async (req, res, next) => {
-  console.log(req.body.token)
+    try {
+        const user = await Model.UserPersonal.findById(req.params.userId);
+        if (!user) return res.status(400).send("No user");
 
-  var results = await Model.Auth.findOne({
-      token: req.body.token,
-    }).exec()
+        const token = await Model.Token.findOne({
+            userId: user._id,
+            token: req.params.token,
+        });
+        if (!token) return res.status(400).send("Invalid link or expired");
 
-  console.log(results)
+        user.password = req.body.password;
 
+        await user.save();
+        await token.delete();
+
+        res.send("password reset sucessfully.");
+    } catch (error) {
+        res.send("An error occured");
+        console.log(error);
+    }
 }
-
-
 
 
 

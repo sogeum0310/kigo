@@ -6,15 +6,13 @@ block content
   form(action="" method="POST") 
     div.form-group
       label(for="") id
-      input#user_id(type="text", name="user_id" value=(undefined==user_personal ? '' : user_personal.user_id))
-      p#user_id_check
+      input(type="text", name="user_id" value=(undefined==user_personal ? '' : user_personal.user_id))
     div.form-group
       label(for="") password
-      input#password(type="text" name="password" value=(undefined==user_personal ? '' : user_personal.password)) 
+      input(type="text" name="password" value=(undefined==user_personal ? '' : user_personal.password)) 
     div.form-group
       label(for="") password confirm 
-      input#password_confirm(type="text" name="password_confirm" value=(undefined==user_personal ? '' : user_personal.password))  
-      p#password_check
+      input(type="text" name="password_confirm" value=(undefined==user_personal ? '' : user_personal.password))  
     div.form-group
       label(for="") name 
       input(type="text" name="name" value=(undefined==user_personal ? '' : user_personal.name)) 
@@ -42,33 +40,7 @@ block content
       textarea#policy(name="", cols="30", rows="10") 
     button(type="submit") confirm 
 
-  script.
-    var user_id = document.getElementById('user_id')
-    user_id.addEventListener('keyup', async () => {
-      var results = await fetch('/userid/check', {
-        method: 'POST',
-        headers: { 
-          'Accept': 'application/json',
-          'Content-Type': 'application/json' 
-          },
-        //- headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: JSON.stringify({ user_id: user_id.value })
-      })
-      .then(obj => obj.text())
-      document.getElementById('user_id_check').textContent = results
-    })
-
-    var password = document.getElementById('password')
-    var password_confirm = document.getElementById('password_confirm')
-    var password_check = document.getElementById('password_check')
-
-    password_confirm.addEventListener('keyup', function () {
-      if (password.value===password_confirm.value) {
-        password_check.textContent = ''
-      } else {
-        password_check.textContent = 'password confirm failed'
-      }
-    })
-
-
-       
+  if errors 
+    ul 
+      for error in errors 
+        li!= error.msg

@@ -1,6 +1,7 @@
 var Model = require('../models/model')
 var async = require('async')
 var nodemailer = require('nodemailer')
+var { body, checkSchema, validationResult } = require('express-validator')
 
 
 exports.login_get = (req, res, next) => {
@@ -9,43 +10,40 @@ exports.login_get = (req, res, next) => {
   } else {
     res.render('user_login', { title: 'Login' })
   }
-
-  Model.UserPersonal.updateMany({ auth: 1 }).exec()
-
-
 }
-exports.login_post = async (req, res, next) => {
-  if (req.body.login_type==='personal') {
-    var user = await Model.UserPersonal.findOne({'user_id': req.body.login_id}).exec()
-    loginProcess(user)
-  }
-  if (req.body.login_type==='business') {
-    var user = await Model.UserBusiness.findOne({'user_id': req.body.login_id}).exec()
-    loginProcess(user)
-  }
-  function loginProcess(user) {
-    if (!user) { return console.log('no user') } 
-    if (req.body.login_password != user.password) { return console.log('wrong password') } 
-    if (user.auth===0) { return console.log('Wait for authorization') }
-    req.session.user = user
-    res.redirect('/login')
-  }
+
+const loginSchema = {
+  username: {
+    custom: {
+      options: async (value) => {
+        var user = await Model.UserPersonal.findOne({ user_id: value }).exec()
+        if (!user) {
+          return Promise.reject('no user')
+        } 
+      }
+    }
+  },
 }
+
+exports.login_post = [ 
+  checkSchema(loginSchema),
+
+  async (req, res, next) => {
+
+    const errors = validationResult(req)
+
+    if (!errors.isEmpty()) {
+      res.render('user_login', { title: 'Login', errors: errors.array() })
+    } 
+
+    console.log('good')
+
+  }
+]
+
 exports.logout = (req, res, next) => {
   req.session.destroy()
   res.redirect('/')
-}
-
-exports.user_id_check = async (req, res, next) => {
-  var user_id = req.body.user_id
-  var user = await Model.UserPersonal.findOne({ user_id: req.body.user_id }).exec()
-  if (!user_id.match(/[a-z]/)) {
-    res.send('lowercase alphabet only')
-  } else if (user) {
-    res.send('already signed up')
-  } else {
-    res.send('success')
-  }
 }
 
 exports.lost_password_get = async (req, res, next ) => {
@@ -88,21 +86,74 @@ exports.signup_personal_get = async (req, res, next) => {
   var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
   res.render('user_signup_personal', { title: 'Signup for personal', cities: cities,})
 }
-exports.signup_personal_post = async (req, res, next) => {
-  var user = new Model.UserPersonal({
-    user_id : req.body.user_id,
-    password : req.body.password,
-    name: req.body.name,
-    gender: req.body.gender,
-    date_of_birth: req.body.birth_date,
-    city: req.body.city,
-    phone: req.body.phone,
-    email: req.body.email
-  })
-  await user.save()
-  var message = 'Signup success'
-  res.redirect('/success/?message=' + message)
+
+const registrationSchema = {
+  user_id: {
+    custom: {
+      options: async (value) => {
+        var user = await Model.UserPersonal.findOne({ user_id: value }).exec()
+        // if (value.match(/[a-z0-9]/)) {
+        //   return Promise.reject('Only valid in lowercase alphabet and number')
+        // }
+        if (user) {
+          return Promise.reject('Username already in use')
+        } 
+      }
+    }
+  },
+  password: {
+    isStrongPassword: {
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1
+    },
+    errorMessage: 'Password must be greater than 8 and contain at least one uppercase letter, one lowercase letter, and one number'
+  },
+  email: {
+    normalizeEmail: true,
+    custom: {
+      options: async (value) => {
+        var email = await Model.UserPersonal.findOne({ email: value }).exec()
+        if (email) {
+          return Promise.reject('E-mail already is use')
+        }
+      }
+    }
+  }
 }
+
+exports.signup_personal_post = [
+  checkSchema(registrationSchema),
+
+  async (req, res, next) => {
+
+    const errors = validationResult(req)
+
+    if (!errors.isEmpty()) {
+      var estimate_items = await Model.EstimateItem.find().exec()
+      var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
+      return res.render('user_signup_personal', { title: 'Signup for personal', cities: cities, errors: errors.array()})
+    }
+
+    console.log('good')
+
+    // var user = new Model.UserPersonal({
+    //   user_id : req.body.user_id,
+    //   password : req.body.password,
+    //   name: req.body.name,
+    //   gender: req.body.gender,
+    //   date_of_birth: req.body.birth_date,
+    //   city: req.body.city,
+    //   phone: req.body.phone,
+    //   email: req.body.email
+    // })
+    // await user.save()
+    // var message = 'Signup success'
+    // res.redirect('/success/?message=' + message)
+  }
+]
+
 exports.signup_business_get = async (req, res, next) => {
   var estimate_items = await Model.EstimateItem.find().exec()
   var platforms = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[0]._id }).exec()

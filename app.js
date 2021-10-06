@@ -20,7 +20,7 @@ var awsMongo = 'mongodb://sogeum0310:hyun0831**@ec2-15-164-219-91.ap-northeast-2
 
 // mongoose connection 
 const mongoose = require('mongoose');
-mongoose.connect(localMongo, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(awsMongo, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // var populate_esimate_form = require('./populate-estimate-form')
 // var populate_user = require('./populate-user.js')
@@ -61,7 +61,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   store: MongoStore.create({
-    mongoUrl: localMongo
+    mongoUrl: awsMongo
   })
 }))
 

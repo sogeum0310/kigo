@@ -3,6 +3,11 @@ extends layout
 block content 
   h1= title
 
+  if errors 
+    ul 
+      for error in errors 
+        li!= error.msg
+
   form(action="" method="POST" enctype="multipart/form-data") 
     div.form-group
       label(for="") id
@@ -47,11 +52,3 @@ block content
 
     p 
       button(type="submit") confirm
-
-
-
-
-
-
-
-       

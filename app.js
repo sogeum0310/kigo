@@ -74,6 +74,7 @@ app.use(function (req, res, next) {
       res.locals.user_global_account = 'personal'
     }
   }
+  // console.log(res.locals.user_global_account)
   next()
 })
 

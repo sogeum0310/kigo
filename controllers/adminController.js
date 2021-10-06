@@ -31,6 +31,7 @@ exports.user_business_list = async (req, res, next) => {
 exports.user_detail_get = async (req, res, next) => {
   var user = await Model.User.findById(req.params.id).populate('city').populate('platform').exec()
   user.file = await Model.File.findOne({ parent: req.params.id }).exec()
+  user.reviews = await Model.Review.find({ user_business: req.params.id }).exec()
   res.render('admin/user_detail', { title: 'User detail', user: user })
 }
 
@@ -58,9 +59,7 @@ exports.estimate_response_list = async (req, res, next) => {
 }
 exports.estimate_response_detail = async (req, res, next) => {
   var estimate_response = await Model.EstimateResponse.findById(req.params.id).exec()
-  var portfolio = await Model.File.findOne({ 'parent': estimate_response.user }).exec()
-  var business_reviews = await Model.BusinessReview.find({ 'user_business': estimate_response.user }).exec()
-  res.render('admin/estimate_response_detail', { title: 'Estimate Response', estimate_response: estimate_response, portfolio: portfolio, business_reviews: business_reviews })
+  res.render('admin/estimate_response_detail', { title: 'Estimate Response', estimate_response: estimate_response })
 }
 
 

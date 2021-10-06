@@ -3,6 +3,11 @@ extends layout
 block content 
   h1= title
 
+  if errors 
+    ul 
+      for error in errors 
+        li!= error.msg
+
   form(action="" method="POST") 
     div.form-group
       label(for="") id
@@ -39,8 +44,3 @@ block content
     div.form-group
       textarea#policy(name="", cols="30", rows="10") 
     button(type="submit") confirm 
-
-  if errors 
-    ul 
-      for error in errors 
-        li!= error.msg

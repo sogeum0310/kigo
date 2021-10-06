@@ -15,33 +15,37 @@ async function populateUser() {
 
   console.log(estimate_items)
 
-  function createUserPersonal(user_id, password, name, gender, date_of_birth, city, phone, email) {
+  function createUserPersonal(username, password, name, gender, date_of_birth, city, phone, email) {
     user_personal_detail = {
-      user_id: user_id,
+      username: username,
       password: password,
       name: name,
       gender: gender, 
       date_of_birth: date_of_birth,
       city: city,
       phone: phone,
-      email: email
+      email: email,
+      auth: 1,
+      account: 'personal'
     }
-    var user_personal = new Model.UserPersonal(user_personal_detail)
+    var user_personal = new Model.User(user_personal_detail)
     user_personal.save()
   }
 
-  function createUserBusiness(user_id, password, name, phone, email, about, city, platform) {
+  function createUserBusiness(username, password, name, phone, email, about, city, platform) {
     user_business_detail = {
-      user_id: user_id,
+      username: username,
       password: password,
       name: name,
       phone: phone,
       email: email,
       about: about,
       city: city,
-      platform: platform
+      platform: platform,
+      auth: 0,
+      account: 'business'
     }
-    var user_business = new Model.UserBusiness(user_business_detail)
+    var user_business = new Model.User(user_business_detail)
     user_business.save()
   }
 

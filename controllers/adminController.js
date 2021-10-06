@@ -14,27 +14,29 @@ exports.user_personal_list = async (req, res, next) => {
   //     resolve(results)
   //   })
   // })
-  var user_personals = Model.UserPersonal.find().exec()
+  var user_personals = Model.User.find({ account: 'personal' }).populate('city').exec()
   console.log(user_personals)
   user_personals.then(function (user_personals) {
     console.log(user_personals)
-    res.render('admin/user_list_personal', { title: '', user_personals: user_personals })
+    res.render('admin/user_list', { title: 'Personal members', users: user_personals })
   })
 }
-exports.user_personal_detail = async (req, res, next) => {
-  var results = await Model.UserPersonal.findById(req.params.id).exec()
-  res.render('admin/user_detail_personal', { title: 'User detail for personal', results: results })
-}
+
 exports.user_business_list = async (req, res, next) => {
-  var user_businesses = await Model.UserBusiness.find().populate('city').populate('platform').exec()
-  res.render('admin/user_list_business', { title: 'Business members', user_businesses: user_businesses })
+  var user_businesses = await Model.User.find({ account: 'business' }).populate('city').populate('platform').exec()
+  res.render('admin/user_list', { title: 'Business members', users: user_businesses })
   console.log(user_businesses)
 }
-exports.user_business_detail = async (req, res, next) => {
-  var results = await Model.UserBusiness.findById(req.params.id).exec()
-  res.render('admin/user_detail_business', { title: 'User detail for business', results: results })
+
+exports.user_detail_get = async (req, res, next) => {
+  var user = await Model.User.findById(req.params.id).exec()
+  res.render('admin/user_detail', { title: 'User detail', user: user })
 }
 
+exports.user_detail_post = async (req, res, next) => {
+  await Model.User.findByIdAndUpdate(req.params.id, { auth: 1 })
+  res.redirect('/admin/user/detail/' + req.params.id)
+}
 
 exports.estimate_request_list = async (req, res, next) => {
   var estimate_requests = await Model.EstimateRequest.find().populate('platform').exec()
@@ -42,12 +44,12 @@ exports.estimate_request_list = async (req, res, next) => {
 }
 exports.estimate_request_detail = async (req, res, next) => {
   var estimate_request = await Model.EstimateRequest.findById(req.params.id).populate('platform').populate('how_many').populate('business').populate('goal').populate('start_day').populate('how_long').populate('cost').populate('city').populate('feedback').exec()
-  var estimate_responses = await Model.EstimateResponse.find({ 'estimate_request': req.params.id }).populate('user_id').exec()
+  var estimate_responses = await Model.EstimateResponse.find({ 'estimate_request': req.params.id }).populate('user').exec()
   res.render('admin/estimate_request_detail', { title: 'Estimate', estimate_request: estimate_request, estimate_responses: estimate_responses })
 }
 exports.estimate_response_list = async (req, res, next) => {
   var estimate_responses = await Model.EstimateResponse.find()
-  .populate('user_id')
+  .populate('user')
   .populate({ path: 'estimate_request', populate: { path: 'city' } })
   .populate({ path: 'estimate_request', populate: { path: 'platform' } })
   .exec()
@@ -55,8 +57,8 @@ exports.estimate_response_list = async (req, res, next) => {
 }
 exports.estimate_response_detail = async (req, res, next) => {
   var estimate_response = await Model.EstimateResponse.findById(req.params.id).exec()
-  var portfolio = await Model.File.findOne({ 'parent': estimate_response.user_id }).exec()
-  var business_reviews = await Model.BusinessReview.find({ 'user_business': estimate_response.user_id }).exec()
+  var portfolio = await Model.File.findOne({ 'parent': estimate_response.user }).exec()
+  var business_reviews = await Model.BusinessReview.find({ 'user_business': estimate_response.user }).exec()
   res.render('admin/estimate_response_detail', { title: 'Estimate Response', estimate_response: estimate_response, portfolio: portfolio, business_reviews: business_reviews })
 }
 

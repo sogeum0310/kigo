@@ -8,7 +8,7 @@ block content
       if (estimate_received.sent < 1)
         li
           a(href="/estimate/received/" + estimate_received._id) #{estimate_received.platform[0].name}  
-          span (#{estimate_received.user_id.user_id})
+          span (#{estimate_received.user.username})
 
   //- pre= estimate_received_list
 

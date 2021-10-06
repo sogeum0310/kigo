@@ -54,7 +54,7 @@ exports.company_qna_create_post = async (req, res, next) => {
   var qna_detail = new Model.QnaQuestion({
     title: req.body.title,
     content: req.body.content,
-    user_id: req.session.user._id
+    user: req.session.user._id
   })
   qna_detail.save()
 
@@ -70,7 +70,7 @@ exports.company_message_create_post = async (req, res, next) => {
   var message = new Model.Message({
     title: req.body.title,
     content: req.body.content,
-    user_id: req.session.user._id
+    user: req.session.user._id
   })
   message.save()
   
@@ -80,9 +80,7 @@ exports.company_message_create_post = async (req, res, next) => {
 
 exports.chat_list = async (req, res, next) => {
   var chat_list = await Model.ChatRoom.find({ member: req.session.user._id }).exec()
-  var user_personal = await Model.UserPersonal.find().exec()
-  var user_business = await Model.UserBusiness.find().exec()
-  var user = { user_personal: user_personal, user_business: user_business }  
+  var user = await Model.User.find().exec()
 
   res.render('chat_list', { title: 'Chat list', user: user, chat_list: chat_list })
 }
@@ -114,27 +112,6 @@ exports.success = async (req, res, next) => {
 }
 
 exports.test = async (req, res, next) => {
-
-  var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'sogeum0310@gmail.com',
-      pass: 'hyun0831**'
-    }
-  });
-  
-  var mailOptions = {
-    from: 'sogeum0310@gmail.com',
-    to: 'tvvmvn@gmail.com',
-    subject: 'Sending Email using Node.js',
-    text: 'That was easy!'
-  };
-  
-  transporter.sendMail(mailOptions, function(error, info){
-    if (error) {
-      console.log(error);
-    } else {
-      console.log('Email sent: ' + info.response);
-    }
-  });
+  var user_personal = await Model.User.find({ account: 'personal' })
+  Model.User.insertMany({ auth: 1 })
 }

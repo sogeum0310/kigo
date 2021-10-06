@@ -1,0 +1,10 @@
+extends layout 
+
+block content 
+  h1= title 
+
+  pre= user
+
+  if (user.auth===0)
+    form(action="", method="POST") 
+      button(type="submit") confirm

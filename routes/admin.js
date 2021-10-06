@@ -34,9 +34,10 @@ router.get('/', admin_controller.index);
 router.get('/success', admin_controller.success)
 
 router.get('/user/personal/list', admin_controller.user_personal_list)
-router.get('/user/personal/:id', admin_controller.user_personal_detail)
 router.get('/user/business/list', admin_controller.user_business_list)
-router.get('/user/business/:id', admin_controller.user_business_detail)
+router.get('/user/detail/:id', admin_controller.user_detail_get)
+router.post('/user/detail/:id', admin_controller.user_detail_post)
+
 router.get('/estimate/request/list', admin_controller.estimate_request_list)
 router.get('/estimate/request/:id', admin_controller.estimate_request_detail)
 router.get('/estimate/response/list', admin_controller.estimate_response_list)

@@ -67,9 +67,8 @@ app.use(session({
 
 app.use(function (req, res, next) {
   var user_global = req.session.user
-  // console.log(user_global)
   if (user_global) {
-    if (user_global.platform) {
+    if (user_global.platform.length > 0) {
       res.locals.user_global_account = 'business'
     } else {
       res.locals.user_global_account = 'personal'

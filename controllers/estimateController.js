@@ -3,19 +3,19 @@ var async = require('async')
 
 
 exports.estimate_request_list = async (req, res, next) => {
-  var estimate_requests = await Model.EstimateRequest.find({ 'user_id': req.session.user }).populate('platform').exec()
+  var estimate_requests = await Model.EstimateRequest.find({ 'user': req.session.user }).populate('platform').exec()
   res.render('estimate_request_list', { title: 'Estimate requests', estimate_requests: estimate_requests })
 }
 
 exports.estimate_response_detail = async (req, res, next) => {
   var estimate_response = await Model.EstimateResponse.findById(req.params.id).exec() 
-  var portfolio = await Model.File.findOne({ parent: estimate_response.user_id }).exec()
-  var business_reviews = await Model.BusinessReview.find({ user_business: estimate_response.user_id }).exec()
+  var portfolio = await Model.File.findOne({ parent: estimate_response.user }).exec()
+  var business_reviews = await Model.BusinessReview.find({ user_business: estimate_response.user }).exec()
   res.render('estimate_response_detail', { title: 'Estimate Response', estimate_response: estimate_response, portfolio: portfolio, business_reviews: business_reviews })
 }
 
 exports.estimate_received_list = async (req, res, next) => {
-  var user_business = await Model.UserBusiness.findById(req.session.user).exec() 
+  var user_business = await Model.User.findById(req.session.user).exec() 
   var user_business_platform = []
   var user_business_city = []
 
@@ -38,13 +38,13 @@ exports.estimate_received_list = async (req, res, next) => {
        { count: { $lte: 2 } }
      ] 
     })
-    .populate('platform').populate('user_id')
+    .populate('platform').populate('user')
 
   for (estimate_request of estimate_requests) {
     estimate_request.sent = await Model.EstimateResponse.countDocuments({ 
       $and: [
         { estimate_request: estimate_request._id }, 
-        { user_id: req.session.user._id }
+        { user: req.session.user._id }
       ] 
     }).exec()
   }
@@ -60,7 +60,7 @@ exports.estimate_received_detail_get = async (req, res, next) => {
 exports.estimate_received_detail_post = async (req, res, next) => {
   var estimate_response = new Model.EstimateResponse({
     estimate_request: req.params.id,
-    user_id: req.session.user,
+    user: req.session.user._id,
     item: req.body.item,
     cost: req.body.cost,
     note: req.body.note
@@ -77,8 +77,8 @@ exports.estimate_received_detail_post = async (req, res, next) => {
 }
 
 exports.estimate_sent_list = async (req, res, next) => {
-  var estimate_responses = await Model.EstimateResponse.find({ user_id: req.session.user })
-  .populate({ path: 'estimate_request', populate: { path: 'user_id' } })
+  var estimate_responses = await Model.EstimateResponse.find({ user: req.session.user._id })
+  .populate({ path: 'estimate_request', populate: { path: 'user' } })
   .populate({ path: 'estimate_request', populate: { path: 'platform' } })
   .exec()
   res.render('estimate_sent_list', { title: 'Estimate sent', estimate_responses: estimate_responses })
@@ -118,13 +118,13 @@ exports.estimate_request_create_get = async (req, res, next) => {
 
 exports.estimate_request_detail = async (req, res, next) => {
   var estimate_request = await Model.EstimateRequest.findById(req.params.id).populate('platform').populate('how_many').populate('business').populate('goal').populate('start_day').populate('how_long').populate('cost').populate('city').populate('feedback').exec()
-  var estimate_responses = await Model.EstimateResponse.find({ estimate_request: req.params.id }).populate('user_id').exec()
+  var estimate_responses = await Model.EstimateResponse.find({ estimate_request: req.params.id }).populate('user').exec()
   res.render('estimate_request_detail', { title: 'Estimate', estimate_request: estimate_request, estimate_responses: estimate_responses, })
 }
 
 exports.estimate_request_create_post = async (req, res, next) => {
   var estimate = new Model.EstimateRequest({
-    user_id: req.session.user,
+    user: req.session.user._id,
     platform: req.body.platform,
     how_many: req.body.how_many,
     business: req.body.business,

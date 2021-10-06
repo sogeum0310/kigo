@@ -6,7 +6,7 @@ block content
   form(action="" method="POST" enctype="multipart/form-data") 
     div.form-group
       label(for="") id
-      input(type="text" name="user_id" value=(undefined==user_business ? '':user_business.user_id))
+      input(type="text" name="user_id" value=(undefined==user_business ? '':user_business.username))
     div.form-group
       label(for="") password
       input(type="text" name="password" value=(undefined==user_business ? '':user_business.password)) 
@@ -42,7 +42,8 @@ block content
           input(type="checkbox", name="platform", value=platform._id, checked=platform.checked) 
           label(for="") #{platform.name}
 
-    p * you can finish signing up after authorization has been accepted
+    if (user_business===undefined)
+      p * you can finish signing up after authorization has been accepted
 
     p 
       button(type="submit") confirm

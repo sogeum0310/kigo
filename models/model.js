@@ -11,36 +11,27 @@ var EstimateItemDetailSchema = new Schema({
   name: { type: String },
 })
 
-
-var UserPersonalSchema = new Schema({
-  user_id : { type: String, required: true, maxLength: 100 },
-  password : { type: String, required: true, maxLength: 100 },
+var UserSchema = new Schema({
+  username: { type: String },
+  password: { type: String } ,
   name: { type: String },
   gender: { type: String },
-  date_of_birth: { type: Date },
-  city: [{ type: Schema.ObjectId }],
-  phone: { type: String },
-  email: { type: String },
-  auth: { type: Number, default: 1 }
-});
-
-UserPersonalSchema.virtual('date_of_birth_yyyy_mm_dd').get(function() {
-  return DateTime.fromJSDate(this.date_of_birth).toISODate(); //format 'YYYY-MM-DD'
-});
-
-var UserBusinessSchema = new Schema({
-  user_id : { type: String, required: true, maxLength: 100 },
-  password : { type: String, required: true, maxLength: 100 },
-  name: { type: String },
+  date_of_birth: { type: Date } ,
   phone: { type: String },
   email: { type: String },
   about: { type: String },
-  city: [{ type:Schema.ObjectId, ref: 'EstimateItemDetail'  }],
+  city: [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }] ,
   platform: [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
-  auth: { type: Number, default: 0 }
+  auth: { type: Number },
+  account: { type: String }
+})
+
+UserSchema.virtual('date_of_birth_yyyy_mm_dd').get(function() {
+  return DateTime.fromJSDate(this.date_of_birth).toISODate(); //format 'YYYY-MM-DD'
 });
+
 var EstimateRequestSchema = new Schema({
-  user_id: { type: Schema.ObjectId, ref: 'UserPersonal' },
+  user: { type: Schema.ObjectId, ref: 'User' },
   platform : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   how_many : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   business : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
@@ -55,7 +46,7 @@ var EstimateRequestSchema = new Schema({
 });
 var EstimateResponseSchema = new Schema({
   estimate_request: { type: Schema.ObjectId, ref: 'EstimateRequest', required: true },
-  user_id: { type: Schema.ObjectId, ref: 'UserBusiness', required: true },
+  user: { type: Schema.ObjectId, ref: 'User', required: true },
   item: [{ type: String }],
   cost: [{ type: String }],
   note: [{ type: String }],
@@ -64,8 +55,8 @@ var EstimateResponseSchema = new Schema({
 
 
 var BusinessReviewSchema = new Schema({
-  user_business: { type: Schema.ObjectId, ref: 'UserBusiness' },
-  user_personal: { type: Schema.ObjectId, ref: 'UserPersonal' },
+  user_business: { type: Schema.ObjectId, ref: 'User' },
+  user_personal: { type: Schema.ObjectId, ref: 'User' },
   content: { type: String },
 })
 
@@ -74,23 +65,9 @@ var ChatRoomSchema = new Schema({
 })
 
 var ChatContentSchema = new Schema({
-  user_id: { type: Schema.ObjectId },
+  user: { type: Schema.ObjectId },
   content: { type: String },
   room: { type: Schema.ObjectId },
-})
-
-ChatContentSchema.virtual('user_personal', {
-  ref: 'UserPersonal',
-  localField: 'user_id',
-  foreignField: '_id',
-  justOne: true,
-})
-
-ChatContentSchema.virtual('user_business', {
-  ref: 'UserBusiness',
-  localField: 'user_id',
-  foreignField: '_id',
-  justOne: true,
 })
 
 var FileSchema = new Schema({
@@ -103,7 +80,7 @@ var BlogPostSchema = new Schema({
   title: { type: String },
   content: { type: String },
   reg_date: { type: Date, default: Date.now },
-  user_id: { type: Schema.ObjectId },
+  user: { type: Schema.ObjectId },
   account: { type: String }
 })
 
@@ -113,8 +90,7 @@ var BlogCommentSchema = new Schema({
 })
 
 
-var UserPersonal = mongoose.model('UserPersonal', UserPersonalSchema)
-var UserBusiness = mongoose.model('UserBusiness', UserBusinessSchema)
+var User = mongoose.model('User', UserSchema)
 var EstimateItem = mongoose.model('EstimateItem', EstimateItemSchema)
 var EstimateItemDetail = mongoose.model('EstimateItemDetail', EstimateItemDetailSchema)
 var EstimateRequest = mongoose.model('EstimateRequest', EstimateRequestSchema)
@@ -136,7 +112,7 @@ var tokenSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     required: true,
-    ref: 'UserPersonal'
+    ref: 'User'
   },
   token: {
     type: String,
@@ -153,8 +129,7 @@ var Token = mongoose.model('Token', tokenSchema)
 
 exports.Token = Token
 
-exports.UserPersonal = UserPersonal
-exports.UserBusiness = UserBusiness
+exports.User = User
 exports.EstimateItem = EstimateItem
 exports.EstimateItemDetail = EstimateItemDetail
 exports.EstimateRequest = EstimateRequest
@@ -170,13 +145,6 @@ exports.Faq = Faq
 exports.QnaQuestion = QnaQuestion
 exports.QnaAnswer = QnaAnswer
 exports.Message = Message
-
-
-// 자주묻는 질문 2타입 - FaqPersonal, FaqBusiness 
-// 공지사항 - Notice
-// 이벤트 - Event
-// 1:1 문의 - QnaQuestion QnaAnswer
-// 키고에 의견 주기 - Opinion
 
 
 

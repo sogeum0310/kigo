@@ -7,7 +7,7 @@ var crypto = require('crypto')
 
 exports.login_get = (req, res, next) => {
   if (req.session.user) {
-    res.render('success', { title: 'on ' + req.session.user.user_id })
+    res.render('success', { title: 'on ' + req.session.user.username })
   } else {
     res.render('user_login', { title: 'Login' })
   }
@@ -15,16 +15,17 @@ exports.login_get = (req, res, next) => {
 
 exports.login_post = async (req, res, next) => {
   if (req.body.login_type=='personal') {
-    var user = await Model.UserPersonal.findOne({'user_id': req.body.username}).exec()
+    var user = await Model.User.findOne({ username: req.body.username, account: 'personal' }).exec()
     loginProcess(user)
   }
   if (req.body.login_type=='business') {
-    var user = await Model.UserBusiness.findOne({'user_id': req.body.username}).exec()
+    var user = await Model.User.findOne({ username: req.body.username, account: 'business' }).exec()
     loginProcess(user)
   }
   function loginProcess(user) {
     if (!user) { return console.log('no user') } 
     if (req.body.password != user.password) { return console.log('wrong password') } 
+    if (user.auth===0) { return console.log('unauthorized') }
     req.session.user = user
     res.redirect('/login')
   }
@@ -69,7 +70,7 @@ exports.lost_password_get = async (req, res, next ) => {
 
 exports.lost_password_post = async (req, res, next) => {
     try {
-        const user = await Model.UserPersonal.findOne({ email: req.body.email });
+        const user = await Model.User.findOne({ email: req.body.email });
 
         let token = await Model.Token.findOne({ userId: user._id });
         if (!token) {
@@ -81,9 +82,6 @@ exports.lost_password_post = async (req, res, next) => {
 
         const link = `http://ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:3000/password-reset/${user._id}/${token.token}`;
         await sendEmail(user.email, "Password reset", link);
-
-        console.log(link)
-        console.log(user)
 
         res.send("password reset link sent to your email account");
     } catch (error) {
@@ -98,7 +96,7 @@ exports.user_reset_password_get = async (req, res, next) => {
 
 exports.user_reset_password_post = async (req, res, next) => {
     try {
-        const user = await Model.UserPersonal.findById(req.params.userId);
+        const user = await Model.User.findById(req.params.userId);
         if (!user) return res.status(400).send("No user");
 
         const token = await Model.Token.findOne({
@@ -134,10 +132,10 @@ exports.signup_personal_get = async (req, res, next) => {
 }
 
 const registrationSchema = {
-  user_id: {
+  username: {
     custom: {
       options: async (value) => {
-        var user = await Model.UserPersonal.findOne({ user_id: value }).exec()
+        var user = await Model.User.findOne({ username: value }).exec()
         // if (value.match(/[a-z0-9]/)) {
         //   return Promise.reject('Only valid in lowercase alphabet and number')
         // }
@@ -160,7 +158,7 @@ const registrationSchema = {
     normalizeEmail: true,
     custom: {
       options: async (value) => {
-        var email = await Model.UserPersonal.findOne({ email: value }).exec()
+        var email = await Model.User.findOne({ email: value }).exec()
         if (email) {
           return Promise.reject('E-mail already is use')
         }
@@ -192,7 +190,9 @@ exports.signup_personal_post = [
     //   date_of_birth: req.body.birth_date,
     //   city: req.body.city,
     //   phone: req.body.phone,
-    //   email: req.body.email
+    //   email: req.body.email,
+    //   auth: 1,
+    //   account: 'personal'
     // })
     // await user.save()
     // var message = 'Signup success'
@@ -207,8 +207,8 @@ exports.signup_business_get = async (req, res, next) => {
   res.render('user_signup_business', { title: 'Signup for business',cities: cities, platforms: platforms, })
 }
 exports.signup_business_post = async (req, res, next) => {
-  var user_business = new Model.UserBusiness({
-    user_id : req.body.user_id,
+  var user_business = new Model.User({
+    username : req.body.user_id,
     password : req.body.password,
     name: req.body.name,
     phone: req.body.phone,
@@ -216,7 +216,10 @@ exports.signup_business_post = async (req, res, next) => {
     about: req.body.about,
     city: req.body.city,
     platform: req.body.platform,
+    auth: 0,
+    account: 'business'
   })
+  await user_business.save()
   
   portfolio = req.files.portfolio
   var new_file_name = portfolio.md5 + '.' + portfolio.name.split('.').pop()
@@ -224,15 +227,14 @@ exports.signup_business_post = async (req, res, next) => {
   portfolio.mv(upload_path)
 
   var file = new Model.File({
-    parent: req.session.user._id,
+    parent: user_business._id,
     name: portfolio.name,
     md_name: new_file_name
   })
 
   await file.save()
-  await user_business.save()
   
-  var message = 'Request for signing up has been accepted successfully' 
+  var message = 'Request for registration is submitted'
   res.redirect('/success/?message=' + message)
 }
 
@@ -246,7 +248,7 @@ exports.mypage_business = async (req, res, next) => {
 exports.mypage_personal_account_get = async (req, res, next) => {
   var estimate_items = await Model.EstimateItem.find().exec()
   var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
-  var user_personal = await Model.UserPersonal.findById(req.session.user._id).exec()
+  var user_personal = await Model.User.findById(req.session.user._id).exec()
   res.render('user_signup_personal', { title: 'Mypage for personal account', user_personal: user_personal, cities: cities, })
 }
 exports.mypage_business_account_get = async (req, res, next) => {
@@ -254,7 +256,7 @@ exports.mypage_business_account_get = async (req, res, next) => {
   var platforms = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[0]._id }).exec()
   var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
   var file = await Model.File.findOne({ parent: req.session.user._id }).exec()
-  var user_business = await Model.UserBusiness.findById(req.session.user._id).exec()
+  var user_business = await Model.User.findById(req.session.user._id).exec()
 
   for (var i=0; i<platforms.length; i++) {
     for (var j=0; j<user_business.platform.length; j++) {
@@ -266,8 +268,8 @@ exports.mypage_business_account_get = async (req, res, next) => {
   res.render('user_signup_business', { title: 'Mypage for business account', user_business: user_business, file: file, cities: cities, platforms: platforms, })
 }
 exports.mypage_personal_account_post = async (req, res, next) => {
-  var user_personal = new Model.UserPersonal({
-    user_id: req.body.user_id,
+  var user_personal = new Model.User({
+    username: req.body.user_id,
     password: req.body.password,
     name: req.body.name,
     gender: req.body.gender,
@@ -277,14 +279,14 @@ exports.mypage_personal_account_post = async (req, res, next) => {
     email: req.body.email,
     _id: req.session.user._id
   })
-  await Model.UserPersonal.findByIdAndUpdate(req.session.user._id, user_personal, {})
+  await Model.User.findByIdAndUpdate(req.session.user._id, user_personal, {})
   var message = 'user for personal is updated!'
   res.redirect('/success/?message=' + message)
 }
 
 exports.mypage_business_account_post = async (req, res, next) => {
-  var user_business = new Model.UserBusiness({
-    user_id : req.body.user_id,
+  var user_business = new Model.User({
+    username : req.body.user_id,
     password : req.body.password,
     name: req.body.name,
     phone: req.body.phone,
@@ -314,7 +316,7 @@ exports.mypage_business_account_post = async (req, res, next) => {
     await file.save()
   }
 
-  await Model.UserBusiness.findByIdAndUpdate(req.session.user._id, user_business, {}) 
+  await Model.User.findByIdAndUpdate(req.session.user._id, user_business, {}) 
   var message = 'user for business is updated!'
   res.redirect('/success/?message=' + message)
 }
@@ -322,7 +324,7 @@ exports.mypage_personal_review_list = async (req, res, next) => {
   res.render('mypage_personal_review_list', { title: 'My review list' })
 }
 exports.mypage_personal_qna_list = async (req, res, next) => {
-  var qna_questions = await Model.QnaQuestion.find({ user_id: req.session.user._id }).exec()
+  var qna_questions = await Model.QnaQuestion.find({ user: req.session.user._id }).exec()
   for (qna_question of qna_questions) {
     qna_question.qna_answer = await Model.QnaAnswer.findOne({ parent: qna_question._id }).exec()
   }

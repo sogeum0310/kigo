@@ -91,7 +91,7 @@ exports.lost_password_post = async (req, res, next) => {
 }
 
 exports.user_reset_password_get = async (req, res, next) => {
-  res.render('user_reset_password', { title: 'password reset', a: req.params.userId, b: req.params.token })
+  res.render('user_reset_password', { title: 'password reset' })
 }
 
 exports.user_reset_password_post = async (req, res, next) => {
@@ -206,45 +206,69 @@ exports.signup_business_get = async (req, res, next) => {
   var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
   res.render('user_signup_business', { title: 'Signup for business',cities: cities, platforms: platforms, })
 }
-exports.signup_business_post = async (req, res, next) => {
-  var user_business = new Model.User({
-    username : req.body.user_id,
-    password : req.body.password,
-    name: req.body.name,
-    phone: req.body.phone,
-    email: req.body.email,
-    about: req.body.about,
-    city: req.body.city,
-    platform: req.body.platform,
-    auth: 0,
-    account: 'business'
-  })
-  await user_business.save()
-  
-  portfolio = req.files.portfolio
-  var new_file_name = portfolio.md5 + '.' + portfolio.name.split('.').pop()
-  upload_path = 'files/' + new_file_name
-  portfolio.mv(upload_path)
+exports.signup_business_post = [
+  checkSchema(registrationSchema),
+  async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      var estimate_items = await Model.EstimateItem.find().exec()
+      var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
+      var platforms = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[0]._id }).exec()
+      return res.render('user_signup_business', { title: 'Signup for personal', cities: cities, platforms: platforms, errors: errors.array()})
+    }
 
-  var file = new Model.File({
-    parent: user_business._id,
-    name: portfolio.name,
-    md_name: new_file_name
-  })
+    console.log('good')
 
-  await file.save()
-  
-  var message = 'Request for registration is submitted'
-  res.redirect('/success/?message=' + message)
+    // var user_business = new Model.User({
+    //   username : req.body.user_id,
+    //   password : req.body.password,
+    //   name: req.body.name,
+    //   phone: req.body.phone,
+    //   email: req.body.email,
+    //   about: req.body.about,
+    //   city: req.body.city,
+    //   platform: req.body.platform,
+    //   auth: 0,
+    //   account: 'business'
+    // })
+    // await user_business.save()
+    
+    // portfolio = req.files.portfolio
+    // var new_file_name = portfolio.md5 + '.' + portfolio.name.split('.').pop()
+    // upload_path = 'files/' + new_file_name
+    // portfolio.mv(upload_path)
+
+    // var file = new Model.File({
+    //   parent: user_business._id,
+    //   name: portfolio.name,
+    //   md_name: new_file_name
+    // })
+
+    // await file.save()
+    
+    // var message = 'Request for registration is submitted'
+    // res.redirect('/success/?message=' + message)
+  }
+]
+
+exports.mypage = async (req, res, next) => {
+  res.render('user_mypage', { title: 'My page', user: req.session.user })
 }
 
+exports.account_access_get = async (req, res, next) => {
+  res.render('user_account_access', { title: 'Account access' })
+}
 
-exports.mypage_personal = async (req, res, next) => {
-  res.render('user_mypage', { title: 'User personal', user_account: 'personal' })
+exports.account_access_post = async (req, res, next) => {
+  var user = await Model.User.findById(req.session.user._id)
+  if (user.password!==req.body.password) { return console.log('wrong') }
+  if (user.account==='personal') {
+    res.redirect('/mypage/personal/account')
+  } else {
+    res.redirect('/mypage/business/account')
+  }
 }
-exports.mypage_business = async (req, res, next) => {
-  res.render('user_mypage', { title: 'User business', user_account: 'business' })
-}
+
 exports.mypage_personal_account_get = async (req, res, next) => {
   var estimate_items = await Model.EstimateItem.find().exec()
   var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
@@ -324,15 +348,10 @@ exports.mypage_personal_review_list = async (req, res, next) => {
   var review_list = await Model.Review.find({ user_personal: req.session.user._id })
   res.render('mypage_personal_review_list', { title: 'My review list', review_list: review_list })
 }
-exports.mypage_personal_qna_list = async (req, res, next) => {
+exports.mypage_qna_list = async (req, res, next) => {
   var qna_questions = await Model.QnaQuestion.find({ user: req.session.user._id }).exec()
   for (qna_question of qna_questions) {
     qna_question.qna_answer = await Model.QnaAnswer.findOne({ parent: qna_question._id }).exec()
   }
-  res.render('mypage_qna_list', { title: 'Qna list for personal', qna_list: qna_questions })
+  res.render('mypage_qna_list', { title: 'Qna list', qna_list: qna_questions })
 }
-
-exports.mypage_business_qna_list = async (req, res, next) => {
-  res.render('mypage_qna_list', { title: 'Qna list for business', qna_list: '' })
-}
-

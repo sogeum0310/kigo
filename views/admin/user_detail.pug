@@ -7,6 +7,10 @@ block content
 
   pre= user.file
 
+  ul
+    each review in user.reviews 
+      li= review
+
   if (user.auth===0)
     form(action="", method="POST") 
       button(type="submit") confirm

@@ -6,10 +6,10 @@ block content
   pre= estimate_request 
   hr
 
-  p
-
-  each estimate_response in estimate_responses 
-    a(href="/estimate/response/" + estimate_response._id)= estimate_response.user_id.user_id
-    p= estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)
+  ul
+    each estimate_response in estimate_responses 
+      li
+        a(href="/estimate/response/" + estimate_response._id) #{estimate_response.user.username}
+        |  #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}
 
   

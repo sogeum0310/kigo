@@ -29,7 +29,8 @@ router.get('/estimate/request/form', estimate_controller.estimate_request_create
 router.post('/estimate/request/form', estimate_controller.estimate_request_create_post)
 router.get('/estimate/request/:id', estimate_controller.estimate_request_detail)
 
-router.get('/estimate/response/:id', estimate_controller.estimate_response_detail)
+router.get('/estimate/response/:id', estimate_controller.estimate_response_detail_get)
+router.post('/estimate/response/:id', estimate_controller.estimate_response_detail_post)
 
 router.get('/estimate/received/list', estimate_controller.estimate_received_list)
 router.get('/estimate/received/:id', estimate_controller.estimate_received_detail_get)

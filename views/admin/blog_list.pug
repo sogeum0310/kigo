@@ -7,5 +7,9 @@ block content
     each blog_item in blog_list
       li
         a(href="/admin/"+url+"/" + blog_item._id)= blog_item.title 
+        if (blog_item.qna_answer)
+          |  completed
 
   a(href="/admin/"+url+"/create") create 
+
+  

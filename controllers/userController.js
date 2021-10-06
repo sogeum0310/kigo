@@ -321,7 +321,8 @@ exports.mypage_business_account_post = async (req, res, next) => {
   res.redirect('/success/?message=' + message)
 }
 exports.mypage_personal_review_list = async (req, res, next) => {
-  res.render('mypage_personal_review_list', { title: 'My review list' })
+  var review_list = await Model.Review.find({ user_personal: req.session.user._id })
+  res.render('mypage_personal_review_list', { title: 'My review list', review_list: review_list })
 }
 exports.mypage_personal_qna_list = async (req, res, next) => {
   var qna_questions = await Model.QnaQuestion.find({ user: req.session.user._id }).exec()

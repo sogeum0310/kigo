@@ -7,11 +7,24 @@ exports.estimate_request_list = async (req, res, next) => {
   res.render('estimate_request_list', { title: 'Estimate requests', estimate_requests: estimate_requests })
 }
 
-exports.estimate_response_detail = async (req, res, next) => {
+exports.estimate_response_detail_get = async (req, res, next) => {
   var estimate_response = await Model.EstimateResponse.findById(req.params.id).exec() 
   var portfolio = await Model.File.findOne({ parent: estimate_response.user }).exec()
-  var business_reviews = await Model.BusinessReview.find({ user_business: estimate_response.user }).exec()
+  var business_reviews = await Model.Review.find({ user_business: estimate_response.user }).exec()
   res.render('estimate_response_detail', { title: 'Estimate Response', estimate_response: estimate_response, portfolio: portfolio, business_reviews: business_reviews })
+}
+
+exports.estimate_response_detail_post = async (req, res, next) => {
+
+  var review = new Model.Review({
+    user_personal: req.session.user._id,
+    user_business: req.body.user_business,
+    rating: req.body.rating,
+    content: req.body.content,
+  })
+  await review.save()
+
+  res.redirect('/estimate/response/' + req.params.id)
 }
 
 exports.estimate_received_list = async (req, res, next) => {

@@ -9,7 +9,7 @@ block content
     each estimate_sent in estimate_responses
       li
         a(href="/estimate/sent/" + estimate_sent._id)= estimate_sent.estimate_request.platform[0].name
-        |  (#{estimate_sent.estimate_request.user_id.user_id})
+        |  (#{estimate_sent.estimate_request.user.username})
         if (estimate_sent.estimate_request.count < 3)
           span  견적요청중
         else 

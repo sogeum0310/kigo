@@ -29,7 +29,8 @@ exports.user_business_list = async (req, res, next) => {
 }
 
 exports.user_detail_get = async (req, res, next) => {
-  var user = await Model.User.findById(req.params.id).exec()
+  var user = await Model.User.findById(req.params.id).populate('city').populate('platform').exec()
+  user.file = await Model.File.findOne({ parent: req.params.id }).exec()
   res.render('admin/user_detail', { title: 'User detail', user: user })
 }
 
@@ -175,8 +176,11 @@ exports.faq_update_post = async (req, res, next) => {
 }
 
 exports.qna_list = async (req, res, next) => {
-  var qna_list = await Model.QnaQuestion.find().exec()
-  res.render('admin/blog_list', { title: 'Qna list', blog_list: qna_list, url: 'qna' })
+  var qna_questions = await Model.QnaQuestion.find().exec()
+  for (qna_question of qna_questions) {
+    qna_question.qna_answer = await Model.QnaAnswer.findOne({ parent: qna_question._id }).exec()
+  }
+  res.render('admin/blog_list', { title: 'Qna list', blog_list: qna_questions, url: 'qna' })
 }
 
 exports.qna_detail_get = async (req, res, next) => {

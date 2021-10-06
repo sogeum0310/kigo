@@ -6,13 +6,34 @@ block content
   pre= estimate_response
 
   p 
-    a(href="/chat/?you=" + estimate_response.user_id) chat 
+    a(href="/chat/?you=" + estimate_response.user) chat 
 
   h3 Portfolio
   pre= portfolio
   //- img(src="/files/" + portfolio.md_name, alt="")
 
   h3 Business reviews
+
+  form(action="", method="POST") 
+    input(type="hidden", name="user_business", value=estimate_response.user)
+    div.form-group
+      label(for="") 
+      textarea(name="content", cols="30", rows="10") 
+    div.form-group
+      input(type="radio", name="rating", value="1")
+      label(for="") 1
+      input(type="radio", name="rating", value="2")
+      label(for="") 2
+      input(type="radio", name="rating", value="3")
+      label(for="") 3
+      input(type="radio", name="rating", value="4")
+      label(for="") 4
+      input(type="radio", name="rating", value="5")
+      label(for="") 5
+
+    p 
+      button(type="submit") confirm
+
   pre= business_reviews
 
   p 

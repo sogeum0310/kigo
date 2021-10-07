@@ -1,7 +1,6 @@
-var Model = require('../models/model')
-var async = require('async')
+const Model = require('../models/model')
 const { faq_list } = require('./adminController')
-var nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
 
 exports.index = async (req, res, next)  => {
   res.render('index', { title: 'KIGO' })
@@ -30,8 +29,6 @@ exports.company_faq_list = async (req, res, next) => {
   var faq_list_business = await Model.Faq.find({ account: 'business' }).exec()
 
   var faq_list = { personal: faq_list_personal, business: faq_list_business }
-
-  // console.log(faq_list)
 
   res.render('company_blog_list', { title: 'Faq list', blog_list: JSON.stringify(faq_list) })
 }
@@ -78,6 +75,7 @@ exports.company_message_create_post = async (req, res, next) => {
   res.redirect('/success/?message=' + message)
 }
 
+
 exports.chat_list = async (req, res, next) => {
   var chat_list = await Model.ChatRoom.find({ member: req.session.user._id }).exec()
   var user = await Model.User.find().exec()
@@ -98,11 +96,11 @@ exports.chat_create = async (req, res, next) => {
 }
 
 exports.chat_detail = async (req, res, next) => { 
-  var chat_contents = await Model.ChatContent.find({ room: req.params.id }).exec()
+  var chat_contents = await Model.ChatContent.find({ room: req.params.id }).populate('user').exec()
   res.render('chat_detail', { 
     title: 'Chat detail',
     chat_contents: chat_contents, 
-    user: req.session.user._id,
+    user: JSON.stringify(req.session.user),
     room: req.params.id,
   })
 }
@@ -113,5 +111,5 @@ exports.success = async (req, res, next) => {
 
 exports.test = async (req, res, next) => {
   var user_personal = await Model.User.find({ account: 'personal' })
-  Model.User.insertMany({ auth: 1 })
+  // Model.User.insertMany({ auth: 1 })
 }

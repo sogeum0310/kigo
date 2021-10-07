@@ -6,12 +6,12 @@ block content
   if errors 
     ul 
       for error in errors 
-        li!= error.msg
+        li= error
 
   form(action="" method="POST" enctype="multipart/form-data") 
     div.form-group
       label(for="") id
-      input(type="text" name="user_id" value=(undefined==user_business ? '':user_business.username))
+      input(type="text" name="username" value=(undefined==user_business ? '':user_business.username))
     div.form-group
       label(for="") password
       input(type="text" name="password" value=(undefined==user_business ? '':user_business.password)) 

@@ -1,5 +1,5 @@
-var Model = require('../models/model')
-var async = require('async')
+const Model = require('../models/model')
+const async = require('async')
 
 
 exports.estimate_request_list = async (req, res, next) => {

@@ -1,9 +1,9 @@
-var express = require('express')
-var router = express.Router()
+const express = require('express')
+const router = express.Router()
 
-var estimate_controller = require('../controllers/estimateController')
-var user_controller = require('../controllers/userController')
-var other_controller = require('../controllers/otherController')
+const estimate_controller = require('../controllers/estimateController')
+const user_controller = require('../controllers/userController')
+const other_controller = require('../controllers/otherController')
 
 
 /* GET home page. */

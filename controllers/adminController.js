@@ -1,5 +1,5 @@
 /* For controller */
-var Model = require('../models/model');
+const Model = require('../models/model');
 
 
 exports.index = async (req, res, next) => {

@@ -1,17 +1,17 @@
-var mongoose = require('mongoose')
-var Schema = mongoose.Schema
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 const { DateTime } = require("luxon");  //for date handling
 
 
-var EstimateItemSchema = new Schema({
+const EstimateItemSchema = new Schema({
   name: { type: String }
 })
-var EstimateItemDetailSchema = new Schema({
+const EstimateItemDetailSchema = new Schema({
   estimate_item: { type: Schema.ObjectId, ref: 'EstimateItem' },
   name: { type: String },
 })
 
-var UserSchema = new Schema({
+const UserSchema = new Schema({
   username: { type: String },
   password: { type: String } ,
   name: { type: String },
@@ -30,7 +30,7 @@ UserSchema.virtual('date_of_birth_yyyy_mm_dd').get(function() {
   return DateTime.fromJSDate(this.date_of_birth).toISODate(); //format 'YYYY-MM-DD'
 });
 
-var EstimateRequestSchema = new Schema({
+const EstimateRequestSchema = new Schema({
   user: { type: Schema.ObjectId, ref: 'User' },
   platform : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   how_many : [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
@@ -44,7 +44,7 @@ var EstimateRequestSchema = new Schema({
   count:  { type: Number, default: 0 },
   reg_date: { type: Date, default: Date.now }
 });
-var EstimateResponseSchema = new Schema({
+const EstimateResponseSchema = new Schema({
   estimate_request: { type: Schema.ObjectId, ref: 'EstimateRequest', required: true },
   user: { type: Schema.ObjectId, ref: 'User', required: true },
   item: [{ type: String }],
@@ -54,7 +54,7 @@ var EstimateResponseSchema = new Schema({
 }) 
 
 
-var reviewSchema = new Schema({
+const reviewSchema = new Schema({
   user_business: { type: Schema.ObjectId, ref: 'User' },
   user_personal: { type: Schema.ObjectId, ref: 'User' },
   rating: { type: Number },
@@ -62,23 +62,24 @@ var reviewSchema = new Schema({
   reg_date: { type: Date, default: Date.now },
 })
 
-var ChatRoomSchema = new Schema({
+const ChatRoomSchema = new Schema({
   member:[{ type: Schema.ObjectId }]
 })
 
-var ChatContentSchema = new Schema({
-  user: { type: Schema.ObjectId },
+const ChatContentSchema = new Schema({
+  user: { type: Schema.ObjectId, ref: 'User' },
   content: { type: String },
   room: { type: Schema.ObjectId },
+  reg_date: { type: Date, default: Date.now }
 })
 
-var FileSchema = new Schema({
+const FileSchema = new Schema({
   parent: { type: Schema.ObjectId },
   name: { type: String },
   md_name: { type: String }
 }) 
 
-var BlogPostSchema = new Schema({
+const BlogPostSchema = new Schema({
   title: { type: String },
   content: { type: String },
   reg_date: { type: Date, default: Date.now },
@@ -86,31 +87,31 @@ var BlogPostSchema = new Schema({
   account: { type: String }
 })
 
-var BlogCommentSchema = new Schema({
+const BlogCommentSchema = new Schema({
   parent: { type: Schema.ObjectId },
   content: { type: String }
 })
 
 
-var User = mongoose.model('User', UserSchema)
-var EstimateItem = mongoose.model('EstimateItem', EstimateItemSchema)
-var EstimateItemDetail = mongoose.model('EstimateItemDetail', EstimateItemDetailSchema)
-var EstimateRequest = mongoose.model('EstimateRequest', EstimateRequestSchema)
-var EstimateResponse = mongoose.model('EstimateResponse', EstimateResponseSchema)
-var Review = mongoose.model('Review', reviewSchema)
-var ChatRoom = mongoose.model('ChatRoom', ChatRoomSchema)
-var ChatContent = mongoose.model('ChatContent', ChatContentSchema)
-var File = mongoose.model('File', FileSchema)
+const User = mongoose.model('User', UserSchema)
+const EstimateItem = mongoose.model('EstimateItem', EstimateItemSchema)
+const EstimateItemDetail = mongoose.model('EstimateItemDetail', EstimateItemDetailSchema)
+const EstimateRequest = mongoose.model('EstimateRequest', EstimateRequestSchema)
+const EstimateResponse = mongoose.model('EstimateResponse', EstimateResponseSchema)
+const Review = mongoose.model('Review', reviewSchema)
+const ChatRoom = mongoose.model('ChatRoom', ChatRoomSchema)
+const ChatContent = mongoose.model('ChatContent', ChatContentSchema)
+const File = mongoose.model('File', FileSchema)
 
-var Notice = mongoose.model('Notice', BlogPostSchema)
-var Event = mongoose.model('Event', BlogPostSchema)
-var Faq = mongoose.model('Faq', BlogPostSchema)
-var Message = mongoose.model('Message', BlogPostSchema)
-var QnaQuestion = mongoose.model('QnaQuestion', BlogPostSchema)
-var QnaAnswer = mongoose.model('QnaAnswer', BlogCommentSchema)
+const Notice = mongoose.model('Notice', BlogPostSchema)
+const Event = mongoose.model('Event', BlogPostSchema)
+const Faq = mongoose.model('Faq', BlogPostSchema)
+const Message = mongoose.model('Message', BlogPostSchema)
+const QnaQuestion = mongoose.model('QnaQuestion', BlogPostSchema)
+const QnaAnswer = mongoose.model('QnaAnswer', BlogCommentSchema)
 
 
-var tokenSchema = new Schema({
+const tokenSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -127,7 +128,7 @@ var tokenSchema = new Schema({
   }
 })
 
-var Token = mongoose.model('Token', tokenSchema)
+const Token = mongoose.model('Token', tokenSchema)
 
 exports.Token = Token
 

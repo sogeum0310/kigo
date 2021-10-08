@@ -77,19 +77,26 @@ exports.company_message_create_post = async (req, res, next) => {
 
 
 exports.chat_list = async (req, res, next) => {
-  var chat_list = await Model.ChatRoom.find({ member: req.session.user._id }).exec()
-  var user = await Model.User.find().exec()
+  var chat_list = await Model.ChatRoom.find({ user: req.session.user._id }).populate('user').exec()
+  
+  for (chat_item of chat_list) {
+    for (user of chat_item.user) {
+      if (user._id.toString()!==req.session.user._id) {
+        chat_item.member = user
+      }
+    }
+  }
 
-  res.render('chat_list', { title: 'Chat list', user: user, chat_list: chat_list })
+  res.render('chat_list', { title: 'Chat list', chat_list: chat_list })
 }
 
 exports.chat_create = async (req, res, next) => {
-  var member = []
-  member.push(req.session.user._id)
-  member.push(req.body.member)  
+  var user = []
+  user.push(req.session.user._id)
+  user.push(req.body.user)  
 
   var room = new Model.ChatRoom({
-    member: member
+    user: user
   })
   room.save()
   res.redirect('/chat/' + room._id)
@@ -110,6 +117,5 @@ exports.success = async (req, res, next) => {
 }
 
 exports.test = async (req, res, next) => {
-  var user_personal = await Model.User.find({ account: 'personal' })
-  // Model.User.insertMany({ auth: 1 })
+  res.render('test', { title: 'Test' })
 }

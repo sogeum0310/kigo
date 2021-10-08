@@ -2,3 +2,10 @@ extends layout
 
 block content 
   h1= title
+
+
+
+  script.
+    var socket = io()
+
+    socket.emit('join')

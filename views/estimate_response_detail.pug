@@ -6,7 +6,7 @@ block content
   pre= estimate_response
 
   form(action="/chat/create", method="POST") 
-    input(type="text", name="member", value=estimate_response.user)
+    input(type="text", name="user", value=estimate_response.user)
     button(type="submit") chat
 
   h3 Portfolio

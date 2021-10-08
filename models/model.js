@@ -63,7 +63,7 @@ const reviewSchema = new Schema({
 })
 
 const ChatRoomSchema = new Schema({
-  member:[{ type: Schema.ObjectId }]
+  user:[{ type: Schema.ObjectId, ref: 'User' }]
 })
 
 const ChatContentSchema = new Schema({

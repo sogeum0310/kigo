@@ -3,17 +3,20 @@ extends layout
 block content 
   h1= title
 
-  ul#messages(style="background: whitesmoke; height: 400px; overflow: auto")
-    if (chat_contents)
-      each chat_content in chat_contents 
-        li #{chat_content.user.username} : #{chat_content.content}
+  div(style="background: whitesmoke; height: 400px; overflow: auto")
+    ul#messages
+      if (chat_contents)
+        each chat_content in chat_contents 
+          li #{chat_content.user.username} : #{chat_content.content}
+    p#event
 
   form#form
     input#input(type="text")
     button SEND
 
   p 
-    a(href="#" onclick="outRoom()") Out 
+    a(href="/chat/list") back / 
+    a(href="javascript:void(0)" onclick="outRoom()") out 
 
   script(src="/socket.io/socket.io.js")
   script.
@@ -28,7 +31,6 @@ block content
 
     function outRoom() {
       socket.emit('out', room)
-      location.href = '/chat/list'
     }
 
     form.addEventListener('submit', function (e) {

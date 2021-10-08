@@ -20,12 +20,15 @@ app.io = require('socket.io')()
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://sogeum0310:hyun0831**@ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:27017/kigo', { useNewUrlParser: true, useUnifiedTopology: true });
 
+
 app.io.on('connection', (socket) => {
   socket.on('join', (room) => {
     socket.join(room)
+    app.io.to(room).emit('join', room)
   })
-  socket.on('out', (city) => {
-    socket.leave(city)
+  socket.on('out', (room) => {
+    socket.leave(room)
+    app.io.to(room).emit('out', room)
   })
   socket.on('chat message', async (room, msg) => {
     const message = new Model.ChatContent({

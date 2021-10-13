@@ -1,9 +1,43 @@
 extends layout 
 
 block content 
-  h1= title
+  //- h1= title
 
-  pre= estimate_response
+  //- pre= estimate_response
 
-  p 
-    a(href="/admin/estimate/request/" + estimate_response.estimate_request) Back
+  //- p.go_response_list
+  //-     a(href="/admin/estimate/request/" + estimate_response.estimate_request)
+  //-       i.fa.fa-bars(aria-hidden='true') 
+
+  h1.admin_con_title= title
+
+  //- p.admin_back_btn 
+  //-   a(href="/admin/estimate/request/" + estimate_response.estimate_request) Back
+
+  .estimate_request_detail_box 
+    p.estimate_request_detail_3st_txt 
+      span 견적서 작성일 :
+      |  #{estimate_response.reg_date.getFullYear()}.#{estimate_response.reg_date.getMonth() +1}.#{estimate_response.reg_date.getDate()}
+    .estimate_request_detail_stat_wrap
+      .estimate_request_detail_stat.estimate_request_detail_stat02 
+        h3 #{estimate_response.item[0]}
+        p #{estimate_response.cost[0]}
+        p #{estimate_response.note[0]}
+      .estimate_request_detail_stat.estimate_request_detail_stat02 
+        h3 #{estimate_response.item[1]}
+        p #{estimate_response.cost[1]}
+        p #{estimate_response.note[1]}
+      .estimate_request_detail_stat.estimate_request_detail_stat02 
+        h3 #{estimate_response.item[2]}
+        p #{estimate_response.cost[2]}
+        p #{estimate_response.note[2]}
+    p.estimate_request_detail_cost_txt 
+      span 견적가 :
+      |  #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}원
+    if (file)
+      .estimate_request_portfolio_imgbox 
+        img(src="/files/" + portfolio.md_name, alt="")
+
+
+  //- p 
+  //-   a(href="/admin/estimate/request/" + estimate_response.estimate_request) Back

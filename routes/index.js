@@ -9,11 +9,20 @@ const other_controller = require('../controllers/otherController')
 /* GET home page. */
 router.get('/', other_controller.index)
 router.get('/test', other_controller.test)
+router.get('/success', other_controller.success)
+
+
 router.get('/company/about', other_controller.company_about)
+router.get('/company/ranking', other_controller.company_ranking)
 router.get('/company/notice/list', other_controller.company_blog_list)
 router.get('/company/guide', other_controller.company_guide)
 router.get('/company/event/list', other_controller.company_event_list)
 router.get('/company/faq/list', other_controller.company_faq_list)
+router.get('/company/faq/personal', other_controller.faq_list_personal)
+router.get('/company/faq/business', other_controller.faq_list_business)
+
+// 자주묻는질문 페이지분리
+
 router.get('/company/share', other_controller.company_share)
 
 router.get('/company/contact/list', other_controller.company_contact_list)
@@ -59,18 +68,19 @@ router.post('/signup/business', user_controller.signup_business_post)
 
 router.get('/mypage', user_controller.mypage)
 
-router.get('/mypage/account/access', user_controller.account_access_get)
-router.post('/mypage/account/access', user_controller.account_access_post)
-  
-router.get('/mypage/personal/account', user_controller.mypage_personal_account_get)
-router.post('/mypage/personal/account', user_controller.mypage_personal_account_post)
+// router.get('/mypage/account/access', user_controller.account_access_get)
+// router.post('/mypage/account/access', user_controller.account_access_post)
+
+router.get('/mypage/personal/access', user_controller.mypage_personal_access_get)
+router.post('/mypage/personal/access', user_controller.mypage_personal_access_post)
+router.post('/mypage/personal/account', user_controller.mypage_personal_account)
+
+router.get('/mypage/business/access', user_controller.mypage_business_access_get)
+router.post('/mypage/business/access', user_controller.mypage_business_access_post)
+router.post('/mypage/business/account', user_controller.mypage_business_account)
+
 router.get('/mypage/personal/review/list', user_controller.mypage_personal_review_list)
 router.get('/mypage/qna/list', user_controller.mypage_qna_list)
-
-router.get('/mypage/business/account', user_controller.mypage_business_account_get)
-router.post('/mypage/business/account', user_controller.mypage_business_account_post)
-
-router.get('/success', other_controller.success)
 
 
 /* Chat */

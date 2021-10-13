@@ -1,11 +1,14 @@
-h1= title 
+link(rel='stylesheet', href='/stylesheets/admin.css')
+link(rel='stylesheet', href='/stylesheets/style.css')
+.container
+  h1.admin_login_title= title 
 
-form(action="/admin/login", method="POST")
-  div.form-group
-    label(for="")
-    input(type="text", name="admin")
-  div.form-group
-    label(for="")
-    input(type="text")
-  p
-    button(type="submit") confirm  
+  form(action="/admin/login", method="POST")
+    div.form-group.admin_login_form_group
+      label(for="")
+      input.frm_input.full_input(type="text", name="admin", plaholder="아이디")
+    div.form-group
+      label(for="")
+      input.frm_input.full_input(type="text", plaholder="비밀번호")
+    p
+      button.submit_btn(type="submit") 로그인  

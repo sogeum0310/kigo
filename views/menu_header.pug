@@ -1,0 +1,33 @@
+header.content_header 
+  nav.navi_wrap 
+    .navi
+      .navi_top.clearfix
+        p 편리한 광고비용 견적비교
+          img.logo_img(src='/img/logo.png' alt='')
+
+                  
+      a(href="/") 홈
+      a(href="/company/about") 회사소개
+      a(href="/company/notice/list") 공지사항
+      //- a(href="/login") 회원가입 및 로그인
+      a(href="/company/guide") 이용방법
+      a(href="/company/ranking") 등급제 확인
+      //- a(href="/company/faq/list") 자주묻는질문
+      a(href="/company/faq/personal") 자주묻는질문
+      //- 자주묻는질문 페이지분리
+      a(href="/company/event/list") 키고이벤트
+      a(href="/company/share") 친구에게 앱 추천하기
+      if (user_global)
+        a(href="/company/contact/list") 고객센터
+      //- a(href="/test") test 
+    .navi_bg 
+
+
+  .header_box 
+    .menu_btn 
+      span 
+      span 
+      span 
+    .logo_box 
+      a(href="/")
+        img(src="/img/top_logo.png", alt="") 

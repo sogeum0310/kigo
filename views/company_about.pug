@@ -1,4 +1,32 @@
 extends layout 
-
+block header 
+  include menu_header.pug
 block content 
-  h1= title
+  //- h1= title
+  .container 
+    .com_about_top_txtbox 
+      h3 성공의 키가 되는 광고
+      p 키고를 키고 시작하세요 
+
+    .com_about_top_imgbox 
+      img(src="/img/company_about/com_about_top_img.png", alt="")
+    
+    .com_about_articlebox 
+      p
+        img(src='/img/company_about/com_about_icon01.png' alt='')
+        | 합리적인 광고 중개시장을 만들고싶어요!
+      p
+        | ‘키고’는 매출 향상 등을 위해 합리적인 가격으로 광고를 원하는 사업주(소상공인, 창업주)와 고객 유치를 위해 노력하는 실력 있는 광고업체 및 인플루언서를 연결해주는 서비스입니다.
+      p
+        | 광고 의뢰 절차는 정보의 교류가 자유롭지 않고,  광고 업체가 믿을만한 업체인지 의문이 들어요. 그래서 대부분 정보의 주도권은 광고 업체에게 있죠. 이러한 이유로 광고를 의뢰하는 사업주(소상공인, 창업주)가 합리적인 계약을 진행할 가능성이 떨어지게 됩니다. 저희는 이러한 문제를 해결하고자, 현장 방문 없이 정확한 견적을 비교할 수 있는 서비스를 운영하고 있어요.
+      p
+        | 사업주(소상공인, 창업주)가 광고를 의뢰할 때 꼭 거쳐야 할 필수 서비스로 성장할 날을 꿈꾸며 열심히 노력하겠습니다. 
+        img(src='/img/company_about/com_about_icon02.png' alt='')
+    .com_about_imgbox 
+      img(src="/img/company_about/com_about_article01.png", alt="")
+    .com_about_imgbox 
+      img(src="/img/company_about/com_about_article02.png", alt="")
+    .com_about_imgbox 
+      img(src="/img/company_about/com_about_article03.png", alt="")
+    .com_about_imgbox 
+      img(src="/img/company_about/com_about_article04.png", alt="")

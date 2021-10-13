@@ -1,54 +1,134 @@
 extends layout 
-
+block header 
+  include back_header.pug
 block content 
-  h1= title
+  //- h1= title
 
-  if errors 
-    ul 
-      for error in errors 
-        li= error
+  //- if errors 
+  //-   ul 
+  //-     for error in errors 
+  //-       li= error
 
-  form(action="" method="POST" enctype="multipart/form-data") 
-    div.form-group
-      label(for="") id
-      input(type="text" name="username" value=(undefined==user_business ? '':user_business.username))
-    div.form-group
-      label(for="") password
-      input(type="text" name="password" value=(undefined==user_business ? '':user_business.password)) 
-    div.form-group
-      label(for="") password confirm 
-      input(type="text" name="password_confirm" value=(undefined==user_business ? '':user_business.password))  
-    div.form-group
-      label(for="") company name 
-      input(type="text" name="name" value=(undefined==user_business ? '' : user_business.name)) 
-    div.form-group
-      label(for="") phone
-      input(type="text" name="phone" value=(undefined==user_business ? '' : user_business.phone))
-    div.form-group
-      label(for="") email 
-      input(type="text" name="email" value=(undefined==user_business ? '' : user_business.email))
-    div.form-group
-      textarea#policy(name="about", cols="30", rows="10")=(undefined==user_business ? '' : user_business.about)
+  //- form(action="" method="POST" enctype="multipart/form-data") 
+  //-   div.form-group
+  //-     label(for="") id
+  //-     input(type="text" name="username" value=(undefined==user_business ? '':user_business.username))
+  //-   div.form-group
+  //-     label(for="") password
+  //-     input(type="text" name="password" value=(undefined==user_business ? '':user_business.password)) 
+  //-   div.form-group
+  //-     label(for="") password confirm 
+  //-     input(type="text" name="password_confirm" value=(undefined==user_business ? '':user_business.password))  
+  //-   div.form-group
+  //-     label(for="") company name 
+  //-     input(type="text" name="name" value=(undefined==user_business ? '' : user_business.name)) 
+  //-   div.form-group
+  //-     label(for="") phone
+  //-     input(type="text" name="phone" value=(undefined==user_business ? '' : user_business.phone))
+  //-   div.form-group
+  //-     label(for="") email 
+  //-     input(type="text" name="email" value=(undefined==user_business ? '' : user_business.email))
+  //-   div.form-group
+  //-     textarea#policy(name="about", cols="30", rows="10")=(undefined==user_business ? '' : user_business.about)
 
-    div.form-group
-      label(for="") portfolio 
-      input(type="file", name="portfolio")
-    pre= file
+  //-   div.form-group
+  //-     label(for="") portfolio 
+  //-     input(type="file", name="portfolio")
+  //-   pre= file
 
-    div.form-group
-      label(for="") city 
-      select(name="city") 
-        each city in cities 
-          option(value=city._id, selected=(undefined!=user_business && user_business.city==city._id.toString() ? 'selected' : false))= city.name 
+  //-   div.form-group
+  //-     label(for="") city 
+  //-     select(name="city") 
+  //-       each city in cities 
+  //-         option(value=city._id, selected=(undefined!=user_business && user_business.city==city._id.toString() ? 'selected' : false))= city.name 
 
-    div.form-group
-      each platform in platforms 
-        div
-          input(type="checkbox", name="platform", value=platform._id, checked=platform.checked) 
-          label(for="") #{platform.name}
+  //-   div.form-group
+  //-     each platform in platforms 
+  //-       div
+  //-         input(type="checkbox", name="platform", value=platform._id, checked=platform.checked) 
+  //-         label(for="") #{platform.name}
 
-    if (user_business===undefined)
-      p * you can finish signing up after authorization has been accepted
+  //-   if (user_business===undefined)
+  //-     p * you can finish signing up after authorization has been accepted
 
-    p 
-      button(type="submit") confirm
+  //-   p 
+  //-     button(type="submit") confirm
+  style.
+    .foot_icon_wrap{
+    display: none;
+    }
+  .container
+
+    if errors 
+      ul.signup_error 
+        for error in errors 
+          li= error
+
+    form(action=(undefined===user_business ? '' : '/mypage/business/account') method="POST" enctype="multipart/form-data", onsubmit="return confirm('제출하시겠습니까?');") 
+      table.signup_form
+        tbody
+          tr
+            td
+              label(for='') 아이디
+            td
+              input.full_input#user_id(type='text' name='username' value=(undefined==user_business ? '':user_business.username))
+          tr 
+            td 
+              label(for="") 비밀번호
+            td 
+              input.full_input(type="text" name="password" value=(undefined==user_business ? '':user_business.password)) 
+          tr 
+            td 
+              label(for="") 비밀번호 확인
+            td 
+              input.full_input(type="text" name="password_confirm" value=(undefined==user_business ? '':user_business.password))
+          tr 
+            td 
+              label(for="") 회사이름
+            td 
+              input.full_input(type="text" name="name" value=(undefined==user_business ? '' : user_business.name)) 
+          tr 
+            td 
+              label(for="") 핸드폰번호
+            td 
+              input.full_input(type="text" name="phone" value=(undefined==user_business ? '' : user_business.phone))
+          tr 
+            td 
+              label(for="") 이메일
+            td 
+              input.full_input(type="text" name="email" value=(undefined==user_business ? '' : user_business.email))
+          tr 
+            td 
+              label(for="") 회사소개 
+            td 
+              textarea#policy.full_input(name="about", cols="30", rows="10")=(undefined==user_business ? '' : user_business.about)
+          tr 
+            td 
+              label(for="") 포트폴리오
+            td 
+              input.full_input#file_portfolio(type="file", name="portfolio")
+              br
+              //- pre= file
+              if (file)
+                  img(src="/files/" + file.md_name, alt="")
+                  p= file.name
+          tr 
+            td 
+              label(for="") 계신지역
+            td 
+              select.full_input(name="city") 
+                each city in cities 
+                  option(value=city._id, selected=(undefined!=user_business && user_business.city==city._id.toString() ? 'selected' : false))= city.name 
+      div.form-group.clearfix
+        each platform in platforms 
+          div.platform_checkdiv
+            input(type="checkbox", name="platform", value=platform._id, checked=platform.checked) 
+            label(for="") #{platform.name}
+      if (user_business===undefined)
+        p.sign_accepted_txt 심사를 통해 승인이 완료되면 가입하신 핸드폰으로 SMS문자를 통하여 알려 드립니다.
+
+      p 
+        button.signup_btn(type="submit") 확인
+
+block scripts 
+  script(src='/javascript/user_unmodifiable.js')

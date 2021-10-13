@@ -1,4 +1,13 @@
 extends layout 
-
+block header 
+  include menu_header.pug
 block content 
-  h1= title
+  h1.success_title= title
+
+  p.success_back 
+    a(href=go_to) Back 
+      i.fa.fa-arrow-left(aria-hidden='true')
+
+block scripts
+  //- 성공시 바로이동
+  //- script(src='/javascript/sucess_back.js')

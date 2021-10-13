@@ -1,41 +1,143 @@
 extends layout 
-
+block header 
+  include back_header.pug
 block content 
-  h1= title
+  //- h1= title
 
-  pre= results
+  //- pre= results
 
-  form(action="", method="POST") 
+  //- form(action="", method="POST") 
 
-    table 
-      tr 
-        th item 
-        th cost 
-        th note 
-      tr 
-        td 
-          input(type="text", name="item")
-        td
-          input(type="text", name="cost")
-        td
-          input(type="text", name="note")
-      tr 
-        td 
-          input(type="text", name="item")
-        td
-          input(type="text", name="cost")
-        td
-          input(type="text", name="note")
-      tr 
-        td 
-          input(type="text", name="item")
-        td
-          input(type="text", name="cost")
-        td
-          input(type="text", name="note")
-  
+  //-   table 
+  //-     tr 
+  //-       th item 
+  //-       th cost 
+  //-       th note 
+  //-     tr 
+  //-       td 
+  //-         input(type="text", name="item")
+  //-       td
+  //-         input(type="number", name="cost")
+  //-       td
+  //-         input(type="text", name="note")
+  //-     tr 
+  //-       td 
+  //-         input(type="text", name="item")
+  //-       td
+  //-         input(type="number", name="cost")
+  //-       td
+  //-         input(type="text", name="note")
+  //-     tr 
+  //-       td 
+  //-         input(type="text", name="item")
+  //-       td
+  //-         input(type="number", name="cost")
+  //-       td
+  //-         input(type="text", name="note")
+          
+  //-   p
+  //-     button(type="submit") confirm
+
+  //- p 
+  //-   a(href="/estimate/received/list") list
+
+
+
+  .container
+    p.go_list_btn 
+      a(href="/estimate/received/list")
+        i.fa.fa-bars(aria-hidden='true')
+    .estimate_request_detail_box 
+      p.estimate_request_detail_2st_txt #{results.platform[0].name}
+      p.estimate_request_detail_3st_txt 
+        span 견적 요청일자 :
+        |  #{results.reg_date.getFullYear()}년 #{results.reg_date.getMonth() + 1}월 #{results.reg_date.getDate()}일
+      .estimate_request_detail_stat_wrap
+        .estimate_request_detail_stat 
+          h3 월간 작업(포스팅) 횟수
+          p #{results.how_many[0].name}
+        .estimate_request_detail_stat 
+          h3 광고 업종(상품)
+          p 
+            each results_business in results.business
+              span.estimate_request_checked= results_business.name
+        .estimate_request_detail_stat 
+          h3 광고 목적
+          p 
+            each results_goal in results.goal
+              span.estimate_request_checked= results_goal.name
+        .estimate_request_detail_stat 
+          h3 광고 시작 날짜
+          p #{results.start_day[0].name}
+        .estimate_request_detail_stat 
+          h3 광고 집행 기간
+          p #{results.how_long[0].name}
+        .estimate_request_detail_stat 
+          h3 예상 금액
+          p #{results.cost[0].name}
+        .estimate_request_detail_stat 
+          h3 계신 지역
+          p 
+            each results_city in results.city
+              span.estimate_request_checked= results_city.name
+        .estimate_request_detail_stat 
+          h3 피드백 서비스
+          p 
+            each results_feedback in results.feedback
+              span.estimate_request_checked= results_feedback.name
+
+    form(action="", method="POST", onsubmit="return confirm('제출하시겠습니까?');") 
+
+      table#itemTable.estimate_received_detail_form_stat 
+        tr 
+          th 
+            p 항목
+          th 
+            p 금액
+          th 
+            p 비고
+        tr#itemRow
+          td 
+            input.full_input.frm_input(type="text", name="item", required)
+          td
+            input.full_input.frm_input(type="number", name="cost", required)
+          td
+            input.full_input.frm_input(type="text", name="note")
+        tr
+          td 
+            input.full_input.frm_input(type="text", name="item")
+          td
+            input.full_input.frm_input(type="number", name="cost")
+          td
+            input.full_input.frm_input(type="text", name="note")
+        tr
+          td 
+            input.full_input.frm_input(type="text", name="item")
+          td
+            input.full_input.frm_input(type="number", name="cost")
+          td
+            input.full_input.frm_input(type="text", name="note")
+
+    button#addItem +
     p
-      button(type="submit") confirm
+      button.submit_btn(type="submit") 보내기
 
-  p 
-    a(href="/estimate/received/list") list
+    script.
+      var itemTable = document.getElementById('itemTable')
+      var itemRow = document.getElementById('itemRow')
+      var addItem = document.getElementById('addItem')
+
+      addItem.addEventListener('click', function (e) {
+        e.preventDefault()
+        var newItem = itemRow.cloneNode(true)
+        for (td of newItem.children) {
+          td.firstElementChild.value = ''
+        }
+        itemTable.appendChild(newItem)
+      })
+
+
+
+
+
+

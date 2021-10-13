@@ -1,8 +1,75 @@
 extends layout 
-
+block header 
+  include back_header.pug
 block content 
-  h1= title 
+  //- h1= title 
 
-  pre= results
+  //- pre= estimate_response
 
-  a(href="/estimate/sent/list") list 
+  //- a(href="/estimate/sent/list") list 
+
+  .container
+    p.go_list_btn 
+        a(href="/estimate/sent/list")
+          i.fa.fa-bars(aria-hidden='true') 
+    .estimate_request_detail_box.estimate_sent_detail_box 
+      p.estimate_request_detail_2st_txt #{estimate_response.estimate_request.platform[0].name} 
+        span (#{estimate_response.estimate_request.user.username})
+      p.estimate_request_detail_3st_txt 
+        span 견적 요청일자 :
+        |  #{estimate_response.reg_date.getFullYear()}년 #{estimate_response.reg_date.getMonth() + 1}월 #{estimate_response.reg_date.getDate()}일
+      .estimate_request_detail_stat_wrap
+        .estimate_request_detail_stat 
+          h3 월간 작업(포스팅) 횟수
+          p #{estimate_response.estimate_request.how_many[0].name}
+        .estimate_request_detail_stat 
+          h3 광고 업종(상품)
+          p 
+            each estimate_response_business in estimate_response.estimate_request.business
+              span.estimate_request_checked= estimate_response_business.name
+        .estimate_request_detail_stat 
+          h3 광고 목적
+          p 
+            each estimate_response_goal in estimate_response.estimate_request.goal
+              span.estimate_request_checked= estimate_response_goal.name
+        .estimate_request_detail_stat 
+          h3 광고 시작 날짜
+          p #{estimate_response.estimate_request.start_day[0].name}
+        .estimate_request_detail_stat 
+          h3 광고 집행 기간
+          p #{estimate_response.estimate_request.how_long[0].name}
+        .estimate_request_detail_stat 
+          h3 예상 금액
+          p #{estimate_response.estimate_request.cost[0].name}
+        .estimate_request_detail_stat 
+          h3 계신 지역
+          p 
+            each estimate_response_city in estimate_response.estimate_request.city
+              span.estimate_request_checked= estimate_response_city.name
+        .estimate_request_detail_stat 
+          h3 피드백 서비스
+          p 
+            each estimate_response_feedback in estimate_response.estimate_request.feedback
+              span.estimate_request_checked= estimate_response_feedback.name
+    .estimate_request_detail_box.estimate_sent_detail_box  
+      p.estimate_request_detail_3st_txt 
+        span 견적서 작성일 :
+        |  #{estimate_response.reg_date.getFullYear()}.#{estimate_response.reg_date.getMonth() +1}.#{estimate_response.reg_date.getDate()}
+      .estimate_request_detail_stat_wrap
+        .estimate_request_detail_stat.estimate_request_detail_stat02 
+          h3 #{estimate_response.item[0]}
+          p #{estimate_response.cost[0]}
+          p #{estimate_response.note[0]}
+        .estimate_request_detail_stat.estimate_request_detail_stat02 
+          h3 #{estimate_response.item[1]}
+          p #{estimate_response.cost[1]}
+          p #{estimate_response.note[1]}
+        .estimate_request_detail_stat.estimate_request_detail_stat02 
+          h3 #{estimate_response.item[2]}
+          p #{estimate_response.cost[2]}
+          p #{estimate_response.note[2]}
+      p.estimate_request_detail_cost_txt 
+        span 견적가 :
+        |  #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}원
+    
+

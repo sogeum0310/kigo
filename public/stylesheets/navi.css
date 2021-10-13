@@ -1,0 +1,145 @@
+
+.navi_wrap {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: -100%;
+  z-index: 10;
+  transition: all 0.3s;
+}
+.navi_bg{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  z-index: -1;
+  display: none;
+  transition: all 0.3s;
+}
+.navi{
+  width: 80%;
+  height: 100vh;
+  background: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  transition: all 0.4s ease-in-out;
+}
+.navi a{
+  display: block;
+  font-size: 16px;
+  font-weight: 400;
+  color: #00022b;
+  background: #fff;
+  border-bottom: 1px solid #ccc;
+  padding: 16.5px 15px;
+}
+/* .navi a:last-child{
+  border-bottom: none;
+} */
+.navi_top img{
+  margin-right: 10px;
+  position: relative;
+  top: 16.5px;
+  width: 80px;
+}
+.navi_top img, .navi_top p{
+  float: left;
+}
+.navi_top{
+  font-size: 16px;
+  font-weight: bold;
+  background: #00012d;
+  color: #fff;
+  line-height: 55px;
+  height: 55px;
+  padding-left: 15px;
+  padding-right: 15px;
+  position: relative;
+}
+
+/* 메뉴 클릭시 */
+.navi_wrap.on{
+  opacity: 1;
+  display: block;
+  left: 0;
+}
+.navi_wrap.on .navi_bg{
+  z-index: 1;
+  display: block;
+  opacity: 1;
+}
+.navi_wrap.on .navi{
+}
+.navi_wrap.on .navi_top{
+}
+/* 메뉴 클릭시 */
+
+@media(max-width:767px){
+  .navi_top{
+    font-size: 12px;
+  }
+}
+@media(max-width:360px){
+  .navi_top img{
+    width: 60px;
+    top: 20px;
+  }
+  .navi_top{
+    font-size: 10px;
+  }
+
+}
+
+/* nav_css */
+
+.header_box{
+  width: 100%;
+  height: 64px;
+  position: relative;
+  background: #fff;
+}
+.logo_box{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+.menu_btn span, .menu_btn{
+  display: inline-block;
+  box-sizing: border-box;
+}
+.menu_btn{
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+}
+.menu_btn span{
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: #000;
+  border-radius: 10px;
+}
+.menu_btn span:nth-child(1){
+  top: 0;
+}
+.menu_btn span:nth-child(2){
+  top: 10.5px;
+}
+.menu_btn span:nth-child(3){
+  bottom: 0;
+}
+
+
+/* header_css */

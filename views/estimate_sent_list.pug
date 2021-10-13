@@ -1,18 +1,33 @@
 extends layout 
-
+block header 
+  include back_header.pug
 block content
-  h1= title 
+  //- h1= title 
 
   //- pre= results
 
-  ul
-    each estimate_sent in estimate_responses
-      li
-        a(href="/estimate/sent/" + estimate_sent._id)= estimate_sent.estimate_request.platform[0].name
-        |  (#{estimate_sent.estimate_request.user.username})
-        if (estimate_sent.estimate_request.count < 3)
-          span  견적요청중
-        else 
-          span  견적요청완료
+  //- ul
+  //-   each estimate_sent in estimate_responses
+  //-     li
+  //-       a(href="/estimate/sent/" + estimate_sent._id)= estimate_sent.estimate_request.platform[0].name
+  //-       |  (#{estimate_sent.estimate_request.user.username})
+  //-       if (estimate_sent.estimate_request.count < 3)
+  //-         span  견적요청중
+  //-       else 
+  //-         span  견적요청완료
 
   //- pre= estimate_responses
+
+  .container 
+    ul.estimate_sent_list_wrap
+      each estimate_sent in estimate_responses
+        li
+          a(href="/estimate/sent/" + estimate_sent._id)
+            .estimate_sent_con_box.clearfix
+              span.estimate_sent_list_platform #{estimate_sent. estimate_request.platform[0].name}
+              span.estimate_sent_list_username 사용자명 : #{estimate_sent.estimate_request.user.username}
+              if (estimate_sent.estimate_request.count < 3)
+                span.estimate_sent_list_state_i.estimate_sent_list_state  견적요청중
+              else 
+                span.estimate_sent_list_state_f.estimate_sent_list_state  견적요청완료
+            p.estimate_sent_list_reg_date 견적요청일자 : #{estimate_sent.reg_date.getFullYear()}.#{estimate_sent.reg_date.getMonth() +1}.#{estimate_sent.reg_date.getDate()}

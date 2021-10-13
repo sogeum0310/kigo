@@ -2,20 +2,25 @@ doctype html
 html
   head
     title= title
+    link(rel='stylesheet', href='/stylesheets/reset.css')
+    link(rel='stylesheet', href='/stylesheets/font-awesome/css/font-awesome.min.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/stylesheets/admin.css')
   body
-
-    block nav 
-      a(href="/admin") home / 
-      a(href="/admin/user/personal/list") 일반회원 / 
-      a(href="/admin/user/business/list") 기업회원 / 
-      a(href="/admin/estimate/request/list") 견적서 목록 / 
-      a(href="/admin/estimate/response/list") response /  
-      a(href="/admin/notice/list") 공지 / 
-      a(href="/admin/faq/list") 자주묻는 질문 / 
-      a(href="/admin/event/list") 이벤트  / 
-      a(href="/admin/qna/list") 1:1 문의 / 
-      a(href="/admin/message/list") 의견 /  
-      a(href="/admin/mypage") mypage 
-
-    block content
+    .admin_container
+      .admin_left_aside
+        block nav 
+          nav.admin_nav.clearfix 
+            a(href="/admin") home
+            a(href="/admin/user/personal/list") 일반회원
+            a(href="/admin/user/business/list") 기업회원
+            a(href="/admin/estimate/request/list") 견적서 목록
+            //- a(href="/admin/estimate/response/list") response
+            a(href="/admin/notice/list") 공지
+            a(href="/admin/faq/list") 자주묻는 질문
+            a(href="/admin/event/list") 이벤트
+            a(href="/admin/qna/list") 1:1 문의
+            a(href="/admin/message/list") 의견
+            a(href="/admin/mypage") 마이페이지
+      .admin_content_area
+        block content

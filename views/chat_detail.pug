@@ -1,22 +1,72 @@
 extends layout 
-
+block header 
+  include back_header.pug
 block content 
-  h1= title
+  //- h1= title
 
-  div(style="background: whitesmoke; height: 400px; overflow: auto")
-    ul#messages
+  //- div(style="background: whitesmoke; height: 400px; overflow: auto")
+  //-   ul#messages
+  //-     if (chat_contents)
+  //-       each chat_content in chat_contents 
+  //-         li #{chat_content.user.username} : #{chat_content.content}
+  //-   p#event
+
+  //- form#form
+  //-   input#input(type="text")
+  //-   button SEND
+
+  //- p 
+  //-   a(href="/chat/list") back 
+
+  //- script(src="/socket.io/socket.io.js")
+  //- script.
+  //-   var socket = io()
+  //-   var messages = document.getElementById('messages')
+  //-   var form = document.getElementById('form')
+  //-   var input = document.getElementById('input')
+  //-   var user = JSON.parse('!{user}')
+  //-   var room = '!{room}'
+
+  //-   socket.emit('join', room)
+
+  //-   form.addEventListener('submit', function (e) {
+  //-     e.preventDefault()
+  //-     if (input.value) {
+  //-       var message = { user: user, content: input.value }
+  //-       socket.emit('chat message', room, message)
+  //-       input.value = ''
+  //-     }
+  //-   })
+
+  //-   socket.on('chat message', function (msg) {
+  //-     console.log(msg)
+  //-     var item = document.createElement('li')
+  //-     item.textContent = msg.user.username + ' : ' + msg.content
+  //-     messages.appendChild(item)
+  //-   })
+
+
+  //- p.go_chat_list 
+  //-   a(href='/chat/list')
+  //-     i.fa.fa-bars(aria-hidden='true')
+
+  div.chat_detail_wrap#chat_detail_wrap
+    ul#messages.chat_detail_ul
       if (chat_contents)
         each chat_content in chat_contents 
-          li #{chat_content.user.username} : #{chat_content.content}
-    p#event
+          if (chat_content.user._id==JSON.parse(user)._id)
+            li.chat_me 
+              span.chat_content #{chat_content.content}
+              //- span.chat_username #{chat_content.user.username}
+          else 
+            li.chat_you 
+             span.chat_username #{chat_content.user.username}
+             span.chat_content #{chat_content.content}
 
   form#form
-    input#input(type="text")
-    button SEND
+    input#input.send_chat_input(type="text")
+    button.send_chat_btn 보내기
 
-  p 
-    a(href="/chat/list") back / 
-    a(href="javascript:void(0)" onclick="outRoom()") out 
 
   script(src="/socket.io/socket.io.js")
   script.
@@ -28,10 +78,6 @@ block content
     var room = '!{room}'
 
     socket.emit('join', room)
-
-    function outRoom() {
-      socket.emit('out', room)
-    }
 
     form.addEventListener('submit', function (e) {
       e.preventDefault()
@@ -45,6 +91,13 @@ block content
     socket.on('chat message', function (msg) {
       console.log(msg)
       var item = document.createElement('li')
+
+      if (user._id===msg.me) {
+        item.style.color = 'red'
+      }
+
       item.textContent = msg.user.username + ' : ' + msg.content
       messages.appendChild(item)
     })
+block scripts 
+  script(src='/javascript/chat_overflow.js')

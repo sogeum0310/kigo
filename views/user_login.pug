@@ -1,27 +1,33 @@
 extends layout 
-
+block header 
+  include menu_header.pug
 block content
-  form(action="" method="POST") 
-    h1= title
-    input(type="text", name="username")
-    br
-    input(type="text", name="password")
-    br
-    button(type="submit")  confirm
-    div.form-group
-      label(for="") user 
-      input(type="radio", name="login_type", value="personal", checked) 
-      label(for="") company 
-      input(type="radio", name="login_type", value="business") 
+  .container
+    //- img.login_logo(src="/img/login_logo.png", alt="")
+    form(action="", method="POST", autocomplete="off") 
+      //- h1= title 
+      input.login_username(type="text", name="username", placeholder='아이디')
+      br
+      input.login_password(type="text", name="password", placeholder='비밀번호')
+      br
+      button.login_btn(type="submit") LOGIN
 
-              
-  if errors 
-    ul 
-      for error in errors 
-        li= error
-      
-  p 
-    a(href="/signup/option") Sign up 
+      div.form-group.login_type_check.clearfix
+        div
+          input#type_user(type="radio", name="login_type", value="personal", checked) 
+          label(for="type_user") 일반사용자
+        div
+          input#type_business(type="radio", name="login_type", value="business")
+          label(for="type_business") 광고업체, 인플루언서 
 
-  p 
-    a(href="/user/lostpassword") Lost password? 
+                
+    if errors 
+      ul.login_error 
+        for error in errors 
+          li= error
+        
+    p.join_btn 
+      a(href="/signup/option") 회원가입
+
+    p.lost_password_btn 
+      a(href="/user/lostpassword") 비밀번호 찾기

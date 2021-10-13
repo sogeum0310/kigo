@@ -18,9 +18,9 @@ const sendEmail = async (email, subject, text) => {
       text: text,
     });
 
-    console.log("email sent sucessfully");
+    console.log("등록된 이메일로 비밀번호 수정 링크를 발송했습니다");
   } catch (error) {
-      console.log(error, "email not sent");
+      console.log(error, "error: email not sent");
   } 
 }
 

@@ -1,37 +1,85 @@
 doctype html
 html
   head
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     title= title
+    link(rel='stylesheet', href='/stylesheets/reset.css')
+    link(rel='stylesheet', href='/stylesheets/font-awesome/css/font-awesome.min.css')
+    link(rel='stylesheet', href='/stylesheets/navi.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
     
   body
-    nav 
-      a(href="/") 홈 / 
-      a(href="/company/about") 회사소개 / 
-      a(href="/company/notice/list") 공지사항 / 
-      a(href="/login") 회원가입 및 로그인 / 
-      a(href="/company/guide") 이용방법 / 
-      a(href="/company/faq/list") 자주묻는질문 / 
-      a(href="/company/event/list") 키고이벤트 / 
-      a(href="/company/share") 친구에게 앱 추천하기 / 
-      a(href="/company/contact/list") 고객센터 / 
-      a(href="/test") test 
-    
-    div.wrap
-      block content
+    .page_wrap
+      //- nav 
+      //-   a(href="/") 홈 / 
+      //-   a(href="/company/about") 회사소개 / 
+      //-   a(href="/company/notice/list") 공지사항 / 
+      //-   a(href="/login") 회원가입 및 로그인 / 
+      //-   a(href="/company/guide") 이용방법 / 
+      //-   //- a(href="/company/faq/list") 자주묻는질문 / 
+      //-   a(href="/company/faq/personal") 자주묻는질문 / 
+      //-   //- 자주묻는질문 페이지분리
+      //-   a(href="/company/event/list") 키고이벤트 / 
+      //-   a(href="/company/share") 친구에게 앱 추천하기 / 
+      //-   a(href="/company/contact/list") 고객센터 / 
+      //-   a(href="/test") test 
 
-    footer 
-      if (user_global_account)
-        a(href="/") 홈 / 
-        if (user_global_account==='personal')
-          a(href="/estimate/request/form") 견적 요청하기 / 
-          a(href="/estimate/request/list") 받은 견적 / 
-        if (user_global_account==='business')
-          a(href="/estimate/received/list") 받은 견적요청 / 
-          a(href="/estimate/sent/list") 보낸 견적 / 
-        a(href="/chat/list") 채팅 / 
-        a(href="/mypage") 마이페이지 
-      else
-        h3 login first
+      block header
+      
+      div.wrap
+        block content
+
+      footer 
+        if (user_global_account)
+          ul.foot_icon_wrap.clearfix 
+          
+            //- a(href="/") 홈 / 
+            li 
+              a(href="/")
+                img(src='/img/foot_icon01.svg' alt='')
+                p 홈
+            if (user_global_account==='personal')
+
+              //- a(href="/estimate/request/form") 견적 요청하기 / 
+              //- a(href="/estimate/request/list") 받은 견적 / 
+              li 
+                a(href="/estimate/request/form")
+                  img(src='/img/foot_icon03.svg' alt='')
+                  p 견적 요청
+              li 
+                a(href="/estimate/request/list")
+                  img(src='/img/foot_icon04.svg' alt='')
+                  p 받은 견적
+            if (user_global_account==='business')
+
+              //- a(href="/estimate/received/list") 받은 견적요청 / 
+              //- a(href="/estimate/sent/list") 보낸 견적 / 
+              li 
+                a(href="/estimate/received/list")
+                  img(src='/img/foot_icon04.svg' alt='')
+                  p 받은 견적요청
+              li 
+                a(href="/estimate/sent/list")
+                  img(src='/img/foot_icon03.svg' alt='')
+                  p 보낸 견적
+
+            //- a(href="/chat/list") 채팅 / 
+            //- a(href="/mypage") 마이페이지 
+            li 
+              a(href="/chat/list")
+                img(src='/img/foot_icon06.svg' alt='')
+                p 채팅
+            li 
+              a(href="/mypage")
+                img(src='/img/foot_icon02.svg' alt='')
+                p 마이페이지
+        else
+          ul.foot_icon_wrap.clearfix 
+            h3 
+              a(href="/login") 회원가입 및 로그인
+    script(src='/javascript/jquery-1.12.4.min.js')
+    script(src='/javascript/navi.js')
+    script(src='/javascript/back.js')
+    block scripts 
       
 

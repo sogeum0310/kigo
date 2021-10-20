@@ -23,5 +23,8 @@ block content
             p.mypage_qna_answer 답변 : #{qna.qna_answer.content}
           else 
             p.mypage_qna_answer 대기중입니다
+      p.no_chat_list_text 질문목록이 없습니다.
 
+block scripts
+  script(src='/javascript/no_chat_list.js')
     

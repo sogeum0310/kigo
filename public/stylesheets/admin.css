@@ -1,5 +1,4 @@
 body {
-    padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   }
   
@@ -20,28 +19,48 @@ body {
   }
   .admin_left_aside{
     display: inline-block;
-    width: 150px;
+    width: 280px;
     vertical-align: top;
   }
   .admin_content_area{
     display: inline-block;
     padding-left: 50px;
+    padding-top: 50px;
+    padding-right: 50px;
     min-width: 1000px;
-    width: calc(100% - 150px);
+    width: calc(100% - 280px);
     vertical-align: top;
   }
 
   .admin_nav{
-    border: 1px solid #ccc;
     border-bottom: none;
+    background: #22282c;
+    height: 100vh;
   }
   .admin_nav a{
     width: 100%;
-    padding: 10px 0;
+    padding: 30px 0;
+    padding-left: 30px;
     color: #000;
-    text-align: center;
+    text-align: left;
     display: block;
-    border-bottom: 1px solid #ccc;
+    color: rgba(255,255,255,0.97);
+    font-weight: bold;
+    transition: all 0.3s;
+  }
+  .admin_nav a i{
+    font-size: 20px;
+    margin-right: 5px;
+  }
+  .admin_nav a:hover{
+    background: #494d4f;
+    color: rgb(255,255,255);
+  }
+  .adm_login_box{
+    max-width: 767px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
   }
 
   /* 로그인 */
@@ -50,23 +69,44 @@ body {
     font-size: 20px;
     font-weight: bold;
   }
-
+  .adm_login_logo{
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 100px;
+  }
   /* index */
   .admin_stat{
     min-width: 1000px;
     width: 100%;
     height: auto;
-    border: 1px solid #ccc;
-    border-bottom: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    overflow: hidden;
   }
   .admin_stat tr{
     border-bottom: 1px solid #ccc;
   }
+  .admin_stat tr:last-child{
+    /* border-bottom: #0099e8; */
+  }
+  .admin_stat tr:hover td{
+    color: #4B37FF;
+    font-weight: bold;
+  }
+  .admin_stat tr:first-child:hover td{
+    color: #fff;
+
+  }
+  .member_detail_stat tr:first-child:hover td:last-child{
+    color: #000;
+  }
+  .admin_stat tr:last-child{
+  }
   .admin_stat tr th{
     font-weight: bold;
-    font-size: 14px;
-    background: #e1deff;
-    color: #000;
+    font-size: 16px;
+    background: #0099e8;
+    color: #fff;
     font-weight: bold;
     border-right: 1px solid rgba(255,255,255,0.4);
   }
@@ -75,15 +115,17 @@ body {
   }
   .admin_stat tr td,  .admin_stat tr th{
     text-align: center;
-    padding: 10px 0;
+    padding: 15px 0;
   }
   .admin_stat tr td{
-    border-right: 1px solid #ccc;
+    /* border-right: 1px solid #ccc; */
   }
   .admin_stat tr td:last-child{
-    border-right: none;
+    /* border-right: none; */
   }
-
+  .admin_stat tr:nth-child(even){
+    background: #f7f7f7;
+  }
 
   .admin_member_stat tr td{
     width: 25%;
@@ -126,6 +168,7 @@ body {
     float: left;
     width: 25%;
     text-align: center;
+
   }
   .admin_request_list_wrap li a{
     display: block;
@@ -133,21 +176,30 @@ body {
     border: 1px solid #ccc;
     color: #000;
     margin: 0 5px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.3);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.3);
+    box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.3);
   }
   .admin_notice_list_top{
-    background: #f7f7f7;
+    background: #0099e8;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
   }
   .admin_notice_list_top p{
     font-weight: bold;
+    color: #fff;
   }
   .admin_notice_list_top p, .admin_notice_list_box a, .admin_notice_list_box p{
     display: inline-block;
-    padding: 10px;
+    padding: 15px;
+  }
+  .admin_notice_list_box:hover a, .admin_notice_list_box:hover p{
+    color: #4B37FF;
+    font-weight: bold;
   }
   .admin_notice_list_subject, .admin_notice_list_box a{
     width: 70%;
-    border-right: 1px solid #ccc;
-    border-left: 1px solid #ccc;
     padding-left: 20px;
     padding-right: 20px;
   }
@@ -171,6 +223,9 @@ body {
     width: 100%;
     height: auto;
     position: relative;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    overflow: hidden;
   }
   .admin_notice_list_wrap li{
     font-size: 16px;
@@ -184,6 +239,12 @@ body {
   .admin_notice_list_wrap li a{
     color: #000;
   }
+  .admin_notice_list_wrap li:nth-child(even){
+    background: #f7f7f7;
+  }
+  /* .admin_notice_list_wrap li:nth-child(even) p, .admin_notice_list_wrap li:nth-child(even) a{
+    color: #0099e8;
+  } */
   .admin_write_btn{
     color: #fff;
     background: #4B37FF;
@@ -202,7 +263,7 @@ body {
     font-weight: bold;
   }
   .admin_container{
-    min-width: 1200px;
+    min-width: 1300px;
   }
 
 
@@ -288,6 +349,9 @@ body {
     text-align: center;
     margin-top: 15px;
     display: inline-block;
+  }
+  .admin_nav img{
+    max-width: ;
   }
 
   /* 공지사항 등 */

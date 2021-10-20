@@ -8,7 +8,7 @@ router.post('/login', admin_controller.login_post)
 router.get('/mypage', admin_controller.mypage)
 router.get('/logout', admin_controller.logout)
 
-router.get('/', admin_controller.index);
+router.get('/', admin_controller.index)
 router.get('/success', admin_controller.success)
 
 router.get('/user/personal/list', admin_controller.user_personal_list)

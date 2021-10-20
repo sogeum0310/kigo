@@ -47,6 +47,11 @@ body {
 img{
   max-width: 100%;
 }
+.signup_txt{
+  font-size: 12px;
+  font-weight: 400;
+  color: #999;
+}
 
 /* a {
   color: #00B7FF;
@@ -575,7 +580,7 @@ img{
 .full_input{
   width: 100%;
 }
-.signup_btn, .submit_btn, .submit_btn02{
+.signup_btn, .submit_btn, .submit_btn2{
   width: 100%;
   height: auto;
   padding: 8px 0;
@@ -977,25 +982,45 @@ img{
 .estimate_request_detail_stat h3{
   font-size: 14px;
   font-weight: bold;
-  display: inline-block;
-  width: 50%;
-  vertical-align: top;
+  /* display: inline-block; */
+  /* width: 50%; */
+  /* vertical-align: top; */
 }
 .estimate_request_detail_stat p{
   font-size: 14px;
   font-weight: 400;
-  display: inline-block;
-  width: 50%;
+  /* display: inline-block; */
+  /* width: 50%; */
 }
-.estimate_request_detail_stat.estimate_request_detail_stat02 h3, .estimate_request_detail_stat.estimate_request_detail_stat02 p{
+/* .estimate_request_detail_stat.estimate_request_detail_stat02 h3, .estimate_request_detail_stat.estimate_request_detail_stat02 p{
   width: 33.33%;
+} */
+.estimate_request_detail_itembox, .estimate_request_detail_costbox, .estimate_request_detail_notebox {
+  width: 33.33%;
+  display: inline-block;
+  vertical-align: top;
 }
-.estimate_request_detail_stat.estimate_request_detail_stat p:nth-child(2){
+.estimate_request_detail_costbox{
+  text-align: center;
+}
+.estimate_request_detail_itembox{
+  text-align: left;
+}
+.estimate_request_detail_notebox{
+  text-align: right;
+}
+.estimate_request_detail_itembox h3, .estimate_request_detail_costbox p, .estimate_request_detail_notebox p{
+  height: 40px;
+  overflow-y: auto;
+}
+
+
+/* .estimate_request_detail_stat.estimate_request_detail_stat p:nth-child(2){
   text-align: center;  
 }
 .estimate_request_detail_stat.estimate_request_detail_stat p:last-child{
   text-align: right;
-}
+} */
 .estimate_request_detail_stat p .estimate_request_checked{
   position: relative;
   display: inline-block;
@@ -1067,14 +1092,15 @@ img{
 
 .chat_detail_wrap{
   width: 100%;
-  height: auto;
   position: relative;
   padding: 20px;
   background: #EEF5FB;
-  height: 400px;
+  height: calc(100vh - 64px);
   overflow: auto;
   border-radius: 10px;
   margin-bottom: 10px;
+  padding-bottom: 50px;
+
 }
 .chat_detail_ul li{
   font-size: 14px;
@@ -1109,7 +1135,14 @@ img{
   font-weight: 400;
 
 }
-
+@media(max-width:767px){
+  .estimate_request_detail_stat h3, .estimate_request_detail_stat p{
+    font-size: 12px;
+  }
+  /* .chat_detail_wrap{
+    height: 50vh;
+  } */
+}
 
 /* 채팅 디테일 */
 
@@ -1638,7 +1671,7 @@ img{
 
 /* 0813 서버닫히고 추가할부분 */
 
-.chat_me .chat_username, .chat_you .chat_username{
+.chat_me span, .chat_you span{
   font-size: 20px;
   font-weight: 400;
   margin-bottom: 10px;
@@ -1647,19 +1680,62 @@ img{
 .chat_me{
   text-align: right;
 }
-.chat_me .chat_username{
+.chat_me span{
   color: #4B37FF;
 }
-.chat_you .chat_username{
+.chat_you span{
   color: #a00;
   margin-right: 10px;
 }
-.chat_you .chat_content{
+.chat_you div{
   margin-left: 10px;
 }
-.chat_content{
+.chat_you div, .chat_me div{
   background: #fff;
   border-radius: 10px;
   padding: 10px;
   display: inline-block;
+}
+.chat_me span{
+  display: none;
+}
+
+.no_chat_list_text, .no_recevied_list_text{
+  display: none;
+}
+.no_chat_list_text.on, .no_recevied_list_text.on{
+  display: block;
+}
+.received_plus_btn{
+  background: #fff;
+  display: block;
+  text-align: center;
+  border: 1px solid #ccc;
+  outline: none;
+  max-width: 100px;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+  
+}
+.reset_password_page_wrap .form-group{
+  margin-bottom: 10px;
+}
+.reset_password_page_wrap .form-group label{
+  font-size: 18px;
+  font-weight: 400;
+  display: block;
+  margin-bottom: 5px;
+}
+.kigo_imgbox {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.send_chat_form{
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
 }

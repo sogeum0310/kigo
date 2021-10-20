@@ -20,7 +20,6 @@ app.io = require('socket.io')()
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://sogeum0310:hyun0831**@ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:27017/kigo', { useNewUrlParser: true, useUnifiedTopology: true });
 
-// https://github.com/sogeum0310/
 
 app.io.on('connection', (socket) => {
   socket.on('join', (room) => {
@@ -35,9 +34,10 @@ app.io.on('connection', (socket) => {
     }) 
     message.save()
     msg.me = msg.user._id
+
     app.io.to(room).emit('chat message', msg);
   });
-  socket.on('disconnect', function () {
+  socket.on('disconnect', function () { 
     console.log('disconnect!')
   })
 })
@@ -94,11 +94,7 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
 
-  if (req.url.match(/^\/admin\//)) {
-    res.render('admin/error');
-  } else {
-    res.render('error');
-  }
+  res.render('error');
 });
 
 

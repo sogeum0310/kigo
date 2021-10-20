@@ -3,62 +3,77 @@ const async = require('async')
 const { body, checkSchema, validationResult } = require('express-validator')
 const crypto = require('crypto')
 const sendEmail = require('../utils/sendEmail')
-const validCheck = require('../utils/valid')
 
 
 exports.login_get = (req, res, next) => {
-  if (req.session.user) {
-    res.render('success', { title: '안녕하세요! ' + req.session.user.username, go_to: '/' })
-  } else {
-    res.render('user_login', { title: '로그인' })
+  try {
+    if (req.session.user) {
+      res.render('success', { title: '안녕하세요! ' + req.session.user.username, go_to: '/' })
+    } else {
+      res.render('user_login', { title: '로그인' })
+    }
+  } catch (error) {
+    res.render('error', { message: '', error: error })
   }
 }
 
 exports.login_post = async (req, res, next) => {
-  if (req.body.login_type=='personal') {
-    var user = await Model.User.findOne({ username: req.body.username, account: 'personal' }).exec()
-    loginProcess(user)
-  }
-  if (req.body.login_type=='business') {
-    var user = await Model.User.findOne({ username: req.body.username, account: 'business' }).exec()
-    loginProcess(user)
-  }
-  function loginProcess(user) {
-    var errors = []
-    var error
+  try {
+    if (req.body.login_type=='personal') {
+      var user = await Model.User.findOne({ username: req.body.username, account: 'personal' }).exec()
+      loginProcess(user)
+    }
+    if (req.body.login_type=='business') {
+      var user = await Model.User.findOne({ username: req.body.username, account: 'business' }).exec()
+      loginProcess(user)
+    }
+    function loginProcess(user) {
+      var errors = []
+      var error
 
-    if (!user) { 
-      error = '아이디와 비밀번호를 확인하세요'
-      errors.push(error)
-    } else {
-      if (req.body.password != user.password) {
+      if (!user) { 
         error = '아이디와 비밀번호를 확인하세요'
         errors.push(error)
-      } 
-      if (user.auth===0) {
-        error = '심사 진행중입니다'
-        errors.push(error)
+      } else {
+        if (req.body.password != user.password) {
+          error = '아이디와 비밀번호를 확인하세요'
+          errors.push(error)
+        } 
+        if (user.auth===0) {
+          error = '심사 진행중입니다'
+          errors.push(error)
+        }
       }
-    }
-    if (errors.length>0) {
-      return res.render('user_login', { title: '로그인', errors: errors })
-    }
+      if (errors.length>0) {
+        return res.render('user_login', { title: '로그인', errors: errors })
+      }
 
-    req.session.user = user
-    res.redirect('/login')
+      req.session.user = user
+      res.redirect('/login')
+    }
+  } catch (error) {
+    res.render('error', { message: '', error: error })
   }
 }
 
 exports.logout = (req, res, next) => {
-  req.session.destroy()
+  try {
+    req.session.destroy()
 
-  var message = '로그아웃되었습니다'
-  var url = '/'
-  res.redirect(`/success/?message=${message}&go_to=${url}`)
+    var message = '로그아웃되었습니다'
+    var url = '/'
+    res.redirect(`/success/?message=${message}&go_to=${url}`)
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.lost_password_get = async (req, res, next ) => {
-  res.render('user_lost_password', { title: '비밀번호 찾기' })
+  try {
+    res.render('user_lost_password', { title: '비밀번호 찾기' })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.lost_password_post = async (req, res, next) => {
@@ -81,7 +96,11 @@ exports.lost_password_post = async (req, res, next) => {
 }
 
 exports.user_reset_password_get = async (req, res, next) => {
-  res.render('user_reset_password', { title: '비밀번호 재설정' })
+  try {
+    res.render('user_reset_password', { title: '비밀번호 재설정' })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.user_reset_password_post = async (req, res, next) => {
@@ -93,6 +112,13 @@ exports.user_reset_password_post = async (req, res, next) => {
       token: req.params.token,
     });
     if (!token) return res.status(400).send("유효하지 않거나 만료된 링크입니다");
+    
+    if (!req.body.password.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)) {
+      return res.send('비밀번호는 최소 1개 이상의 영어 대문자 및 소문자, 숫자가 있어야합니다. 길이는 최소 8자 이상이어야 합니다')
+    }
+    if (req.body.password!==req.body.password_confirm) {
+      return res.send('비밀번호가 일치하지 않습니다')
+    }
     user.password = req.body.password;
     await user.save();
     await token.delete();
@@ -104,272 +130,311 @@ exports.user_reset_password_post = async (req, res, next) => {
 }
 
 exports.signup_option = async (req, res, next) => {
-  res.render('user_signup_option', { title: '회원가입' })
+  try {
+    res.render('user_signup_option', { title: '회원가입' })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
+
 exports.signup_personal_get = async (req, res, next) => {
-  var estimate_items = await Model.EstimateItem.find().exec()
-  var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
-  res.render('user_signup_personal', { title: '일반사용자 회원가입', cities: cities,})
+  try {
+    var estimate_items = await Model.EstimateItem.find().exec()
+    var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
+    res.render('user_signup_personal', { title: '일반사용자 회원가입', cities: cities,})
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.signup_personal_post = async (req, res, next) => {
-  var user = await Model.User.findOne({ username: req.body.username })
-  var errors = validCheck(req.body.username, user, req.body.password, req.body.password_confirm, req.body.email)
-
-  if (errors.length>0) {
-    var estimate_items = await Model.EstimateItem.find().exec()
-    var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
-    var user_personal = {
-      username: req.body.username,
+  try {
+    var user_personal = new Model.User({
+      username : req.body.username,
+      password : req.body.password,
       name: req.body.name,
       gender: req.body.gender,
-      date_of_birth_yyyy_mm_dd: req.body.birth_date,
+      date_of_birth: req.body.birth_date,
+      city: req.body.city,
       phone: req.body.phone,
       email: req.body.email,
-    }
-    return res.render('user_signup_personal', { title: '일반사용자 회원가입', user_personal: user_personal, cities: cities, errors: errors })
+      auth: 1,
+      account: 'personal'
+    })
+    await user_personal.save()
+
+    var message = '회원가입이 완료되었습니다'
+    var url = '/'
+    res.redirect(`/success/?message=${message}&go_to=${url}`)
+  } catch (error) {
+    res.render('error', { message: '', error: error })
   }
-
-  var user_personal = new Model.User({
-    username : req.body.username,
-    password : req.body.password,
-    name: req.body.name,
-    gender: req.body.gender,
-    date_of_birth: req.body.birth_date,
-    city: req.body.city,
-    phone: req.body.phone,
-    email: req.body.email,
-    auth: 1,
-    account: 'personal'
-  })
-  await user_personal.save()
-
-  var message = 'Signup success!'
-  var url = '/'
-  res.redirect(`/success/?message=${message}&go_to=${url}`)
 }
 
 exports.signup_business_get = async (req, res, next) => {
-  var estimate_items = await Model.EstimateItem.find().exec()
-  var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
-  var platforms = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[0]._id }).exec()
-  res.render('user_signup_business', { title: '광고업체 회원가입',cities: cities, platforms: platforms, })
-}
-exports.signup_business_post = async (req, res, next) => {
-  var user = await Model.User.findOne({ username: req.body.username })
-  var errors = validCheck(req.body.username, user, req.body.password, req.body.password_confirm, req.body.email)
-
-  if (errors.length>0) {
+  try {
     var estimate_items = await Model.EstimateItem.find().exec()
     var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
     var platforms = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[0]._id }).exec()
+    res.render('user_signup_business', { title: '광고업체 회원가입',cities: cities, platforms: platforms, })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
+}
 
-    var user_business = {
-      username: req.body.username,
+exports.signup_business_post = async (req, res, next) => {
+  try {
+    var user_business = new Model.User({
+      username : req.body.username,
+      password : req.body.password,
       name: req.body.name,
       phone: req.body.phone,
       email: req.body.email,
       about: req.body.about,
       city: req.body.city,
-      platform: req.body.platform
-    }
+      platform: req.body.platform,
+      auth: 0,
+      account: 'business'
+    })
 
-    for (platform of platforms) {
-      if (req.body.platform.includes(platform._id.toString())) {
-        platform.checked='true'
-      }
-    }
+    await user_business.save()
     
-    return res.render('user_signup_business', { title: '광고업체 회원가입', user_business: user_business, cities: cities, platforms: platforms, errors: errors })
+    if (req.files) {
+      portfolio = req.files.portfolio
+      var new_file_name = portfolio.md5 + '.' + portfolio.name.split('.').pop()
+      upload_path = 'files/' + new_file_name
+      portfolio.mv(upload_path)
+
+      var file = new Model.File({
+        parent: user_business._id,
+        name: portfolio.name,
+        md_name: new_file_name
+      })
+      await file.save()
+    }
+
+    var message = '회원가입 신청이 완료되었습니다'
+    var url = '/'
+    res.redirect(`/success/?message=${message}&go_to=${url}`)
+  } catch (error) {
+    res.render('error', { message: '', error: error })
   }
-
-  var user_business = new Model.User({
-    username : req.body.username,
-    password : req.body.password,
-    name: req.body.name,
-    phone: req.body.phone,
-    email: req.body.email,
-    about: req.body.about,
-    city: req.body.city,
-    platform: req.body.platform,
-    auth: 0,
-    account: 'business'
-  })
-
-  await user_business.save()
-  
-  portfolio = req.files.portfolio
-  var new_file_name = portfolio.md5 + '.' + portfolio.name.split('.').pop()
-  upload_path = 'files/' + new_file_name
-  portfolio.mv(upload_path)
-
-  var file = new Model.File({
-    parent: user_business._id,
-    name: portfolio.name,
-    md_name: new_file_name
-  })
-  await file.save()
-  
-  var message = '회원가입 신청이 완료되었습니다'
-  var url = '/'
-  res.redirect(`/success/?message=${message}&go_to=${url}`)
 }
 
 exports.mypage = async (req, res, next) => {
-  res.render('user_mypage', { title: 'My page', user: req.session.user })
+  try {
+    res.render('user_mypage', { title: 'My page', user: req.session.user })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.account_access_get = async (req, res, next) => {
-  res.render('user_account_access', { title: '비밀번호 확인' })
+  try {
+    res.render('user_account_access', { title: '비밀번호 확인' })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.account_access_post = async (req, res, next) => {
-  var user = await Model.User.findById(req.session.user._id)
-  if (user.password!==req.body.password) {
-    var error = '비밀번호를 확인하세요'
-    return res.render('user_account_access', { title: '비밀번호 확인', error: error })
-  }
-  if (user.account==='personal') {
-    res.redirect('/mypage/personal/account')
-  } else {
-    res.redirect('/mypage/business/account')
+  try {
+    var user = await Model.User.findById(req.session.user._id)
+    if (user.password!==req.body.password) {
+      var error = '비밀번호를 확인하세요'
+      return res.render('user_account_access', { title: '비밀번호 확인', error: error })
+    }
+    if (user.account==='personal') {
+      res.redirect('/mypage/personal/account')
+    } else {
+      res.redirect('/mypage/business/account')
+    }
+  } catch (error) {
+    res.render('error', { message: '', error: error })
   }
 }
 
 exports.mypage_personal_access_get = async (req, res, next) => {
-  res.render('user_account_access', { title: '비밀번호 확인' })
+  try {
+    res.render('user_account_access', { title: '비밀번호 확인' })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.mypage_personal_access_post = async (req, res, next) => {
-  var user = await Model.User.findById(req.session.user._id)
+  try {
+    var user = await Model.User.findById(req.session.user._id)
 
-  if (user.password!==req.body.password) {
-    var error = '비밀번호를 확인하세요'
-    return res.render('user_account_access', { title: '비밀번호 확인', error: error })
+    if (user.password!==req.body.password) {
+      var error = '비밀번호를 확인하세요'
+      return res.render('user_account_access', { title: '비밀번호 확인', error: error })
+    }
+
+    var estimate_items = await Model.EstimateItem.find().exec()
+    var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
+    var user_personal = await Model.User.findById(req.session.user._id).exec()
+    res.render('user_signup_personal', { title: '나의 정보', user_personal: user_personal, cities: cities, update: true })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
   }
-
-  var estimate_items = await Model.EstimateItem.find().exec()
-  var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
-  var user_personal = await Model.User.findById(req.session.user._id).exec()
-  res.render('user_signup_personal', { title: '나의 정보', user_personal: user_personal, cities: cities, })
 }
 
 exports.mypage_personal_account = async (req, res, next) => {
-  var user = await Model.User.findOne({ username: req.body.username })
-  var errors = validCheck(req.body.username, '', req.body.password, req.body.password_confirm, req.body.email)
+  try {
+    var user_personal = new Model.User({
+      username: req.body.username,
+      password: req.body.password,
+      name: req.body.name,
+      gender: req.body.gender,
+      date_of_birth: req.body.birth_date,
+      city: req.body.city,
+      phone: req.body.phone,
+      email: req.body.email,
+      _id: req.session.user._id
+    })
+    await Model.User.findByIdAndUpdate(req.session.user._id, user_personal, {})
 
-  if (errors.length>0) {
-    var estimate_items = await Model.EstimateItem.find().exec()
-    var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
-    return res.render('user_signup_personal', { title: '나의 정보', user_personal: user, cities: cities, errors: errors })
+    var message = '정보수정이 완료되었습니다'
+    var url = '/mypage'
+    res.redirect(`/success/?message=${message}&go_to=${url}`)
+  } catch (error) {
+    res.render('error', { message: '', error: error })
   }
-
-  var user_personal = new Model.User({
-    username: req.body.username,
-    password: req.body.password,
-    name: req.body.name,
-    gender: req.body.gender,
-    date_of_birth: req.body.birth_date,
-    city: req.body.city,
-    phone: req.body.phone,
-    email: req.body.email,
-    _id: user._id
-  })
-  await Model.User.findByIdAndUpdate(user._id, user_personal, {})
-
-  var message = '정보수정이 완료되었습니다'
-  var url = '/mypage'
-  res.redirect(`/success/?message=${message}&go_to=${url}`)
 }
 
 exports.mypage_business_access_get = async (req, res, next) => {
-  res.render('user_account_access', { title: '비밀번호 확인' })
+  try {
+    res.render('user_account_access', { title: '비밀번호 확인' })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.mypage_business_access_post = async (req, res, next) => {
-  var user = await Model.User.findById(req.session.user._id)
+  try {
+    var user = await Model.User.findById(req.session.user._id)
 
-  if (user.password!==req.body.password) {
-    var error = '비밀번호를 확인하세요'
-    return res.render('user_account_access', { title: '비밀번호 확인', error: error })
-  }
-
-  var estimate_items = await Model.EstimateItem.find().exec()
-  var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
-  var platforms = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[0]._id }).exec()
-  var file = await Model.File.findOne({ parent: req.session.user._id }).exec()
-  var user_business = await Model.User.findById(req.session.user._id).exec()
-
-  for (var i=0; i<platforms.length; i++) {
-    for (var j=0; j<user_business.platform.length; j++) {
-      if (platforms[i]._id.toString()===user_business.platform[j]._id.toString()) {
-        platforms[i].checked='true'
-      }
+    if (user.password!==req.body.password) {
+      var error = '비밀번호를 확인하세요'
+      return res.render('user_account_access', { title: '비밀번호 확인', error: error })
     }
-  } 
-  res.render('user_signup_business', { title: '나의 정보', user_business: user_business, file: file, cities: cities, platforms: platforms, })
-}
 
-exports.mypage_business_account = async (req, res, next) => {
-  var user = await Model.User.findOne({ username: req.body.username })
-  var errors = validCheck(req.body.username, '', req.body.password, req.body.password_confirm, req.body.email)
-
-  if (errors.length>0) {
     var estimate_items = await Model.EstimateItem.find().exec()
     var cities = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[7]._id }).exec()
     var platforms = await Model.EstimateItemDetail.find({ estimate_item: estimate_items[0]._id }).exec()
-    var file = await Model.File.findOne({ parent: user._id }).exec()
+    var file = await Model.File.findOne({ parent: req.session.user._id }).sort([[ 'reg_date', 'descending' ]]).exec()
+    var user_business = await Model.User.findById(req.session.user._id).exec()
 
-    for (platform of platforms) {
-      if (user.platform.includes(platform._id)) {
-        platform.checked='true'
+    for (var i=0; i<platforms.length; i++) {
+      for (var j=0; j<user_business.platform.length; j++) {
+        if (platforms[i]._id.toString()===user_business.platform[j]._id.toString()) {
+          platforms[i].checked='true'
+        }
       }
+    } 
+    res.render('user_signup_business', { title: '나의 정보', user_business: user_business, file: file, cities: cities, platforms: platforms, update: true })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
+}
+
+exports.mypage_business_account = async (req, res, next) => {
+  try {
+    var user_business = new Model.User({
+      username : req.body.username,
+      password : req.body.password_confirm,
+      name: req.body.name,
+      phone: req.body.phone,
+      email: req.body.email,
+      about: req.body.about,
+      city: req.body.city,
+      platform: req.body.platform,
+      _id: req.session.user._id
+    })
+    await Model.User.findByIdAndUpdate(req.session.user._id, user_business, {}) 
+
+    if (req.files) {
+      portfolio = req.files.portfolio
+      var new_file_name = portfolio.md5 + '.' + portfolio.name.split('.').pop()
+      upload_path = 'files/' + new_file_name
+      portfolio.mv(upload_path)
+    
+      var file = new Model.File({
+        parent: req.session.user._id,
+        name: portfolio.name,
+        md_name: new_file_name
+      })
+      await file.save()
     }
 
-    return res.render('user_signup_business', { title: '나의 정보', user_business: user, file: file, cities: cities, platforms: platforms, errors: errors })
+    var message = '회원정보 수정이 완료되었습니다'
+    var url = '/mypage'
+    res.redirect(`/success/?message=${message}&go_to=${url}`)
+  } catch (error) {
+    res.render('error', { message: '', error: error })
   }
-
-  var user_business = new Model.User({
-    username : req.body.username,
-    password : req.body.password_confirm,
-    name: req.body.name,
-    phone: req.body.phone,
-    email: req.body.email,
-    about: req.body.about,
-    city: req.body.city,
-    platform: req.body.platform,
-    _id: user._id
-  })
-  await Model.User.findByIdAndUpdate(user._id, user_business, {}) 
-
-  if (req.files) {
-    portfolio = req.files.portfolio
-    var new_file_name = portfolio.md5 + '.' + portfolio.name.split('.').pop()
-    upload_path = 'files/' + new_file_name
-    portfolio.mv(upload_path)
-  
-    var file = new Model.File({
-      parent: user._id,
-      name: portfolio.name,
-      md_name: new_file_name
-    })
-    await file.save()
-  }
-
-  var message = '회원정보 수정이 완료되었습니다'
-  var url = '/mypage'
-  res.redirect(`/success/?message=${message}&go_to=${url}`)
 }
 
 exports.mypage_personal_review_list = async (req, res, next) => {
-  var review_list = await Model.Review.find({ user_personal: req.session.user._id })
-  res.render('mypage_personal_review_list', { title: '나의 리뷰', review_list: review_list })
+  try {
+    var review_list = await Model.Review.find({ user_personal: req.session.user._id })
+    res.render('mypage_personal_review_list', { title: '나의 리뷰', review_list: review_list })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.mypage_qna_list = async (req, res, next) => {
-  var qna_questions = await Model.QnaQuestion.find({ user: req.session.user._id }).exec()
-  for (qna_question of qna_questions) {
-    qna_question.qna_answer = await Model.QnaAnswer.findOne({ parent: qna_question._id }).exec()
+  try {
+    var qna_questions = await Model.QnaQuestion.find({ user: req.session.user._id }).exec()
+    for (qna_question of qna_questions) {
+      qna_question.qna_answer = await Model.QnaAnswer.findOne({ parent: qna_question._id }).exec()
+    }
+    res.render('mypage_qna_list', { title: '나의 Q&A', qna_list: qna_questions })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
   }
-  res.render('mypage_qna_list', { title: '나의 Q&A', qna_list: qna_questions })
+}
+
+exports.validity = async (req, res, next) => {
+  try {
+    var user = await Model.User.findOne({ username: req.body.username })
+    var email = await Model.User.findOne({ email: req.body.email })
+    var errors = []
+    var error
+
+    if (user && req.body.update===undefined) {
+      error = '이미 사용중인 아이디입니다'
+      errors.push(error)
+    }
+    if (!req.body.username.match(/[a-z0-9]{6,}/)) {
+      error = '아이디 생성 규칙을 따라주십시오'
+      errors.push(error)
+    }
+    if (!req.body.password.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)) {
+      error = '비밀번호 생성 규칙을 따라주십시오'
+      errors.push(error)
+    }
+    if (req.body.password!==req.body.password_confirm) {
+      error = '비밀번호가 일치하지 않습니다'
+      errors.push(error)
+    }
+    if (email && req.body.update===undefined) {
+      error = '이미 가입된 이메일입니다'
+      errors.push(error)
+    }
+    if (!req.body.email.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/)) {
+      error = '유효하지 않은 이메일입니다'
+      errors.push(error)
+    }
+
+    if (errors.length>0) {
+      res.send(errors)
+    } else {
+      res.send('success')
+    }
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }

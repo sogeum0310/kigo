@@ -25,7 +25,7 @@ block content
     tbody
         tr 
           th 
-            if(user.account == "business")
+            if (user.account == "business")
              span 회사이름
             else 
              span 이름
@@ -35,7 +35,7 @@ block content
           th 
            | 핸드폰번호
           td 
-           | #{user.phone}
+           | #{user.phone} 
         tr 
           th 
            | 이메일주소
@@ -63,8 +63,10 @@ block content
           td 
             if (user.file)
               a(href="/files/" + user.file.md_name , download) #{user.file.md_name} 다운로드
+
+  
   if (user.auth===0)
-    form(action="", method="POST") 
+    form(action="", method="POST", onsubmit="return confirm('승인하시겠습니까?');") 
       button.submit_btn(type="submit") 승인하기
   if(user.account == "business")
     h1.admin_detail_con_title 리뷰목록

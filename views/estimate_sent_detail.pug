@@ -57,17 +57,27 @@ block content
         |  #{estimate_response.reg_date.getFullYear()}.#{estimate_response.reg_date.getMonth() +1}.#{estimate_response.reg_date.getDate()}
       .estimate_request_detail_stat_wrap
         .estimate_request_detail_stat.estimate_request_detail_stat02 
-          h3 #{estimate_response.item[0]}
-          p #{estimate_response.cost[0]}
-          p #{estimate_response.note[0]}
-        .estimate_request_detail_stat.estimate_request_detail_stat02 
-          h3 #{estimate_response.item[1]}
-          p #{estimate_response.cost[1]}
-          p #{estimate_response.note[1]}
-        .estimate_request_detail_stat.estimate_request_detail_stat02 
-          h3 #{estimate_response.item[2]}
-          p #{estimate_response.cost[2]}
-          p #{estimate_response.note[2]}
+          .estimate_request_detail_itembox
+            each estimate_response_list_item in estimate_response.item
+              h3 #{estimate_response_list_item}
+          .estimate_request_detail_costbox
+            each estimate_response_list_cost in estimate_response.cost
+              p #{estimate_response_list_cost}
+          .estimate_request_detail_notebox 
+            each estimate_response_list_note in estimate_response.note
+              p #{estimate_response_list_note}
+        //- .estimate_request_detail_stat.estimate_request_detail_stat02 
+        //-   h3 #{estimate_response.item[0]}
+        //-   p #{estimate_response.cost[0]}
+        //-   p #{estimate_response.note[0]}
+        //- .estimate_request_detail_stat.estimate_request_detail_stat02 
+        //-   h3 #{estimate_response.item[1]}
+        //-   p #{estimate_response.cost[1]}
+        //-   p #{estimate_response.note[1]}
+        //- .estimate_request_detail_stat.estimate_request_detail_stat02 
+        //-   h3 #{estimate_response.item[2]}
+        //-   p #{estimate_response.cost[2]}
+        //-   p #{estimate_response.note[2]}
       p.estimate_request_detail_cost_txt 
         span 견적가 :
         |  #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}원

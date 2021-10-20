@@ -1,6 +1,11 @@
 extends layout 
 
 block content 
+	header.clearfix 
+		.header_box.container
+			.header_back_btn
+				i.fa.fa-arrow-left(aria-hidden='true')
+			h1.header_title=title
 	//- h1= title
 	.container 
 		.select_user_txt 

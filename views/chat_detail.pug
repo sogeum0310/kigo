@@ -49,6 +49,18 @@ block content
   //- p.go_chat_list 
   //-   a(href='/chat/list')
   //-     i.fa.fa-bars(aria-hidden='true')
+  style.
+    .wrap{
+    margin-bottom: 0;
+    }
+    .page_wrap{
+    padding-top: 64px;
+    }
+    .foot_icon_wrap{
+      display: none;
+    }
+  //- 채팅 페이지만 간격조정
+
 
   div.chat_detail_wrap#chat_detail_wrap
     ul#messages.chat_detail_ul
@@ -56,15 +68,16 @@ block content
         each chat_content in chat_contents 
           if (chat_content.user._id==JSON.parse(user)._id)
             li.chat_me 
-              span.chat_content #{chat_content.content}
+              .chat_content #{chat_content.content}
               //- span.chat_username #{chat_content.user.username}
           else 
             li.chat_you 
              span.chat_username #{chat_content.user.username}
-             span.chat_content #{chat_content.content}
+             .chat_content #{chat_content.content}
+             
 
-  form#form
-    input#input.send_chat_input(type="text")
+  form#form.send_chat_form
+    input#input.send_chat_input(type="text", required)
     button.send_chat_btn 보내기
 
 
@@ -91,13 +104,30 @@ block content
     socket.on('chat message', function (msg) {
       console.log(msg)
       var item = document.createElement('li')
+      var chat_username = document.createElement('span')
+      var chat_content = document.createElement('div')
+      item.appendChild(chat_username)
+      item.appendChild(chat_content)
+
 
       if (user._id===msg.me) {
-        item.style.color = 'red'
+        //- item.style.color = 'red'
+        item.classList.add('chat_me')
+      } else {
+        item.classList.add('chat_you')
       }
 
-      item.textContent = msg.user.username + ' : ' + msg.content
+      //- item.textContent = msg.user.username + ' : ' + msg.content
+      chat_username.textContent = msg.user.username
+      chat_content.textContent = msg.content
       messages.appendChild(item)
+
+      var objDiv = document.getElementById("chat_detail_wrap");
+      objDiv.scrollTop = objDiv.scrollHeight
+       //- 채팅 입력하고 스크롤 내려가게
     })
+
+
+
 block scripts 
   script(src='/javascript/chat_overflow.js')

@@ -47,8 +47,12 @@ block content
     //- pre= blog_comment
     if (blog_comment)
       h3 답변 : #{blog_comment.content}
-    form(action="", method="POST") 
+    form(action="", method="POST", onsubmit="return confirm('제출하시겠습니까?');") 
       div.form-group
-        textarea.frm_input.full_input(name="content", cols="30", rows="10", placeholder="답변을 입력하세요.") 
+        textarea.frm_input.full_input#adm_qna_create_txt(name="content", cols="30", rows="10", placeholder="답변을 입력하세요.") 
       p 
         button.submit_btn(type="submit") 확인
+
+block scripts 
+  if (url==='qna')
+    script(src='/javascript/adm_qna_create_check.js')

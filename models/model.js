@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const { DateTime } = require("luxon");  //for date handling
 
+// var moment = require('moment-timezone')
+// moment().tz('Asia/Seoul').format()
 
 const EstimateItemSchema = new Schema({
   name: { type: String }
@@ -76,7 +78,8 @@ const ChatContentSchema = new Schema({
 const FileSchema = new Schema({
   parent: { type: Schema.ObjectId },
   name: { type: String },
-  md_name: { type: String }
+  md_name: { type: String },
+  reg_date: { type: Date, default: Date.now }
 }) 
 
 const BlogPostSchema = new Schema({

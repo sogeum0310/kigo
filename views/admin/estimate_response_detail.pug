@@ -3,7 +3,6 @@ extends layout
 block content 
   //- h1= title
 
-  //- pre= estimate_response
 
   //- p.go_response_list
   //-     a(href="/admin/estimate/request/" + estimate_response.estimate_request)
@@ -14,6 +13,8 @@ block content
   //- p.admin_back_btn 
   //-   a(href="/admin/estimate/request/" + estimate_response.estimate_request) Back
 
+  //- pre= estimate_response
+  //- 견적 요청자 이름
   .estimate_request_detail_box 
     p.estimate_request_detail_3st_txt 
       span 견적서 작성일 :

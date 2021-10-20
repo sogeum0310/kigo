@@ -41,14 +41,13 @@ block content
   //- p 
   //-   a(href="/estimate/received/list") list
 
-
-
   .container
     p.go_list_btn 
       a(href="/estimate/received/list")
         i.fa.fa-bars(aria-hidden='true')
     .estimate_request_detail_box 
       p.estimate_request_detail_2st_txt #{results.platform[0].name}
+        span , (#{results.user.username})님
       p.estimate_request_detail_3st_txt 
         span 견적 요청일자 :
         |  #{results.reg_date.getFullYear()}년 #{results.reg_date.getMonth() + 1}월 #{results.reg_date.getDate()}일
@@ -98,29 +97,31 @@ block content
             p 비고
         tr#itemRow
           td 
-            input.full_input.frm_input(type="text", name="item", required)
+            input.full_input.frm_input(type="text", name="item", required="true")
           td
-            input.full_input.frm_input(type="number", name="cost", required)
+            input.full_input.frm_input(type="number", name="cost", required="true",oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');")
+          td
+            input.full_input.frm_input(type="text", name="note", required="true")
+        tr
+          td 
+            input.full_input.frm_input(type="text", name="item")
+          td
+            input.full_input.frm_input(type="number", name="cost", oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');")
           td
             input.full_input.frm_input(type="text", name="note")
         tr
           td 
             input.full_input.frm_input(type="text", name="item")
           td
-            input.full_input.frm_input(type="number", name="cost")
-          td
-            input.full_input.frm_input(type="text", name="note")
-        tr
-          td 
-            input.full_input.frm_input(type="text", name="item")
-          td
-            input.full_input.frm_input(type="number", name="cost")
+            input.full_input.frm_input(type="number", name="cost", oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');")
           td
             input.full_input.frm_input(type="text", name="note")
 
-    button#addItem +
-    p
-      button.submit_btn(type="submit") 보내기
+      button#addItem.received_plus_btn +
+      p
+        button.submit_btn(type="submit") 보내기
+
+    //- button들이 form밖에 나가있어서 안으로 수정
 
     script.
       var itemTable = document.getElementById('itemTable')
@@ -132,6 +133,7 @@ block content
         var newItem = itemRow.cloneNode(true)
         for (td of newItem.children) {
           td.firstElementChild.value = ''
+          td.firstElementChild.required=false
         }
         itemTable.appendChild(newItem)
       })

@@ -7,6 +7,16 @@ const other_controller = require('../controllers/otherController')
 
 
 /* GET home page. */
+router.get(['/', '/*'], async (req, res, next) => {
+  if (req.session.user) {
+    next()
+  } else {
+    // res.redirect('/')
+    // res.send('access denied')
+    next()
+  }
+})
+
 router.get('/', other_controller.index)
 router.get('/test', other_controller.test)
 router.get('/success', other_controller.success)
@@ -14,12 +24,15 @@ router.get('/success', other_controller.success)
 
 router.get('/company/about', other_controller.company_about)
 router.get('/company/ranking', other_controller.company_ranking)
+router.get('/company/event_page', other_controller.company_event_page)
+// 이미지 이벤트영역
 router.get('/company/notice/list', other_controller.company_blog_list)
 router.get('/company/guide', other_controller.company_guide)
 router.get('/company/event/list', other_controller.company_event_list)
 router.get('/company/faq/list', other_controller.company_faq_list)
 router.get('/company/faq/personal', other_controller.faq_list_personal)
 router.get('/company/faq/business', other_controller.faq_list_business)
+
 
 // 자주묻는질문 페이지분리
 
@@ -67,6 +80,8 @@ router.get('/signup/business', user_controller.signup_business_get)
 router.post('/signup/business', user_controller.signup_business_post)
 
 router.get('/mypage', user_controller.mypage)
+
+router.post('/validity', user_controller.validity)
 
 // router.get('/mypage/account/access', user_controller.account_access_get)
 // router.post('/mypage/account/access', user_controller.account_access_post)

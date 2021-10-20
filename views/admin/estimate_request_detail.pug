@@ -12,12 +12,13 @@ block content
   //-   a(href="/admin/estimate/response/" + estimate_response._id) #{estimate_response.user.username}
   //-   |  #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}
 
-  
+
 
   h1.admin_con_title= title
 
   .estimate_request_detail_box 
       p.estimate_request_detail_2st_txt #{estimate_request.platform[0].name}
+       span , (#{estimate_request.user.username})님
       p.estimate_request_detail_3st_txt 
         span 견적 요청일자 :
         |  #{estimate_request.reg_date.getFullYear()}-#{estimate_request.reg_date.getMonth() +1}-#{estimate_request.reg_date.getDate()}

@@ -1,28 +1,67 @@
 extends layout 
 block header 
   include back_header.pug
-block content 
-  //- h1= title
+block content  
+  h1= title
+  ul
+    each chat_room in chat_rooms 
+      li 
+        if (chat_room.user.length > 0)
+          each user in chat_room.user
+            span [#{user.username}]  
+        else 
+          span [알수없음]
+        if (chat_room.last_message)
+          span(id=chat_room._id) #{chat_room.last_message.content} (#{chat_room.count})
+        a(href="chat/" + chat_room._id)  Go to room >
 
-  //- h3 Chat list
-  //- ul 
-  //-   each chat_item in chat_list
-  //-     li 
-  //-       a(href="/chat/" + chat_item._id) #{chat_item.member.username}
+  h2 Users 
+  each user in users 
+    p
+      button(onclick="handleSubmit(this)" value=user._id) #{user.username}
 
-  //- pre= chat_list
 
-    //- h1= title
+  script.
+    var ul = document.querySelector('ul')
 
-  .container
-    h3.chat_list_title 채팅 리스트
-    ul.chat_list_wrap 
-      each chat_room in chat_list
-        li.chat_list_li 
-          a(href="/chat/" + chat_room._id) #{chat_room.member.username}
-            if (chat_room.last_content)
-              p.chat_last_content #{chat_room.last_content.content}  - #{chat_room.last_content.reg_date.toLocaleString()}
-      p.no_chat_list_text 진행중인 채팅목록이 잆습니다.
 
-block scripts
-  script(src='/javascript/no_chat_list.js')
+    // Emit the make room event
+    function handleSubmit(elem) {
+      var user = elem.value
+      socket.emit('makeRoom', user)
+    }
+
+    // On make room event, bring master to the room just has been made
+    socket.on('makeRoom', function (chat_room, master) {
+      if (master===user_global._id) {  
+        location.href = 'chat/' + chat_room._id
+      }
+    })
+
+    // Replace last massage and count
+    socket.on('last_message', function (chat_content, chat_contents) {
+      var n = 0
+      for (chat_content of chat_contents) {
+        if (!chat_content.read.includes(user_global._id)) {
+          n++
+        }
+      }
+      document.getElementById(chat_content.room).textContent =`${chat_content.content} (${n})`
+    })
+
+    // Make new room item in the list, only if when chat has first began
+    socket.on('addRoom', function (room, last_content) {  
+      room.user.map(function (value, index) {
+        if (user_global._id===value._id) {
+          room.user.splice(index, 1)
+          var li = document.createElement('li')
+          
+          li.innerHTML = 
+          `
+            <a href="chat/${room._id}">${room.user[0].username}</a>
+            <span id="${room._id}">${last_content.content} (1)</span>
+          `
+          ul.appendChild(li)
+        }
+      })
+    })

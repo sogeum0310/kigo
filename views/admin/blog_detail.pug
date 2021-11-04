@@ -1,58 +1,72 @@
 extends layout 
 
 block content 
-  //- h1= title
-
-  //- pre= blog_detail
-
-  //- a(href="/admin/"+url+"/list") list / 
-  //- if (url==='notice' || url==='event' || url==='faq')
-  //-   a(href="/admin/"+url+"/create") create / 
-  //-   a(href="/admin/"+url+"/"+blog_detail._id+"/update") update / 
-  //-   a(href="/admin/"+url+"/"+blog_detail._id+"/delete") delete
-
-  //- if (url==='qna')
-  //-   pre= blog_comment
-  //-   h3 Answer
-  //-   form(action="", method="POST") 
-  //-     div.form-group
-  //-       textarea(name="content", cols="30", rows="10") 
-  //-     p 
-  //-       button(type="submit") confirm
-
-
-
   h1.admin_con_title= title
 
   .admin_tool_wrap.clearfix 
     a(href="/admin/"+url+"/list") 리스트
     if (url==='notice' || url==='event' || url==='faq')
-      a(href="/admin/"+url+"/create") 
+      a(href=`/admin/${url}/create`) 
        i.fa.fa-pencil(aria-hidden='true')
        | 글 작성
-      a(href="/admin/"+url+"/"+blog_detail._id+"/update") 
+      a(href=`/admin/${url}/${blog_detail._id}/update`) 
        i.fa.fa-pencil-square-o(aria-hidden='true')
        | 수정
-      a(href="/admin/"+url+"/"+blog_detail._id+"/delete") 
+      a(href=`/admin/${url}/${blog_detail._id}/delete`) 
         i.fa.fa-trash-o(aria-hidden='true')
         | 삭제
 
   .admin_blog_detail_wrap
     h3 제목 : #{blog_detail.title}
-    h4 내용 : #{blog_detail.content}
-    p #{blog_detail.reg_date.getFullYear()}.#{blog_detail.reg_date.getMonth() +1}.#{blog_detail.reg_date.getDate()}
+    h4 내용 : !{blog_detail.content}
+    p #{blog_detail.reg_date}
   
 
   if (url==='qna')
-    //- pre= blog_comment
-    if (blog_comment)
-      h3 답변 : #{blog_comment.content}
-    form(action="", method="POST", onsubmit="return confirm('제출하시겠습니까?');") 
-      div.form-group
-        textarea.frm_input.full_input#adm_qna_create_txt(name="content", cols="30", rows="10", placeholder="답변을 입력하세요.") 
-      p 
-        button.submit_btn(type="submit") 확인
 
-block scripts 
-  if (url==='qna')
-    script(src='/javascript/adm_qna_create_check.js')
+    h3 create comment
+    form(action="", method="POST") 
+      input(type="hidden", name="blog", value=blog_detail._id)
+      div.form-group
+        label(for="") 
+        textarea(name="content")
+      button(type="submit") confirm 
+
+    h3 comments
+    each blog_comment in blog_comments 
+      form(id="form-" + blog_comment._id) 
+        input(type="hidden", name="id", value=blog_comment._id)
+        textarea(id="item-" + blog_comment._id, name="content") #{blog_comment.content}
+        div
+          button(onclick=`createBtn('${blog_comment._id}')`) update 
+          button(onclick=`deleteBtn('${blog_comment._id}')`) delete
+        p -
+    
+
+    script.
+      async function createBtn(id) {
+        document.getElementById('form-' + id).addEventListener('submit', function (e) {
+          e.preventDefault()
+        })
+
+        var formData = new FormData(document.getElementById('form-' + id))
+        var results = await fetch('/admin/qna/comment/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(formData).toString()
+        }).then(res => res.text())
+      }
+
+      async function deleteBtn(id) {
+        document.getElementById('form-' + id).addEventListener('submit', function (e) {
+          e.preventDefault()
+        })
+        
+        var results = await fetch('/admin/qna/comment/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: 'id=' + id
+        }).then(res => res.text())
+
+        document.getElementById('form-' + id).style.display = 'none'
+      }

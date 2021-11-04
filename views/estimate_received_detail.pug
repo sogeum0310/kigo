@@ -2,127 +2,67 @@ extends layout
 block header 
   include back_header.pug
 block content 
-  //- h1= title
+  h1= title
 
-  //- pre= results
+  //- pre= estimate_request
 
-  //- form(action="", method="POST") 
+  h2 ## #{estimate_request.topic.name}
+  hr
 
-  //-   table 
-  //-     tr 
-  //-       th item 
-  //-       th cost 
-  //-       th note 
-  //-     tr 
-  //-       td 
-  //-         input(type="text", name="item")
-  //-       td
-  //-         input(type="number", name="cost")
-  //-       td
-  //-         input(type="text", name="note")
-  //-     tr 
-  //-       td 
-  //-         input(type="text", name="item")
-  //-       td
-  //-         input(type="number", name="cost")
-  //-       td
-  //-         input(type="text", name="note")
-  //-     tr 
-  //-       td 
-  //-         input(type="text", name="item")
-  //-       td
-  //-         input(type="number", name="cost")
-  //-       td
-  //-         input(type="text", name="note")
-          
-  //-   p
-  //-     button(type="submit") confirm
+  -var x = 1
+  while (x < 11)
+    -var y = x++
+    if (estimate_request[`field${y}`].length>0)
+      h3 # #{estimate_request[`field${y}`][0].item.name}
+      each something in estimate_request[`field${y}`]
+        p= something.name 
+        if (estimate_request.estimate_text[0] && estimate_request.estimate_text[0].item.toString()===something.item._id.toString())
+          p #{estimate_request.estimate_text[0].text}
+      hr
 
-  //- p 
-  //-   a(href="/estimate/received/list") list
+  h3 # somethign to say 
+  p= estimate_request.content
 
-  .container
-    p.go_list_btn 
-      a(href="/estimate/received/list")
-        i.fa.fa-bars(aria-hidden='true')
-    .estimate_request_detail_box 
-      p.estimate_request_detail_2st_txt #{results.platform[0].name}
-        span , (#{results.user.username})님
-      p.estimate_request_detail_3st_txt 
-        span 견적 요청일자 :
-        |  #{results.reg_date.getFullYear()}년 #{results.reg_date.getMonth() + 1}월 #{results.reg_date.getDate()}일
-      .estimate_request_detail_stat_wrap
-        .estimate_request_detail_stat 
-          h3 월간 작업(포스팅) 횟수
-          p #{results.how_many[0].name}
-        .estimate_request_detail_stat 
-          h3 광고 업종(상품)
-          p 
-            each results_business in results.business
-              span.estimate_request_checked= results_business.name
-        .estimate_request_detail_stat 
-          h3 광고 목적
-          p 
-            each results_goal in results.goal
-              span.estimate_request_checked= results_goal.name
-        .estimate_request_detail_stat 
-          h3 광고 시작 날짜
-          p #{results.start_day[0].name}
-        .estimate_request_detail_stat 
-          h3 광고 집행 기간
-          p #{results.how_long[0].name}
-        .estimate_request_detail_stat 
-          h3 예상 금액
-          p #{results.cost[0].name}
-        .estimate_request_detail_stat 
-          h3 계신 지역
-          p 
-            each results_city in results.city
-              span.estimate_request_checked= results_city.name
-        .estimate_request_detail_stat 
-          h3 피드백 서비스
-          p 
-            each results_feedback in results.feedback
-              span.estimate_request_checked= results_feedback.name
-
-    form(action="", method="POST", onsubmit="return confirm('제출하시겠습니까?');") 
-
-      table#itemTable.estimate_received_detail_form_stat 
+  form(action="", method="POST") 
+    table 
+      tbody#itemTable
         tr 
-          th 
-            p 항목
-          th 
-            p 금액
-          th 
-            p 비고
-        tr#itemRow
+          th item 
+          th cost 
+          th note 
+        tr#itemRow 
           td 
-            input.full_input.frm_input(type="text", name="item", required="true")
+            input(type="text", name="item")
           td
-            input.full_input.frm_input(type="number", name="cost", required="true",oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');")
+            input(type="number", name="cost")
           td
-            input.full_input.frm_input(type="text", name="note", required="true")
-        tr
+            input(type="text", name="note")
+        tr 
           td 
-            input.full_input.frm_input(type="text", name="item")
+            input(type="text", name="item")
           td
-            input.full_input.frm_input(type="number", name="cost", oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');")
+            input(type="number", name="cost")
           td
-            input.full_input.frm_input(type="text", name="note")
-        tr
+            input(type="text", name="note")
+        tr 
           td 
-            input.full_input.frm_input(type="text", name="item")
+            input(type="text", name="item")
           td
-            input.full_input.frm_input(type="number", name="cost", oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');")
+            input(type="number", name="cost")
           td
-            input.full_input.frm_input(type="text", name="note")
+            input(type="text", name="note")
+          
+    p
+      button(type="submit") confirm
+    p   
+      button#addItem add
 
-      button#addItem.received_plus_btn +
-      p
-        button.submit_btn(type="submit") 보내기
+    hr
 
-    //- button들이 form밖에 나가있어서 안으로 수정
+  p 
+    a(href="/estimate/received/list") list
 
+ 
     script.
       var itemTable = document.getElementById('itemTable')
       var itemRow = document.getElementById('itemRow')

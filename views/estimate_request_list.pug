@@ -23,7 +23,7 @@ block content
         a(href=estimate_request._id)
           .estimate_request_list_con_box.clearfix
             li
-              p.esti_title #{estimate_request.platform[0].name} 
+              p.esti_title #{estimate_request.topic.name} 
               //- p.esti_date 견적요청일자 : #{estimate_request.reg_date.toLocaleString()}
               p.esti_date 견적요청일자 : #{estimate_request.reg_date.getFullYear()}년 #{estimate_request.reg_date.getMonth() + 1}월 #{estimate_request.reg_date.getDate()}일
 
@@ -31,7 +31,7 @@ block content
               //- div #{estimate_request.reg_date.getMonth() + 1}월
               //- div #{estimate_request.reg_date.getDate()}일
             li
-              if (estimate_request.count < 3)
+              if (estimate_request.count < 10)
                 span  견적요청중
               else 
                 span  견적요청완료

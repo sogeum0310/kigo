@@ -3,17 +3,7 @@ block header
   include back_header.pug 
 block content 
   //- h1= title 
-
-  //- ul
-  //-   li
-  //-     a(href="/mypage/account/access") account 
-  //-   li
-  //-     a(href="/mypage/qna/list") my qna 
-  //-   if (user.account==='personal')
-  //-     li 
-  //-       a(href="/mypage/personal/review/list") my review 
-  //-   li
-  //-     a(href="/logout") logout 
+  
   .container
     ul.mypage_wrap
       li
@@ -21,15 +11,17 @@ block content
           i.fa.fa-user(aria-hidden='true')
       if (user.account==='personal')
         li
-          a(href="/mypage/personal/access") 나의 정보 수정 
+          a(href="/mypage/personal/account") 나의 정보 수정 
       if (user.account==='business')
         li
-          a(href="/mypage/business/access") 나의 정보 수정 
+          a(href="/mypage/business/account") 나의 정보 수정 
       li
         a(href="/mypage/qna/list") 나의 문의 내역
       if (user.account==='personal')
         li 
           a(href="/mypage/personal/review/list") 나의 후기
+      li 
+        a(href="/user/access_password") Change password  
       li
         a(href="/logout") 로그아웃
 

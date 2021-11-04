@@ -2,13 +2,24 @@ extends layout
 block header 
   include back_header.pug
 block content 
-  //- h1= title 
+  h1= title 
+
+  -var x = 1
+  while (x < 11)
+    -var y = x++
+    if (estimate_response.estimate_request[`field${y}`].length>0)
+      h3 # #{estimate_response.estimate_request[`field${y}`][0].item.name}
+      each something in estimate_response.estimate_request[`field${y}`]
+        p= something.name 
+        if (estimate_response.estimate_request.estimate_text[0] && estimate_response.estimate_request.estimate_text[0].item.toString()===something.item._id.toString())
+          p #{estimate_response.estimate_request.estimate_text[0].text}
+      hr
 
   //- pre= estimate_response
 
-  //- a(href="/estimate/sent/list") list 
+  a(href="/estimate/sent/list") list 
 
-  .container
+  //- .container
     p.go_list_btn 
         a(href="/estimate/sent/list")
           i.fa.fa-bars(aria-hidden='true') 

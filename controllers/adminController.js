@@ -167,9 +167,10 @@ exports.notice_create_post = async (req, res, next) => {
       title: req.body.title,
       content: req.body.content
     })
-    notice.save()
-    // var message = 'A notice is successfully posted'
-    // res.redirect('/admin/success/?message=' + message)
+
+    await notice.save()
+    var message = 'A notice is successfully posted'
+    res.redirect('/admin/success/?message=' + message)
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -201,7 +202,7 @@ exports.notice_update_post = async (req, res, next) => {
       _id: req.params.id
     })
     await Model.Notice.findByIdAndUpdate(req.params.id, notice_detail)
-    var message = '공지사항 작성이 완료되었습니다'
+    var message = '공지사항 수정이 완료되었습니다'
     var url = '/admin/notice/' + req.params.id
     res.redirect(`/admin/success/?message=${message}&go_to=${url}`)
   } catch (error) {
@@ -382,8 +383,8 @@ exports.qna_list = async (req, res, next) => {
 exports.qna_detail_get = async (req, res, next) => {
   try {
     var qna_question = await Model.QnaQuestion.findById(req.params.id).exec()
-    var qna_answer = await Model.QnaAnswer.findOne({ parent: req.params.id }).exec()
-    res.render('admin/blog_detail', { title: '1:1 문의', blog_detail: qna_question, blog_comment: qna_answer, url: 'qna' })
+    var qna_answer = await Model.QnaAnswer.find({ parent: req.params.id }).exec()
+    res.render('admin/blog_detail', { title: '1:1 문의', blog_detail: qna_question, blog_comments: qna_answer, url: 'qna' })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -395,7 +396,8 @@ exports.qna_detail_post = async (req, res, next) => {
       parent: req.params.id,
       content: req.body.content
     })
-    qna_detail.save()
+    await qna_detail.save()
+
     var message = '답변 등록이 완료되었습니다'
     var url = '/admin/qna/' + req.params.id
     res.redirect(`/admin/success/?message=${message}&go_to=${url}`)
@@ -409,6 +411,25 @@ exports.qna_delete_get = async (req, res, next) => {
     console.log(req.params.id)
   } catch (error) {
     res.render('error', { message: '', error: error })
+  }
+}
+
+
+exports.qna_comment_update = async (req, res, next) => {
+  try {
+    await Model.QnaAnswer.findByIdAndUpdate(req.body.id, { content: req.body.content })
+    res.send(req.body.content)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+exports.qna_comment_delete = async (req, res, next) => {
+  try {
+    await Model.QnaAnswer.findByIdAndDelete(req.body.id)
+    res.send('success')
+  } catch (error) {
+    console.log(error)
   }
 }
 
@@ -436,6 +457,16 @@ exports.message_delete_get = async (req, res, next) => {
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
+}
+
+exports.summernote_ajax = async (req, res, next) => {
+  var my_file = req.files.file
+
+  var new_file_name = my_file.md5 + '.' + my_file.name.split('.').pop()
+  upload_path = 'files/blog/' + new_file_name
+  await my_file.mv(upload_path)
+
+  res.send('/files/blog/' + new_file_name)
 }
 
 exports.success = async (req, res, next) => {

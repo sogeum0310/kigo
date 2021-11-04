@@ -2,194 +2,37 @@ extends layout
 block header 
   include back_header.pug
 block content
-  //- h1= title
+  h1= title 
 
-  .container
-    form(action="", method="POST", onsubmit="return confirm('제출하시겠습니까?');") 
-      .estimate_request_percent_bar.estimate_request_percent_bar1
-        span.bar
-        span 0%
-      .estimate_request_box.estimate_request_box1
-        h3.estimate_request_con_title= estimate_items[0].name
-        each platform in platforms 
+  if (topics)
+    ul 
+      each topic in topics 
+        li 
+          a(href="/estimate/request/form?topic=" + topic._id) #{topic.name} 
+  
+  if (estimate_items)
+    div.wrap
+        form.container(action="", method="POST") 
+          each estimate_item in estimate_items 
+            div.form-group
+              h3 #{estimate_item.name}
+              each detail in estimate_item.details
+                div
+                  label(for=detail._id) #{detail.name} 
+                  input(type=detail.input_type, id=detail._id, name=detail.input_name, value=detail._id)
+                  if (detail._id.toString()==='6176421e29616e19462b0177')
+                    input(type="hidden", name='item', value=estimate_item._id)
+                    input(type="text", name="text", value="")
+            hr
+
           div.form-group
-            label(for="")= platform.name 
-            input(type="radio", name="platform", value=platform._id)
-      .estimate_request_next_btn.estimate_request_next_btn1
-        p 다음
+            h3 something to say 
+            textarea(name="content") 
+          
+          //- 임시 버튼
+          button(type="submit") submit 
 
+    a.prev(href="") < | 
+    a.next(href="") > 
 
-      .estimate_request_percent_bar.estimate_request_percent_bar2
-        span.bar
-        span 12%
-      .estimate_request_box.estimate_request_box2
-        h3.estimate_request_con_title= estimate_items[1].name
-        each how_many in how_manys
-          div.form-group
-            label(for="")= how_many.name 
-            input(type="radio", name="how_many", value=how_many._id) 
-      .estimate_request_next_btn.estimate_request_next_btn2
-        p 다음  
-
-      .estimate_request_percent_bar.estimate_request_percent_bar3
-        span.bar
-        span 23%
-      .estimate_request_box.estimate_request_box3
-        h3.estimate_request_con_title= estimate_items[2].name
-        each business in businesses 
-          div.form-group.half-form-group
-            label(for="")= business.name 
-            input(type="checkbox", name="business", value=business._id)
-      .estimate_request_next_btn.estimate_request_next_btn3
-        p 다음
-
-      .estimate_request_percent_bar.estimate_request_percent_bar4
-        span.bar
-        span 34%
-      .estimate_request_box.estimate_request_box4
-        h3.estimate_request_con_title= estimate_items[3].name
-        each goal in goals 
-          div.form-group
-            label(for="")= goal.name 
-            input(type="checkbox", name="goal", value=goal._id)
-      .estimate_request_next_btn.estimate_request_next_btn4
-        p 다음
-
-      .estimate_request_percent_bar.estimate_request_percent_bar5
-        span.bar
-        span 45%
-      .estimate_request_box.estimate_request_box5
-        h3.estimate_request_con_title= estimate_items[4].name
-        each start_day in start_days 
-          div.form-group
-            label(for="")= start_day.name 
-            input(type="radio", name="start_day", value=start_day._id) 
-      .estimate_request_next_btn.estimate_request_next_btn5
-        p 다음
-
-      .estimate_request_percent_bar.estimate_request_percent_bar6
-        span.bar
-        span 56%
-      .estimate_request_box.estimate_request_box6
-        h3.estimate_request_con_title= estimate_items[5].name
-        each how_long in how_longs 
-          div.form-group
-            label(for="")= how_long.name 
-            input(type="radio", name="how_long", value=how_long._id)
-      .estimate_request_next_btn.estimate_request_next_btn6
-        p 다음 
-
-      .estimate_request_percent_bar.estimate_request_percent_bar7
-        span.bar
-        span 67%
-      .estimate_request_box.estimate_request_box7
-        h3.estimate_request_con_title= estimate_items[6].name
-        each cost in costs 
-          div.form-group
-            label(for="")= cost.name 
-            input(type="radio", name="cost", value=cost._id)
-      .estimate_request_next_btn.estimate_request_next_btn7
-        p 다음
-
-      .estimate_request_percent_bar.estimate_request_percent_bar8
-        span.bar
-        span 78%
-      .estimate_request_box.estimate_request_box8
-        h3.estimate_request_con_title= estimate_items[7].name
-        each city in cities 
-          div.form-group.half-form-group
-            label(for="")= city.name 
-            input(type="checkbox", name="city", value=city._id)
-      .estimate_request_next_btn.estimate_request_next_btn8
-        p 다음
-
-
-      .estimate_request_percent_bar.estimate_request_percent_bar9
-        span.bar
-        span 89%
-      .estimate_request_box.estimate_request_box9
-        h3.estimate_request_con_title= estimate_items[8].name
-        each feedback in feedbacks 
-          div.form-group
-            label(for="")= feedback.name 
-            input(type="checkbox", name="feedback", value=feedback._id)  
-      .estimate_request_next_btn.estimate_request_next_btn9
-        p 다음
-
-      .estimate_request_percent_bar.estimate_request_percent_bar10
-        span.bar
-        span 100%
-      p.estimate_request_submit 
-        button(type="submit") 제출하기
-
-
-  //- pre= platforms
-  //- pre= businesses
-  //- pre= goals
-  //- pre= start_days 
-  //- pre= how_longs 
-  //- pre= costs 
-  //- pre= cities 
-  //- pre= feedbacks
-
-  //- form(action="", method="POST") 
-
-  //-   h3= estimate_items[0].name
-  //-   each platform in platforms 
-  //-     div.form-group
-  //-       label(for="")= platform.name 
-  //-       input(type="radio", name="platform", value=platform._id)
-
-  //-   h3= estimate_items[1].name
-  //-   each how_many in how_manys
-  //-     div.form-group
-  //-       label(for="")= how_many.name 
-  //-       input(type="radio", name="how_many", value=how_many._id)   
-
-  //-   h3= estimate_items[2].name
-  //-   each business in businesses 
-  //-     div.form-group
-  //-       label(for="")= business.name 
-  //-       input(type="checkbox", name="business", value=business._id) 
-
-  //-   h3= estimate_items[3].name
-  //-   each goal in goals 
-  //-     div.form-group
-  //-       label(for="")= goal.name 
-  //-       input(type="checkbox", name="goal", value=goal._id)
-
-  //-   h3= estimate_items[4].name
-  //-   each start_day in start_days 
-  //-     div.form-group
-  //-       label(for="")= start_day.name 
-  //-       input(type="radio", name="start_day", value=start_day._id) 
-
-  //-   h3= estimate_items[5].name
-  //-   each how_long in how_longs 
-  //-     div.form-group
-  //-       label(for="")= how_long.name 
-  //-       input(type="radio", name="how_long", value=how_long._id) 
-
-  //-   h3= estimate_items[6].name
-  //-   each cost in costs 
-  //-     div.form-group
-  //-       label(for="")= cost.name 
-  //-       input(type="radio", name="cost", value=cost._id)
-
-  //-   h3= estimate_items[7].name
-  //-   each city in cities 
-  //-     div.form-group
-  //-       label(for="")= city.name 
-  //-       input(type="checkbox", name="city", value=city._id)
-
-  //-   h3= estimate_items[8].name
-  //-   each feedback in feedbacks 
-  //-     div.form-group
-  //-       label(for="")= feedback.name 
-  //-       input(type="checkbox", name="feedback", value=feedback._id)   
-
-  //-   p 
-  //-     button(type="submit") confirm
-
-block scripts 
-  script(src='/javascript/estimate_request_next.js')
+    

@@ -20,10 +20,10 @@ block content
       p.admin_notice_list_date 작성일자
     each blog_item in blog_list
       li.clearfix.admin_notice_list_box
-        a(href="/admin/"+url+"/" + blog_item._id)= blog_item.title 
+        a(href=`/admin/${url}/${blog_item._id}`)= blog_item.title 
           if (blog_item.qna_answer)
             span.adm_completed 완료
-        p #{blog_item.reg_date.getFullYear()}.#{blog_item.reg_date.getMonth() +1}.#{blog_item.reg_date.getDate()}
+        p #{blog_item.reg_date}
 
   if (url==='notice' || url==='event' || url==='faq')
     a.admin_write_btn(href="/admin/"+url+"/create") 글 작성

@@ -1,0 +1,28 @@
+extends layout 
+block header 
+  include back_header.pug
+block content 
+  //- h1= title
+
+  //- h3 Chat list
+  //- ul 
+  //-   each chat_item in chat_list
+  //-     li 
+  //-       a(href="/chat/" + chat_item._id) #{chat_item.member.username}
+
+  //- pre= chat_list
+
+    //- h1= title
+
+  .container
+    h3.chat_list_title 채팅 리스트
+    ul.chat_list_wrap 
+      each chat_room in chat_list
+        li.chat_list_li 
+          a(href="/chat/" + chat_room._id) #{chat_room.member.username}
+            if (chat_room.last_content)
+              p.chat_last_content #{chat_room.last_content.content}  - #{chat_room.last_content.reg_date.toLocaleString()}
+      p.no_chat_list_text 진행중인 채팅목록이 잆습니다.
+
+block scripts
+  script(src='/javascript/no_chat_list.js')

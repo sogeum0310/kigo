@@ -173,67 +173,6 @@ exports.company_message_create_post = async (req, res, next) => {
   }
 }
 
-
-exports.chat_list = async (req, res, next) => {
-  try {
-    var chat_list = await Model.ChatRoom.find({ user: req.session.user._id }).populate('user').exec()
-    var chat_arr = []
-
-    for (chat_room of chat_list) {
-      var last_content = await Model.ChatContent.findOne({ room: chat_room._id }).sort([[ 'reg_date', 'descending' ]])
-      var count = await Model.ChatContent.countDocuments({ room: chat_room._id })
-
-      chat_room.last_content = last_content
-      chat_room.count = count
-
-      if (chat_room.count>0) {
-        chat_arr.push(chat_room)
-      }
-
-      for (user of chat_room.user) {
-        if (user._id.toString()!==req.session.user._id) {
-          chat_room.member = user
-        }
-      }
-    }
-
-    res.render('chat_list', { title: '채팅', chat_list: chat_arr })
-  } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
-}
-
-exports.chat_create = async (req, res, next) => {
-  try {
-    var user = []
-    user.push(req.session.user._id)
-    user.push(req.body.user)
-
-    var room = new Model.ChatRoom({
-      user: user
-    })
-    room.save()
-    res.redirect('/chat/' + room._id)
-  } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
-}
-
-exports.chat_detail = async (req, res, next) => { 
-  try {
-    var chat_contents = await Model.ChatContent.find({ room: req.params.id }).populate('user').exec()
-    res.render('chat_detail', { 
-      title: '채팅',
-      chat_contents: chat_contents, 
-      user: JSON.stringify(req.session.user),
-      room: req.params.id,
-    })
-    console.log(req.session.user)
-  } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
-}
-
 exports.success = async (req, res, next) => {
   try {
     res.render('success', { title: req.query.message, go_to: req.query.go_to })

@@ -2,84 +2,35 @@ extends layout
 block header 
   include back_header.pug
 block content 
-  //- h1= title
+  h1= title
 
-  //- pre= estimate_request 
-  //- hr
+  h2 ## #{estimate_request.topic.name}
+  hr
 
-  //- ul
-  //-   each estimate_request_goal in estimate_request.goal
-  //-     li= estimate_request_goal.name
+  -var x = 1
+  while (x < 11)
+    -var y = x++
+    if (estimate_request[`field${y}`].length>0)
+      h3 # #{estimate_request[`field${y}`][0].item.name}
+      each something in estimate_request[`field${y}`]
+        p= something.name 
+        if (estimate_request.estimate_text[0] && estimate_request.estimate_text[0].item.toString()===something.item._id.toString())
+          p #{estimate_request.estimate_text[0].text}
+      hr
 
+  h3 # somethign to say 
+  p= estimate_request.content
 
-
-  //- ul
-  //-   each estimate_response in estimate_responses 
-  //-     li
-  //-       a(href="/estimate/response/" + estimate_response._id) #{estimate_response.user.username}
-  //-       |  #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}
-
-    //- 상단 삭제 x ( 원본 )
-
-
-        
-
-
+  hr
+  //- pre= estimate_request
 
 
+  h3.estimate_responses_title 제출된 견적서 목록
+  each estimate_response in estimate_responses 
+    ul.estimate_responses_wrap
+      li
+        a(href="/estimate/response/" + estimate_response._id)
+          p.estimate_responses_username #{estimate_response.user.username}
+          p.estimate_responses_price 견적금 : #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}원
 
-    //- pre= estimate_responses
 
-
-  .container
-    .estimate_request_detail_box 
-      //- p.estimate_request_detail_1st_txt
-      //-   span 지역, 
-      //-   span 이름
-      p.estimate_request_detail_2st_txt #{estimate_request.platform[0].name}
-      p.estimate_request_detail_3st_txt 
-        span 견적 요청일자 :
-        |  #{estimate_request.reg_date.getFullYear()}년 #{estimate_request.reg_date.getMonth() + 1}월 #{estimate_request.reg_date.getDate()}일
-      .estimate_request_detail_stat_wrap
-        .estimate_request_detail_stat 
-          h3 월간 작업(포스팅) 횟수
-          p #{estimate_request.how_many[0].name}
-        .estimate_request_detail_stat 
-          h3 광고 업종(상품)
-          p 
-            each estimate_request_business in estimate_request.business
-              span.estimate_request_checked= estimate_request_business.name
-        .estimate_request_detail_stat 
-          h3 광고 목적
-          p 
-            each estimate_request_goal in estimate_request.goal
-              span.estimate_request_checked= estimate_request_goal.name
-        .estimate_request_detail_stat 
-          h3 광고 시작 날짜
-          p #{estimate_request.start_day[0].name}
-        .estimate_request_detail_stat 
-          h3 광고 집행 기간
-          p #{estimate_request.how_long[0].name}
-        .estimate_request_detail_stat 
-          h3 예상 금액
-          p #{estimate_request.cost[0].name}
-        .estimate_request_detail_stat 
-          h3 계신 지역
-          p 
-            each estimate_request_city in estimate_request.city
-              span.estimate_request_checked= estimate_request_city.name
-        .estimate_request_detail_stat 
-          h3 피드백 서비스
-          p 
-            each estimate_request_feedback in estimate_request.feedback
-              span.estimate_request_checked= estimate_request_feedback.name
-
-    h3.estimate_responses_title 제출된 견적서 목록
-    each estimate_response in estimate_responses 
-      ul.estimate_responses_wrap
-        li
-          a(href="/estimate/response/" + estimate_response._id)
-            p.estimate_responses_username #{estimate_response.user.username}
-            p.estimate_responses_price 견적금 : #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}원
-
-  

@@ -9,38 +9,18 @@ const fileUpload = require('express-fileupload')
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const adminRouter = require('./routes/admin');
-const Server = require('socket.io')
 const nodemailer = require('nodemailer')
 const Model = require('./models/model')
 const app = express();
-app.io = require('socket.io')()
 
+const mongoUrl = 'mongodb://sogeum0310:hyun0831**@ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:27017/test?authSource=admin&authMechanism=SCRAM-SHA-1'
 
 // mongoose connection 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://sogeum0310:hyun0831**@ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:27017/kigo', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 
+const populate = require('./populate/populate')
 
-app.io.on('connection', (socket) => {
-  socket.on('join', (room) => {
-    socket.join(room)
-    app.io.to(room).emit('join', room)
-  })
-  socket.on('chat message', async (room, msg) => {
-    const message = new Model.ChatContent({
-      user: msg.user._id,
-      content: msg.content,
-      room: room
-    }) 
-    message.save()
-    msg.me = msg.user._id
-
-    app.io.to(room).emit('chat message', msg);
-  });
-  socket.on('disconnect', function () { 
-    console.log('disconnect!')
-  })
-})
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -56,12 +36,13 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   store: MongoStore.create({
-    mongoUrl: 'mongodb://sogeum0310:hyun0831**@ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:27017/kigo'
+    mongoUrl: mongoUrl
   })
 }))
 
 app.use(function (req, res, next) {
   const user_global = req.session.user
+  res.locals.user_global = user_global
   if (user_global) {
     if (user_global.platform.length > 0) {
       res.locals.user_global_account = 'business'
@@ -70,6 +51,25 @@ app.use(function (req, res, next) {
     }
   }
   next()
+})
+
+// Set global notification count variable for chat
+app.use(async function (req, res, next) {
+  try {
+    var count = await Model.ChatContent.countDocuments({ user: req.session.user._id })
+    var chat_rooms = await Model.ChatRoom.find({ user: req.session.user._id })
+    var chat_notification = 0
+    for (chat_room of chat_rooms) {
+      var count = await Model.ChatContent.countDocuments({ room: chat_room._id, read: { $ne: req.session.user._id } })
+      chat_notification += count
+    }
+    console.log(chat_notification)
+    res.locals.chat_notification = chat_notification
+    next()
+  } catch (error) {
+    console.log(error)
+    next()
+  }
 })
 
 app.use(fileUpload())

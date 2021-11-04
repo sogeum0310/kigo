@@ -3,15 +3,6 @@ block header
   include back_header.pug
 block content 
   //- h1= title 
-  //- form(action="" method="POST")
-  //-   div.form-group
-  //-     label(for="")
-  //-     input(type="text", name="title")
-  //-   div.form-group
-  //-     textarea(name="content", cols="30", rows="10")  
-
-  //-   p 
-  //-     button(type="submit") confirm
   .container
     
     .com_contact_top_txt1 
@@ -31,8 +22,8 @@ block content
       div.form-group.com_contact_form_group
         label(for="") 내용 
         textarea.full_input.frm_input#company_contact_text(name="content", cols="30", rows="10")  
-
       p 
         button.submit_btn(type="submit") 작성완료
+
 block scripts 
   script(src='/javascript/com_contact_txt.js')

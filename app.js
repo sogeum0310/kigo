@@ -62,9 +62,11 @@ app.use(function(req, res, next) {
 });
 
 app.use(async function (req, res, next) {
-  res.locals.user_global = req.user
-  var user_global = await Model.User.findById(req.user.id)
-  res.locals.user_global_account = user_global.account==='personal' ? 'personal' : 'business'
+  if (req.user) {
+    res.locals.user_global = req.user
+    var user_global = await Model.User.findById(req.user.id)
+    res.locals.user_global_account = user_global.account==='personal' ? 'personal' : 'business'
+  }
   next()
 })
 

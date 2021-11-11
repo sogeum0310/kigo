@@ -13,13 +13,13 @@ async function handleSubmit(e) {
     method: 'POST',
     headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
     body: new URLSearchParams(formData).toString()
-  }).then(obj => obj.text())
+  }).then(obj => obj.json())
   
-  if (results==='success') {
+  if (results.errors===null) {
     return form.submit()
   } 
 
-  for (error of JSON.parse(results)) {
+  for (error of results.errors) {
     var li = document.createElement('li')
     li.textContent = error
     errors.appendChild(li)

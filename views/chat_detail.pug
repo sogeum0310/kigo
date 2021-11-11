@@ -6,7 +6,7 @@ block content
   div(style="border:1px dashed grey; height:400px; overflow: auto")
     ul#messages
       each chat_content in chat_contents 
-        if (chat_content.user._id.toString()===user_global._id.toString())
+        if (chat_content.user._id.toString()===user_global.id.toString())
           li #{chat_content.user.username}(나) : !{chat_content.content} #[span.num]
         else 
           li #{chat_content.user.username} : !{chat_content.content} #[span.num]
@@ -23,7 +23,7 @@ block content
     a(href="/chats") Back |  
     form(action="/chat_out", method="POST")
       input(type="hidden", name="room", value=room._id)
-      input(type="hidden", name="user", value=user_global._id) 
+      input(type="hidden", name="user", value=user_global.id) 
       button(type="submit") Out of this room
 
 

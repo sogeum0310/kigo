@@ -32,7 +32,8 @@ const EstimateTextSchema = new Schema({
 // User 
 const UserSchema = new Schema({
   username: { type: String },
-  password: { type: String } ,
+  password: { type: String },
+  salt: { type: String },
   name: { type: String },
   gender: { type: String },
   date_of_birth: { type: Date } ,
@@ -121,7 +122,7 @@ const BlogPostSchema = new Schema({
 
 const BlogCommentSchema = new Schema({
   parent: { type: Schema.ObjectId },
-  user: { type: Schema.ObjectId },
+  user: { type: Schema.ObjectId, ref: 'User' },
   content: { type: String },
   reg_date: { type: Date, default: Date.now }
 })
@@ -155,7 +156,6 @@ exports.Faq = mongoose.model('Faq', BlogPostSchema)
 exports.QnaQuestion = mongoose.model('QnaQuestion', BlogPostSchema)
 exports.QnaAnswer = mongoose.model('QnaAnswer', BlogCommentSchema)
 exports.Message = mongoose.model('Message', BlogPostSchema)
-
 exports.Community = mongoose.model('Community', BlogPostSchema)
 exports.CommunityComment = mongoose.model('CommunityComment', BlogCommentSchema)
 

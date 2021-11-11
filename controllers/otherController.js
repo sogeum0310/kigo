@@ -136,7 +136,7 @@ exports.company_qna_create_post = async (req, res, next) => {
     var qna_detail = new Model.QnaQuestion({
       title: req.body.title,
       content: req.body.content,
-      user: req.session.user._id
+      user: req.user.id
     })
     qna_detail.save()
 
@@ -161,7 +161,7 @@ exports.company_message_create_post = async (req, res, next) => {
     var message = new Model.Message({
       title: req.body.title,
       content: req.body.content,
-      user: req.session.user._id
+      user: req.user.id
     })
     message.save()
     

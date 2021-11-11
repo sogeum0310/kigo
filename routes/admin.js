@@ -59,7 +59,7 @@ router.get('/qna/:id', admin_controller.qna_detail_get)
 router.post('/qna/:id', admin_controller.qna_detail_post)
 router.get('/qna/:id/delete', admin_controller.qna_delete_get)
 
-router.post('/qna/comment/update', admin_controller.qna_comment_update)
+router.post('/qna/comment/create', admin_controller.qna_comment_create)
 router.post('/qna/comment/delete', admin_controller.qna_comment_delete)
 
 // Message

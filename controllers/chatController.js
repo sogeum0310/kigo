@@ -4,16 +4,16 @@ var Model = require('../models/model')
 exports.chat_list = async (req, res, next) => {
   try {
     var users = await Model.User.find()
-    var chat_rooms = await Model.ChatRoom.find({ user: req.session.user._id, active: 1 }).populate('user')
+    var chat_rooms = await Model.ChatRoom.find({ user: req.user.id, active: 1 }).populate('user')
 
     for (chat_room of chat_rooms) {
       var chat_content = await Model.ChatContent.findOne({ room: chat_room._id }).sort([[ 'reg_date', 'descending' ]])
       // Display last message and unread message count in some room
       chat_room.last_message = chat_content
-      chat_room.count = await Model.ChatContent.countDocuments({ room: chat_room._id, read: { $ne: req.session.user._id } })
+      chat_room.count = await Model.ChatContent.countDocuments({ room: chat_room._id, read: { $ne: req.user.id } })
       // Display users except for login user in some room title
       chat_room.user.map(function (value, index) {
-        if (req.session.user._id.toString()===value._id.toString()) {
+        if (req.user.id.toString()===value._id.toString()) {
           chat_room.user.splice(index, 1)
         }
       })

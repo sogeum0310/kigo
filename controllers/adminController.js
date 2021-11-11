@@ -179,7 +179,7 @@ exports.notice_create_post = async (req, res, next) => {
 exports.notice_detail = async (req, res, next) => {
   try {
     var notice_detail = await Model.Notice.findById(req.params.id).exec()
-    res.render('admin/blog_detail', { title: '공지사항', blog_detail: notice_detail, url: 'notice' })
+    res.render('admin/blog_detail', { title: '공지사항', blog: notice_detail, url: 'notice' })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -188,7 +188,7 @@ exports.notice_detail = async (req, res, next) => {
 exports.notice_update_get = async (req, res, next) => {
   try {
     var notice_detail = await Model.Notice.findById(req.params.id).exec()
-    res.render('admin/blog_form', { title: '공지사항', blog_detail: notice_detail, url: 'notice' })
+    res.render('admin/blog_form', { title: '공지사항', blog: notice_detail, url: 'notice' })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -253,7 +253,7 @@ exports.event_create_post = async (req, res, next) => {
 exports.event_detail = async (req, res, next) => {
   try {
     var event_detail = await Model.Event.findById(req.params.id).exec()
-    res.render('admin/blog_detail', { title: '이벤트', blog_detail: event_detail, url: 'event' })
+    res.render('admin/blog_detail', { title: '이벤트', blog: event_detail, url: 'event' })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -262,7 +262,7 @@ exports.event_detail = async (req, res, next) => {
 exports.event_update_get = async (req, res, next) => {
   try {
     var event_detail = await Model.Event.findById(req.params.id).exec()
-    res.render('admin/blog_form', { title: '이벤트', blog_detail: event_detail, url: 'event' })
+    res.render('admin/blog_form', { title: '이벤트', blog: event_detail, url: 'event' })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -328,7 +328,7 @@ exports.faq_create_post = async (req, res, next) => {
 exports.faq_detail = async (req, res, next) => {
   try {
     var faq_detail = await Model.Faq.findById(req.params.id).exec()
-    res.render('admin/blog_detail', { title: '자주묻는 질문', blog_detail: faq_detail, url: 'faq' })
+    res.render('admin/blog_detail', { title: '자주묻는 질문', blog: faq_detail, url: 'faq' })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -337,7 +337,7 @@ exports.faq_detail = async (req, res, next) => {
 exports.faq_update_get = async (req, res, next) => {
   try {
     var faq_detail = await Model.Faq.findById(req.params.id).exec()
-    res.render('admin/blog_form', { title: '자주묻는 질문', blog_detail: faq_detail, url: 'faq' })
+    res.render('admin/blog_form', { title: '자주묻는 질문', blog: faq_detail, url: 'faq' })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -383,8 +383,12 @@ exports.qna_list = async (req, res, next) => {
 exports.qna_detail_get = async (req, res, next) => {
   try {
     var qna_question = await Model.QnaQuestion.findById(req.params.id).exec()
-    var qna_answer = await Model.QnaAnswer.find({ parent: req.params.id }).exec()
-    res.render('admin/blog_detail', { title: '1:1 문의', blog_detail: qna_question, blog_comments: qna_answer, url: 'qna' })
+    var qna_answers = await Model.QnaAnswer.find({ parent: req.params.id }).exec()
+    for(qna_answer of qna_answers) {
+      qna_answer.comment = await Model.QnaAnswer.find({ parent: qna_answer._id }).populate('user')
+    }
+
+    res.render('admin/blog_detail', { title: '1:1 문의', blog: qna_question, blog_comments: qna_answers, url: 'qna' })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -414,11 +418,18 @@ exports.qna_delete_get = async (req, res, next) => {
   }
 }
 
-
-exports.qna_comment_update = async (req, res, next) => {
+exports.qna_comment_create = async (req, res, next) => {
   try {
-    await Model.QnaAnswer.findByIdAndUpdate(req.body.id, { content: req.body.content })
-    res.send(req.body.content)
+    if (req.body.id==='0') {
+      var blog_comment = new Model.QnaAnswer({
+        parent: req.body.parent,
+        user: req.user.id,
+        content: req.body.content
+      })
+      await blog_comment.save()
+    } else {
+      await Model.QnaAnswer.findByIdAndUpdate(req.body.id, { content: req.body.content })
+    }
   } catch (error) {
     console.log(error)
   }
@@ -445,7 +456,7 @@ exports.message_list = async (req, res, next) => {
 exports.message_detail = async (req, res, next) => {
   try {
     var message_detail = await Model.Message.findById(req.params.id).exec()
-    res.render('admin/blog_detail', { title: '의견', blog_detail: message_detail, url: 'message' })
+    res.render('admin/blog_detail', { title: '의견', blog: message_detail, url: 'message' })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }

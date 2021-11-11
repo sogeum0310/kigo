@@ -31,7 +31,7 @@ my_space.on('connection', async (socket) => {
   socket.on('makeRoom', async (user) => {
     try {
       var users = []
-      users.push(session.user._id)
+      users.push(session.passport.user.id)
       users.push(user)
 
       var chat_room = new Model.ChatRoom({
@@ -39,7 +39,7 @@ my_space.on('connection', async (socket) => {
       })
       await chat_room.save()
 
-      socket.emit('makeRoom', chat_room, session.user._id)
+      socket.emit('makeRoom', chat_room, session.passport.user.id)
     } catch (error) {
       console.log(error)
     }
@@ -59,7 +59,7 @@ my_space.on('connection', async (socket) => {
       var user_online = []
       members.map(function (value, index) {
         if (value.room===room._id) {
-          user_online.push(value.user)
+          user_online.push(value.user.id)
         }
       })
 
@@ -67,8 +67,8 @@ my_space.on('connection', async (socket) => {
       var chat_contents = await Model.ChatContent.find({ room: room._id }) 
       var this_room = await Model.ChatRoom.findById(room._id)
       for (chat_content of chat_contents) {
-        if (!chat_content.read.includes(user._id)) {
-          await Model.ChatContent.findByIdAndUpdate(chat_content._id, { $push: { read: user._id } })
+        if (!chat_content.read.includes(user.id)) {
+          await Model.ChatContent.findByIdAndUpdate(chat_content._id, { $push: { read: user.id } })
         }
       }
       var new_contents = await Model.ChatContent.find({ room: room._id }) 
@@ -78,10 +78,10 @@ my_space.on('connection', async (socket) => {
       }
 
       // Replace navigation notification count when joining the room
-      var chat_rooms_for_notification = await Model.ChatRoom.find({ user: user._id })  
+      var chat_rooms_for_notification = await Model.ChatRoom.find({ user: user.id })  
       var chat_notification = 0
       for (chat_room of chat_rooms_for_notification) {
-        var count = await Model.ChatContent.countDocuments({ room: chat_room._id, read: { $ne: session.user._id } })
+        var count = await Model.ChatContent.countDocuments({ room: chat_room._id, read: { $ne: session.passport.user.id } })
         chat_notification += count
       }
 
@@ -98,7 +98,7 @@ my_space.on('connection', async (socket) => {
 
       // Save the new chat message 
       var chat_content = new Model.ChatContent({
-        user: msg.user._id,
+        user: msg.user.id,
         content: msg.message,
         room: room._id,
         read: msg.read
@@ -115,7 +115,7 @@ my_space.on('connection', async (socket) => {
       my_space.emit('chat_notification', chat_rooms_for_notification, chat_contents_for_notification)
 
       // Emit to chat detail - Including my message or not, detect wheather a user in the room or not
-      msg.me = msg.user._id
+      msg.me = msg.user.id
       var room_with_user = await Model.ChatRoom.findById(room._id).populate('user')
       var read = room_with_user.user.length - chat_content.read.length
       my_space.to(room._id).emit('message', msg, read)
@@ -151,7 +151,7 @@ my_space.on('connection', async (socket) => {
         var user_something = []
         members.map(function (value, index) {
           if (value.room===obj.room) {
-            user_something.push(value.user)
+            user_something.push(value.user.id)
           }
         })
 

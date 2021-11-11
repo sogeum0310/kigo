@@ -19,7 +19,7 @@ html
   
       div.wrap
         block content
-
+  
       footer 
         if (user_global_account)
           ul.foot_icon_wrap.clearfix 
@@ -49,7 +49,7 @@ html
               a(href="/chats")
                 img(src='/img/foot_icon06.svg' alt='')
                 p 채팅
-                  span#notification (#{chat_notification})
+                  span#notification #{chat_notification}
             li 
               a(href="/mypage")
                 img(src='/img/foot_icon02.svg' alt='')
@@ -68,9 +68,9 @@ html
         var chat_notification = 0
         
         for (chat_room of chat_rooms) {
-          if (chat_room.user.includes(user_global._id)) {
+          if (chat_room.user.includes(user_global.id)) {
             for (chat_content of chat_contents) {
-              if (chat_content.room===chat_room._id && !chat_content.read.includes(user_global._id)) {
+              if (chat_content.room===chat_room._id && !chat_content.read.includes(user_global.id)) {
                 console.log(chat_content)
                 chat_notification++
               }

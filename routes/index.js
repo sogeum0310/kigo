@@ -53,6 +53,12 @@ router.get('/estimate/sent/:id', estimate_controller.estimate_sent_detail)
 
 // User
 router.get('/login', user_controller.login_get)
+router.get('/auth/google', user_controller.auth_google);
+router.get('/auth/google/callback', user_controller.auth_google_callback);
+router.get('/auth/naver', user_controller.auth_naver);
+router.get('/auth/naver/callback', user_controller.auth_naver_callback);
+router.get('/auth/kakao', user_controller.auth_kakao)
+router.get('/auth/kakao/callback', user_controller.auth_kakao_callback)
 router.post('/login', user_controller.login_post)
 router.get('/logout', user_controller.logout)
 
@@ -97,7 +103,6 @@ router.get('/community/update/:id', community_controller.community_update_get)
 router.post('/community/update/:id', community_controller.community_update_post)
 
 router.post('/community/comment/create', community_controller.blog_comment_create)
-router.post('/community/comment/update', community_controller.blog_comment_update)
 router.post('/community/comment/delete', community_controller.blog_comment_delete)
 
 

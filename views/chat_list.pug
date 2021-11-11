@@ -33,7 +33,7 @@ block content
 
     // On make room event, bring master to the room just has been made
     socket.on('makeRoom', function (chat_room, master) {
-      if (master===user_global._id) {  
+      if (master===user_global.id) {  
         location.href = 'chat/' + chat_room._id
       }
     })
@@ -42,7 +42,7 @@ block content
     socket.on('last_message', function (chat_content, chat_contents) {
       var n = 0
       for (chat_content of chat_contents) {
-        if (!chat_content.read.includes(user_global._id)) {
+        if (!chat_content.read.includes(user_global.id)) {
           n++
         }
       }
@@ -52,7 +52,7 @@ block content
     // Make new room item in the list, only if when chat has first began
     socket.on('addRoom', function (room, last_content) {  
       room.user.map(function (value, index) {
-        if (user_global._id===value._id) {
+        if (user_global.id===value._id) {
           room.user.splice(index, 1)
           var li = document.createElement('li')
           

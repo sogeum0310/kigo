@@ -4,7 +4,7 @@ const async = require('async')
 
 exports.estimate_request_list = async (req, res, next) => {
   try {
-    var estimate_requests = await Model.EstimateRequest.find({ 'user': req.session.user._id }).populate('topic')
+    var estimate_requests = await Model.EstimateRequest.find({ 'user': req.user.id }).populate('topic')
     res.render('estimate_request_list', { title: '견적요청', estimate_requests: estimate_requests })
   } catch (error) {
     res.render('error', { message: '', error: error })
@@ -13,7 +13,7 @@ exports.estimate_request_list = async (req, res, next) => {
 
 exports.estimate_response_detail_get = async (req, res, next) => {
   try {
-  var estimate_response = await Model.EstimateResponse.findById(req.params.id).populate('user').exec() 
+    var estimate_response = await Model.EstimateResponse.findById(req.params.id).populate('user').exec() 
     var portfolio = await Model.File.findOne({ parent: estimate_response.user }).sort([[ 'reg_date', 'descending' ]]).exec()
     var business_reviews = await Model.Review.find({ user_business: estimate_response.user }).exec()
     res.render('estimate_response_detail', { title: '견적서', estimate_response: estimate_response, portfolio: portfolio, business_reviews: business_reviews })
@@ -25,7 +25,7 @@ exports.estimate_response_detail_get = async (req, res, next) => {
 exports.estimate_response_detail_post = async (req, res, next) => {
   try {
     var review = new Model.Review({
-      user_personal: req.session.user._id,
+      user_personal: req.user.id,
       user_business: req.body.user_business,
       rating: req.body.rating,
       content: req.body.content,
@@ -40,7 +40,7 @@ exports.estimate_response_detail_post = async (req, res, next) => {
 
 exports.estimate_received_list = async (req, res, next) => {
   try {
-    var user_business = await Model.User.findById(req.session.user._id).exec() 
+    var user_business = await Model.User.findById(req.user.id).exec() 
     var user_business_platform = []
 
     for (i=0; i<user_business.platform.length; i++) {
@@ -61,12 +61,12 @@ exports.estimate_received_list = async (req, res, next) => {
       estimate_request.sent = await Model.EstimateResponse.countDocuments({ 
         $and: [
           { estimate_request: estimate_request._id }, 
-          { user: req.session.user._id }
+          { user: req.user.id }
         ] 
       }).exec()
     }
 
-    var last_estimate_response = await Model.EstimateResponse.findOne({ user: req.session.user._id }).sort([['reg_date', 'descending']])
+    var last_estimate_response = await Model.EstimateResponse.findOne({ user: req.user.id }).sort([['reg_date', 'descending']])
     console.log(last_estimate_response)
     if (last_estimate_response) {
       var long = new Date() - last_estimate_response.reg_date
@@ -87,7 +87,7 @@ exports.estimate_received_list = async (req, res, next) => {
   var estimate_requests = await Model.EstimateRequest.find().populate('topic').populate('user')
 
 
-  var last_estimate_response = await Model.EstimateResponse.findOne({ user: req.session.user._id }).sort([['reg_date', 'descending']])
+  var last_estimate_response = await Model.EstimateResponse.findOne({ user: req.user.id }).sort([['reg_date', 'descending']])
   console.log(last_estimate_response)
   if (last_estimate_response) {
     var long = new Date() - last_estimate_response.reg_date
@@ -133,7 +133,7 @@ exports.estimate_received_detail_post = async (req, res, next) => {
   try {
     var estimate_response = new Model.EstimateResponse({
       estimate_request: req.params.id,
-      user: req.session.user._id,
+      user: req.user.id,
       item: req.body.item,
       cost: req.body.cost,
       note: req.body.note
@@ -155,7 +155,7 @@ exports.estimate_received_detail_post = async (req, res, next) => {
 
 exports.estimate_sent_list = async (req, res, next) => {
   try {
-    var estimate_responses = await Model.EstimateResponse.find({ user: req.session.user._id })
+    var estimate_responses = await Model.EstimateResponse.find({ user: req.user.id })
     .populate({ path: 'estimate_request', populate: [{ path: 'user' }, { path: 'topic' }] })
     .exec()
     res.render('estimate_sent_list', { title: '보낸 견적', estimate_responses: estimate_responses })
@@ -255,7 +255,7 @@ exports.estimate_request_detail = async (req, res, next) => {
 exports.estimate_request_create_post = async (req, res, next) => {
   try {
     var estimate = new Model.EstimateRequest({
-      user: req.session.user._id,
+      user: req.user.id,
       topic: req.query.topic,
       field1: req.body.field1,
       field2: req.body.field2,

@@ -12,25 +12,24 @@ block content
       br
       button.login_btn(type="submit") LOGIN
 
-      div.form-group.login_type_check.clearfix
-        div
-          input#type_user(type="radio", name="login_type", value="personal", checked) 
-          label(for="type_user") 일반사용자
-        div
-          input#type_business(type="radio", name="login_type", value="business")
-          label(for="type_business") 광고업체, 인플루언서 
+    if (hasMessages)
+      ul
+        each message in messages
+          li= message
+    
+    ul 
+      li
+        a(href="/auth/google") Google login 
+      li
+        a(href="/auth/naver") Naver login 
+      li
+        a(href="/auth/kakao") Kakao login 
 
-                
-    if errors 
-      ul.login_error 
-        for error in errors 
-          li= error
-        
     p.join_btn 
       a(href="/signup/option") 회원가입
 
     p 
-      a(href="/user/lostusername") Find username
+      a(href="/user/lostusername") # Find username
 
     p.lost_password_btn 
       a(href="/user/lostpassword") 비밀번호 찾기

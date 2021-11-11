@@ -13,54 +13,81 @@ block content
 
   hr
 
-  h3 create comment
+  button(onclick=`createItem('${blog._id}', 0)`) create
+
+  h3 comments
+  each blog_comment in blog_comments 
+    div(id="item-" + blog_comment._id)
+      p(id="content-" + blog_comment._id) #{blog_comment.content} 
+      if (blog_comment.user)
+        i - #{blog_comment.user.username}
+      p
+        button(onclick=`createItem('${blog_comment.parent}', '${blog_comment._id}')`) update
+        button(onclick=`deleteItem('${blog_comment._id}')`) delete
+        button(onclick=`createItem('${blog_comment._id}', 0)`) add
+      div(style="margin-left:25px")
+        each comment in blog_comment.comment
+          div(id="item-" + comment._id)
+            p(id="content-" + comment._id) #{comment.content} 
+            if (blog_comment.user)
+              i - #{comment.user.username}
+            p
+              button(onclick=`createItem('${comment.parent}', '${comment._id}')`) update
+              button(onclick=`deleteItem('${comment._id}')`) delete
+              button(onclick=`createItem('${blog_comment._id}', 0)`) add
+      br
+
+  hr
+
+  h3 comment form
 
   form(action="/community/comment/create", method="POST") 
-    input(type="hidden", name="blog", value=blog._id)
+    div.form-group
+      label(for="") parent
+      input(type="text", id="parent" name="parent", value="")
+    div.form-group
+      label(for="") id
+      input(type="text", id="id" name="id", value="")
     div.form-group
       label(for="") 
       textarea(name="content")
     button(type="submit") confirm 
 
-  hr
-
-  h3 comments
-
-  each blog_comment in blog_comments 
-    form(id="form-" + blog_comment._id) 
-      input(type="hidden", name="id", value=blog_comment._id)
-      textarea(id="item-" + blog_comment._id, name="content") #{blog_comment.content}
-      if (user_global._id.toString()===blog_comment.user.toString())
-        div
-          button(onclick=`createBtn('${blog_comment._id}')`) update 
-          button(onclick=`deleteBtn('${blog_comment._id}')`) delete
-      p -
-  
 
   script.
-    async function createBtn(id) {
-      document.getElementById('form-' + id).addEventListener('submit', function (e) {
-        e.preventDefault()
-      })
+    var form = document.querySelector('form')
 
-      var formData = new FormData(document.getElementById('form-' + id))
-      var results = await fetch('/community/comment/update', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData).toString()
-      }).then(res => res.text())
+    function createItem(parent, id) {
+      document.querySelector('#parent').value = parent
+      document.querySelector('#id').value = id
+      var content = document.querySelector('#content-' + id) ? document.querySelector('#content-' + id).textContent : ''
+      document.querySelector('textarea').textContent = content
     }
 
-    async function deleteBtn(id) {
-      document.getElementById('form-' + id).addEventListener('submit', function (e) {
-        e.preventDefault()
-      })
-      
+    async function deleteItem(id) {
+      var res = confirm('y/n')
+      if (res===false) {
+        return console.log('false')
+      }
+
       var results = await fetch('/community/comment/delete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'id=' + id
       }).then(res => res.text())
 
-      document.getElementById('form-' + id).style.display = 'none'
+      document.getElementById('item-' + id).style.display = 'none'
     }
+
+
+
+  
+
+    
+
+
+
+
+  
+
+  

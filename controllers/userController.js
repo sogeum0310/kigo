@@ -2,8 +2,6 @@ const Model = require('../models/model')
 const async = require('async')
 const crypto = require('crypto')
 const sendEmail = require('../utils/sendEmail')
-const bcrypt = require('bcrypt')
-const saltRounds = 10
 
 var passport = require('passport')
 var passportLocal = require('../auth/local');
@@ -315,11 +313,11 @@ exports.access_password_get = async (req, res, next) => {
 
 exports.access_password_post = async (req, res, next) => {
   try {
-    const match = await bcrypt.compare(req.body.password, req.user.password);
+    var user = await Model.User.findById(req.user.id)
+    var hashedPassword = crypto.pbkdf2Sync(req.body.password, user.salt, 310000, 32, 'sha256').toString('hex')
 
-    if (!match) {
-      var error = 'wrong password'
-      return res.render('user_access_password', { title: 'Access password', error: error })
+    if (user.password!==hashedPassword) {
+      return res.redirect('access_password')
     }
 
     res.render('user_change_password', { title: 'Change password' })
@@ -344,12 +342,10 @@ exports.change_password = async (req, res, rext) => {
       return res.render('user_change_password', { title: 'Change password', errors: errors })
     }
 
-    var user = await Model.User.findById(req.user.id)
-    var hash = await bcrypt.hash(req.body.password, saltRounds);
+    var salt = crypto.randomBytes(16).toString('hex');
+    var hashedPassword = crypto.pbkdf2Sync(req.body.password, salt, 310000, 32, 'sha256').toString('hex')
 
-    user.password = hash
-
-    await user.save();
+    await Model.User.findByIdAndUpdate(req.user.id, { password: hashedPassword })
 
     var message = 'Change password successfully'
     var url = '/'
@@ -434,7 +430,11 @@ exports.user_reset_password_post = async (req, res, next) => {
     if (req.body.password!==req.body.password_confirm) {
       return res.send('비밀번호가 일치하지 않습니다')
     }
-    user.password = req.body.password;
+
+    var salt = crypto.randomBytes(16).toString('hex');
+    var hashedPassword = crypto.pbkdf2Sync(req.body.password, salt, 310000, 32, 'sha256').toString('hex')
+    
+    user.password = hashedPassword
     await user.save();
     await token.delete();
     res.send("비밀번호 재설정이 완료되었습니다");

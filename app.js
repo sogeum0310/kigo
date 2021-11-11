@@ -15,6 +15,7 @@ const app = express();
 
 const mongoUrl = 'mongodb://sogeum0310:hyun0831**@ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:27017/test?authSource=admin&authMechanism=SCRAM-SHA-1'
 
+// air
 // mongoose connection 
 const mongoose = require('mongoose');
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });

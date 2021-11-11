@@ -1,47 +1,113 @@
 extends layout 
-
+block header 
+  include back_header.pug
 block content 
   h1= title
+  div(style="border:1px dashed grey; height:400px; overflow: auto")
+    ul#messages
+      each chat_content in chat_contents 
+        if (chat_content.user._id.toString()===user_global._id.toString())
+          li #{chat_content.user.username}(나) : !{chat_content.content} #[span.num]
+        else 
+          li #{chat_content.user.username} : !{chat_content.content} #[span.num]
 
-  ul#messages(style="background: whitesmoke; height: 400px; overflow: auto")
-    if (chat_contents)
-      pre= chat_contents
+  form#form(action="")
+    input(type="text" id="input")
+    button(type="submit") send
 
-  form#form
-    input#input(type="text")
-    button SEND
+  form#file_form
+    input(type="file" name="my_files" multiple)
+    button(type="submit") send
+  
+  p
+    a(href="/chats") Back |  
+    form(action="/chat_out", method="POST")
+      input(type="hidden", name="room", value=room._id)
+      input(type="hidden", name="user", value=user_global._id) 
+      button(type="submit") Out of this room
 
-  p 
-    a(href="#" onclick="outRoom()") Out 
 
-  script(src="/socket.io/socket.io.js")
   script.
-    var socket = io()
-    var messages = document.getElementById('messages')
+    var ul = document.querySelector('ul')
     var form = document.getElementById('form')
+    var file_form = document.querySelector('#file_form')
     var input = document.getElementById('input')
-    var user = '!{user}'
-    var room = '!{room}'
+    var messages = document.getElementById('messages')
+    var event = document.getElementById('event')
+    var room = JSON.parse('!{JSON.stringify(room)}')
 
-    socket.emit('join', room)
 
-    function outRoom() {
-      socket.emit('out', room)
-      location.href = '/chat/list'
-    }
+    // Send to the server when a user has join some room
+    socket.emit('join', room, user_global)
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault()
-      if (input.value) {
-        var message = { user: user, content: input.value }
-        socket.emit('chat message', room, message)
-        input.value = ''
+    // Detect members remained in the room. It will sent with message to the server
+    var members
+
+    //  On join event
+    socket.on('join', function (arr, n, notification) {
+      console.log(arr)
+      members = arr
+      // Make count next to the message lower when a user join
+      var nums = document.querySelectorAll('.num')
+      for (i=0; i<nums.length; i++) {
+        nums[i].textContent = n[i]
       }
+      // Replace notification count in the navigation bar when a user join the room
+      document.getElementById('notification').textContent = notification
+      console.log(notification)
     })
 
-    socket.on('chat message', function (msg) {
-      console.log(msg)
-      var item = document.createElement('li')
-      item.textContent = msg.user + ' : ' + msg.content
-      messages.appendChild(item)
+    // On bye event, to detect user remained in the room
+    socket.on('bye', function (arr) {
+      console.log(arr)
+      members = arr
+    })
+
+    // Send message to server
+    form.addEventListener('submit', function (e) {
+      e.preventDefault()
+      
+      var msg = { user: user_global, message: input.value, read: members }
+      // Emit the message event
+      socket.emit('message', room, msg)
+      input.value = ''
+
+      console.log(members)
+    })
+
+    // Add new message item arrived from server in the list 
+    socket.on('message', function (msg, read) {
+      var li = document.createElement('li')
+      
+      if (user_global._id===msg.me) {
+        li.innerHTML = `${msg.user.username}(나) : ${msg.message} <span class="num">${read}</span>`
+      } else {
+        li.innerHTML = `${msg.user.username} : ${msg.message} <span class="num">${read}</span>`
+      }
+      messages.appendChild(li)
+    })
+
+    file_form.addEventListener('submit', async function (e) {
+      e.preventDefault()
+
+      var form_data = new FormData(file_form)
+
+      var results = await fetch('/chat_file', {
+        method: 'POST',
+        body: form_data
+      }).then(res => res.json())
+
+      var txt = ''
+
+      for (result of results) {
+        var img = `<img src="/files/chat/${result}">`
+        txt += img 
+      }
+
+      var msg = { user: user_global, message: txt, read: members }
+      // Emit the message event
+      socket.emit('message', room, msg)
+      input.value = ''
+
+      console.log(members)
     })

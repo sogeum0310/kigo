@@ -1,0 +1,37 @@
+extends layout 
+
+block content 
+  h1= title 
+
+  form(action="")
+    div.form-group
+      label(for="") email 
+      input(type="text", name="email") 
+    p 
+      button(type="submit") submit 
+
+  h3 results
+  p#demo
+
+  script.
+    var form = document.querySelector('form')
+    var btn = document.querySelector('button')
+
+    btn.addEventListener('click', getUsername)
+
+    async function getUsername(e) {
+      e.preventDefault()
+
+      var formData = new FormData(form)
+
+      var results = await fetch('/user/lostusername', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData).toString()
+      }).then(res => res.text())
+
+      document.querySelector('#demo').textContent = results
+    }
+
+   
+

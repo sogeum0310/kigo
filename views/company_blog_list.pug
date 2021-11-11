@@ -1,15 +1,37 @@
 extends layout 
 
 block content
-  h1=title 
+  //- h1.title=title 
+  header.clearfix 
+    .header_box.container 
+      .header_back_btn 
+        i.fa.fa-arrow-left(aria-hidden='true')
+      h1.header_title=title
 
-  pre= blog_list
+  //- pre= blog_list
 
-  //- ul
-  //-   each blog_post in blog_list 
-  //-     li 
-  //-       h2 #{blog_post.title}
-  //-       p #{blog_post.content}
+  .container
+    ul.blog_list_tab.clearfix 
+      li 
+        a(href="/company/faq/personal") 일반사용자
+      li 
+        a(href='/company/faq/business')
+          | 광고업체
+          br
+          |     인플루언서
+
+
+    ul.blog_list_area
+      each blog_post in blog_list 
+        li 
+          h2 #{blog_post.title}
+            i.fa.fa-angle-down(aria-hidden='true')
+          p !{blog_post.content}
+
+
+block scripts
+  script(src='/javascript/faq_list_tab.js')
+  script(src='/javascript/blog_list_accordian.js')
         
         
 

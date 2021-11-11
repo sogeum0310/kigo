@@ -1,15 +1,37 @@
 extends layout 
 
 block content 
-  h1= title
+  //- h1= title
 
-  ul 
-    each user in users
-      li 
-        a(href="/admin/user/detail/" + user._id) #{user.username}
-        if (user.auth===0)
-          |  unauthorized
+  //- ul 
+  //-   each user in users
+  //-     li 
+  //-       a(href="/admin/user/detail/" + user._id) #{user.username}
+  //-       if (user.auth===0)
+  //-         |  unauthorized
 
-  hr
+  //- hr
 
-  pre= users
+  //- pre= users
+  h1.admin_con_title= title
+
+  table.admin_stat.admin_member_stat
+    tbody
+      tr
+        th
+          | 아이디
+        th
+          | 연락처
+        th
+          | 이메일
+        th 
+          | 관리
+      each user in users
+        tr 
+          td #{user.username}
+          td 
+            | #{user.phone}
+          td 
+            | #{user.email}
+          td 
+            a(href="/admin/user/detail/" + user._id) 상세보기

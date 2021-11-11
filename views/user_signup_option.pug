@@ -1,6 +1,19 @@
 extends layout 
 
 block content 
-	h1= title
-	a(href="/signup/personal") user / 
-	a(href="/signup/business") business	
+	header.clearfix 
+		.header_box.container
+			.header_back_btn
+				i.fa.fa-arrow-left(aria-hidden='true')
+			h1.header_title=title
+	//- h1= title
+	.container 
+		.select_user_txt 
+			p
+				i.fa.fa-check-circle(aria-hidden='true')
+				|  일반사용자 또는 광고업체, 인플루언서중에서 선택하십시오.
+		ul.select_user_type.clearfix 
+			li 
+				a(href="/signup/personal") 일반사용자
+			li 
+				a(href="/signup/business") 광고업체 또는 인플루언서

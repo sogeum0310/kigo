@@ -1,10 +1,18 @@
 extends layout 
-
+block header 
+  include back_header.pug
 block content 
-  h1= title 
+  //- h1= title 
 
-  ul 
-    li 
-      a(href="/company/contact/qna/create") QnA 
-    li 
-      a(href="/company/contact/message/create") Message
+  //- ul 
+  //-   li 
+  //-     a(href="/company/contact/qna/create") QnA 
+  //-   li 
+  //-     a(href="/company/contact/message/create") Message
+
+  .container
+    ul.contact_list  
+      li 
+        a(href="/company/contact/qna/create") 1:1 문의하기 
+      li 
+        a(href="/company/contact/message/create") 키고에 의견주기

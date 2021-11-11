@@ -1,14 +1,30 @@
 extends layout 
-
+block header 
+  include back_header.pug
 block content 
-  h1= title 
+  //- h1= title 
   
-  ul
-    each qna in qna_list 
-      li= qna
-        if (qna.qna_answer)
-          p= qna.qna_answer
-        else 
-          p 대기중입니다
+  //- ul
+  //-   each qna in qna_list 
+  //-     li= qna
+  //-       if (qna.qna_answer)
+  //-         p= qna.qna_answer
+  //-       else 
+  //-         p 대기중입니다
 
+  .container
+    ul.mypage_qna_list
+      each qna in qna_list 
+        li
+          .mypage_qna_question.clearfix
+            p 질문 : #{qna.content} 
+            p #{qna.reg_date.getFullYear()}-#{qna.reg_date.getMonth() +1}-#{qna.reg_date.getDate()}
+          if (qna.qna_answer)
+            p.mypage_qna_answer 답변 : #{qna.qna_answer.content}
+          else 
+            p.mypage_qna_answer 대기중입니다
+      p.no_chat_list_text 질문목록이 없습니다.
+
+block scripts
+  script(src='/javascript/no_chat_list.js')
     

@@ -1,15 +1,31 @@
 extends layout 
 
 block content 
-  h1= title
+  //- h1= title
 
-  ul
+  //- ul
+  //-   each blog_item in blog_list
+  //-     li
+  //-       a(href="/admin/"+url+"/" + blog_item._id)= blog_item.title 
+  //-       if (blog_item.qna_answer)
+  //-         |  completed
+
+  //- if (url==='notice' || url==='event' || url==='faq')
+  //-   a(href="/admin/"+url+"/create") create 
+
+  h1.admin_con_title= title
+  ul.admin_notice_list_wrap
+    li.clearfix.admin_notice_list_top 
+      p.admin_notice_list_subject 제목
+      p.admin_notice_list_date 작성일자
     each blog_item in blog_list
-      li
-        a(href="/admin/"+url+"/" + blog_item._id)= blog_item.title 
-        if (blog_item.qna_answer)
-          |  completed
+      li.clearfix.admin_notice_list_box
+        a(href=`/admin/${url}/${blog_item._id}`)= blog_item.title 
+          if (blog_item.qna_answer)
+            span.adm_completed 완료
+        p #{blog_item.reg_date}
 
-  a(href="/admin/"+url+"/create") create 
+  if (url==='notice' || url==='event' || url==='faq')
+    a.admin_write_btn(href="/admin/"+url+"/create") 글 작성
 
   

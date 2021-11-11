@@ -1,0 +1,13 @@
+extends layout 
+
+block content 
+  h1= title
+
+  ul 
+    each blog in blogs 
+      li
+        a(href="/community/" + blog._id) #{blog.title} 
+
+  
+
+  a(href="/community/create") create  

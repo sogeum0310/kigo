@@ -1,38 +1,96 @@
 extends layout 
-
+block header 
+  include back_header.pug
 block content 
-  h1= title
+  //- h1= title
 
-  ul#messages(style="background: whitesmoke; height: 250px")
-    if (chat_contents)
-      each chat_content in chat_contents 
-        if (chat_content.user_personal)
-          li #{chat_content.user_personal.user_id} : #{chat_content.content}
-        if (chat_content.user_business)
-          li #{chat_content.user_business.user_id} : #{chat_content.content}
+  //- div(style="background: whitesmoke; height: 400px; overflow: auto")
+  //-   ul#messages
+  //-     if (chat_contents)
+  //-       each chat_content in chat_contents 
+  //-         li #{chat_content.user.username} : #{chat_content.content}
+  //-   p#event
 
-  form#form
-    input#input(type="text")
-    button SEND
+  //- form#form
+  //-   input#input(type="text")
+  //-   button SEND
 
-  p 
-    a(href="#" onclick="outRoom()") Out 
+  //- p 
+  //-   a(href="/chat/list") back 
+
+  //- script(src="/socket.io/socket.io.js")
+  //- script.
+  //-   var socket = io()
+  //-   var messages = document.getElementById('messages')
+  //-   var form = document.getElementById('form')
+  //-   var input = document.getElementById('input')
+  //-   var user = JSON.parse('!{user}')
+  //-   var room = '!{room}'
+
+  //-   socket.emit('join', room)
+
+  //-   form.addEventListener('submit', function (e) {
+  //-     e.preventDefault()
+  //-     if (input.value) {
+  //-       var message = { user: user, content: input.value }
+  //-       socket.emit('chat message', room, message)
+  //-       input.value = ''
+  //-     }
+  //-   })
+
+  //-   socket.on('chat message', function (msg) {
+  //-     console.log(msg)
+  //-     var item = document.createElement('li')
+  //-     item.textContent = msg.user.username + ' : ' + msg.content
+  //-     messages.appendChild(item)
+  //-   })
+
+
+  //- p.go_chat_list 
+  //-   a(href='/chat/list')
+  //-     i.fa.fa-bars(aria-hidden='true')
+  style.
+    .wrap{
+    margin-bottom: 0;
+    }
+    .page_wrap{
+    padding-top: 64px;
+    }
+    .foot_icon_wrap{
+      display: none;
+    }
+  //- 채팅 페이지만 간격조정
+
+
+  div.chat_detail_wrap#chat_detail_wrap
+    ul#messages.chat_detail_ul
+      if (chat_contents)
+        each chat_content in chat_contents 
+          if (chat_content.user._id==JSON.parse(user)._id)
+            li.chat_me 
+              .chat_content #{chat_content.content}
+              //- span.chat_username #{chat_content.user.username}
+          else 
+            li.chat_you 
+             span.chat_username #{chat_content.user.username}
+             .chat_content #{chat_content.content}
+             
+
+  form#form.send_chat_form
+    input#input.send_chat_input(type="text", required)
+    button.send_chat_btn 보내기
+
 
   script(src="/socket.io/socket.io.js")
   script.
     var socket = io()
-    var user = '!{user._id}'
     var messages = document.getElementById('messages')
     var form = document.getElementById('form')
     var input = document.getElementById('input')
-    var x = document.getElementById('x')
+    var user = JSON.parse('!{user}')
+    var room = '!{room}'
 
     socket.emit('join', room)
-
-    function outRoom() {
-      socket.emit('out', room)
-      location.href = '/chat/list'
-    }
 
     form.addEventListener('submit', function (e) {
       e.preventDefault()
@@ -44,12 +102,32 @@ block content
     })
 
     socket.on('chat message', function (msg) {
+      console.log(msg)
       var item = document.createElement('li')
-      item.textContent = msg.user + ' : ' + msg.content
+      var chat_username = document.createElement('span')
+      var chat_content = document.createElement('div')
+      item.appendChild(chat_username)
+      item.appendChild(chat_content)
+
+
+      if (user._id===msg.me) {
+        //- item.style.color = 'red'
+        item.classList.add('chat_me')
+      } else {
+        item.classList.add('chat_you')
+      }
+
+      //- item.textContent = msg.user.username + ' : ' + msg.content
+      chat_username.textContent = msg.user.username
+      chat_content.textContent = msg.content
       messages.appendChild(item)
+
+      var objDiv = document.getElementById("chat_detail_wrap");
+      objDiv.scrollTop = objDiv.scrollHeight
+       //- 채팅 입력하고 스크롤 내려가게
     })
 
 
 
-
-    
+block scripts 
+  script(src='/javascript/chat_overflow.js')

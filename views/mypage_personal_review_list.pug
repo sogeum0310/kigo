@@ -1,8 +1,20 @@
 extends layout 
-
+block header 
+  include back_header.pug
 block content 
-  h1= title
+  //- h1= title
 
-  ul 
-    each review in review_list 
-      li= review
+  //- ul 
+  //-   each review in review_list 
+  //-     li= review
+
+  .container
+    ul.mypage_personal_review_wrap 
+      each review in review_list 
+        li
+          p.mypage_personal_review_star 별점 : #{review.rating}
+          .mypage_personal_review_conbox.clearfix
+            p 제목 : #{review.content} 
+            p #{review.reg_date.getFullYear()}-#{review.reg_date.getMonth() +1}-#{review.reg_date.getDate()}
+
+

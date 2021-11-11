@@ -1,51 +1,26 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var session = require('express-session')
-var MongoStore = require('connect-mongo')
-var fileUpload = require('express-fileupload')
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var adminRouter = require('./routes/admin');
-const Server = require('socket.io')
-var nodemailer = require('nodemailer')
-var Model = require('./models/model')
-var app = express();
-var Model = require('./models/model')
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const session = require('express-session')
+const MongoStore = require('connect-mongo')
+const fileUpload = require('express-fileupload')
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const adminRouter = require('./routes/admin');
+const nodemailer = require('nodemailer')
+const Model = require('./models/model')
+const app = express();
 
-var localMongo = 'mongodb://localhost:27017/kigo'
-var awsMongo = 'mongodb://sogeum0310:hyun0831**@ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:27017/kigo'
+const mongoUrl = 'mongodb://sogeum0310:hyun0831**@ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:27017/test?authSource=admin&authMechanism=SCRAM-SHA-1'
 
 // mongoose connection 
 const mongoose = require('mongoose');
-mongoose.connect(awsMongo, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 
-// var populate_esimate_form = require('./populate-estimate-form')
-// var populate_user = require('./populate-user.js')
-// var populate_estimate = require('./populate-estimate')
-// var populate_estimate_response = require('./populate-estimate-response')
+const populate = require('./populate/populate')
 
-app.io = require('socket.io')()
-
-app.io.on('connection', (socket) => {
-  socket.on('join', (room) => {
-    socket.join(room)
-  })
-  socket.on('out', (city) => {
-    socket.leave(city)
-  })
-  socket.on('chat message', async (room, msg) => {
-    var message = new Model.ChatContent({
-      user_id: msg.user,
-      content: msg.content,
-      room: room
-    }) 
-    message.save()
-    app.io.to(room).emit('chat message', msg);
-  });
-})
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -61,12 +36,13 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   store: MongoStore.create({
-    mongoUrl: awsMongo
+    mongoUrl: mongoUrl
   })
 }))
 
 app.use(function (req, res, next) {
-  var user_global = req.session.user
+  const user_global = req.session.user
+  res.locals.user_global = user_global
   if (user_global) {
     if (user_global.platform.length > 0) {
       res.locals.user_global_account = 'business'
@@ -74,8 +50,26 @@ app.use(function (req, res, next) {
       res.locals.user_global_account = 'personal'
     }
   }
-  // console.log(res.locals.user_global_account)
   next()
+})
+
+// Set global notification count variable for chat
+app.use(async function (req, res, next) {
+  try {
+    var count = await Model.ChatContent.countDocuments({ user: req.session.user._id })
+    var chat_rooms = await Model.ChatRoom.find({ user: req.session.user._id })
+    var chat_notification = 0
+    for (chat_room of chat_rooms) {
+      var count = await Model.ChatContent.countDocuments({ room: chat_room._id, read: { $ne: req.session.user._id } })
+      chat_notification += count
+    }
+    console.log(chat_notification)
+    res.locals.chat_notification = chat_notification
+    next()
+  } catch (error) {
+    console.log(error)
+    next()
+  }
 })
 
 app.use(fileUpload())
@@ -100,11 +94,7 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
 
-  if (req.url.match(/^\/admin\//)) {
-    res.render('admin/error');
-  } else {
-    res.render('error');
-  }
+  res.render('error');
 });
 
 

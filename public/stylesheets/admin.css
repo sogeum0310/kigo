@@ -1,9 +1,357 @@
 body {
-    padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   }
   
   a {
     color: grey;
+    text-decoration: none;
   }
   
+
+  .admin_login_title{
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .admin_login_form_group input{
+    margin-bottom: 5px;
+  }
+  .admin_left_aside{
+    display: inline-block;
+    width: 280px;
+    vertical-align: top;
+  }
+  .admin_content_area{
+    display: inline-block;
+    padding-left: 50px;
+    padding-top: 50px;
+    padding-right: 50px;
+    min-width: 1000px;
+    width: calc(100% - 280px);
+    vertical-align: top;
+  }
+
+  .admin_nav{
+    border-bottom: none;
+    background: #22282c;
+    height: 100vh;
+  }
+  .admin_nav a{
+    width: 100%;
+    padding: 30px 0;
+    padding-left: 30px;
+    color: #000;
+    text-align: left;
+    display: block;
+    color: rgba(255,255,255,0.97);
+    font-weight: bold;
+    transition: all 0.3s;
+  }
+  .admin_nav a i{
+    font-size: 20px;
+    margin-right: 5px;
+  }
+  .admin_nav a:hover{
+    background: #494d4f;
+    color: rgb(255,255,255);
+  }
+  .adm_login_box{
+    max-width: 767px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  /* 로그인 */
+
+  .admin_index_title{
+    font-size: 20px;
+    font-weight: bold;
+  }
+  .adm_login_logo{
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 100px;
+  }
+  /* index */
+  .admin_stat{
+    min-width: 1000px;
+    width: 100%;
+    height: auto;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    overflow: hidden;
+  }
+  .admin_stat tr{
+    border-bottom: 1px solid #ccc;
+  }
+  .admin_stat tr:last-child{
+    /* border-bottom: #0099e8; */
+  }
+  .admin_stat tr:hover td{
+    color: #4B37FF;
+    font-weight: bold;
+  }
+  .admin_stat tr:first-child:hover td{
+    color: #fff;
+
+  }
+  .member_detail_stat tr:first-child:hover td:last-child{
+    color: #000;
+  }
+  .admin_stat tr:last-child{
+  }
+  .admin_stat tr th{
+    font-weight: bold;
+    font-size: 16px;
+    background: #0099e8;
+    color: #fff;
+    font-weight: bold;
+    border-right: 1px solid rgba(255,255,255,0.4);
+  }
+  .admin_stat tr th:last-child{
+    border-right: none;
+  }
+  .admin_stat tr td,  .admin_stat tr th{
+    text-align: center;
+    padding: 15px 0;
+  }
+  .admin_stat tr td{
+    /* border-right: 1px solid #ccc; */
+  }
+  .admin_stat tr td:last-child{
+    /* border-right: none; */
+  }
+  .admin_stat tr:nth-child(even){
+    background: #f7f7f7;
+  }
+
+  .admin_member_stat tr td{
+    width: 25%;
+  }
+  .member_detail_stat{
+    margin-bottom: 10px;
+  }
+  .member_detail_stat tr th{
+    width: 25%;
+  }
+  .member_detail_stat tr td{
+    width: 75%;
+  }
+
+  .admin_user_detail_review_list {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .admin_user_detail_review_list li{
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  .admin_detail_con_title, .admin_con_title{
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  /* 목록 */
+
+  .admin_request_list_wrap{
+    margin-top: 30px;
+  }
+  .admin_request_list_wrap li{
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 8px;
+    float: left;
+    width: 25%;
+    text-align: center;
+
+  }
+  .admin_request_list_wrap li a{
+    display: block;
+    padding: 10px;
+    border: 1px solid #ccc;
+    color: #000;
+    margin: 0 5px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.3);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.3);
+    box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.3);
+  }
+  .admin_notice_list_top{
+    background: #0099e8;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .admin_notice_list_top p{
+    font-weight: bold;
+    color: #fff;
+  }
+  .admin_notice_list_top p, .admin_notice_list_box a, .admin_notice_list_box p{
+    display: inline-block;
+    padding: 15px;
+  }
+  .admin_notice_list_box:hover a, .admin_notice_list_box:hover p{
+    color: #4B37FF;
+    font-weight: bold;
+  }
+  .admin_notice_list_subject, .admin_notice_list_box a{
+    width: 70%;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .admin_notice_list_subject{
+    text-align: center;
+    padding-left: 0;
+  }
+  .admin_notice_list_date, .admin_notice_list_box p{
+    width: 30%;
+    border-right: 1px solid #ccc;
+    text-align: center;
+  }
+
+  .admin_back_btn{
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+
+  .admin_notice_list_wrap{
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    overflow: hidden;
+  }
+  .admin_notice_list_wrap li{
+    font-size: 16px;
+    font-weight: 400;
+    color: #000;
+    border-top: 1px solid #ccc;
+  }
+  .admin_notice_list_wrap li:last-child{
+    border-bottom: 1px solid #ccc;
+  }
+  .admin_notice_list_wrap li a{
+    color: #000;
+  }
+  .admin_notice_list_wrap li:nth-child(even){
+    background: #f7f7f7;
+  }
+  /* .admin_notice_list_wrap li:nth-child(even) p, .admin_notice_list_wrap li:nth-child(even) a{
+    color: #0099e8;
+  } */
+  .admin_write_btn{
+    color: #fff;
+    background: #4B37FF;
+    width: 200px;
+    height: auto;
+    padding: 10px 20px;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 15px;
+    display: block;
+  }
+
+  .adm_completed{
+    float: right;
+    color: #4b37ff;
+    font-weight: bold;
+  }
+  .admin_container{
+    min-width: 1300px;
+  }
+
+
+  .admin_blog_detail_wrap{
+    width: 100%;
+    height: auto;
+    position: relative;
+    background: #fff;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.5);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.5);
+    box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.5);
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  .admin_blog_detail_wrap h3{
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .admin_blog_detail_wrap h4{
+    font-size: 14px;
+    font-weight: 400;
+  }
+  .admin_blog_detail_wrap p{
+    font-size: 14px;
+    font-weight: 400;
+    color: #999;
+  }
+  .admin_tool_wrap{
+    margin-bottom: 10px;
+  }
+  .admin_tool_wrap a{
+    float: left;
+    width: 100px;
+    margin: 0 10px;
+    text-align: center;
+    padding: 10px 0;
+    background: #4B37FF;
+    color: #fff;
+  }
+  .admin_tool_wrap a:first-child{
+    margin-left: 0;
+  }
+  .admin_tool_wrap a:nth-child(3){
+    background: green;
+  }
+  .admin_tool_wrap a:last-child{
+    background: red;
+    margin-right: 0;
+  }
+  .admin_tool_wrap a i{
+    margin-right: 5px;
+    font-size: 18px;
+  }
+  .admin_blog_form_group label, .admin_blog_form_group p{
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .admin_blog_form_group p{
+    margin-top: 10px;
+  }
+  .admin_fqa_form_group{
+    margin-bottom: 10px;
+  }
+  .admin_fqa_form_group input{
+    margin-right: 20px;
+  }
+  .admin_fqa_form_group{
+    font-size: 16px;
+  }
+  .admin_mypage_wrap{
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .admin_mypage_wrap li a{
+    color: #fff;
+    font-size: 14px;
+    background: #4B37FF;
+    padding: 15px;
+    text-align: center;
+    margin-top: 15px;
+    display: inline-block;
+  }
+  .admin_nav img{
+    max-width: ;
+  }
+
+  /* 공지사항 등 */

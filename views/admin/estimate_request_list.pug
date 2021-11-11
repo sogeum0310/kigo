@@ -1,14 +1,24 @@
 extends layout 
 
 block content 
-  h1= title
+  //- h1= title
 
-  ul
+  //- ul
+  //-   each estimate_request in estimate_requests
+  //-     li 
+  //-       a(href=estimate_request._id) #{estimate_request.platform[0].name}
+  //-       |  (#{estimate_request.count})
+
+  //- hr
+
+  //- pre= estimate_requests
+
+  h1.admin_con_title= title
+
+  ul.admin_request_list_wrap.clearfix
     each estimate_request in estimate_requests
       li 
         a(href=estimate_request._id) #{estimate_request.platform[0].name}
-        |  (#{estimate_request.count})
+         p (#{estimate_request.count}) 건
 
   hr
-
-  pre= estimate_requests

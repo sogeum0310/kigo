@@ -1,117 +1,191 @@
-var Model = require('../models/model')
-var async = require('async')
+const Model = require('../models/model')
 const { faq_list } = require('./adminController')
-var nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
 
 exports.index = async (req, res, next)  => {
-  res.render('index', { title: 'KIGO' })
+  try {
+    res.render('index', { title: 'KIGO' })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.company_about = async (req, res, next) => {
-  res.render('company_about', { title: 'Company about' })
+  try {
+    res.render('company_about', { title: '회사소개' })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
+
+exports.company_ranking = async (req, res, next) => {
+  try {
+    res.render('company_ranking_info', { title: '등급제확인' })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
+}
+
+exports.company_event_page = async (req, res, next) => {
+  try {
+    res.render('company_event_page', { title: '이벤트' })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
+}
+// 이벤트추가
+
 exports.company_blog_list = async (req, res, next) => {
-  var notice_list = await Model.Notice.find().exec()
-  res.render('company_blog_list', { title: 'Notice list', blog_list: notice_list })
+  try {
+    var notice_list = await Model.Notice.find().exec()
+    res.render('company_blog_list', { title: '공지사항', blog_list: notice_list })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 exports.company_blog_detail = async (req, res, next) => {
+  try {
   console.log('')
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
+
 exports.company_guide = async (req, res, next) => {
-  res.render('company_guide', { title: 'Guide' })
+  try {
+  res.render('company_guide', { title: '이용방법' })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
+
 exports.company_event_list = async (req, res, next) => {
-  var event_list = await Model.Event.find().exec()
-  res.render('company_blog_list', { title: 'Event list', blog_list: event_list })
+  try {
+    var event_list = await Model.Event.find().exec()
+    res.render('company_blog_list', { title: '이벤트', blog_list: event_list })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.company_faq_list = async (req, res, next) => {
-  var faq_list_personal = await Model.Faq.find({ account: 'personal' }).exec()
-  var faq_list_business = await Model.Faq.find({ account: 'business' }).exec()
+  try {
+    var faq_list_personal = await Model.Faq.find({ account: 'personal' }).exec()
+    var faq_list_business = await Model.Faq.find({ account: 'business' }).exec()
 
-  var faq_list = { personal: faq_list_personal, business: faq_list_business }
-
-  // console.log(faq_list)
-
-  res.render('company_blog_list', { title: 'Faq list', blog_list: JSON.stringify(faq_list) })
+    var faq_list = { personal: faq_list_personal, business: faq_list_business }
+    res.render('company_blog_list', { title: '자주묻는 질문', blog_list: JSON.stringify(faq_list) })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
+
+exports.faq_list_personal = async (req, res, next) => {
+  try {
+    var faq_list_personal = await Model.Faq.find({ account: 'personal' }).exec()
+    res.render('company_blog_list', { title: '자주묻는 질문', blog_list: faq_list_personal })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
+}
+
+exports.faq_list_business = async (req, res, next) => {
+  try {
+    var faq_list_business = await Model.Faq.find({ account: 'business' }).exec()
+    res.render('company_blog_list', { title: '자주묻는 질문', blog_list: faq_list_business })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
+}
+
+// 자주묻는질문 페이지 분리
+
 exports.company_faq_detail = async (req, res, next) => {
-  console.log('')
+  try {
+    console.log('')
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 exports.company_share = async (req, res, next) => {
-  res.render('company_share', { title: 'Share' })
+  try {
+    res.render('company_share', { title: '추천하기' })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.company_contact_list = async (req, res, next) => {
-  res.render('company_contact_list', { title: 'Contact list' })
+  try {
+    res.render('company_contact_list', { title: '고객센터' })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.company_qna_create_get = async (req, res, next) => {
-  res.render('company_contact_form', { title: 'Qna create' })
+  try {
+    res.render('company_contact_form', { title: '1:1 문의하기' })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.company_qna_create_post = async (req, res, next) => {
-  var qna_detail = new Model.QnaQuestion({
-    title: req.body.title,
-    content: req.body.content,
-    user: req.session.user._id
-  })
-  qna_detail.save()
+  try {
+    var qna_detail = new Model.QnaQuestion({
+      title: req.body.title,
+      content: req.body.content,
+      user: req.session.user._id
+    })
+    qna_detail.save()
 
-  var message = 'A question is successfully posted'
-  res.redirect('/success/?message=' + message)
+    var message = '문의가 접수되었습니다'
+    var url = '/mypage/qna/list'
+    res.redirect(`/success/?message=${message}&go_to=${url}`)
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.company_message_create_get = async (req, res, next) => {
-  res.render('company_contact_form', { title: 'Message create' })
+  try {
+    res.render('company_contact_form', { title: '의견' })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.company_message_create_post = async (req, res, next) => {
-  var message = new Model.Message({
-    title: req.body.title,
-    content: req.body.content,
-    user: req.session.user._id
-  })
-  message.save()
-  
-  var message = 'A message is successfully sent'
-  res.redirect('/success/?message=' + message)
-}
-
-exports.chat_list = async (req, res, next) => {
-  var chat_list = await Model.ChatRoom.find({ member: req.session.user._id }).exec()
-  var user = await Model.User.find().exec()
-
-  res.render('chat_list', { title: 'Chat list', user: user, chat_list: chat_list })
-}
-
-exports.chat_create = async (req, res, next) => {
-  var member = []
-  member.push(req.session.user._id)
-  member.push(req.body.member)  
-
-  var room = new Model.ChatRoom({
-    member: member
-  })
-  room.save()
-  res.redirect('/chat/' + room._id)
-}
-
-exports.chat_detail = async (req, res, next) => { 
-  var chat_contents = await Model.ChatContent.find({ room: req.params.id }).exec()
-  res.render('chat_detail', { 
-    title: 'Chat detail',
-    chat_contents: chat_contents, 
-    user: req.session.user._id,
-    room: req.params.id,
-  })
+  try {
+    var message = new Model.Message({
+      title: req.body.title,
+      content: req.body.content,
+      user: req.session.user._id
+    })
+    message.save()
+    
+    var message = '의견이 접수되었습니다.'
+    var url = '/'
+    res.redirect(`/success/?message=${message}&go_to=${url}`)
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.success = async (req, res, next) => {
-  res.render('success', { title: req.query.message })
+  try {
+    res.render('success', { title: req.query.message, go_to: req.query.go_to })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }
 
 exports.test = async (req, res, next) => {
-  var user_personal = await Model.User.find({ account: 'personal' })
-  Model.User.insertMany({ auth: 1 })
+  try {
+    res.render('test', { title: 'Test' })
+    console.log(new Date())
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
 }

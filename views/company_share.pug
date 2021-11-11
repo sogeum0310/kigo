@@ -1,4 +1,12 @@
 extends layout 
-
+block header 
+  include back_header.pug
 block content 
-  h1= title
+  //- h1= title
+  .container 
+    a#create-kakao-link-btn.create-kakao-link-btn(href='javascript:;')
+      i.fa.fa-heart(aria-hidden='true')
+      |  추천 Click!
+block scripts 
+  script(src='https://developers.kakao.com/sdk/js/kakao.js')
+  script(src='/javascript/share.js')

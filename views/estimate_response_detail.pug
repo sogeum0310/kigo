@@ -1,40 +1,127 @@
 extends layout 
-
+block header 
+  include back_header.pug
 block content 
-  h1= title
+  //- h1= title
 
-  pre= estimate_response
+  //- pre= estimate_response
 
-  p 
-    a(href="/chat/?you=" + estimate_response.user) chat 
+  //- form(action="/chat/create", method="POST") 
+  //-   input(type="text", name="user", value=estimate_response.user)
+  //-   button(type="submit") chat
 
-  h3 Portfolio
-  pre= portfolio
-  //- img(src="/files/" + portfolio.md_name, alt="")
+  //- h3 Portfolio
+  //- pre= portfolio
 
-  h3 Business reviews
 
-  form(action="", method="POST") 
-    input(type="hidden", name="user_business", value=estimate_response.user)
-    div.form-group
-      label(for="") 
-      textarea(name="content", cols="30", rows="10") 
-    div.form-group
-      input(type="radio", name="rating", value="1")
-      label(for="") 1
-      input(type="radio", name="rating", value="2")
-      label(for="") 2
-      input(type="radio", name="rating", value="3")
-      label(for="") 3
-      input(type="radio", name="rating", value="4")
-      label(for="") 4
-      input(type="radio", name="rating", value="5")
-      label(for="") 5
+  //- h3 Business reviews
 
-    p 
-      button(type="submit") confirm
+  //- form(action="", method="POST") 
+  //-   input(type="hidden", name="user_business", value=estimate_response.user)
+  //-   div.form-group
+  //-     label(for="") 
+  //-     textarea(name="content", cols="30", rows="10") 
+  //-   div.form-group
+  //-     input(type="radio", name="rating", value="1")
+  //-     label(for="") 1
+  //-     input(type="radio", name="rating", value="2")
+  //-     label(for="") 2
+  //-     input(type="radio", name="rating", value="3")
+  //-     label(for="") 3
+  //-     input(type="radio", name="rating", value="4")
+  //-     label(for="") 4
+  //-     input(type="radio", name="rating", value="5")
+  //-     label(for="") 5
 
-  pre= business_reviews
+  //-   p 
+  //-     button(type="submit") confirm
 
-  p 
-    a(href="/estimate/request/" + estimate_response.estimate_request) list 
+  //- pre= business_reviews
+
+  //- p 
+  //-   a(href="/estimate/request/" + estimate_response.estimate_request) list 
+
+  //- 상단 - 원본
+
+
+
+  .container
+    p.go_response_list
+      a(href="/estimate/request/" + estimate_response.estimate_request)
+        i.fa.fa-bars(aria-hidden='true') 
+    .estimate_request_detail_box 
+      p.estimate_request_detail_3st_txt 
+        span 견적서 작성일 :
+        |  #{estimate_response.reg_date.getFullYear()}.#{estimate_response.reg_date.getMonth() +1}.#{estimate_response.reg_date.getDate()}
+      .estimate_request_detail_stat_wrap
+        .estimate_request_detail_stat.estimate_request_detail_stat02 
+          .estimate_request_detail_itembox
+            each estimate_response_list_item in estimate_response.item
+              h3 #{estimate_response_list_item}
+          .estimate_request_detail_costbox
+            each estimate_response_list_cost in estimate_response.cost
+              p #{estimate_response_list_cost}
+          .estimate_request_detail_notebox 
+            each estimate_response_list_note in estimate_response.note
+              p #{estimate_response_list_note}
+            
+        //- .estimate_request_detail_stat.estimate_request_detail_stat02 
+        //-   h3 #{estimate_response.item[0]}
+        //-   p #{estimate_response.cost[0]}
+        //-   p #{estimate_response.note[0]}
+        //- .estimate_request_detail_stat.estimate_request_detail_stat02 
+        //-   h3 #{estimate_response.item[1]}
+        //-   p #{estimate_response.cost[1]}
+        //-   p #{estimate_response.note[1]}
+        //- .estimate_request_detail_stat.estimate_request_detail_stat02 
+        //-   h3 #{estimate_response.item[2]}
+        //-   p #{estimate_response.cost[2]}
+        //-   p #{estimate_response.note[2]}
+      p.estimate_request_detail_cost_txt 
+        span 견적가 :
+        |  #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}원
+    .estimate_request_portfolio_imgbox 
+      img(src="/files/" + portfolio.md_name, alt="")
+    .estimate_request_detail_company_info
+      h2 #{estimate_response.user.username}
+      h3 회사소개
+      p #{estimate_response.user.about}
+    .estimate_chat_box 
+      form(action="/chat/create", method="POST", onsubmit="return confirm('채팅을 시작하시겠습니까?');") 
+        input(type="hidden", name="user", value=estimate_response.user._id)
+        button.submit_btn2(type="submit") 채팅시작
+
+
+    form(action="", method="POST", onsubmit="return confirm('제출하시겠습니까?');") 
+      input(type="hidden", name="user_business", value=estimate_response.user._id)
+      div.form-group.estimate_response_form_star
+        input#rate5(type="radio", name="rating", value="5")
+        label(for="rate5") ⭐
+        input#rate4(type="radio", name="rating", value="4")
+        label(for="rate4") ⭐
+        input#rate3(type="radio", name="rating", value="3")
+        label(for="rate3") ⭐
+        input#rate2(type="radio", name="rating", value="2")
+        label(for="rate2") ⭐
+        input#rate1(type="radio", name="rating", value="1")
+        label(for="rate1") ⭐
+      div.form-group.estimate_response_review_form
+        label(for="") 
+        textarea.frm_input.full_input#estimate_response_text(name="content", cols="30", rows="10", required) 
+
+      p 
+        button.submit_btn(type="submit") 작성완료
+
+    ul.business_review_list_wrap
+      each business_review_list in business_reviews 
+        li.clearfix 
+          .user_icon
+            i.fa.fa-user-circle(aria-hidden='true')
+            p 별점 : #{business_review_list.rating}점
+          p.review_content #{business_review_list.content}
+          //- p.review_reg_date #{business_review_list.reg_date.getFullYear()}. #{business_review_list.reg_date.getMonth() +1}. #{business_review_list.reg_date.getDate()}
+
+
+block scripts 
+  script(src='/javascript/response_star.js')
+

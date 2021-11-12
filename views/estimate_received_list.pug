@@ -4,72 +4,12 @@ block header
 block content 
   h1= title 
 
-
   ul
     each estimate_received in estimate_received_list 
       li  
         a(href="/estimate/received/" + estimate_received._id) #{estimate_received.topic.name} #{estimate_received.user.username}
 
-  h3= message
-
   hr
-
-  //- pre= estimate_received_list
-
-  //- ul 
-  //-   each estimate_received in estimate_received_list 
-  //-     if (estimate_received.sent < 1)
-  //-       li
-  //-         a(href="/estimate/received/" + estimate_received._id) #{estimate_received.platform[0].name}  
-  //-         span (#{estimate_received.user.username})
-
-  //- //- h3= message
-
-  //- //- pre= estimate_received_list
   
-  //- .container
-  //-   //- ul.estimate_received_list_wrap 
-  //-   //-   each estimate_received in estimate_received_list 
-  //-   //-     if (estimate_received.sent < 1)
-  //-   //-       li.clearfix
-  //-   //-         a.clearfix.estimate_received_list_con_box(href="/estimate/received/" + estimate_received._id)
-  //-   //-           div #{estimate_received.platform[0].name},  
-  //-   //-             span (#{estimate_received.user.username})님
-  //-   //-           //- span.estimate_received_list_state 견적요청중
-              
-  //-   //-           p.estimate_received_list_reg_date 견적요청일 : #{estimate_received.reg_date.getFullYear()}.#{estimate_received.reg_date.getMonth() +1}.#{estimate_received.reg_date.getDate()}
-
-  //-   if (message)
-  //-     ul.estimate_received_list_wrap 
-  //-       each estimate_received in estimate_received_list 
-  //-         if (estimate_received.sent < 1)
-  //-           li.clearfix
-  //-             .estimate_received_list_con_box
-  //-               div #{estimate_received.platform[0].name},  
-  //-                 span (#{estimate_received.user.username})님
-  //-               //- span.estimate_received_list_state 견적요청중
-                
-  //-               p.estimate_received_list_reg_date 견적요청일 : #{estimate_received.reg_date.getFullYear()}.#{estimate_received.reg_date.getMonth() +1}.#{estimate_received.reg_date.getDate()}
-  //-     h3.estimate_received_message 
-  //-       i.fa.fa-exclamation-circle(aria-hidden='true')
-  //-       | #{message}
-  //-   else 
-  //-     ul.estimate_received_list_wrap 
-  //-       each estimate_received in estimate_received_list 
-  //-         if (estimate_received.sent < 1)
-  //-           li.clearfix
-  //-             a.clearfix.estimate_received_list_con_box(href="/estimate/received/" + estimate_received._id)
-  //-               div #{estimate_received.platform[0].name},  
-  //-                 span (#{estimate_received.user.username})님
-  //-               //- span.estimate_received_list_state 견적요청중
-                
-  //-               p.estimate_received_list_reg_date 견적요청일 : #{estimate_received.reg_date.getFullYear()}.#{estimate_received.reg_date.getMonth() +1}.#{estimate_received.reg_date.getDate()}
-      
-    
-  //-   //- h3= message
-
-
-
-
-
-
+  if (message)
+    h3= message

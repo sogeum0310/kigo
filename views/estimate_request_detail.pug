@@ -4,25 +4,27 @@ block header
 block content 
   h1= title
 
-  h2 ## #{estimate_request.topic.name}
+  h2 #{estimate_request.topic.name}
   hr
 
+  //- Estimate request item and checked item details
   -var x = 1
   while (x < 11)
     -var y = x++
     if (estimate_request[`field${y}`].length>0)
       h3 # #{estimate_request[`field${y}`][0].item.name}
-      each something in estimate_request[`field${y}`]
-        p= something.name 
-        if (estimate_request.estimate_text[0] && estimate_request.estimate_text[0].item.toString()===something.item._id.toString())
+      each checked_detail in estimate_request[`field${y}`]
+        p= checked_detail.name 
+        if (estimate_request.estimate_text[0].item && estimate_request.estimate_text[0].item.toString()===checked_detail.item._id.toString())
           p #{estimate_request.estimate_text[0].text}
-      hr
-
-  h3 # somethign to say 
+  
+  //- Text input
+  h3 Somethign to say 
   p= estimate_request.content
 
   hr
-  //- pre= estimate_request
+  //- Estimate_request 
+  pre= estimate_request
 
 
   h3.estimate_responses_title 제출된 견적서 목록

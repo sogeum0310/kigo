@@ -4,7 +4,7 @@ const async = require('async')
 
 exports.estimate_request_list = async (req, res, next) => {
   try {
-    var estimate_requests = await Model.EstimateRequest.find({ 'user': req.user.id }).populate('topic')
+    var estimate_requests = await Model.EstimateRequest.find({ 'user': req.user.id }).populate('topic').sort([[ 'reg_date', 'descending' ]])
     res.render('estimate_request_list', { title: '견적요청', estimate_requests: estimate_requests })
   } catch (error) {
     res.render('error', { message: '', error: error })
@@ -222,38 +222,9 @@ exports.estimate_request_create_get = async (req, res, next) => {
   }
 }
 
-exports.estimate_request_detail = async (req, res, next) => {
-  try {
-    var estimate_request = await Model.EstimateRequest.findById(req.params.id)
-    .populate([ 
-      { path: 'field1', populate: 'item' }, 
-      { path: 'field2', populate: 'item' }, 
-      { path: 'field3', populate: 'item' }, 
-      { path: 'field4', populate: 'item' }, 
-      { path: 'field5', populate: 'item' }, 
-      { path: 'field6', populate: 'item' }, 
-      { path: 'field7', populate: 'item' }, 
-      { path: 'field8', populate: 'item' }, 
-      { path: 'field9', populate: 'item' }, 
-      { path: 'field10', populate: 'item' }, 
-      { path: 'topic' }
-    ])
-  
-    var estimate_text = await Model.EstimateText.find({ estimate_result: req.params.id })
-    console.log(estimate_text)
-  
-    estimate_request.estimate_text = estimate_text
-
-    var estimate_responses = await Model.EstimateResponse.find({ estimate_request: req.params.id }).populate('user').exec()
-
-    res.render('estimate_request_detail', { title: '견적서', estimate_request: estimate_request, estimate_responses: estimate_responses, })
-  } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
-}
-
 exports.estimate_request_create_post = async (req, res, next) => {
   try {
+    // return console.log(req.query.topic)
     var estimate = new Model.EstimateRequest({
       user: req.user.id,
       topic: req.query.topic,
@@ -290,5 +261,37 @@ exports.estimate_request_create_post = async (req, res, next) => {
     res.render('error', { message: '', error: error })
   }
 }
+
+exports.estimate_request_detail = async (req, res, next) => {
+  try {
+    var estimate_request = await Model.EstimateRequest.findById(req.params.id)
+    .populate([ 
+      { path: 'field1', populate: 'item' }, 
+      { path: 'field2', populate: 'item' }, 
+      { path: 'field3', populate: 'item' }, 
+      { path: 'field4', populate: 'item' }, 
+      { path: 'field5', populate: 'item' }, 
+      { path: 'field6', populate: 'item' }, 
+      { path: 'field7', populate: 'item' }, 
+      { path: 'field8', populate: 'item' }, 
+      { path: 'field9', populate: 'item' }, 
+      { path: 'field10', populate: 'item' }, 
+      { path: 'topic' }
+    ])
+  
+    var estimate_text = await Model.EstimateText.find({ estimate_result: req.params.id })
+    console.log(estimate_text)
+  
+    console.log(req.params.id)
+    estimate_request.estimate_text = estimate_text
+
+    var estimate_responses = await Model.EstimateResponse.find({ estimate_request: req.params.id }).populate('user').exec()
+
+    res.render('estimate_request_detail', { title: '견적서', estimate_request: estimate_request, estimate_responses: estimate_responses, })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
+}
+
 
 

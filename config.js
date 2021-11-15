@@ -16,44 +16,18 @@ exports.account = {
 // Social login
 exports.ids = {
   google: {
-    clientID: 'x',
-    clientSecret: 'x',
-    callbackURL: "x"
+    clientID: '526707866896-pjrnbbvt1vtjojlocp2juh77sr6eb438.apps.googleusercontent.com',
+    clientSecret: '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',
+    callbackURL: "http://ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:3000/auth/google/callback"
   },
   naver: {
-    clientID: 'a',
-    clientSecret: 'a',
-    callbackURL: "a"
+    clientID: '7j693ZkVrhj1R9wWidAT',
+    clientSecret: 's3QAv5oDt1',
+    callbackURL: "http://ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:3000/auth/naver/callback"
   }, 
   kakao: {
-    clientID: 'a',
-    clientSecret: 'a',
-    callbackURL: "a"
+    clientID: 'e11159ccad8f896ae82a8db559c740fb',
+    clientSecret: '',
+    callbackURL: "http://ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:3000/auth/kakao/callback"
   }
 };
-
-// 구글
-// sogeum0310
-// hyun0831**
-
-// 클라이언트id
-// 526707866896-pjrnbbvt1vtjojlocp2juh77sr6eb438.apps.googleusercontent.com
-
-// 클라이언트 비밀번호
-// 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
-
-// 네이버
-// idendrive
-// hyun6004**
-
-// 클라이언트id
-// 7j693ZkVrhj1R9wWidAT
-
-// clientSecret
-// s3QAv5oDt1
-
-// 카카오
-// sogeum9300@daum.net
-
-// clientSecret
-// e11159ccad8f896ae82a8db559c740fb

@@ -19,7 +19,7 @@ var config = require('./config.js')
 const populate = require('./populate/populate')
 
 // kiwon git
-// kiwon best
+// temin best.
 const mongoUrl = config.mydb.url
 // mongoose connection 
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });

@@ -16,9 +16,9 @@ exports.account = {
 // Social login
 exports.ids = {
   google: {
-    clientID: 'a',
-    clientSecret: 'a',
-    callbackURL: "a"
+    clientID: 'x',
+    clientSecret: 'x',
+    callbackURL: "x"
   },
   naver: {
     clientID: 'a',

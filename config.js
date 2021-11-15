@@ -17,18 +17,18 @@ exports.account = {
 // Social login
 exports.ids = {
   google: {
-    clientID: 'a',
-    clientSecret: 'a',
-    callbackURL: "a"
+    clientID: '526707866896-pjrnbbvt1vtjojlocp2juh77sr6eb438.apps.googleusercontent.com',
+    clientSecret: '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',
+    callbackURL: "http://ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:3000/auth/google/callback"
   },
   naver: {
-    clientID: 'a',
-    clientSecret: 'a',
-    callbackURL: "a"
+    clientID: '7j693ZkVrhj1R9wWidAT',
+    clientSecret: 's3QAv5oDt1',
+    callbackURL: "http://ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:3000/auth/naver/callback"
   }, 
   kakao: {
-    clientID: 'a',
-    clientSecret: 'a',
-    callbackURL: "a"
+    clientID: 'e11159ccad8f896ae82a8db559c740fb',
+    clientSecret: '',
+    callbackURL: "http://ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:3000/auth/kakao/callback"
   }
 };

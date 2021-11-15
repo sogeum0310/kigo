@@ -18,7 +18,7 @@ const mongoose = require('mongoose');
 var config = require('./config.js')
 const populate = require('./populate/populate')
 
-
+// kiwon git
 const mongoUrl = config.mydb.url
 // mongoose connection 
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });

@@ -1,6 +1,6 @@
 extends layout 
 block header 
-  include back_header.pug
+  include z_back_header.pug
 block content 
   h1= title
 
@@ -16,8 +16,9 @@ block content
       h3 # #{estimate_request[`field${y}`][0].item.name}
       each something in estimate_request[`field${y}`]
         p= something.name 
-        if (estimate_request.estimate_text[0] && estimate_request.estimate_text[0].item.toString()===something.item._id.toString())
-          p #{estimate_request.estimate_text[0].text}
+        if (estimate_request.estimate_text[0].text)
+          if (estimate_request.estimate_text[0].item.toString()===something.item._id.toString())
+            p #{estimate_request.estimate_text[0].text}
       hr
 
   h3 # somethign to say 

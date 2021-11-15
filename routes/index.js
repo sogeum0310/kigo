@@ -1,37 +1,35 @@
 const express = require('express')
 const router = express.Router()
-// import controller
 const estimate_controller = require('../controllers/estimateController')
 const user_controller = require('../controllers/userController')
-const other_controller = require('../controllers/otherController')
+const company_controller = require('../controllers/companyController')
 const community_controller = require('../controllers/communityController')
 const chat_controller = require('../controllers/chatController')
 
 
 // Index
-router.get('/', other_controller.index)
-router.get('/test', other_controller.test)
-router.get('/success', other_controller.success)
+router.get('/', company_controller.index)
+router.get('/success', company_controller.success)
 
 
 // Company
-router.get('/company/about', other_controller.company_about)
-router.get('/company/ranking', other_controller.company_ranking)
-router.get('/company/event_page', other_controller.company_event_page)
+router.get('/company/about', company_controller.company_about)
+router.get('/company/ranking', company_controller.company_ranking)
+router.get('/company/event_page', company_controller.company_event_page)
 // 이미지 이벤트영역
-router.get('/company/notice/list', other_controller.company_blog_list)
-router.get('/company/guide', other_controller.company_guide)
-router.get('/company/event/list', other_controller.company_event_list)
-router.get('/company/faq/list', other_controller.company_faq_list)
+router.get('/company/notice/list', company_controller.company_blog_list)
+router.get('/company/guide', company_controller.company_guide)
+router.get('/company/event/list', company_controller.company_event_list)
+router.get('/company/faq/list', company_controller.company_faq_list)
 // 자주묻는질문 페이지분리
-router.get('/company/faq/personal', other_controller.faq_list_personal)
-router.get('/company/faq/business', other_controller.faq_list_business)
-router.get('/company/share', other_controller.company_share)
-router.get('/company/contact/list', other_controller.company_contact_list)
-router.get('/company/contact/qna/create', other_controller.company_qna_create_get)
-router.post('/company/contact/qna/create', other_controller.company_qna_create_post)
-router.get('/company/contact/message/create', other_controller.company_message_create_get)
-router.post('/company/contact/message/create', other_controller.company_message_create_post)
+router.get('/company/faq/personal', company_controller.faq_list_personal)
+router.get('/company/faq/business', company_controller.faq_list_business)
+router.get('/company/share', company_controller.company_share)
+router.get('/company/contact/list', company_controller.company_contact_list)
+router.get('/company/contact/qna/create', company_controller.company_qna_create_get)
+router.post('/company/contact/qna/create', company_controller.company_qna_create_post)
+router.get('/company/contact/message/create', company_controller.company_message_create_get)
+router.post('/company/contact/message/create', company_controller.company_message_create_post)
 
 
 // Estimate request and response
@@ -45,10 +43,12 @@ router.post('/estimate/response/:id', estimate_controller.estimate_response_deta
 
 router.get('/estimate/received/list', estimate_controller.estimate_received_list)
 router.get('/estimate/received/:id', estimate_controller.estimate_received_detail_get)
+router.post('/estimate/received/delete', estimate_controller.estimate_received_delete)
 router.post('/estimate/received/:id', estimate_controller.estimate_received_detail_post)
 
 router.get('/estimate/sent/list', estimate_controller.estimate_sent_list)
-router.get('/estimate/sent/:id', estimate_controller.estimate_sent_detail)
+router.get('/estimate/sent/:id', estimate_controller.estimate_sent_detail_get)
+router.post('/estimate/sent/:id', estimate_controller.estimate_sent_detail_post)
 
 
 // User
@@ -79,17 +79,13 @@ router.get('/signup/personal', user_controller.signup_personal_get)
 router.post('/signup/personal', user_controller.signup_personal_post)
 router.get('/signup/business', user_controller.signup_business_get)
 router.post('/signup/business', user_controller.signup_business_post)
-
-router.get('/mypage', user_controller.mypage)
-
 router.post('/validity', user_controller.validity)
 
+router.get('/mypage', user_controller.mypage)
 router.get('/mypage/personal/account', user_controller.mypage_personal_account_get)
 router.post('/mypage/personal/account', user_controller.mypage_personal_account_post)
-
 router.get('/mypage/business/account', user_controller.mypage_business_account_get)
 router.post('/mypage/business/account', user_controller.mypage_business_account_post)
-
 router.get('/mypage/personal/review/list', user_controller.mypage_personal_review_list)
 router.get('/mypage/qna/list', user_controller.mypage_qna_list)
 

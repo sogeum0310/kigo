@@ -1,74 +1,15 @@
 extends layout 
 
 block content 
-  //- h1= title 
-
-  //- pre= user
-
-
-  //- pre= user.file
-
-  //- ul
-  //-   each review in user.reviews 
-  //-     li= review
-
-  //- if (user.auth===0)
-  //-   form(action="", method="POST") 
-  //-     button(type="submit") confirm
-
-  //- p   
-  //-   a(href=`/admin/user/${user.account}/list`) list 
-
   h1.admin_detail_con_title= title 
 
-  table.admin_stat.member_detail_stat
-    tbody
-        tr 
-          th 
-            if (user.account == "business")
-             span 회사이름
-            else 
-             span 이름
-          td 
-           | #{user.name}
-        tr 
-          th 
-           | 핸드폰번호
-          td 
-           | #{user.phone} 
-        tr 
-          th 
-           | 이메일주소
-          td 
-           | #{user.email}
-        tr 
-          th 
-           | 계신지역
-          td 
-           | #{user.city[0].name}
-        tr
-          th 
-           | 회사소개
-          td 
-           | #{user.about}
-        tr 
-          th 
-           | 광고방법
-          td 
-            each user_platform in user.platform
-              p= user_platform.name
-        tr 
-          th 
-           | 포트폴리오
-          td 
-            if (user.file)
-              a(href="/files/" + user.file.md_name , download) #{user.file.md_name} 다운로드
-
+  pre= user 
   
   if (user.auth===0)
     form(action="", method="POST", onsubmit="return confirm('승인하시겠습니까?');") 
       button.submit_btn(type="submit") 승인하기
-  if(user.account == "business")
+
+  if (user.account==="business")
     h1.admin_detail_con_title 리뷰목록
     ul.admin_user_detail_review_list 
       each review in user.reviews

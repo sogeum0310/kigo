@@ -160,8 +160,49 @@ transporter.sendMail(mailOptions, function(error, info){
   }
 });
 
+// Estimate received for Business
+exports.estimate_received_list = async (req, res, next) => {
+  try {
+    var user_business = await Model.User.findById(req.user.id).exec() 
+    var user_business_platform = []
 
+    for (i=0; i<user_business.platform.length; i++) {
+      var obj = {}
+      obj.platform = user_business.platform[i]
+      user_business_platform.push(obj)
+    }
 
-[]
+    var estimate_requests = await Model.EstimateRequest.find({
+      $and: [
+        { $or: user_business_platform },
+        { count: { $lte: 9 } }
+      ] 
+      })
+      .populate('platform').populate('user')
 
-{}
+    for (estimate_request of estimate_requests) {
+      estimate_request.sent = await Model.EstimateResponse.countDocuments({ 
+        $and: [
+          { estimate_request: estimate_request._id }, 
+          { user: req.user.id }
+        ] 
+      }).exec()
+    }
+
+    var last_estimate_response = await Model.EstimateResponse.findOne({ user: req.user.id }).sort([['reg_date', 'descending']])
+    console.log(last_estimate_response)
+    if (last_estimate_response) {
+      var long = new Date() - last_estimate_response.reg_date
+      if (long < 1000*60*60) {
+        var ms = 1000*60*60 - long
+        ms = Math.floor(ms/60000)
+        var message = ms + ' 분 뒤에 견적서를 작성할 수 있습니다'
+      }
+    }
+    res.render('estimate_received_list', { title: '받은 견적', estimate_received_list: estimate_requests, message: message })
+
+  } catch (error) {
+  res.render('error', { message: '', error: error })
+  }
+}
+

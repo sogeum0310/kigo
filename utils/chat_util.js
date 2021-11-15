@@ -1,7 +1,10 @@
 const Model = require('../models/model')
 var MongoStore = require('connect-mongo')
 var session = require('express-session')
-const mongoUrl = 'mongodb://sogeum0310:hyun0831**@ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:27017/test?authSource=admin&authMechanism=SCRAM-SHA-1'
+const { default: strictTransportSecurity } = require('helmet/dist/middlewares/strict-transport-security')
+var config = require('../config.js')
+const mongoUrl = config.mydb.url
+
 const sessionMiddleware = session({
   secret: 'Keyboard cat',
   resave: false,
@@ -34,10 +37,18 @@ my_space.on('connection', async (socket) => {
       users.push(session.passport.user.id)
       users.push(user)
 
-      var chat_room = new Model.ChatRoom({
-        user: users,
-      })
-      await chat_room.save()
+      var old_room = await Model.ChatRoom.findOne({ user: users.sort() })
+
+      var chat_room;
+
+      if (old_room) {
+        chat_room = old_room
+      } else {
+        chat_room = new Model.ChatRoom({
+          user: users.sort(),
+        })
+        await chat_room.save()
+      }
 
       socket.emit('makeRoom', chat_room, session.passport.user.id)
     } catch (error) {

@@ -21,10 +21,8 @@ router.get('/user/detail/:id', admin_controller.user_detail_get)
 router.post('/user/detail/:id', admin_controller.user_detail_post)
 
 // Estimate 
-router.get('/estimate/request/list', admin_controller.estimate_request_list)
-router.get('/estimate/request/:id', admin_controller.estimate_request_detail)
-router.get('/estimate/response/list', admin_controller.estimate_response_list)
-router.get('/estimate/response/:id', admin_controller.estimate_response_detail)
+router.get('/estimate/list', admin_controller.estimate_list)
+router.get('/estimate/:id', admin_controller.estimate_detail)
 
 // Notice
 router.get('/notice/list', admin_controller.notice_list)

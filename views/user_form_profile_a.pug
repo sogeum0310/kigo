@@ -1,6 +1,6 @@
 extends layout 
 block header 
-  include back_header.pug
+  include z_back_header.pug
 block content 
   style.
     .foot_icon_wrap{
@@ -37,40 +37,37 @@ block content
             td 
               label(for="") 이름 
             td 
-              input.full_input(type="text" name="name" value=(undefined==user_personal ? '' : user_personal.name)) 
+              input.full_input(type="text" name="name" value=(undefined===user_personal ? '' : user_personal.name)) 
           tr 
             td 
               label(for="") 성별
             td 
               label(for="") 남
-              input.check_gender(type="radio" name="gender" value="male" checked=(undefined==user_personal || user_personal.gender!='male' ? false:'checked'))
+              input.check_gender(type="radio" name="gender" value="male" checked=true)
               label(for="") 여
-              input.check_gender(type="radio" name="gender" value="female" checked=(undefined==user_personal || user_personal.gender!='female' ? false:'checked')) 
+              input.check_gender(type="radio" name="gender" value="female" checked=(user_personal && user_personal.gender==='female' ? true : false)) 
           tr 
             td 
               label(for="") 생년월일
             td 
-              input.full_input(type="date" name="birth_date" value=(undefined==user_personal ? '' : user_personal.date_of_birth_yyyy_mm_dd)) 
+              input.full_input(type="date" name="birth_date" value=(undefined===user_personal ? '' : user_personal.date_of_birth_yyyy_mm_dd)) 
           tr 
             td 
               label(for="") 지역
             td 
               select.full_input(name="city") 
                 each city in cities 
-                  option(value=city._id, selected=(undefined!=user_personal && user_personal.city==city._id.toString() ? 'selected' : false))= city.name 
+                  option(value=city._id, selected=(undefined!==user_personal && user_personal.city==city._id.toString() ? 'selected' : false))= city.name 
           tr 
             td 
               label(for="") 휴대폰
             td 
-              input.full_input(type="number" name="phone" value=(undefined==user_personal ? '' : user_personal.phone))
+              input.full_input(type="number" name="phone" value=(undefined===user_personal ? '' : user_personal.phone))
           tr 
             td 
               label(for="") 이메일
             td 
-              input.full_input(type="text" name="email" value=(undefined==user_personal ? '': user_personal.email))
-          //- tr 
-          //-   td(colspan='2')
-          //-     textarea#policy.full_input(name="", cols="30", rows="10") 
+              input.full_input(type="text" name="email" value=(undefined===user_personal ? '': user_personal.email))
       .terms 
         p 이용약관
       button.signup_btn(type="submit") 확인

@@ -14,17 +14,14 @@ const Model = require('./models/model')
 const app = express();
 var chat_notification = require('./utils/chat_notification')
 var passport = require('passport');
-
-
-const mongoUrl = 'mongodb://sogeum0310:hyun0831**@ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:27017/test?authSource=admin&authMechanism=SCRAM-SHA-1'
-
-// air
-// mongoose connection 
 const mongoose = require('mongoose');
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
-
+var config = require('./config.js')
 const populate = require('./populate/populate')
 
+
+const mongoUrl = config.mydb.url
+// mongoose connection 
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

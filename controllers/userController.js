@@ -2,6 +2,7 @@ const Model = require('../models/model')
 const async = require('async')
 const crypto = require('crypto')
 const sendEmail = require('../utils/sendEmail')
+const config = require('../config')
 
 var passport = require('passport')
 var passportLocal = require('../auth/local');
@@ -16,7 +17,7 @@ exports.login_get = (req, res, next) => {
     if (req.user) {
       res.render('success', { title: '안녕하세요! ' + req.user.username, go_to: '/' })
     } else {
-      res.render('user_login', { title: '로그인' })
+      res.render('user_form_login', { title: '로그인' })
     }
   } catch (error) {
     res.render('error', { message: '', error: error })
@@ -78,7 +79,7 @@ exports.signup_personal_get = async (req, res, next) => {
     var estimate_items = await Model.EstimateItem.find().exec()
     var cities = await Model.EstimateItemDetail.find({ item: estimate_items[8]._id }).exec()
 
-    res.render('user_signup_personal', { title: '일반사용자 회원가입', cities: cities,})
+    res.render('user_form_profile_a', { title: '일반사용자 회원가입', cities: cities,})
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -122,7 +123,7 @@ exports.signup_business_get = async (req, res, next) => {
     var platforms = await Model.EstimateTopic.find().exec()
     var estimate_items = await Model.EstimateItem.find().exec()
     var cities = await Model.EstimateItemDetail.find({ item: estimate_items[8]._id }).exec()
-    res.render('user_signup_business', { title: '광고업체 회원가입', cities: cities, platforms: platforms, })
+    res.render('user_form_profile_b', { title: '광고업체 회원가입', cities: cities, platforms: platforms, })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -166,11 +167,10 @@ exports.signup_business_post = async (req, res, next) => {
       }
     }
 
-    req.login(user_business, function (err) {
-      var message = '회원가입 신청이 완료되었습니다'
-      var url = '/'
-      res.redirect(`/success/?message=${message}&go_to=${url}`)
-    })
+    var message = '회원가입 신청이 완료되었습니다'
+    var url = '/'
+    res.redirect(`/success/?message=${message}&go_to=${url}`)
+
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -186,13 +186,14 @@ exports.mypage = async (req, res, next) => {
   }
 }
 
+// Account for Personal
 exports.mypage_personal_account_get = async (req, res, next) => {
   try {
     var estimate_items = await Model.EstimateItem.find().exec()
     var cities = await Model.EstimateItemDetail.find({ item: estimate_items[8]._id }).exec()
     var user_personal = await Model.User.findById(req.user.id).exec()
 
-    res.render('user_signup_personal', { title: '나의 정보', user_personal: user_personal, cities: cities })
+    res.render('user_form_profile_a', { title: '나의 정보', user_personal: user_personal, cities: cities })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -220,6 +221,7 @@ exports.mypage_personal_account_post = async (req, res, next) => {
   }
 }
 
+// Account for Business
 exports.mypage_business_account_get = async (req, res, next) => {
   try {
     var estimate_items = await Model.EstimateItem.find().exec()
@@ -228,15 +230,13 @@ exports.mypage_business_account_get = async (req, res, next) => {
     var files = await Model.File.find({ parent: req.user.id }).sort([[ 'reg_date', 'descending' ]]).exec()
     var user_business = await Model.User.findById(req.user.id).exec()
 
-    for (var i=0; i<platforms.length; i++) {
-      for (var j=0; j<user_business.platform.length; j++) {
-        if (platforms[i]._id.toString()===user_business.platform[j]._id.toString()) {
-          platforms[i].checked='true'
-        }
+    for (platform of platforms) {
+      if (user_business.platform.includes(platform._id)) {
+        platform.checked=true
       }
-    } 
+    }
 
-    res.render('user_signup_business', { title: '나의 정보', user_business: user_business, files: files, cities: cities, platforms: platforms })
+    res.render('user_form_profile_b', { title: '나의 정보', user_business: user_business, files: files, cities: cities, platforms: platforms })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -286,8 +286,8 @@ exports.mypage_business_account_post = async (req, res, next) => {
 // Mypage - Review
 exports.mypage_personal_review_list = async (req, res, next) => {
   try {
-    var review_list = await Model.Review.find({ user_personal: req.user.id })
-    res.render('mypage_personal_review_list', { title: '나의 리뷰', review_list: review_list })
+    var review_list = await Model.Review.find()
+    res.render('user_review_list', { title: '나의 리뷰', review_list: review_list })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -300,7 +300,7 @@ exports.mypage_qna_list = async (req, res, next) => {
     for (qna_question of qna_questions) {
       qna_question.qna_answer = await Model.QnaAnswer.findOne({ parent: qna_question._id }).exec()
     }
-    res.render('mypage_qna_list', { title: '나의 Q&A', qna_list: qna_questions })
+    res.render('user_qna_list', { title: '나의 Q&A', qna_list: qna_questions })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -308,7 +308,7 @@ exports.mypage_qna_list = async (req, res, next) => {
 
 // Change password
 exports.access_password_get = async (req, res, next) => {
-  res.render('user_access_password', { title: 'Access password' })
+  res.render('user_form_access', { title: 'Access password' })
 }
 
 exports.access_password_post = async (req, res, next) => {
@@ -320,7 +320,7 @@ exports.access_password_post = async (req, res, next) => {
       return res.redirect('access_password')
     }
 
-    res.render('user_change_password', { title: 'Change password' })
+    res.render('user_form_password', { title: 'Change password', password_change: true })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -328,18 +328,11 @@ exports.access_password_post = async (req, res, next) => {
 
 exports.change_password = async (req, res, rext) => {
   try {
-    var errors = []
-
     if (!req.body.password.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)) {
-      var error = '비밀번호는 최소 1개 이상의 영어 대문자 및 소문자, 숫자가 있어야합니다. 길이는 최소 8자 이상이어야 합니다'
-      errors.push(error)
+      return res.send('비밀번호는 최소 1개 이상의 영어 대문자 및 소문자, 숫자가 있어야합니다. 길이는 최소 8자 이상이어야 합니다')
     }
     if (req.body.password!==req.body.password_confirm) {
-      var error = '비밀번호가 일치하지 않습니다'
-      errors.push(error)
-    }
-    if (errors.length>0) {
-      return res.render('user_change_password', { title: 'Change password', errors: errors })
+      return res.send('비밀번호가 일치하지 않습니다')
     }
 
     var salt = crypto.randomBytes(16).toString('hex');
@@ -359,7 +352,7 @@ exports.change_password = async (req, res, rext) => {
 // Lost username
 exports.lost_username_get = async (req, res, next) => {
   try {
-    res.render('user_lost_username', { title: 'Lost username' })
+    res.render('user_form_username', { title: 'Lost username' })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -381,7 +374,7 @@ exports.lost_username_post = async (req, res, next) => {
 // Lost password
 exports.lost_password_get = async (req, res, next ) => {
   try {
-    res.render('user_lost_password', { title: '비밀번호 찾기' })
+    res.render('user_form_email', { title: '비밀번호 찾기' })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -397,7 +390,7 @@ exports.lost_password_post = async (req, res, next) => {
         token: crypto.randomBytes(32).toString("hex"),
       }).save();
     }
-    const link = `http://ec2-15-164-219-91.ap-northeast-2.compute.amazonaws.com:3000/password-reset/${user.id}/${token.token}`;
+    const link = config.account.url + `/password-reset/${user.id}/${token.token}`;
     await sendEmail(user.email, "비밀번호 재설정", link);
     res.send("비밀번호 재설정 링크를 등록된 이메일로 발송하였습니다");
   } catch (error) {
@@ -408,7 +401,7 @@ exports.lost_password_post = async (req, res, next) => {
 
 exports.user_reset_password_get = async (req, res, next) => {
   try {
-    res.render('user_reset_password', { title: '비밀번호 재설정' })
+    res.render('user_form_password', { title: '비밀번호 재설정' })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }

@@ -1,7 +1,8 @@
 const Model = require('../models/model')
-const { faq_list } = require('./adminController')
 const nodemailer = require('nodemailer');
 
+
+// Index
 exports.index = async (req, res, next)  => {
   try {
     res.render('index', { title: 'KIGO' })
@@ -10,6 +11,16 @@ exports.index = async (req, res, next)  => {
   }
 }
 
+// Success page
+exports.success = async (req, res, next) => {
+  try {
+    res.render('z_success', { title: req.query.message, go_to: req.query.go_to })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
+}
+
+// Company 
 exports.company_about = async (req, res, next) => {
   try {
     res.render('company_about', { title: '회사소개' })
@@ -168,23 +179,6 @@ exports.company_message_create_post = async (req, res, next) => {
     var message = '의견이 접수되었습니다.'
     var url = '/'
     res.redirect(`/success/?message=${message}&go_to=${url}`)
-  } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
-}
-
-exports.success = async (req, res, next) => {
-  try {
-    res.render('success', { title: req.query.message, go_to: req.query.go_to })
-  } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
-}
-
-exports.test = async (req, res, next) => {
-  try {
-    res.render('test', { title: 'Test' })
-    console.log(new Date())
   } catch (error) {
     res.render('error', { message: '', error: error })
   }

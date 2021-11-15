@@ -1,14 +1,14 @@
 var passport = require('passport');
 var KakaoStrategy = require('passport-kakao').Strategy
 var Model = require('../models/model');
-var config = require('./_config');
+var config = require('../config');
 
 
 passport.use(new KakaoStrategy(
   {
-    clientID: config.kakao.clientID,
-    clientSecret: config.kakao.clientSecret,
-    callbackURL: config.kakao.callbackURL,
+    clientID: config.ids.kakao.clientID,
+    clientSecret: config.ids.kakao.clientSecret,
+    callbackURL: config.ids.kakao.callbackURL,
   },
   function(accessToken, refreshToken, profile, done) {
     console.log(profile)

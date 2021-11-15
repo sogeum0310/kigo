@@ -1,6 +1,7 @@
 const Model = require('../models/model')
 
 
+// Community 
 exports.community_list = async (req, res, next) => {
   try {
     var blogs = await Model.Community.find()
@@ -75,6 +76,7 @@ exports.community_update_post = async (req, res, next) => {
   }
 }
 
+// Community comment
 exports.blog_comment_create = async (req, res, next) => {
   try {
     if (req.body.id==='0') {

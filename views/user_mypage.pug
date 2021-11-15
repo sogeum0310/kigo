@@ -1,6 +1,6 @@
 extends layout 
 block header 
-  include back_header.pug 
+  include z_back_header.pug 
 block content 
   //- h1= title 
   .container
@@ -16,9 +16,8 @@ block content
           a(href="/mypage/business/account") 나의 정보 수정 
       li
         a(href="/mypage/qna/list") 나의 문의 내역
-      if (user.account==='personal')
-        li 
-          a(href="/mypage/personal/review/list") 나의 후기
+      li 
+        a(href="/mypage/personal/review/list") 나의 후기
       li 
         a(href="/user/access_password") Change password  
       li

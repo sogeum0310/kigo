@@ -1,14 +1,14 @@
 var passport = require('passport');
 var NaverStrategy = require('passport-naver').Strategy;
 var Model = require('../models/model');
-var config = require('./_config');
+var config = require('../config');
 
 
 passport.use(new NaverStrategy(
   {
-    clientID: config.naver.clientID,
-    clientSecret: config.naver.clientSecret,
-    callbackURL: config.naver.callbackURL
+    clientID: config.ids.naver.clientID,
+    clientSecret: config.ids.naver.clientSecret,
+    callbackURL: config.ids.naver.callbackURL
   },
   function(accessToken, refreshToken, profile, done) {
     console.log(profile)

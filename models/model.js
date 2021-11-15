@@ -41,7 +41,7 @@ const UserSchema = new Schema({
   email: { type: String },
   about: { type: String },
   city: [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }] ,
-  platform: [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
+  platform: [{ type: Schema.ObjectId, ref: 'EstimateTopic' }],
   auth: { type: Number },
   account: { type: String }
 })
@@ -66,6 +66,7 @@ const EstimateRequestSchema = new Schema({
   field10: [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   content: { type: String },
   count:  { type: Number, default: 0 },
+  drop: [{ type: Schema.ObjectId }],
   reg_date: { type: Date, default: Date.now }
 });
 
@@ -75,6 +76,7 @@ const EstimateResponseSchema = new Schema({
   item: [{ type: String }],
   cost: [{ type: String }],
   note: [{ type: String }],
+  submit: { type: Boolean, default: false },
   reg_date: { type: Date, default: Date.now }
 }) 
 

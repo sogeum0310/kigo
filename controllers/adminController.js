@@ -1,13 +1,31 @@
-/* For controller */
 const Model = require('../models/model');
 
 
+// Index
+exports.index = async (req, res, next) => {
+  try {
+    res.render('admin/index', { title: '관리자' });
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
+}
+
+// Success page
+exports.success = async (req, res, next) => {
+  try {
+    res.render('admin/z_success', { title: req.query.message, go_to: req.query.go_to })
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
+}
+
+// Login
 exports.login_get = async (req, res, next) => {
   try {
     if (req.session.admin) {
       next()
     } else {
-      res.render('admin/login', { title: '관리자 로그인' })
+      res.render('admin/admin_form_login', { title: '관리자 로그인' })
     }
   } catch (error) {
     res.render('error', { message: '', error: error })
@@ -27,14 +45,7 @@ exports.login_post = async (req, res, next) => {
   }
 }
 
-exports.mypage = async (req, res, next) => {
-  try {
-    res.render('admin/mypage', { title: '관리자 정보' })
-  } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
-}
-
+// Logout
 exports.logout = async (req, res, next) => {
   try {
     // req.session.destroy()
@@ -44,14 +55,16 @@ exports.logout = async (req, res, next) => {
   }
 }
 
-exports.index = async (req, res, next) => {
+// Account
+exports.mypage = async (req, res, next) => {
   try {
-    res.render('admin/index', { title: '관리자' });
+    res.render('admin/admin_mypage', { title: '관리자 정보' })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
 }
 
+// User
 exports.user_personal_list = async (req, res, next) => {
   try {
     // var user_personals = Promise.resolve(Model.UserPersonal.find().exec())
@@ -102,48 +115,47 @@ exports.user_detail_post = async (req, res, next) => {
   }
 }
 
-exports.estimate_request_list = async (req, res, next) => {
+// Estimate request
+exports.estimate_list = async (req, res, next) => {
   try {
-    var estimate_requests = await Model.EstimateRequest.find().populate('platform').exec()
-    res.render('admin/estimate_request_list', { title: '일반사용자 견적서', estimate_requests: estimate_requests })
+    var estimate_responses = await Model.EstimateResponse.find({ submit: true }).populate('user')
+
+    res.render('admin/estimate_list', { title: 'Estimates', estimate_responses: estimate_responses })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
 }
 
-exports.estimate_request_detail = async (req, res, next) => {
+exports.estimate_detail = async (req, res, next) => {
   try {
-    var estimate_request = await Model.EstimateRequest.findById(req.params.id).populate('user').populate('platform').populate('how_many').populate('business').populate('goal').populate('start_day').populate('how_long').populate('cost').populate('city').populate('feedback').exec()
-    var estimate_responses = await Model.EstimateResponse.find({ 'estimate_request': req.params.id }).populate('user').exec()
-    res.render('admin/estimate_request_detail', { title: '일반사용자 견적서', estimate_request: estimate_request, estimate_responses: estimate_responses })
+    var estimate_response = await Model.EstimateResponse.findById(req.params.id)
+    .populate('user').populate({ path: 'estimate_request', populate: [
+      { path: 'user' }, 
+      { path: 'field1', populate: 'item' }, 
+      { path: 'field2', populate: 'item' }, 
+      { path: 'field3', populate: 'item' }, 
+      { path: 'field4', populate: 'item' }, 
+      { path: 'field5', populate: 'item' }, 
+      { path: 'field6', populate: 'item' }, 
+      { path: 'field7', populate: 'item' }, 
+      { path: 'field8', populate: 'item' }, 
+      { path: 'field9', populate: 'item' }, 
+      { path: 'field10', populate: 'item' }, 
+      { path: 'topic' }
+    ]})
+
+    var estimate_text = await Model.EstimateText.find({ estimate_result: estimate_response.estimate_request._id })
+    console.log(estimate_text)
+  
+    estimate_response.estimate_request.estimate_text = estimate_text
+    
+    res.render('admin/estimate_detail', { title: '보낸 견적', estimate_response: estimate_response })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
 }
 
-exports.estimate_response_list = async (req, res, next) => {
-  try {
-    var estimate_responses = await Model.EstimateResponse.find()
-    .populate('user')
-    .populate({ path: 'estimate_request', populate: { path: 'city' } })
-    .populate({ path: 'estimate_request', populate: { path: 'platform' } })
-    .exec()
-    res.render('admin/estimate_response_list', { title: '광고업체 견적서', estimate_responses: estimate_responses })
-  } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
-}
-
-exports.estimate_response_detail = async (req, res, next) => {
-  try {
-    var estimate_response = await Model.EstimateResponse.findById(req.params.id).exec()
-    res.render('admin/estimate_response_detail', { title: '광고업체 견적서', estimate_response: estimate_response })
-  } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
-}
-
-
+// Notice
 exports.notice_list = async (req, res, next) => {
   try {
     var notice_list = await Model.Notice.find().exec()
@@ -218,6 +230,7 @@ exports.notice_delete_get = async (req, res, next) => {
   }
 }
 
+// Event
 exports.event_list = async (req, res, next) => {
   try {
     var event_list = await Model.Event.find().exec()
@@ -292,6 +305,7 @@ exports.event_delete_get = async (req, res, next) => {
   }
 }
 
+// Faq
 exports.faq_list = async (req, res, next) => {
   try {
     var faq_list = await Model.Faq.find().exec()
@@ -368,6 +382,7 @@ exports.faq_delete_get = async (req, res, next) => {
   }
 }
 
+// Qna
 exports.qna_list = async (req, res, next) => {
   try {
     var qna_questions = await Model.QnaQuestion.find().exec()
@@ -444,6 +459,7 @@ exports.qna_comment_delete = async (req, res, next) => {
   }
 }
 
+// Message
 exports.message_list = async (req, res, next) => {
   try {
     var message_list = await Model.Message.find().exec()
@@ -470,6 +486,7 @@ exports.message_delete_get = async (req, res, next) => {
   }
 }
 
+// Summernote image upload
 exports.summernote_ajax = async (req, res, next) => {
   var my_file = req.files.file
 
@@ -478,12 +495,4 @@ exports.summernote_ajax = async (req, res, next) => {
   await my_file.mv(upload_path)
 
   res.send('/files/blog/' + new_file_name)
-}
-
-exports.success = async (req, res, next) => {
-  try {
-    res.render('admin/success', { title: req.query.message, go_to: req.query.go_to })
-  } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
 }

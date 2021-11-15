@@ -1,6 +1,6 @@
 extends layout 
 block header 
-  include back_header.pug
+  include z_back_header.pug
 block content  
   h1= title
   ul
@@ -15,28 +15,10 @@ block content
           span(id=chat_room._id) #{chat_room.last_message.content} (#{chat_room.count})
         a(href="chat/" + chat_room._id)  Go to room >
 
-  h2 Users 
-  each user in users 
-    p
-      button(onclick="handleSubmit(this)" value=user._id) #{user.username}
-
 
   script.
     var ul = document.querySelector('ul')
 
-
-    // Emit the make room event
-    function handleSubmit(elem) {
-      var user = elem.value
-      socket.emit('makeRoom', user)
-    }
-
-    // On make room event, bring master to the room just has been made
-    socket.on('makeRoom', function (chat_room, master) {
-      if (master===user_global.id) {  
-        location.href = 'chat/' + chat_room._id
-      }
-    })
 
     // Replace last massage and count
     socket.on('last_message', function (chat_content, chat_contents) {

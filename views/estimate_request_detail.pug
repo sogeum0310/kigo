@@ -1,6 +1,6 @@
 extends layout 
 block header 
-  include back_header.pug
+  include z_back_header.pug
 block content 
   h1= title
 
@@ -19,13 +19,12 @@ block content
           p #{estimate_request.estimate_text[0].text}
   
   //- Text input
-  h3 Somethign to say 
+  h3 # Something to say 
   p= estimate_request.content
 
   hr
   //- Estimate_request 
-  pre= estimate_request
-
+  //- pre= estimate_request
 
   h3.estimate_responses_title 제출된 견적서 목록
   each estimate_response in estimate_responses 
@@ -33,6 +32,6 @@ block content
       li
         a(href="/estimate/response/" + estimate_response._id)
           p.estimate_responses_username #{estimate_response.user.username}
-          p.estimate_responses_price 견적금 : #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}원
+          p.estimate_responses_price 견적금: #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}원
 
 

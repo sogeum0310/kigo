@@ -1,49 +1,7 @@
 extends layout 
 block header 
-  include back_header.pug
+  include z_back_header.pug
 block content 
-  //- h1= title
-
-  //- pre= estimate_response
-
-  //- form(action="/chat/create", method="POST") 
-  //-   input(type="text", name="user", value=estimate_response.user)
-  //-   button(type="submit") chat
-
-  //- h3 Portfolio
-  //- pre= portfolio
-
-
-  //- h3 Business reviews
-
-  //- form(action="", method="POST") 
-  //-   input(type="hidden", name="user_business", value=estimate_response.user)
-  //-   div.form-group
-  //-     label(for="") 
-  //-     textarea(name="content", cols="30", rows="10") 
-  //-   div.form-group
-  //-     input(type="radio", name="rating", value="1")
-  //-     label(for="") 1
-  //-     input(type="radio", name="rating", value="2")
-  //-     label(for="") 2
-  //-     input(type="radio", name="rating", value="3")
-  //-     label(for="") 3
-  //-     input(type="radio", name="rating", value="4")
-  //-     label(for="") 4
-  //-     input(type="radio", name="rating", value="5")
-  //-     label(for="") 5
-
-  //-   p 
-  //-     button(type="submit") confirm
-
-  //- pre= business_reviews
-
-  //- p 
-  //-   a(href="/estimate/request/" + estimate_response.estimate_request) list 
-
-  //- 상단 - 원본
-
-
 
   .container
     p.go_response_list
@@ -65,31 +23,21 @@ block content
             each estimate_response_list_note in estimate_response.note
               p #{estimate_response_list_note}
             
-        //- .estimate_request_detail_stat.estimate_request_detail_stat02 
-        //-   h3 #{estimate_response.item[0]}
-        //-   p #{estimate_response.cost[0]}
-        //-   p #{estimate_response.note[0]}
-        //- .estimate_request_detail_stat.estimate_request_detail_stat02 
-        //-   h3 #{estimate_response.item[1]}
-        //-   p #{estimate_response.cost[1]}
-        //-   p #{estimate_response.note[1]}
-        //- .estimate_request_detail_stat.estimate_request_detail_stat02 
-        //-   h3 #{estimate_response.item[2]}
-        //-   p #{estimate_response.cost[2]}
-        //-   p #{estimate_response.note[2]}
       p.estimate_request_detail_cost_txt 
         span 견적가 :
         |  #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}원
-    .estimate_request_portfolio_imgbox 
-      img(src="/files/" + portfolio.md_name, alt="")
+    if (portfolios)
+      each portfolio in portfolios
+        .estimate_request_portfolio_imgbox 
+          img(src="/files/user/" + portfolio.md_name, alt="")
+    
     .estimate_request_detail_company_info
       h2 #{estimate_response.user.username}
       h3 회사소개
       p #{estimate_response.user.about}
     .estimate_chat_box 
-      form(action="/chat/create", method="POST", onsubmit="return confirm('채팅을 시작하시겠습니까?');") 
-        input(type="hidden", name="user", value=estimate_response.user._id)
-        button.submit_btn2(type="submit") 채팅시작
+      button(onclick="handleSubmit(this)" value=estimate_response.user._id) 채팅시작
+
 
 
     form(action="", method="POST", onsubmit="return confirm('제출하시겠습니까?');") 
@@ -117,10 +65,18 @@ block content
         li.clearfix 
           .user_icon
             i.fa.fa-user-circle(aria-hidden='true')
-            p 별점 : #{business_review_list.rating}점
+            p 별점 : #{business_review_list.rating} 점
           p.review_content #{business_review_list.content}
           //- p.review_reg_date #{business_review_list.reg_date.getFullYear()}. #{business_review_list.reg_date.getMonth() +1}. #{business_review_list.reg_date.getDate()}
 
+  script.
+    function handleSubmit(elem) {
+      var user = elem.value
+      socket.emit('makeRoom', user)
+    }
+    socket.on('makeRoom', function (chat_room) {
+      location.href = '/chat/' + chat_room._id
+    })
 
 block scripts 
   script(src='/javascript/response_star.js')

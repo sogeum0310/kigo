@@ -1,16 +1,16 @@
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var Model = require('../models/model');
-var config = require('./_config');
+var config = require('../config');
 
 
 passport.use(new GoogleStrategy( // new GoogleStrategy(object, function)
   
   // Parameter - Object
   {
-    clientID: config.google.clientID,
-    clientSecret: config.google.clientSecret,
-    callbackURL: config.google.callbackURL
+    clientID: config.ids.google.clientID,
+    clientSecret: config.ids.google.clientSecret,
+    callbackURL: config.ids.google.callbackURL
   },
   
   // Parameter - Function

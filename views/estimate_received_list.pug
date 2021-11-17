@@ -1,0 +1,20 @@
+extends layout 
+block header 
+  include z_back_header.pug
+block content 
+  h1= title 
+
+  ul
+    each estimate_received in estimate_received_list 
+      if (estimate_received.matched)
+        li  
+          a(href="/estimate/received/" + estimate_received._id) #{estimate_received.topic.name} #{estimate_received.user.username} 
+          form(action="/estimate/received/delete", method="POST", onsubmit="return confirm('y/n')") 
+            input(type="hidden", name="id", value=estimate_received._id)
+            button(type="submit") &times;
+            p -
+
+  hr
+
+  if (message)
+    h3= message

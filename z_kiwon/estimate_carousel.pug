@@ -1,0 +1,91 @@
+extends layout 
+
+block content 
+  h1= title
+
+  //- style.
+    .wrap { border:1px dashed; }
+    .container { white-space: nowrap; transition: .5s; }
+    .form-group { width:100%; display: inline-block; }
+  
+  h3#demo
+
+  div.wrap
+    form.container(action="", method="POST") 
+      each survey_item in survey_items 
+        div.form-group
+          h3 #{survey_item.name}
+          each detail in survey_item.details
+            div
+              label(for=detail._id) #{detail.name} 
+              input(type=detail.input_type, id=detail._id, name=detail.input_name, value=detail._id)
+              if (detail.name==='직접입력')
+                input(type="hidden", name='item', value=survey_item._id)
+                input(type="text", name="text", value="")
+
+      div.form-group
+        h3 something to say 
+        textarea(name="content") 
+
+  a.prev(href="") < | 
+  a.next(href="") > 
+
+  //- pre= survey_items
+
+  script.
+
+    var container = document.querySelector('.container')
+    var prev = document.querySelector('.prev')
+    var next = document.querySelector('.next')
+    var groups = document.querySelectorAll('.form-group')
+    
+    var x = document.createElement ('button')
+    x.textContent = 'confirm'
+    groups[groups.length-1].appendChild(x)
+
+    var num = 0
+    var x = 100 / groups.length 
+    
+    document.getElementById('demo').textContent = x
+    prev.style.display = 'none'
+
+    prev.addEventListener('click', function (e) {
+      e.preventDefault()
+      num += 100
+      container.style.transform = `translateX(${num}%)`
+
+      if (num >= 0) {
+        prev.style.display = 'none'
+      } else {
+        next.style.display = 'inline'
+      }
+
+      document.getElementById('demo').textContent = - num / groups.length + x
+    })
+
+    next.addEventListener('click', function (e) {
+      e.preventDefault()
+
+      num -= 100
+      container.style.transform = `translateX(${num}%)`
+
+      if (-num/100 >= groups.length-1) {
+        next.style.display = 'none'
+      } else {
+        prev.style.display = 'inline'
+      }
+
+      document.getElementById('demo').textContent = - num / groups.length + x
+    })
+
+
+
+
+
+
+
+    
+
+    
+
+    

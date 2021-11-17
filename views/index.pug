@@ -1,0 +1,139 @@
+extends layout
+block header 
+  include z_menu_header.pug
+block content
+  //- h1= title
+  //- p Welcome to #{title}   
+  .main_s1.main_sec
+    .container 
+      .main_s1_txtbox 
+        p.first_line 광고 비용 얼마나 할까?
+        p.second_line
+          span 30초
+          | 면 충분해요!
+        p.third_line
+          | '견적비교'
+          span 부터
+          | '우수업체'
+          span 확인까지
+          br
+          |     한방에 해결해드려요!
+  .main_s2.main_sec
+    .container 
+      .clearfix.main_s2_con_row 
+        if (user_global_account)
+          if (user_global_account==='personal')
+            li.main_s2_left.main_s2_con
+              a(href="/estimate/request/form") 
+                .main_s2_left_con_box.main_s2_con_box
+                  h3.main_s2_con_title
+                    | 사업주
+                    br
+                    span (소상공인, 창업주)
+                  p.main_s2_con_article
+                    | 광고업체
+                    br
+                    |       광고업체와
+                    br
+                    |       인플루언서를 만나요!
+                  img.cherron_right(src='/img/chevron-right.svg' alt='')
+                  img.main_s2_con_icon(src='/img/main_s2_icon01.svg' alt='')
+          else 
+            li.main_s2_left.main_s2_con
+              .main_s2_left_con_box.main_s2_con_box
+                h3.main_s2_con_title
+                  | 사업주
+                  br
+                  span (소상공인, 창업주)
+                p.main_s2_con_article
+                  | 광고업체
+                  br
+                  |       광고업체와
+                  br
+                  |       인플루언서를 만나요!
+                img.cherron_right(src='/img/chevron-right.svg' alt='')
+                img.main_s2_con_icon(src='/img/main_s2_icon01.svg' alt='')
+          if (user_global_account==='business')
+            li.main_s2_right.main_s2_con
+              a(href="/estimate/received/list") 
+                .main_s2_right_con_box.main_s2_con_box
+                  h3.main_s2_con_title
+                    | 광고업체 
+                    br
+                    span &#38;
+                    br
+                    |       인플루언서
+                  p.main_s2_con_article
+                    | 쉽고 빠르게!
+                    br
+                    |       고객을 만나요!
+                  img.cherron_right(src='/img/chevron-right.svg' alt='')
+                  img.main_s2_con_icon(src='/img/main_s2_icon02.svg' alt='')
+          else 
+            li.main_s2_right.main_s2_con
+              .main_s2_right_con_box.main_s2_con_box
+                h3.main_s2_con_title
+                  | 광고업체 
+                  br
+                  span &#38;
+                  br
+                  |       인플루언서
+                p.main_s2_con_article
+                  | 쉽고 빠르게!
+                  br
+                  |       고객을 만나요!
+                img.cherron_right(src='/img/chevron-right.svg' alt='')
+                img.main_s2_con_icon(src='/img/main_s2_icon02.svg' alt='')
+        else
+            li.main_s2_left.main_s2_con
+              a(href="/login") 
+                .main_s2_left_con_box.main_s2_con_box
+                  h3.main_s2_con_title
+                    | 사업주
+                    br
+                    span (소상공인, 창업주)
+                  p.main_s2_con_article
+                    | 광고업체
+                    br
+                    |       광고업체와
+                    br
+                    |       인플루언서를 만나요!
+                  img.cherron_right(src='/img/chevron-right.svg' alt='')
+                  img.main_s2_con_icon(src='/img/main_s2_icon01.svg' alt='')
+            li.main_s2_right.main_s2_con
+              a(href="/login") 
+                .main_s2_right_con_box.main_s2_con_box
+                  h3.main_s2_con_title
+                    | 광고업체 
+                    br
+                    span &#38;
+                    br
+                    |       인플루언서
+                  p.main_s2_con_article
+                    | 쉽고 빠르게!
+                    br
+                    |       고객을 만나요!
+                  img.cherron_right(src='/img/chevron-right.svg' alt='')
+                  img.main_s2_con_icon(src='/img/main_s2_icon02.svg' alt='')
+  .main_s3.main_sec 
+    .container 
+      .main_f_txtbox 
+        h3 (주) 바른누리
+        p
+          | 대표이사 : 허삼영
+          br
+          |     주소 : 광주광역시 서구 화개1로 33, 201-1805
+          br
+          |     사업자등록번호 : 712-86-01620 통신판매업신고 : 제2020-광주서구-0926호
+          br
+          |     이메일 : help@kigo1.co.kr
+          br
+          a(href='#') 이용약관
+          |  
+          a(href='#') 개인정보처리방침
+          br
+          |     Copyright © KIGO. All Rights Reserved.
+        p 
+          | 키고는 통신판매중개자이며 거래당사자가 아닙니다.
+          br
+          | 따라서 서비스에 대한 이행, 계약사항 및 분쟁에 대해 책임을 지지 않습니다.

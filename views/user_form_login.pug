@@ -1,0 +1,35 @@
+extends layout 
+block header 
+  include z_menu_header.pug
+block content
+  .container
+    //- img.login_logo(src="/img/login_logo.png", alt="")
+    form(action="", method="POST", autocomplete="off") 
+      //- h1= title 
+      input.login_username(type="text", name="username", placeholder='아이디')
+      br
+      input.login_password(type="password", name="password", placeholder='비밀번호')
+      br
+      button.login_btn(type="submit") LOGIN
+
+    if (hasMessages)
+      ul
+        each message in messages
+          li= message
+    
+    ul 
+      li
+        a(href="/auth/google") Google login 
+      li
+        a(href="/auth/naver") Naver login 
+      li
+        a(href="/auth/kakao") Kakao login 
+
+    p.join_btn 
+      a(href="/signup/option") 회원가입
+
+    p 
+      a(href="/user/lostusername") # Find username
+
+    p.lost_password_btn 
+      a(href="/user/lostpassword") 비밀번호 찾기

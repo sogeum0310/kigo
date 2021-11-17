@@ -1,0 +1,28 @@
+extends layout 
+
+block content 
+  h1.admin_detail_con_title= title 
+
+  hr
+
+  pre= user 
+
+  hr
+  
+  h1 auth status
+  form(action="", method="POST", onsubmit="return confirm('y/n')") 
+    select(name="auth") 
+      option(value="true", selected=(user.auth===true ? true : false)) accepted
+      option(value="false", selected=(user.auth===false ? true : false)) denied
+    button(type="submit") confirm 
+
+  hr
+
+  if (user.account==="business")
+    h1.admin_detail_con_title 리뷰목록
+    ul.admin_user_detail_review_list 
+      each review in user.reviews
+        li 
+          p 남긴말 : #{review.content}
+          p 별점 : #{review.rating}
+          p 날짜 : #{review.reg_date}

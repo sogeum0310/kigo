@@ -1,0 +1,93 @@
+extends layout 
+
+block content 
+  h1= title
+  pre= blog
+
+  div !{blog.content}
+
+  a(href="/community/list") list 
+  a(href="/community/create") create 
+  a(href="/community/update/" + blog._id) update 
+  a(href="/community/delete/" + blog._id) delete
+
+  hr
+
+  button(onclick=`createItem('${blog._id}', 0)`) create
+
+  h3 comments
+  each blog_comment in blog_comments 
+    div(id="item-" + blog_comment._id)
+      p(id="content-" + blog_comment._id) #{blog_comment.content} 
+      if (blog_comment.user)
+        i - #{blog_comment.user.username}
+      p
+        button(onclick=`createItem('${blog_comment.parent}', '${blog_comment._id}')`) update
+        button(onclick=`deleteItem('${blog_comment._id}')`) delete
+        button(onclick=`createItem('${blog_comment._id}', 0)`) add
+      div(style="margin-left:25px")
+        each comment in blog_comment.comment
+          div(id="item-" + comment._id)
+            p(id="content-" + comment._id) #{comment.content} 
+            if (blog_comment.user)
+              i - #{comment.user.username}
+            p
+              button(onclick=`createItem('${comment.parent}', '${comment._id}')`) update
+              button(onclick=`deleteItem('${comment._id}')`) delete
+              button(onclick=`createItem('${blog_comment._id}', 0)`) add
+      br
+
+  hr
+
+  h3 comment form
+
+  form(action="/community/comment/create", method="POST") 
+    div.form-group
+      label(for="") parent
+      input(type="text", id="parent" name="parent", value="")
+    div.form-group
+      label(for="") id
+      input(type="text", id="id" name="id", value="")
+    div.form-group
+      label(for="") 
+      textarea(name="content")
+    button(type="submit") confirm 
+
+
+  script.
+    var form = document.querySelector('form')
+
+    function createItem(parent, id) {
+      document.querySelector('#parent').value = parent
+      document.querySelector('#id').value = id
+      var content = document.querySelector('#content-' + id) ? document.querySelector('#content-' + id).textContent : ''
+      document.querySelector('textarea').textContent = content
+    }
+
+    async function deleteItem(id) {
+      var res = confirm('y/n')
+      if (res===false) {
+        return console.log('false')
+      }
+
+      var results = await fetch('/community/comment/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'id=' + id
+      }).then(res => res.text())
+
+      document.getElementById('item-' + id).style.display = 'none'
+    }
+
+
+
+  
+
+    
+
+
+
+
+  
+
+  

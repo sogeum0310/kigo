@@ -1,0 +1,35 @@
+extends layout 
+block header 
+  include z_back_header.pug
+block content
+  h1= title 
+
+  //- pre= estimate_responses
+
+  ul
+    each estimate_sent in estimate_responses
+      li
+        a(href="/estimate/sent/" + estimate_sent._id) # #{estimate_sent.estimate_request.topic.name}
+        |  (#{estimate_sent.estimate_request.user.username})
+        if (estimate_sent.estimate_request.count < 10)
+          span  견적요청중
+        else 
+          span  견적요청완료
+
+  //- .container 
+    ul.estimate_sent_list_wrap
+      each estimate_sent in estimate_responses
+        li.estimate_received_sent_list_li
+          a(href="/estimate/sent/" + estimate_sent._id)
+            .estimate_sent_con_box.clearfix
+              span.estimate_sent_list_platform #{estimate_sent. estimate_request.platform[0].name}
+              span.estimate_sent_list_username 사용자명 : #{estimate_sent.estimate_request.user.username}
+              if (estimate_sent.estimate_request.count < 10)
+                span.estimate_sent_list_state_i.estimate_sent_list_state  견적요청중
+              else 
+                span.estimate_sent_list_state_f.estimate_sent_list_state  견적요청완료
+            p.estimate_sent_list_reg_date 견적요청일자 : #{estimate_sent.reg_date.getFullYear()}.#{estimate_sent.reg_date.getMonth() +1}.#{estimate_sent.reg_date.getDate()}
+      p.no_recevied_list_text 보낸 견적이 없습니다.
+
+//- block scripts
+  script(src='/javascript/no_chat_list.js')

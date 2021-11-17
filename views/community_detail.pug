@@ -1,0 +1,115 @@
+extends layout 
+
+block content 
+  h1= title
+  //- Blog article
+  h3= blog.title
+  i= blog.reg_date
+  small  (#{blog.views})
+  div !{blog.content}
+  p
+    a(href="/community/list") list / 
+    a(href="") create / 
+    a(href="/community/" + blog._id + '/update') update / 
+    a(href="") delete 
+  hr
+
+  //- Create comment 
+  button(onclick=`createItem('${blog._id}', null, null, false)`) create comment
+
+  //- All comments
+  h3 comments
+  each blog_comment in blog_comments 
+    //- Comments
+    div(id="item-" + blog_comment._id)
+      p(id="content-" + blog_comment._id) #{blog_comment.content} 
+      if (blog_comment.user)
+        p #[i - #{blog_comment.user.username}]
+      if (user_global && blog_comment.user._id.toString()===user_global.id.toString())
+        button(onclick=`createItem('${blog_comment.parent}', '${blog_comment._id}')`) update
+        button(onclick=`deleteItem('${blog_comment._id}')`) delete
+      if (user_global)
+        button(onclick=`createItem('${blog_comment._id}', null, null, true)`) add
+      //- More comments
+      div(style="margin-left:25px")
+        each comment in blog_comment.comment
+          div(id="item-" + comment._id)
+            if (comment.bites)
+              span @#{comment.bites.username} 
+            span(id="content-" + comment._id) #{comment.content} 
+            if (blog_comment.user)
+              p #[i - #{comment.user.username}]
+            if (user_global && comment.user._id.toString()===user_global.id.toString())
+              button(onclick=`createItem('${comment.parent}', '${comment._id}')`) update
+              button(onclick=`deleteItem('${comment._id}')`) delete
+            if (user_global)
+              button(onclick=`createItem('${blog_comment._id}', null, '${comment.user._id}', true)`) add
+      hr
+
+  //- Form to create or update the comment
+  h3 comment form
+  form(action="/community/comment/create", method="POST") 
+    div.form-group
+      label(for="") redirect url 
+      input(type="text", name="url", value=blog._id) 
+    div.form-group
+      label(for="") parent
+      input(type="text", id="parent" name="parent", value="")
+    div.form-group
+      label(for="") coc 
+      input(type="text", id="coc", name="coc", value="") 
+    div.form-group
+      label(for="") id
+      input(type="text", id="id" name="id", value="")
+    div.form-group
+      label(for="") bites 
+      input(type="text", id="bites" name="bites", value="") 
+    div.form-group
+      label(for="") 
+      textarea(name="content")
+    button(type="submit") confirm 
+
+
+  script.
+    var form = document.querySelector('form')
+
+    // For create or update the comment
+    function createItem(parent, id, bites, coc) {
+      // Fill input in the form
+      document.querySelector('#parent').value = parent
+      document.querySelector('#id').value = id
+      document.querySelector('#bites').value = bites
+      document.querySelector('#coc').value = coc
+      // Fill textarea in the form
+      var content = document.querySelector('#content-' + id) ? document.querySelector('#content-' + id).textContent : ''
+      document.querySelector('textarea').textContent = content
+    }
+
+    // For delete the comment
+    async function deleteItem(id) {
+      var res = confirm('y/n')
+      if (res===false) {
+        return console.log('false')
+      }
+      // Send to server
+      var results = await fetch('/community/comment/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'id=' + id
+      }).then(res => res.text())
+      // Visually hidden
+      document.getElementById('item-' + id).style.display = 'none'
+    }
+
+
+
+  
+
+    
+
+
+
+
+  
+
+  

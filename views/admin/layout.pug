@@ -1,0 +1,49 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/reset.css')
+    link(rel='stylesheet', href='/stylesheets/font-awesome/css/font-awesome.min.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/admin.css')
+    script(src="/summernote/jquery-3.5.1.js") 
+  body
+    .admin_container
+      .admin_left_aside
+        block nav 
+          nav.admin_nav.clearfix 
+            a(href="/admin") 
+             img.logo_img(src='/img/logo.png' alt='')
+            a(href="/admin/user/personal/list")
+              i.fa.fa-address-book-o(aria-hidden='true')
+              | 일반회원
+            a(href="/admin/user/business/list") 
+              i.fa.fa-address-book(aria-hidden='true')
+              | 기업회원
+            a(href="/admin/estimate/list") 
+              i.fa.fa-file-text(aria-hidden='true')
+              | 계약서 목록
+            //- a(href="/admin/estimate/response/list") response
+            a(href="/admin/notice/list") 
+              i.fa.fa-bullhorn(aria-hidden='true')
+              | 공지
+            a(href="/admin/faq/list") 
+              i.fa.fa-question-circle(aria-hidden='true')
+              | 자주묻는 질문
+            a(href="/admin/event/list") 
+              i.fa.fa-calendar-o(aria-hidden='true')
+              | 이벤트
+            a(href="/admin/qna/list") 
+              i.fa.fa-paper-plane-o(aria-hidden='true')
+              | 1:1 문의
+            a(href="/admin/message/list") 
+              i.fa.fa-paper-plane(aria-hidden='true')
+              | 의견
+            a(href="/admin/mypage") 
+              i.fa.fa-user-circle(aria-hidden='true')
+              | 마이페이지
+      .admin_content_area
+        block content
+
+  block scripts
+

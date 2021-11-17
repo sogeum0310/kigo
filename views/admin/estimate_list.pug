@@ -1,0 +1,10 @@
+extends layout 
+
+block content 
+  h1.admin_con_title= title
+
+  ul
+    each estimate_response in estimate_responses
+      li 
+        a(href=estimate_response._id) Submitted estimate by #{estimate_response.user.username}
+        |  #{estimate_response.reg_date}

@@ -1,0 +1,29 @@
+extends layout 
+block header 
+  include z_back_header.pug
+block content 
+  //- h1= title 
+  .container
+    
+    .com_contact_top_txt1 
+      p
+        | 문의 사항이나 궁금한 점이 있으시면 말씀해주세요.
+        br
+        | 답변은 나의 문의 내역에서 확인하시면 됩니다.
+    .com_contact_top_txt2
+      p
+        | 키고에 바라는 점이나 좋은 의견 있으시면 말씀해주세요.
+        br
+        | 더 나은 키고가 되도록 노력하겠습니다.
+    form(action="" method="POST", onsubmit="return confirm('제출하시겠습니까?');")
+      div.form-group.com_contact_form_group
+        label(for="") 제목
+        input.full_input.frm_input(type="text", name="title", required)
+      div.form-group.com_contact_form_group
+        label(for="") 내용 
+        textarea.full_input.frm_input#company_contact_text(name="content", cols="30", rows="10")  
+      p 
+        button.submit_btn(type="submit") 작성완료
+
+block scripts 
+  script(src='/javascript/com_contact_txt.js')

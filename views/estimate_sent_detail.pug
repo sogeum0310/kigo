@@ -1,0 +1,38 @@
+extends layout 
+block header 
+  include z_back_header.pug
+block content 
+  h1= title 
+
+  h2= estimate_response.estimate_request.user.username
+  
+  -var x = 1
+  while (x < 11)
+    -var y = x++
+    if (estimate_response.estimate_request[`field${y}`].length>0)
+      h3 # #{estimate_response.estimate_request[`field${y}`][0].item.name}
+      each checked_detail in estimate_response.estimate_request[`field${y}`]
+        p= checked_detail.name 
+        if (estimate_response.estimate_request.estimate_text[0].text )
+          if (estimate_response.estimate_request.estimate_text[0].item.toString()===checked_detail.item._id.toString())
+            p #{estimate_response.estimate_request.estimate_text[0].text}
+  
+  h3 Something to say 
+  pre= estimate_response.estimate_request.content
+
+  hr
+  
+  pre= estimate_response.item
+  pre= estimate_response.cost
+  pre= estimate_response.note
+
+  if (estimate_response.submit===false)
+    form(action="", method="POST", onsubmit="return confirm('y/n')") 
+      button(type="submit") Sent estimate to KIGO
+  else 
+    p submitted estimate to KIGO!
+
+  a(href="/estimate/sent/list") list 
+
+
+  

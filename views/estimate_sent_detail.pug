@@ -2,37 +2,99 @@ extends layout
 block header 
   include z_back_header.pug
 block content 
-  h1= title 
+  //- pre= estimate_response.estimate_request
+  //- h1= title 
 
-  h2= estimate_response.estimate_request.user.username
+  //- h2= estimate_response.estimate_request.user.username
   
-  -var x = 1
-  while (x < 11)
-    -var y = x++
-    if (estimate_response.estimate_request[`field${y}`].length>0)
-      h3 # #{estimate_response.estimate_request[`field${y}`][0].item.name}
-      each checked_detail in estimate_response.estimate_request[`field${y}`]
-        p= checked_detail.name 
-        if (estimate_response.estimate_request.estimate_text[0].text )
-          if (estimate_response.estimate_request.estimate_text[0].item.toString()===checked_detail.item._id.toString())
-            p #{estimate_response.estimate_request.estimate_text[0].text}
+  //- -var x = 1
+  //- while (x < 11)
+  //-   -var y = x++
+  //-   if (estimate_response.estimate_request[`field${y}`].length>0)
+  //-     h3 # #{estimate_response.estimate_request[`field${y}`][0].item.name}
+  //-     each checked_detail in estimate_response.estimate_request[`field${y}`]
+  //-       p= checked_detail.name 
+  //-       if (estimate_response.estimate_request.estimate_text[0].text )
+  //-         if (estimate_response.estimate_request.estimate_text[0].item.toString()===checked_detail.item._id.toString())
+  //-           p #{estimate_response.estimate_request.estimate_text[0].text}
   
-  h3 Something to say 
-  pre= estimate_response.estimate_request.content
+  //- h3 Something to say 
+  //- pre= estimate_response.estimate_request.content
 
-  hr
+  //- hr
   
-  pre= estimate_response.item
-  pre= estimate_response.cost
-  pre= estimate_response.note
+  //- pre= estimate_response.item
+  //- pre= estimate_response.cost
+  //- pre= estimate_response.note
 
-  if (estimate_response.submit===false)
-    form(action="", method="POST", onsubmit="return confirm('y/n')") 
-      button(type="submit") Sent estimate to KIGO
-  else 
-    p submitted estimate to KIGO!
+  //- if (estimate_response.submit===false)
+  //-   form(action="", method="POST", onsubmit="return confirm('y/n')") 
+  //-     button(type="submit") Sent estimate to KIGO
+  //- else 
+  //-   p submitted estimate to KIGO!
 
-  a(href="/estimate/sent/list") list 
+  //- a(href="/estimate/sent/list") list 
+
+    h1= title 
+  .container
+    ul.received_detail_ul
+      li.clearfix.sent_detail_first
+        p #{estimate_response.estimate_request.user.city}, #{estimate_response.estimate_request.user.name}
+        h2 #{estimate_request.topic.name}
+        p 견적요청일자 : #{estimate_request.reg_date.getFullYear()}.#{estimate_request.reg_date.getMonth() +1}.#{estimate_request.reg_date.getDate()}. #{estimate_request.reg_date.getHours()}:#{estimate_request.reg_date.getMinutes()}
+        
+      
+      -var x = 1
+      while (x < 11)
+        -var y = x++
+        if (estimate_response.estimate_request[`field${y}`].length>0)
+          li.clearfix
+            h3 #{estimate_response.estimate_request[`field${y}`][0].item.name}
+            each checked_detail in estimate_response.estimate_request[`field${y}`]
+              p= checked_detail.name 
+              if (estimate_response.estimate_request.estimate_text[0].text )
+                if (estimate_response.estimate_request.estimate_text[0].item.toString()===checked_detail.item._id.toString())
+                  p #{estimate_response.estimate_request.estimate_text[0].text}
+      li.clearfix.received_detail_last
+        h3 추가 요청사항
+        p= estimate_response.estimate_request.content
+    div.sent_detail_response_date.sent_detail_response_date01.clearfix
+      p 견적서 작성일
+      p #{estimate_response.reg_date.getFullYear()}.#{estimate_response.reg_date.getMonth() +1}.#{estimate_response.reg_date.getDate()}
+    ul.sent_detail_bottom_stat.clearfix
+      li
+        each estimate_response_item in estimate_response.item
+          if (estimate_response_item.length>0)
+            p #{estimate_response_item}
+      li
+        each estimate_response_cost in estimate_response.cost
+          if (estimate_response_cost.length>0)
+            p #{estimate_response_cost}원
+      li
+        each estimate_response_note in estimate_response.note
+          if (estimate_response_note.length>0)
+            p #{estimate_response_note}
+    div.sent_detail_response_date.sent_detail_response_date02.clearfix
+      p 견적가
+      p #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}원
+
+
+
+
+
+          
+      //- hr
+      //- pre= estimate_response
+      //- pre= estimate_response.item
+      //- pre= estimate_response.cost
+      //- pre= estimate_response.note
+
+    if (estimate_response.submit===false)
+      form(action="", method="POST", onsubmit="return confirm('y/n')") 
+        button.submit_btn(type="submit") 키고에 계약서 전송하기
+    else 
+      p.submit_btn 키고에 계약서를 전송하셨습니다.
+
 
 
   

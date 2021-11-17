@@ -1365,6 +1365,9 @@ img{
   color: #fff;
   text-align: center;
 }
+.chat_list_count.chat_list_count02{
+  z-index: 2;
+}
 .chat_list_last_message{
   display: block;
   color: #888;
@@ -1423,7 +1426,32 @@ img{
   font-size: 30px;
   text-align: center;
 }
-
+.estimate_received_list_con_box.on{
+  position: relative;
+}
+.estimate_received_list_con_box.on::after{
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  border-radius: 10px;
+}
+.estimate_received_right button{
+  background: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+.received_list_message{
+  font-size: 14px;
+  color: #6F27E8;
+  font-weight: bold;
+  text-align: center;
+}
 
 /* 채팅 리스트 */
 
@@ -1444,13 +1472,28 @@ img{
   font-weight: 400;
   margin-bottom: 8px;
   padding-bottom: 8px;
+  max-width: 50%;
+  position: relative;
 }
-
+.send_chat_form > div{
+  width: 80%;
+  border: 1px solid #ccc;
+  display: inline-block;
+  position: relative;
+}
+.send_chat_form > div > i{
+  font-size: 16px;
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
 .send_chat_input{
   width: 80%;
   padding: 8px;
-  border: 1px solid #ccc;
   outline: none;
+  border: none;
 }
 .send_chat_btn{
   width: 20%;
@@ -1796,8 +1839,8 @@ img{
   background: #00012D;
   color: #fff;
   font-weight: bold;
-  font-size: 12px;
-  padding: 6px 0;
+  font-size: 16px;
+  padding: 10px 0;
 }
 .estimate_received_detail_form_stat tr td{
   font-size: 12px;
@@ -1809,6 +1852,115 @@ img{
   margin-bottom: 10px;
 }
 
+
+/* new */
+
+.received_detail_ul{
+  width: 100%;
+  height: auto;
+  position: relative;
+  background: #fff;
+  border-radius: 10px;
+  padding: 15px;
+}
+.received_detail_ul li.received_detail_first h2{
+  width: 100%;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+.received_detail_ul li.received_detail_first p{
+  width: 100%;
+  font-size: 14px;
+  color: #181818;
+  padding: 0;
+}
+.received_detail_ul li.sent_detail_first p{
+  width: 100%;
+  padding: 0;
+  font-size: 14px;
+  float: initial;
+}
+.received_detail_ul li.sent_detail_first h2{
+  font-size: 18px;
+  font-weight: bold;
+  margin: 15px 0;
+
+}
+.received_detail_ul li:first-child{
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+.received_detail_ul li{
+  margin-bottom: 15px;
+}
+.received_detail_ul li:last-child{
+  margin-bottom: 0;
+}
+.received_detail_ul li p, .received_detail_ul li h3{
+  float: left;
+  width: 50%;
+  padding: 0 10px;
+  font-size: 14px;
+}
+.received_detail_ul li h3:first-child{
+  padding-left: 0;
+}
+.received_detail_ul li.received_detail_last{
+  border-top: 1px solid #ccc;
+  padding-top: 5px;
+}
+.received_detail_ul li.received_detail_last h3{
+  font-size: 21px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+.received_detail_ul li.received_detail_last h3, .received_detail_ul li.received_detail_last p{
+  clear: both;
+  width: 100%;
+}
+.received_detail_ul li.received_detail_last p{
+  background: #EEF5FB;
+  padding: 15px;
+}
+.sent_detail_bottom_stat{
+  width: 100%;
+  height: auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-top: 15px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+.sent_detail_bottom_stat li{
+  float: left;
+  width: 33.33%;
+}
+.sent_detail_bottom_stat li:nth-child(2){
+  text-align: center;
+}
+.sent_detail_bottom_stat li:last-child{
+  text-align: right;
+}
+.sent_detail_bottom_stat li p{
+  height: 21px;
+  overflow-y: auto;
+}
+.sent_detail_response_date01{
+  margin-top: 30px;
+}
+.sent_detail_response_date02{
+  margin-top: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+}
+.sent_detail_response_date p{
+  float: left;
+  width: 50%;
+}
+.sent_detail_response_date p:last-child{
+  text-align: right;
+}
 /* 업체 받은견적 상세 */
 
 
@@ -2046,8 +2198,38 @@ img{
   margin-bottom: 10px;
   display: block;
 }
+.chat_you .chat_num{
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: bottom;
+  position: relative;
+  bottom: 3px;
+  /* position: absolute;
+  right: -18px;
+  bottom: 14px; */
+}
+.chat_me .chat_num{
+  display: inline-block;
+  margin-right: 10px;
+  vertical-align: bottom;
+  position: relative;
+  bottom: 3px;
+  /* position: absolute;
+  left: -18px;
+  bottom: 14px; */
+}
+.chat_me .chat_num .num.off, .chat_you .chat_num .num.off{
+  display: none;
+}
+.chat_you p span, .chat_me p span{
+  color: #181818;
+  margin: 0;
+  font-size: 14px;
+  display: inline-block;
+}
 .chat_me{
   text-align: right;
+  margin-left: 50%;
 }
 .chat_me span{
   color: #4B37FF;
@@ -2059,14 +2241,34 @@ img{
 .chat_you div{
   margin-left: 10px;
 }
-.chat_you div, .chat_me div{
+.chat_you .chat_content, .chat_me .chat_content{
   background: #fff;
   border-radius: 10px;
   padding: 10px;
   display: inline-block;
+  width: calc(100% - 20px);
 }
 .chat_me span{
+  /* display: none; */
+}
+.chat_file_form{
+  width: 100%;
+  height: auto;
+  position: fixed;
+  left: 0;
+  bottom: 37px;
   display: none;
+}
+.chat_file_form input{
+  width: 80%;
+  background: #fff;
+}
+.chat_file_form button{
+  width: 20%;
+  background: #fff;
+  border: 1px solid #6F27E8;
+  outline: none;
+  padding: 8px;
 }
 
 .no_chat_list_text, .no_recevied_list_text{
@@ -2076,10 +2278,11 @@ img{
   display: block;
 }
 .received_plus_btn{
+  border: none;
+  outline: none;
   background: #fff;
   display: block;
   text-align: center;
-  border: 1px solid #ccc;
   outline: none;
   max-width: 100px;
   width: 100%;
@@ -2088,6 +2291,10 @@ img{
   margin-bottom: 10px;
   font-size: 18px;
   
+}
+.received_plus_btn i{
+  font-size: 20px;
+  cursor: pointer;
 }
 .reset_password_page_wrap .form-group{
   margin-bottom: 10px;

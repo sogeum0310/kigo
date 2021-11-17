@@ -2,19 +2,38 @@ extends layout
 block header 
   include z_back_header.pug
 block content
-  h1= title 
+  //- h1= title 
 
   //- pre= estimate_responses
 
-  ul
-    each estimate_sent in estimate_responses
-      li
-        a(href="/estimate/sent/" + estimate_sent._id) # #{estimate_sent.estimate_request.topic.name}
-        |  (#{estimate_sent.estimate_request.user.username})
-        if (estimate_sent.estimate_request.count < 10)
-          span  견적요청중
-        else 
-          span  견적요청완료
+  //- ul
+  //-   each estimate_sent in estimate_responses
+  //-     li
+  //-       a(href="/estimate/sent/" + estimate_sent._id) # #{estimate_sent.estimate_request.topic.name}
+  //-       |  (#{estimate_sent.estimate_request.user.username})
+  //-       if (estimate_sent.estimate_request.count < 10)
+  //-         span  견적요청중
+  //-       else 
+  //-         span  견적요청완료
+
+  .container
+    ul.estimate_received_list_wrap
+      each estimate_sent in estimate_responses
+        li.clearfix.sent_list_li
+          .estimate_received_left
+            a(href="/estimate/sent/" + estimate_sent._id)
+              p #{estimate_sent.estimate_request.user.city}, #{estimate_sent.estimate_request.user.name}
+              div.estimate_received_left_topic #{estimate_sent.estimate_request.topic.name}
+              p.estimate_received_list_reg_date 견적요청일자 : #{estimate_sent.estimate_request.reg_date.getFullYear()}.#{estimate_sent.estimate_request.reg_date.getMonth() +1}.#{estimate_sent.estimate_request.reg_date.getDate()}. #{estimate_sent.estimate_request.reg_date.getHours()}:#{estimate_sent.estimate_request.reg_date.getMinutes()}
+          .estimate_received_middle
+            if (estimate_sent.estimate_request.count < 10)
+              span  견적요청중
+            else 
+              span  견적요청완료
+    p.no_recevied_list_text 보낸 견적이 없습니다.
+    .estimate_received_list_subtxt 
+      p ※ 견적요청중 : 견적요청을 한 고객이 광고업체, 인플루언서로부터 견적서를 받아보고 있는 경우
+      p ※ 견적요청완료 : 견적요청을 한 고객이 광고업체, 인플루언서로부터 견적서 10개를 받은 경우<br>(고객은 견적서를 10개까지 받아볼 수 있음)
 
   //- .container 
     ul.estimate_sent_list_wrap
@@ -22,7 +41,7 @@ block content
         li.estimate_received_sent_list_li
           a(href="/estimate/sent/" + estimate_sent._id)
             .estimate_sent_con_box.clearfix
-              span.estimate_sent_list_platform #{estimate_sent. estimate_request.platform[0].name}
+              span.estimate_sent_list_platform #{estimate_response.estimate_request[`field${y}`][0].item.name}
               span.estimate_sent_list_username 사용자명 : #{estimate_sent.estimate_request.user.username}
               if (estimate_sent.estimate_request.count < 10)
                 span.estimate_sent_list_state_i.estimate_sent_list_state  견적요청중
@@ -31,5 +50,5 @@ block content
             p.estimate_sent_list_reg_date 견적요청일자 : #{estimate_sent.reg_date.getFullYear()}.#{estimate_sent.reg_date.getMonth() +1}.#{estimate_sent.reg_date.getDate()}
       p.no_recevied_list_text 보낸 견적이 없습니다.
 
-//- block scripts
+block scripts
   script(src='/javascript/no_chat_list.js')

@@ -25,7 +25,7 @@ block content
             li
               p.esti_title #{estimate_request.topic.name} 
               //- p.esti_date 견적요청일자 : #{estimate_request.reg_date.toLocaleString()}
-              p.esti_date 견적요청일자 : #{estimate_request.reg_date.getFullYear()}년 #{estimate_request.reg_date.getMonth() + 1}월 #{estimate_request.reg_date.getDate()}일
+              p.esti_date 견적요청일자 : #{estimate_request.reg_date.getFullYear()}.#{estimate_request.reg_date.getMonth() + 1}.#{estimate_request.reg_date.getDate()}. #{estimate_request.reg_date.getHours()}:#{estimate_request.reg_date.getMinutes()}
 
               //- div #{estimate_request.reg_date.getFullYear()}년
               //- div #{estimate_request.reg_date.getMonth() + 1}월

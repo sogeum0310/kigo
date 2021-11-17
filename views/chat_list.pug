@@ -2,18 +2,43 @@ extends layout
 block header 
   include z_back_header.pug
 block content  
-  h1= title
-  ul
-    each chat_room in chat_rooms 
-      li 
-        if (chat_room.user.length > 0)
-          each user in chat_room.user
-            span [#{user.username}]  
-        else 
-          span [알수없음]
-        if (chat_room.last_message)
-          span(id=chat_room._id) #{chat_room.last_message.content} (#{chat_room.count})
-        a(href="chat/" + chat_room._id)  Go to room >
+  //- h1= title
+  //- ul
+  //-   each chat_room in chat_rooms 
+  //-     li 
+  //-       if (chat_room.user.length > 0)
+  //-         each user in chat_room.user
+  //-           span [#{user.username}]  
+  //-       else 
+  //-         span [알수없음]
+  //-       if (chat_room.last_message)
+  //-         span(id=chat_room._id) #{chat_room.last_message.content} (#{chat_room.count})
+  //-       a(href="chat/" + chat_room._id)  Go to room >
+  .container
+    h3.chat_list_title 채팅 리스트
+    ul.chat_list_wrap
+      each chat_room in chat_rooms 
+        li.chat_list_li.clearfix 
+          a(href="chat/" + chat_room._id)
+            .chat_list_icon 
+              i.fa.fa-user-circle(aria-hidden='true')
+            if (chat_room.user.length > 0)
+              each user in chat_room.user
+                p.chat_list_username #{user.username}
+                  if (chat_room.last_message)
+                    span.chat_list_last_message
+                      span(id=chat_room._id) #{chat_room.last_message.content} 
+                        .chat_list_count #{chat_room.count} 
+            else 
+              p.chat_list_username [알수없음]
+                if (chat_room.last_message)
+                  span.chat_list_last_message
+                    span(id=chat_room._id) #{chat_room.last_message.content} 
+                      .chat_list_count #{chat_room.count} 
+            //- if (chat_room.last_message) 
+            //-   p.chat_list_count
+            //-     span.chat_room_count #{chat_room.count}
+      p.no_chat_list_text 진행중인 채팅목록이 잆습니다.
 
 
   script.
@@ -28,7 +53,7 @@ block content
           n++
         }
       }
-      document.getElementById(chat_content.room).textContent =`${chat_content.content} (${n})`
+      document.getElementById(chat_content.room).innerHTML =`${chat_content.content} <div class="chat_list_count chat_list_count02">${n}</div>`
     })
 
     // Make new room item in the list, only if when chat has first began

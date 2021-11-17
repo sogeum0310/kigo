@@ -17,19 +17,32 @@ block content
         each message in messages
           li= message
     
-    ul 
-      li
-        a(href="/auth/google") Google login 
-      li
-        a(href="/auth/naver") Naver login 
-      li
-        a(href="/auth/kakao") Kakao login 
+    //- ul 
+    //-   li
+    //-     a(href="/auth/google") Google login 
+    //-   li
+    //-     a(href="/auth/naver") Naver login 
+    //-   li
+    //-     a(href="/auth/kakao") Kakao login 
+    ul.sns_login_ul 
+      h3.sns_login_title 소셜계정으로 로그인
+      li.sns_google.sns_icon
+        a(href="/auth/google") 
+          i.fa.fa-google(aria-hidden='true')
+          span Google login
+      li.sns_naver.sns_icon
+        a(href="/auth/naver") 
+          span Naver login 
+      li.sns_kakao.sns_icon
+        a(href="/auth/kakao") 
+          span Kakao login
 
     p.join_btn 
       a(href="/signup/option") 회원가입
-
-    p 
-      a(href="/user/lostusername") # Find username
-
-    p.lost_password_btn 
-      a(href="/user/lostpassword") 비밀번호 찾기
+    ul.clearfix.lost_btn_box
+      li
+        p.lost_id_btn
+          a(href='/user/lostusername') 아이디 찾기
+      li
+        p.lost_password_btn
+          a(href='/user/lostpassword') 비밀번호 찾기

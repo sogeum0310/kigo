@@ -10,3 +10,7 @@ chat_btn.click(function(){
   $("html, body").animate({ scrollTop: $(document).height() }, 0);
   objDiv.scrollTop = objDiv.scrollHeight;
 });
+
+$(".file_plus_btn").click(function(){
+  $(".chat_file_form").slideToggle("on");
+})

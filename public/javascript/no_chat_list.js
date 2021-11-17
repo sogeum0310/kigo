@@ -6,7 +6,7 @@ if ($('.chat_list_li').length){
 
 
 
-if ($('.estimate_received_sent_list_li').length){
+if ($('.sent_list_li').length){
 } else {
   $('.no_recevied_list_text').addClass("on");
 };

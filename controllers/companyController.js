@@ -14,7 +14,7 @@ exports.index = async (req, res, next)  => {
 // Success page
 exports.success = async (req, res, next) => {
   try {
-    res.render('z_success', { title: req.query.message, go_to: req.query.go_to })
+    res.render('success', { title: req.query.message, go_to: req.query.go_to })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }

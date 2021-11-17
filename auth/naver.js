@@ -15,9 +15,12 @@ passport.use(new NaverStrategy(
     Model.User.findOne({ username : profile.provider + profile.id }, function(err, user) {
       if (!user) {
         user = new Model.User({
-          first_name: profile.displayName,
-          email: profile.emails[0].value,
           username: profile.provider + profile.id,
+          name: profile.displayName,
+          email: profile.emails[0].value,
+          auth: true,
+          account: 'personal',
+          social: true
         });
         user.save(function(err) {
           if (err) console.log(err);

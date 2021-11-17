@@ -16,9 +16,10 @@ passport.use(new KakaoStrategy(
       if (err) { return done(err) }
       if (!user) {
         user = new Model.User({
-          first_name: profile.provider + '_user',
           username: profile.provider + profile.id,
-          roles: ['authenticated'],
+          auth: true,
+          account: 'personal',
+          social: true
         })
         user.save(function(err) {
           if (err) { console.log(err) }

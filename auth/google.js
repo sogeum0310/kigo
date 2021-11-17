@@ -20,10 +20,11 @@ passport.use(new GoogleStrategy( // new GoogleStrategy(object, function)
       username: profile.provider + profile.id
     };
     var updates = {
-      name: profile.displayName,
       username: profile.provider + profile.id,
-      first_name: profile.name.givenName,
-      family_name: profile.name.familyName
+      name: profile.displayName,
+      auth: true,
+      account: 'personal',
+      social: true
     };
     var options = {
       upsert: true

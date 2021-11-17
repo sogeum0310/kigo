@@ -36,14 +36,18 @@ const UserSchema = new Schema({
   salt: { type: String },
   name: { type: String },
   gender: { type: String },
-  date_of_birth: { type: Date } ,
+  date_of_birth: { type: Date },
   phone: { type: String },
   email: { type: String },
   about: { type: String },
-  city: [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }] ,
+  city: [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   platform: [{ type: Schema.ObjectId, ref: 'EstimateTopic' }],
-  auth: { type: Number },
-  account: { type: String }
+  auth: { type: Boolean },
+  account: { type: String },
+  social: { type: Boolean, default: false },
+  reg_date: { type: Date, default: Date.now },
+  start_date: { type: Date },
+  drop: { type: Boolean, default: false },
 })
 UserSchema.virtual('date_of_birth_yyyy_mm_dd').get(function() {
   return DateTime.fromJSDate(this.date_of_birth).toISODate(); //format 'YYYY-MM-DD'
@@ -80,16 +84,6 @@ const EstimateResponseSchema = new Schema({
   reg_date: { type: Date, default: Date.now }
 }) 
 
-// Review
-const ReviewSchema = new Schema({
-  user_business: { type: Schema.ObjectId, ref: 'User' },
-  user_personal: { type: Schema.ObjectId, ref: 'User' },
-  rating: { type: Number },
-  content: { type: String },
-  reg_date: { type: Date, default: Date.now },
-})
-
-
 // Chat
 var ChatRoomSchema = new Schema({
   user: [{ type: Schema.ObjectId, ref: 'User' }],
@@ -124,8 +118,11 @@ const BlogPostSchema = new Schema({
 
 const BlogCommentSchema = new Schema({
   parent: { type: Schema.ObjectId },
+  coc: { type: Boolean },
+  bites: { type: Schema.ObjectId, ref: 'User' },
   user: { type: Schema.ObjectId, ref: 'User' },
   content: { type: String },
+  rating: { type: Number, default: null },
   reg_date: { type: Date, default: Date.now }
 })
 
@@ -162,7 +159,7 @@ exports.Community = mongoose.model('Community', BlogPostSchema)
 exports.CommunityComment = mongoose.model('CommunityComment', BlogCommentSchema)
 
 // Others
-exports.Review = mongoose.model('Review', ReviewSchema)
+exports.Review = mongoose.model('Review', BlogCommentSchema)
 exports.File = mongoose.model('File', FileSchema)
 
 // Chat

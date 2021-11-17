@@ -100,7 +100,7 @@ exports.signup_personal_post = async (req, res, next) => {
       city: req.body.city,
       phone: req.body.phone,
       email: req.body.email,
-      auth: 1,
+      auth: true,
       account: 'personal'
     })
 
@@ -144,7 +144,7 @@ exports.signup_business_post = async (req, res, next) => {
       about: req.body.about,
       city: req.body.city,
       platform: req.body.platform,
-      auth: 0,
+      auth: false,
       account: 'business'
     })
 
@@ -283,16 +283,6 @@ exports.mypage_business_account_post = async (req, res, next) => {
   }
 }
 
-// Mypage - Review
-exports.mypage_personal_review_list = async (req, res, next) => {
-  try {
-    var review_list = await Model.Review.find()
-    res.render('user_review_list', { title: '나의 리뷰', review_list: review_list })
-  } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
-}
-
 // My page - Qna
 exports.mypage_qna_list = async (req, res, next) => {
   try {
@@ -383,6 +373,9 @@ exports.lost_password_get = async (req, res, next ) => {
 exports.lost_password_post = async (req, res, next) => {
   try {
     const user = await Model.User.findOne({ email: req.body.email });
+    if (user.social===true) {
+      return res.send('Registered account via social login has no password!')
+    }
     let token = await Model.Token.findOne({ userId: user.id });
     if (!token) {
       token = await new Model.Token({
@@ -484,5 +477,19 @@ exports.validity = async (req, res, next) => {
     }
   } catch (error) {
     res.render('error', { message: '', error: error })
+  }
+}
+
+exports.drop_get = async (req, res, next) => {
+  res.render('user_form_drop', { title: 'User drop' })
+}
+
+exports.drop_post = async (req, res, next) => {
+  try{
+    await Model.User.findByIdAndUpdate(req.user.id, { drop: true })
+    req.logout()
+    res.redirect('/')
+  } catch (error) {
+    console.log(error)
   }
 }

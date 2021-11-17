@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 // Import controller
 const admin_controller = require('../controllers/adminController')
+const comment_controller = require('../controllers/commentController')
 
 
 // Index
@@ -53,12 +54,10 @@ router.get('/faq/:id/delete', admin_controller.faq_delete_get)
 
 // Qna
 router.get('/qna/list', admin_controller.qna_list)
-router.get('/qna/:id', admin_controller.qna_detail_get)
-router.post('/qna/:id', admin_controller.qna_detail_post)
-router.get('/qna/:id/delete', admin_controller.qna_delete_get)
-
-router.post('/qna/comment/create', admin_controller.qna_comment_create)
-router.post('/qna/comment/delete', admin_controller.qna_comment_delete)
+// Qna-Comment
+router.get('/qna/:id', comment_controller.qna_detail)
+router.post('/qna/comment/create', comment_controller.qna_comment_create)
+router.post('/qna/comment/delete', comment_controller.qna_comment_delete)
 
 // Message
 router.get('/message/list', admin_controller.message_list)

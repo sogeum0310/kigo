@@ -2,19 +2,90 @@ extends layout
 block header 
   include z_back_header.pug
 block content 
-  //- h1= title
+  h1= title
 
-  //- ul 
-  //-   each review in review_list 
-  //-     li= review
+  //- All comments
+  h3 comments
+  each blog_comment in blog_comments 
+    //- Comments
+    div(id="item-" + blog_comment._id)
+      p(id="content-" + blog_comment._id) #{blog_comment.content} 
+      if (blog_comment.user)
+        p #[i - #{blog_comment.user.username}]
+      if (user_global && blog_comment.user._id.toString()===user_global.id.toString())
+        button(onclick=`createItem('${blog_comment.parent}', '${blog_comment._id}')`) update
+        button(onclick=`deleteItem('${blog_comment._id}')`) delete
+      if (user_global)
+        button(onclick=`createItem('${blog_comment._id}', null, null, true)`) add
+      //- More comments
+      div(style="margin-left:25px")
+        each comment in blog_comment.comment
+          div(id="item-" + comment._id)
+            if (comment.bites)
+              span @#{comment.bites.username} 
+            span(id="content-" + comment._id) #{comment.content} 
+            if (blog_comment.user)
+              p #[i - #{comment.user.username}]
+            if (user_global && comment.user._id.toString()===user_global.id.toString())
+              button(onclick=`createItem('${comment.parent}', '${comment._id}')`) update
+              button(onclick=`deleteItem('${comment._id}')`) delete
+            if (user_global)
+              button(onclick=`createItem('${blog_comment._id}', null, '${comment.user._id}', true)`) add
+      hr
 
-  .container
-    ul.mypage_personal_review_wrap 
-      each review in review_list 
-        li
-          p.mypage_personal_review_star 별점 : #{review.rating}
-          .mypage_personal_review_conbox.clearfix
-            p 제목 : #{review.content} 
-            p #{review.reg_date.getFullYear()}-#{review.reg_date.getMonth() +1}-#{review.reg_date.getDate()}
+  //- Form to create or update the comment
+  h3 comment form
+  form(action="/mypage/review/create", method="POST") 
+    div.form-group
+      label(for="") redirect url 
+      input(type="text", name="url", value="") 
+    div.form-group
+      label(for="") parent
+      input(type="text", id="parent" name="parent", value="")
+    div.form-group
+      label(for="") coc 
+      input(type="text", id="coc", name="coc", value="") 
+    div.form-group
+      label(for="") id
+      input(type="text", id="id" name="id", value="")
+    div.form-group
+      label(for="") bites 
+      input(type="text", id="bites" name="bites", value="") 
+    div.form-group
+      label(for="") 
+      textarea(name="content")
+    button(type="submit") confirm 
+
+
+  script.
+    var form = document.querySelector('form')
+
+    // For create or update the comment
+    function createItem(parent, id, bites, coc) {
+      // Fill input in the form
+      document.querySelector('#parent').value = parent
+      document.querySelector('#id').value = id
+      document.querySelector('#bites').value = bites
+      document.querySelector('#coc').value = coc
+      // Fill textarea in the form
+      var content = document.querySelector('#content-' + id) ? document.querySelector('#content-' + id).textContent : ''
+      document.querySelector('textarea').textContent = content
+    }
+
+    // For delete the comment
+    async function deleteItem(id) {
+      var res = confirm('y/n')
+      if (res===false) {
+        return console.log('false')
+      }
+      // Send to server
+      var results = await fetch('/mypage/review/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'id=' + id
+      }).then(res => res.text())
+      // Visually hidden
+      document.getElementById('item-' + id).style.display = 'none'
+    }
 
 

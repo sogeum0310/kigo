@@ -20,7 +20,7 @@ block content
                 div
                   label(for=detail._id) #{detail.name} 
                   input(type=detail.input_type, id=detail._id, name=detail.input_name, value=detail._id)
-                  if (detail._id.toString()==='618e4d9c2d34ac810ce995d8')
+                  if (detail.name==='월')
                     input(type="hidden", name='item', value=estimate_item._id)
                     input(type="text", name="text", value="")
             hr

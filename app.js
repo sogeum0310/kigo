@@ -17,7 +17,7 @@ const mongoose = require('mongoose');
 const config = require('./config.js')
 const populate = require('./populate/populate')
 
-
+// What's going on
 const mongoUrl = config.mydb.url
 // mongoose connection 
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });

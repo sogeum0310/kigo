@@ -64,7 +64,7 @@ exports.mypage = async (req, res, next) => {
   }
 }
 
-// User
+// User list
 exports.user_personal_list = async (req, res, next) => {
   try {
     var user_personals = Model.User.find({ account: 'personal' }).populate('city').exec()
@@ -88,21 +88,31 @@ exports.user_business_list = async (req, res, next) => {
   }
 }
 
+// User detail
 exports.user_detail_get = async (req, res, next) => {
   try {
     var user = await Model.User.findById(req.params.id).populate('city').populate('platform').exec()
     user.file = await Model.File.findOne({ parent: req.params.id }).exec()
-    user.reviews = await Model.Review.find({ user_business: req.params.id }).exec()
+    user.reviews = await Model.Review.find({ parent: req.params.id }).exec()
     res.render('admin/user_detail', { title: '회원 정보', user: user })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
 }
 
-exports.user_detail_post = async (req, res, next) => {
+exports.user_detail_auth = async (req, res, next) => {
   try {
-    await Model.User.findByIdAndUpdate(req.params.id, { auth: req.body.auth, start_date: new Date() })
-    res.redirect('/admin/user/detail/' + req.params.id)
+    await Model.User.findByIdAndUpdate(req.body.user, { authorization: req.body.auth })
+    res.redirect('/admin/user/detail/' + req.body.user)
+  } catch (error) {
+    res.render('error', { message: '', error: error })
+  }
+}
+
+exports.user_detail_service = async (req, res, next) => {
+  try {
+    await Model.User.findByIdAndUpdate(req.body.user, { service: true, start_date: new Date() })
+    res.redirect('/admin/user/detail/' + req.body.user)
   } catch (error) {
     res.render('error', { message: '', error: error })
   }

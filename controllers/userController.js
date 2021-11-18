@@ -100,7 +100,7 @@ exports.signup_personal_post = async (req, res, next) => {
       city: req.body.city,
       phone: req.body.phone,
       email: req.body.email,
-      auth: true,
+      service: true,
       account: 'personal'
     })
 
@@ -144,7 +144,7 @@ exports.signup_business_post = async (req, res, next) => {
       about: req.body.about,
       city: req.body.city,
       platform: req.body.platform,
-      auth: false,
+      service: false,
       account: 'business'
     })
 

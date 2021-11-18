@@ -9,16 +9,34 @@ block content
 
   hr
   
-  h1 auth status
-  form(action="", method="POST", onsubmit="return confirm('y/n')") 
-    select(name="auth") 
-      option(value="true", selected=(user.auth===true ? true : false)) accepted
-      option(value="false", selected=(user.auth===false ? true : false)) denied
-    button(type="submit") confirm 
+  form(action="/admin/user/detail/auth", method="POST", onsubmit="return confirm('y/n')") 
+    div.form-group
+      label(for="") user
+      input(type="text", name="user", value=user._id)
+    div.form-group
+      label(for="") authorization
+      select(name="auth") 
+        option(value="true", selected=(user.authorization===true ? true : false)) authorized
+        option(value="false", selected=(user.authorization===false ? true : false)) unauthorized
+    p
+      button(type="submit") confirm 
 
   hr
 
   if (user.account==="business")
+    if (user.service===false)
+      form(action="/admin/user/detail/service", method="POST", onsubmit="return confirm('y/n')") 
+        div.form-group
+          label(for="") user 
+          input(type="text", name="user", value=user._id)
+        p
+          button(type="submit") accept
+    else 
+      p service on
+      p #{user.start_date}
+
+    hr
+
     h1.admin_detail_con_title 리뷰목록
     ul.admin_user_detail_review_list 
       each review in user.reviews

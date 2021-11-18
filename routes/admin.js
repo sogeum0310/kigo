@@ -19,7 +19,9 @@ router.get('/logout', admin_controller.logout)
 router.get('/user/personal/list', admin_controller.user_personal_list)
 router.get('/user/business/list', admin_controller.user_business_list)
 router.get('/user/detail/:id', admin_controller.user_detail_get)
-router.post('/user/detail/:id', admin_controller.user_detail_post)
+// User update
+router.post('/user/detail/auth', admin_controller.user_detail_auth)
+router.post('/user/detail/service', admin_controller.user_detail_service)
 
 // Estimate 
 router.get('/estimate/list', admin_controller.estimate_list)

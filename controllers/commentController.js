@@ -127,6 +127,7 @@ exports.estimate_review_create = async (req, res, next) => {
         rating: req.body.rating
       })
       await blog_comment.save()
+
       res.redirect('/estimate/response/' + req.body.url)
     } else { // Update
       await Model.Review.findByIdAndUpdate(req.body.id, { content: req.body.content, rating: req.body.rating })

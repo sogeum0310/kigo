@@ -17,7 +17,7 @@ const mongoose = require('mongoose');
 const config = require('./config.js')
 const populate = require('./populate/populate')
 
-// 11-17 수요일 6시 44분
+// 11-17 금요일 4시50분
 const mongoUrl = config.mydb.url
 // mongoose connection 
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });

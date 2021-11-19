@@ -4,18 +4,6 @@ block header
 block content 
   //- h1= title
 
-  //- ul.estimate_request_list_box
-  //-   each estimate_request in estimate_requests
-  //-     li 
-  //-       a(href=estimate_request._id) #{estimate_request.platform[0].name}
-  //-       |  (#{estimate_request.count})
-  //-       if (estimate_request.count < 3)
-  //-         span  견적요청중
-  //-       else 
-  //-         span  견적요청완료
-
-  //- pre= estimate_requests
-
   .container
     ul.estimate_request_list_wrap.clearfix
       each estimate_request in estimate_requests
@@ -24,12 +12,7 @@ block content
           .estimate_request_list_con_box.clearfix
             li
               p.esti_title #{estimate_request.topic.name} 
-              //- p.esti_date 견적요청일자 : #{estimate_request.reg_date.toLocaleString()}
               p.esti_date 견적요청일자 : #{estimate_request.reg_date.getFullYear()}년 #{estimate_request.reg_date.getMonth() + 1}월 #{estimate_request.reg_date.getDate()}일
-
-              //- div #{estimate_request.reg_date.getFullYear()}년
-              //- div #{estimate_request.reg_date.getMonth() + 1}월
-              //- div #{estimate_request.reg_date.getDate()}일
             li
               if (estimate_request.count < 10)
                 span  견적요청중

@@ -4,21 +4,19 @@ block content
   link(rel="stylesheet", href="/summernote/summernote-lite.css")
   script(src="/summernote/summernote-lite.js") 
 
-<<<<<<< HEAD
+
+  form(action="", method="POST")
+    //- Choose account weather it is for personal or business
     if (url==='faq')
       h3 account
       div.form-group
         label(for="") personal
-        input(type="radio", name="account", value="personal", checked=(blog_detail && blog_detail.account==='personal' ? 'checked' : false)) 
+        input(type="radio", name="account", value="personal", checked=true) 
         label(for="") business
-        input(type="radio", name="account", value="business", checked=(blog_detail && blog_detail.account==='business' ? 'checked' : false)) 
-=======
-  h1= title 
->>>>>>> 45624db1215acd510c1dda439cd4343bfe3281df
+        input(type="radio", name="account", value="business", checked=(blog && blog.account==='business' ? true : false)) 
 
-  form(action="", method="POST")
-    input(type="text", name="title") 
-    textarea#summernote(name="content")
+    input(type="text", name="title", value=(blog ? blog.title : '')) 
+    textarea#summernote(name="content")=(blog ? blog.content : '')
     p 
       button(type="submit") confirm 
 

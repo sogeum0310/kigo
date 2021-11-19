@@ -15,12 +15,12 @@ var passportKakao = require('../auth/kakao')
 exports.login_get = (req, res, next) => {
   try {
     if (req.user) {
-      res.render('success', { title: '안녕하세요! ' + req.user.username, go_to: '/' })
+      res.redirect('/')
     } else {
       res.render('user_form_login', { title: '로그인' })
     }
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -61,7 +61,7 @@ exports.logout = (req, res, next) => {
     req.logout()
     res.redirect('/')
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -70,7 +70,7 @@ exports.signup_option = async (req, res, next) => {
   try {
     res.render('user_signup_option', { title: '회원가입' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -81,7 +81,7 @@ exports.signup_personal_get = async (req, res, next) => {
 
     res.render('user_form_profile_a', { title: '일반사용자 회원가입', cities: cities,})
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -107,13 +107,11 @@ exports.signup_personal_post = async (req, res, next) => {
     await user_personal.save()
 
     req.login(user_personal, function (err) {
-      var message = '회원가입이 완료되었습니다'
-      var url = '/'
-      res.redirect(`/success/?message=${message}&go_to=${url}`)
+      res.redirect('/')
     });
     
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -125,7 +123,7 @@ exports.signup_business_get = async (req, res, next) => {
     var cities = await Model.EstimateItemDetail.find({ item: estimate_items[8]._id }).exec()
     res.render('user_form_profile_b', { title: '광고업체 회원가입', cities: cities, platforms: platforms, })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -166,13 +164,11 @@ exports.signup_business_post = async (req, res, next) => {
         await file.save()
       }
     }
-
-    var message = '회원가입 신청이 완료되었습니다'
-    var url = '/'
-    res.redirect(`/success/?message=${message}&go_to=${url}`)
+    
+    res.redirect('/')
 
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -182,7 +178,7 @@ exports.mypage = async (req, res, next) => {
     var user = await Model.User.findById(req.user.id)
     res.render('user_mypage', { title: 'My page', user: user })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -195,7 +191,7 @@ exports.mypage_personal_account_get = async (req, res, next) => {
 
     res.render('user_form_profile_a', { title: '나의 정보', user_personal: user_personal, cities: cities })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -213,11 +209,9 @@ exports.mypage_personal_account_post = async (req, res, next) => {
     })
     await Model.User.findByIdAndUpdate(req.user.id, user_personal, {})
 
-    var message = '정보수정이 완료되었습니다'
-    var url = '/mypage'
-    res.redirect(`/success/?message=${message}&go_to=${url}`)
+    res.redirect('/mypage')
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -238,7 +232,7 @@ exports.mypage_business_account_get = async (req, res, next) => {
 
     res.render('user_form_profile_b', { title: '나의 정보', user_business: user_business, files: files, cities: cities, platforms: platforms })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -275,11 +269,9 @@ exports.mypage_business_account_post = async (req, res, next) => {
       }
     }
 
-    var message = '회원정보 수정이 완료되었습니다'
-    var url = '/mypage'
-    res.redirect(`/success/?message=${message}&go_to=${url}`)
+    res.redirect('/mypage')
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -292,13 +284,17 @@ exports.mypage_qna_list = async (req, res, next) => {
     }
     res.render('user_qna_list', { title: '나의 Q&A', qna_list: qna_questions })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
 // Change password
 exports.access_password_get = async (req, res, next) => {
-  res.render('user_form_access', { title: 'Access password' })
+  try {
+    res.render('user_form_access', { title: 'Access password' })
+  } catch (error) {
+    res.render('error', { error: error })
+  }
 }
 
 exports.access_password_post = async (req, res, next) => {
@@ -312,7 +308,7 @@ exports.access_password_post = async (req, res, next) => {
 
     res.render('user_form_password', { title: 'Change password', password_change: true })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -330,12 +326,10 @@ exports.change_password = async (req, res, rext) => {
 
     await Model.User.findByIdAndUpdate(req.user.id, { password: hashedPassword })
 
-    var message = 'Change password successfully'
-    var url = '/'
-    res.redirect(`/success/?message=${message}&go_to=${url}`)
+    res.redirect('/mypage')
 
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -344,7 +338,7 @@ exports.lost_username_get = async (req, res, next) => {
   try {
     res.render('user_form_username', { title: 'Lost username' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -357,7 +351,7 @@ exports.lost_username_post = async (req, res, next) => {
       res.send('no user')
     }
   } catch (error) {
-    console.log(error)
+    res.render('error', { error: error })
   }
 }
 
@@ -366,7 +360,7 @@ exports.lost_password_get = async (req, res, next ) => {
   try {
     res.render('user_form_email', { title: '비밀번호 찾기' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -387,8 +381,7 @@ exports.lost_password_post = async (req, res, next) => {
     await sendEmail(user.email, "비밀번호 재설정", link);
     res.send("비밀번호 재설정 링크를 등록된 이메일로 발송하였습니다");
   } catch (error) {
-    res.send("An error occured");
-    console.log(error);
+    res.render('error', { error: error })
   }
 }
 
@@ -396,7 +389,7 @@ exports.user_reset_password_get = async (req, res, next) => {
   try {
     res.render('user_form_password', { title: '비밀번호 재설정' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -425,8 +418,7 @@ exports.user_reset_password_post = async (req, res, next) => {
     await token.delete();
     res.send("비밀번호 재설정이 완료되었습니다");
   } catch (error) {
-    res.send("An error occured");
-    console.log(error);
+    res.render('error', { error: error })
   }
 }
 
@@ -476,13 +468,17 @@ exports.validity = async (req, res, next) => {
       res.send({ errors: null })
     }
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
 exports.drop_get = async (req, res, next) => {
-  res.render('user_form_drop', { title: 'User drop' })
-}
+  try {
+    res.render('user_form_drop', { title: 'User drop' })
+  } catch (error) {
+    res.render('error', { error: error })
+  }
+ }
 
 exports.drop_post = async (req, res, next) => {
   try{
@@ -490,7 +486,7 @@ exports.drop_post = async (req, res, next) => {
     req.logout()
     res.redirect('/')
   } catch (error) {
-    console.log(error)
+    res.render('error', { error: error })
   }
 }
 
@@ -499,7 +495,7 @@ exports.mypage_alarm_get = async (req, res, next) => {
     var user = await Model.User.findById(req.user.id)
     res.render('user_form_alarm', { title: 'Alarm', online: user.online })
   } catch (error) {
-    console.log(error)
+    res.render('error', { error: error })
   }
 }
 
@@ -513,6 +509,6 @@ exports.mypage_alarm_post = async (req, res, next) => {
       console.log(user.online)
     } 
   } catch (error) {
-    console.log(error)
+    res.render('error', { error: error })
   }
 }

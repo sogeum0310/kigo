@@ -8,7 +8,7 @@ exports.estimate_request_list = async (req, res, next) => {
     var estimate_requests = await Model.EstimateRequest.find({ 'user': req.user.id }).populate('topic').sort([[ 'reg_date', 'descending' ]])
     res.render('estimate_request_list', { title: '견적요청', estimate_requests: estimate_requests })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -37,7 +37,7 @@ exports.estimate_request_create_get = async (req, res, next) => {
       res.render('estimate_request_form', { title: 'Estimate form', estimate_items: estimate_items })
     } 
   } catch (error) {
-    console.log(error)
+    res.render('error', { error: error })
   }
 }
 
@@ -72,11 +72,9 @@ exports.estimate_request_create_post = async (req, res, next) => {
 
     await estimate_text.save()
 
-    var message = '견젹서 전송이 완료되었습니다'
-    var url = '/estimate/request/list'
-    res.redirect(`/success/?message=${message}&go_to=${url}`)
+    res.redirect('/estimate/request/' + estimate._id)
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -107,32 +105,36 @@ exports.estimate_request_detail = async (req, res, next) => {
 
     res.render('estimate_request_detail', { title: '견적서', estimate_request: estimate_request, estimate_responses: estimate_responses, })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
 // Estimate-Received
 exports.estimate_received_list = async (req, res, next) => {
-  var estimate_requests = await Model.EstimateRequest.find().populate('topic').populate('user').sort([['reg_date', 'descending']])
+  try {
+    var estimate_requests = await Model.EstimateRequest.find().populate('topic').populate('user').sort([['reg_date', 'descending']])
 
-  var last_estimate_response = await Model.EstimateResponse.findOne({ user: req.user.id }).sort([['reg_date', 'descending']])
-  if (last_estimate_response) {
-    var long = new Date() - last_estimate_response.reg_date
-    if (long < 1000*60*60) {
-      var ms = 1000*60*60 - long
-      ms = Math.floor(ms/60000)
-      var message = ms + ' 분 뒤에 견적서를 작성할 수 있습니다'
+    var last_estimate_response = await Model.EstimateResponse.findOne({ user: req.user.id }).sort([['reg_date', 'descending']])
+    if (last_estimate_response) {
+      var long = new Date() - last_estimate_response.reg_date
+      if (long < 1000*60*60) {
+        var ms = 1000*60*60 - long
+        ms = Math.floor(ms/60000)
+        var message = ms + ' 분 뒤에 견적서를 작성할 수 있습니다'
+      }
     }
-  }
-  var user_business = await Model.User.findById(req.user.id)
+    var user_business = await Model.User.findById(req.user.id)
 
-  for (estimate_request of estimate_requests) {
-    if  (user_business.platform.includes(estimate_request.topic._id) && estimate_request.count < 10 && !estimate_request.drop.includes(req.user.id)) {
-      estimate_request.matched = true
+    for (estimate_request of estimate_requests) {
+      if  (user_business.platform.includes(estimate_request.topic._id) && estimate_request.count < 10 && !estimate_request.drop.includes(req.user.id)) {
+        estimate_request.matched = true
+      }
     }
-  }
 
-  res.render('estimate_received_list', { title: '', estimate_received_list: estimate_requests, message: message })
+    res.render('estimate_received_list', { title: '', estimate_received_list: estimate_requests, message: message })
+  } catch (error) {
+    res.render('error', { error: error })
+  }
 }
 
 exports.estimate_received_detail_get = async (req, res, next) => {
@@ -159,7 +161,7 @@ exports.estimate_received_detail_get = async (req, res, next) => {
 
     res.render('estimate_received_detail', { title: '견적서', estimate_request: estimate_request })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -179,11 +181,9 @@ exports.estimate_received_detail_post = async (req, res, next) => {
     await estimate_response.save()
     await Model.EstimateRequest.findByIdAndUpdate(req.params.id, { count: count })
 
-    var message = '견적서 전송이 완료되었습니다'
-    var url = '/estimate/send/list'
-    res.redirect(`/success/?message=${message}&go_to=${url}`)
+    res.redirect('/estimate/sent/' + estimate_response._id)
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -193,7 +193,7 @@ exports.estimate_received_delete = async (req, res, next) => {
     await Model.EstimateRequest.findByIdAndUpdate(req.body.id, { $push: { drop: req.user.id } })
     res.redirect('/estimate/received/list')
   } catch (error) {
-    console.log(error)
+    res.render('error', { error: error })
   }
 }
 
@@ -205,7 +205,7 @@ exports.estimate_sent_list = async (req, res, next) => {
     .exec()
     res.render('estimate_sent_list', { title: '보낸 견적', estimate_responses: estimate_responses })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -234,7 +234,7 @@ exports.estimate_sent_detail_get = async (req, res, next) => {
 
     res.render('estimate_sent_detail', { title: '보낸 견적', estimate_response: estimate_response })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -243,9 +243,12 @@ exports.estimate_sent_detail_post = async (req, res, next) => {
     await Model.EstimateResponse.findByIdAndUpdate(req.params.id, { submit: true })
     res.redirect('/estimate/sent/' + req.params.id)
   } catch (error) {
-    return console.log(error)
+    res.render('error', { error: error })
   }
-
 }
+
+
+
+
 
 

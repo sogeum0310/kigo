@@ -8,7 +8,7 @@ block content
   if(blog)
     p.sound_only.bolg_content_tool #{blog.content}
   form(action="", method="POST", onsubmit="return confirm('글을 작성하시겠습니까?')")
-    input.frm_input.full_input(type="text", name="title", value=(undefined===blog? '' : blog.title), required) 
+    input.frm_input.full_input(type="text", name="title", value=(blog? blog.title : ''), required) 
     textarea#summernote.frm_input.full_input(name="content", required)=(blog ? blog.content : '')
     if (url === 'faq')
       h3.admin_con_title 분류를 선택하세요.
@@ -20,8 +20,6 @@ block content
     p 
       button.submit_btn(type="submit") 완료
     
-
-
   script(src="/summernote/summernote.js") 
   block scripts
     script(src='/javascript/admin_create_check.js')

@@ -2,30 +2,6 @@ extends layout
 block header 
   include chat_back_header.pug
 block content 
-  //- h1= title
-  //- div(style="border:1px dashed grey; height:400px; overflow: auto")
-  //-   ul#messages
-  //-     each chat_content in chat_contents 
-  //-       if (chat_content.user._id.toString()===user_global.id.toString())
-  //-         li #{chat_content.user.username}(나) : !{chat_content.content} #[span.num]
-  //-       else 
-  //-         li #{chat_content.user.username} : !{chat_content.content} #[span.num]
-
-  //- form#form(action="")
-  //-   input(type="text" id="input")
-  //-   button(type="submit") send
-
-  //- form#file_form
-  //-   input(type="file" name="my_files" multiple)
-  //-   button(type="submit") send
-  
-  //- p
-  //-   a(href="/chats") Back |  
-  //-   form(action="/chat_out", method="POST")
-  //-     input(type="hidden", name="room", value=room._id)
-  //-     input(type="hidden", name="user", value=user_global.id) 
-  //-     button(type="submit") Out of this room
-
   style.
     .wrap{
     margin-bottom: 0;
@@ -49,7 +25,7 @@ block content
             //- #{chat_content.user.name}(나) :
         else 
           li.chat_you 
-            span.chat_username #{chat_content.user.name}
+            span.chat_username #{chat_content.user.username}
             div.chat_content_box
               .chat_content !{chat_content.content}
               p.chat_num #[span.num]
@@ -128,13 +104,11 @@ block content
     socket.on('message', function (msg, read) {
       var li = document.createElement('li')
   
-
-      
       if (user_global.id===msg.me) {
         li.innerHTML = `<div class="chat_content_box"><p class="chat_num"><span class="num">${read}</span></p><div class="chat_content">${msg.message}</div></div>`
          li.classList.add('chat_me')
       } else {
-         li.innerHTML = `<span class="chat_username">상대</span><div class="chat_content_box"><div class="chat_content">${msg.message}</div><p class="chat_num"><span class="num">${read}</span></p></div>`
+         li.innerHTML = `<span class="chat_username">${msg.user.username}</span><div class="chat_content_box"><div class="chat_content">${msg.message}</div><p class="chat_num"><span class="num">${read}</span></p></div>`
          li.classList.add('chat_you')
       }
 

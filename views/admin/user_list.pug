@@ -31,14 +31,14 @@ block content
             | 탈퇴처리
           th.user_list_tool
             | 관리
-        
+        -var num = 1
         each user in users
           tr 
-            td.user_list_num x
+            td.user_list_num #{num++}
             td.user_list_id #{user.username}
             td.user_list_name #{user.name}
             td.user_list_gender 
-              if(user.gender == 'male')
+              if (user.gender == 'male')
                 span 남
               else 
                 span 여
@@ -47,12 +47,12 @@ block content
             td.user_list_tel #{user.phone}
             td.user_list_mail #{user.email}
             td.user_list_state
-              if(user.auth == '1')
+              if (user.auth == '1')
                 span 사용
               else 
                 span 정지
             td.user_list_mana 
-              if(user.drop == '1')
+              if (user.drop == '1')
                 span 탈퇴
             td.user_list_tool
               a(href="/admin/user/detail/" + user._id) 상세보기

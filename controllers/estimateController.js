@@ -96,14 +96,11 @@ exports.estimate_request_detail = async (req, res, next) => {
     ])
   
     var estimate_text = await Model.EstimateText.find({ estimate_result: req.params.id })
-    console.log(estimate_text)
-  
-    console.log(req.params.id)
     estimate_request.estimate_text = estimate_text
 
-    var estimate_responses = await Model.EstimateResponse.find({ estimate_request: req.params.id }).populate('user').exec()
-
-    res.render('estimate_request_detail', { title: '견적서', estimate_request: estimate_request, estimate_responses: estimate_responses, })
+    var estimate_responses = await Model.EstimateResponse.find({ estimate_request: req.params.id }).populate('user')
+    
+    res.render('estimate_request_detail', { title: '견적서', estimate_request: estimate_request, estimate_responses: estimate_responses })
   } catch (error) {
     res.render('error', { error: error })
   }
@@ -112,7 +109,7 @@ exports.estimate_request_detail = async (req, res, next) => {
 // Estimate-Received
 exports.estimate_received_list = async (req, res, next) => {
   try {
-    var estimate_requests = await Model.EstimateRequest.find().populate('topic').populate('user').sort([['reg_date', 'descending']])
+    var estimate_requests = await Model.EstimateRequest.find().populate('topic').populate({ path: 'user', populate: { path: 'city' } }).sort([['reg_date', 'descending']])
 
     var last_estimate_response = await Model.EstimateResponse.findOne({ user: req.user.id }).sort([['reg_date', 'descending']])
     if (last_estimate_response) {

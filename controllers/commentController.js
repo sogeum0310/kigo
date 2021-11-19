@@ -100,7 +100,7 @@ exports.qna_comment_delete = async (req, res, next) => {
 // Estimate-Response
 exports.estimate_response_detail = async (req, res, next) => {
   try {
-    var blog = await Model.EstimateResponse.findById(req.params.id).populate('user')    
+    var blog = await Model.EstimateResponse.findById(req.params.id).populate({ path: 'user', populate: { path: 'platform' } })    
     var blog_comments = await Model.Review.find({ parent: blog.user._id, coc: false }).populate('user')
     var files = await Model.File.find({ parent: blog.user })
 

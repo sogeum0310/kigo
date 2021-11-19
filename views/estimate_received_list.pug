@@ -27,7 +27,7 @@ block content
             .estimate_received_list_con_box
               .estimate_received_left 
                 a(href="/estimate/received/" + estimate_received._id) 
-                  p.estimate_received_left_topinfo #{estimate_received.user.city}, #{estimate_received.user.name}
+                  p.estimate_received_left_topinfo #{estimate_received.user.city[0].name}, #{estimate_received.user.name}
                   div.estimate_received_left_topic #{estimate_received.topic.name}
                   p.estimate_received_list_reg_date 견적요청일자 : #{estimate_received.reg_date.getFullYear()}.#{estimate_received.reg_date.getMonth() +1}.#{estimate_received.reg_date.getDate()}. #{estimate_received.reg_date.getHours()}:#{estimate_received.reg_date.getMinutes()}
               .estimate_received_middle

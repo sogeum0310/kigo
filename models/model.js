@@ -31,6 +31,7 @@ const EstimateTextSchema = new Schema({
 
 // User 
 const UserSchema = new Schema({
+  // Profile
   username: { type: String },
   password: { type: String },
   salt: { type: String },
@@ -42,12 +43,20 @@ const UserSchema = new Schema({
   about: { type: String },
   city: [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   platform: [{ type: Schema.ObjectId, ref: 'EstimateTopic' }],
-  auth: { type: Boolean },
+  // Date data
+  service: { type: Boolean },
+  reg_date: { type: Date, default: Date.now },
+  start_date: { type: Date, default: null },
+  // Account
   account: { type: String },
   social: { type: Boolean, default: false },
-  reg_date: { type: Date, default: Date.now },
-  start_date: { type: Date },
+  authorization: { type: Boolean, default: true },
+  online: { type: Boolean, default: true },
   drop: { type: Boolean, default: false },
+  // Level
+  level: { type: Number, default: 1 },
+  score: { type: Number, default: 0 },
+  contract: { type: Number, default: 0 }
 })
 UserSchema.virtual('date_of_birth_yyyy_mm_dd').get(function() {
   return DateTime.fromJSDate(this.date_of_birth).toISODate(); //format 'YYYY-MM-DD'

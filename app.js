@@ -9,16 +9,15 @@ const fileUpload = require('express-fileupload')
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const adminRouter = require('./routes/admin');
-const nodemailer = require('nodemailer')
 const Model = require('./models/model')
 const app = express();
-var chat_notification = require('./utils/chat_notification')
-var passport = require('passport');
+const chat_notification = require('./utils/chat_notification')
+const passport = require('passport');
 const mongoose = require('mongoose');
-var config = require('./config.js')
+const config = require('./config.js')
 const populate = require('./populate/populate')
 
-
+// 11-17 수요일 6시 44분
 const mongoUrl = config.mydb.url
 // mongoose connection 
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });

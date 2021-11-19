@@ -92,6 +92,9 @@ router.post('/mypage/personal/account', user_controller.mypage_personal_account_
 router.get('/mypage/business/account', user_controller.mypage_business_account_get)
 router.post('/mypage/business/account', user_controller.mypage_business_account_post)
 router.get('/mypage/qna/list', user_controller.mypage_qna_list)
+// Alarm
+router.get('/mypage/alarm', user_controller.mypage_alarm_get)
+router.post('/mypage/alarm', user_controller.mypage_alarm_post)
 // Review
 router.get('/mypage/review/list', comment_controller.mypage_review_list)
 router.post('/mypage/review/create', comment_controller.mypage_review_create)

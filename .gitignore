@@ -1,2 +1,20 @@
+<<<<<<< HEAD
 # test
 ./test.js
+=======
+# node_modules/
+# .expo/
+# npm-debug.*
+# *.jks
+# *.p8
+# *.p12
+# *.key
+# *.mobileprovision
+# *.orig.*
+# web-build/
+
+/config.js
+
+# macOS
+.DS_Store
+>>>>>>> 35ee56506d60b7f4229c01c8b6933fadae5adce2

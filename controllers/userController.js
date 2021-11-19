@@ -100,7 +100,7 @@ exports.signup_personal_post = async (req, res, next) => {
       city: req.body.city,
       phone: req.body.phone,
       email: req.body.email,
-      auth: true,
+      service: true,
       account: 'personal'
     })
 
@@ -144,7 +144,7 @@ exports.signup_business_post = async (req, res, next) => {
       about: req.body.about,
       city: req.body.city,
       platform: req.body.platform,
-      auth: false,
+      service: false,
       account: 'business'
     })
 
@@ -489,6 +489,29 @@ exports.drop_post = async (req, res, next) => {
     await Model.User.findByIdAndUpdate(req.user.id, { drop: true })
     req.logout()
     res.redirect('/')
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+exports.mypage_alarm_get = async (req, res, next) => {
+  try {
+    var user = await Model.User.findById(req.user.id)
+    res.render('user_form_alarm', { title: 'Alarm', online: user.online })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+exports.mypage_alarm_post = async (req, res, next) => {
+  try {
+    if (req.body.alarm) {
+      var user = await Model.User.findById(req.user.id)
+      var results = user.online===true ? false : true
+      
+      await Model.User.findByIdAndUpdate(req.user.id, { online: results })
+      console.log(user.online)
+    } 
   } catch (error) {
     console.log(error)
   }

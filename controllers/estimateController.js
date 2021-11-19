@@ -43,6 +43,8 @@ exports.estimate_request_create_get = async (req, res, next) => {
 
 exports.estimate_request_create_post = async (req, res, next) => {
   try {
+    // Except for some users that doesn't want to receive estimate requests
+    var users = await Model.User.find({ online: false }, '_id')
     var estimate = new Model.EstimateRequest({
       user: req.user.id,
       topic: req.query.topic,
@@ -57,9 +59,10 @@ exports.estimate_request_create_post = async (req, res, next) => {
       field9: req.body.field9,
       field10: req.body.field10,
       content: req.body.content,
+      drop: users,
       count: 0,
     })
-    estimate.save()
+    await estimate.save()
 
     var estimate_text = new Model.EstimateText({
       estimate_result: estimate._id,
@@ -177,8 +180,7 @@ exports.estimate_received_detail_post = async (req, res, next) => {
     await Model.EstimateRequest.findByIdAndUpdate(req.params.id, { count: count })
 
     var message = '견적서 전송이 완료되었습니다'
-    // var url = '/estimate/send/list'
-    var url = '/estimate/sent/list'
+    var url = '/estimate/send/list'
     res.redirect(`/success/?message=${message}&go_to=${url}`)
   } catch (error) {
     res.render('error', { message: '', error: error })

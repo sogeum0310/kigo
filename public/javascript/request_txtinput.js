@@ -37,10 +37,9 @@ $(document).ready(function(){
 $(document).ready(function(){
   $("#618c7d5266d3de2718257430").change(function(){
       if($("#618c7d5266d3de2718257430").is(":checked")){
+        $(".request_txt_input05").removeClass("on");
         $(".request_txt_input04").addClass("on");
       }else{
-        $(".request_txt_input04").removeClass("on");
-        $('.request_txt_input04').val("");
       }
   });
 });
@@ -48,10 +47,20 @@ $(document).ready(function(){
 $(document).ready(function(){
   $("#618c7d5266d3de2718257432").change(function(){
       if($("#618c7d5266d3de2718257432").is(":checked")){
+        $(".request_txt_input04").removeClass("on");
         $(".request_txt_input05").addClass("on");
+        $('.request_txt_input04').val("");
       }else{
+      }
+  });
+});
+
+$(document).ready(function(){
+  $("#618c7d5266d3de2718257434").change(function(){
+      if($("#618c7d5266d3de2718257434").is(":checked")){
+        $(".request_txt_input04").removeClass("on");
         $(".request_txt_input05").removeClass("on");
-        $('.request_txt_input05').val("");
+      }else{
       }
   });
 });

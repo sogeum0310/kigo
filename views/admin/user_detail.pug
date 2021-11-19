@@ -1,40 +1,128 @@
 extends layout 
 
 block content 
+  //- h1.admin_detail_con_title= title 
+
+  //- hr
+
+  //- pre= user 
+
+  //- hr
+  
+  //- h1 auth status
+  //- form(action="", method="POST", onsubmit="return confirm('y/n')") 
+  //-   select(name="auth") 
+  //-     option(value="true", selected=(user.auth===true ? true : false)) accepted
+  //-     option(value="false", selected=(user.auth===false ? true : false)) denied
+  //-   button(type="submit") confirm 
+
+  //- hr
+
+  //- if (user.account==="business")
+  //-   h1.admin_detail_con_title 리뷰목록
+  //-   ul.admin_user_detail_review_list 
+  //-     each review in user.reviews
+  //-       li 
+  //-         p 남긴말 : #{review.content}
+  //-         p 별점 : #{review.rating}
+  //-         p 날짜 : #{review.reg_date}
   h1.admin_detail_con_title= title 
 
-  pre= user 
-  
-  if (user.auth===0)
-    form(action="", method="POST", onsubmit="return confirm('승인하시겠습니까?');") 
-      button.submit_btn(type="submit") 승인하기
+
+
+  if (user.account==="business")
+    table.user_detail_stat 
+      tr.user_detail_id
+        th 아이디
+        td #{user.username}
+      tr.user_detail_name
+        th 회사명
+        td #{user.name}
+      tr.user_detail_platform
+        th 광고방법
+        td 
+          each user_platform in user.platform
+            span  #{user_platform.name}
+      tr.user_detail_tel
+        th 연락처
+        td #{user.phone}
+      tr.user_detail_mail
+        th 이메일
+        td #{user.email}
+      tr.user_detail_place
+        th 지역
+        td #{user.city[0].name}
+      tr.user_detail_company_info 
+        th 회사소개
+        td #{user.about}
+      tr.user_detail_auth
+        th 승인상태
+        td 
+          if(user.auth == '1')
+            span 사용
+          else 
+            span 정지
+      tr.user_detail_auth_b 
+        th 회원 승인
+        td 
+          form(action="", method="POST", onsubmit="return confirm('y/n')") 
+            select.frm_input(name="auth") 
+              option(value="true", selected=(user.auth===true ? true : false)) 승인
+              option(value="false", selected=(user.auth===false ? true : false)) 미승인
+            button.user_detail_auth_btn(type="submit") 확인
+
+        
+  else 
+    table.user_detail_stat 
+      tr.user_detail_id
+        th 아이디
+        td #{user.username}
+      tr.user_detail_name
+        th 이름
+        td #{user.name}
+      tr.user_detail_tel
+        th 연락처
+        td #{user.phone}
+      tr.user_detail_mail
+        th 이메일
+        td #{user.email}
+      tr.user_detail_place
+        th 지역
+        td #{user.city[0].name}
+      tr.user_detail_birth 
+        th 생년월일
+        td #{user.date_of_birth.getFullYear()}.#{user.date_of_birth.getMonth() +1}.#{user.date_of_birth.getDate()}
+      tr.user_detail_auth
+        th 승인상태
+        td 
+          if(user.auth == '1')
+            span 사용
+          else 
+            span 정지
+      tr.user_detail_auth_b 
+        th 회원 승인
+        td 
+          form(action="", method="POST", onsubmit="return confirm('y/n')") 
+            select.frm_input(name="auth") 
+              option(value="true", selected=(user.auth===true ? true : false)) 승인
+              option(value="false", selected=(user.auth===false ? true : false)) 미승인
+            button.user_detail_auth_btn(type="submit") 확인
+
+
+
+
+
 
   if (user.account==="business")
     h1.admin_detail_con_title 리뷰목록
+    //- ul.admin_user_detail_review_list
+    //-   li 
+    //-     p 남긴말 : 아
+    //-     p 별점 : ★ 4
+    //-     p 날짜 : 2021.10.12 11:30
     ul.admin_user_detail_review_list 
       each review in user.reviews
         li 
           p 남긴말 : #{review.content}
-          p 별점 : #{review.rating}
-          p 날짜 : #{review.reg_date.getFullYear()}.#{review.reg_date.getMonth() +1}. #{review.reg_date.getDate()}
-
-
-
-
-
-            
-  
-
-
-  //- pre= user.file
-
-  //- ul
-  //-   each review in user.reviews 
-  //-     li= review
-
-  //- if (user.auth===0)
-  //-   form(action="", method="POST") 
-  //-     button(type="submit") confirm
-
-  //- p   
-  //-   a(href=`/admin/user/${user.account}/list`) list 
+          p 별점 : ★ #{review.rating}
+          p 날짜 : #{review.reg_date.getFullYear()}.#{review.reg_date.getMonth() +1}.#{review.reg_date.getDate()}. #{review.reg_date.getHours()}:#{review.reg_date.getMinutes()}

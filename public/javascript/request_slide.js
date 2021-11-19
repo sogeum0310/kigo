@@ -15,7 +15,10 @@
       document.getElementById('demo').textContent = Math.floor(- num / groups.length + x) ;
     
       document.getElementById('demo_bar').style.width = Math.floor(- num / groups.length + x) + "%" ;
+
+      window.scrollTo(0,0);
     })
+    
   }
 
   var nextall = document.querySelectorAll(".next");
@@ -34,6 +37,8 @@
     
       
       document.getElementById('demo_bar').style.width = Math.floor(- num / groups.length + x) + "%" ;
+
+      window.scrollTo(0,0);
     })
   }
 

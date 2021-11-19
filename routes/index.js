@@ -5,6 +5,7 @@ const user_controller = require('../controllers/userController')
 const company_controller = require('../controllers/companyController')
 const community_controller = require('../controllers/communityController')
 const chat_controller = require('../controllers/chatController')
+const comment_controller = require('../controllers/commentController')
 
 
 // Index
@@ -32,20 +33,21 @@ router.get('/company/contact/message/create', company_controller.company_message
 router.post('/company/contact/message/create', company_controller.company_message_create_post)
 
 
-// Estimate request and response
+// Estimate-Request
 router.get('/estimate/request/list', estimate_controller.estimate_request_list)
 router.get('/estimate/request/form', estimate_controller.estimate_request_create_get)
 router.post('/estimate/request/form', estimate_controller.estimate_request_create_post)
 router.get('/estimate/request/:id', estimate_controller.estimate_request_detail)
-
-router.get('/estimate/response/:id', estimate_controller.estimate_response_detail_get)
-router.post('/estimate/response/:id', estimate_controller.estimate_response_detail_post)
-
+// Estimate-Response, Review
+router.get('/estimate/response/:id', comment_controller.estimate_response_detail)
+router.post('/estimate/review/create', comment_controller.estimate_review_create)
+router.post('/estimate/review/delete', comment_controller.estimate_review_delete)
+// Estimate-Received
 router.get('/estimate/received/list', estimate_controller.estimate_received_list)
 router.get('/estimate/received/:id', estimate_controller.estimate_received_detail_get)
 router.post('/estimate/received/delete', estimate_controller.estimate_received_delete)
 router.post('/estimate/received/:id', estimate_controller.estimate_received_detail_post)
-
+// Estimate-Sent
 router.get('/estimate/sent/list', estimate_controller.estimate_sent_list)
 router.get('/estimate/sent/:id', estimate_controller.estimate_sent_detail_get)
 router.post('/estimate/sent/:id', estimate_controller.estimate_sent_detail_post)
@@ -74,6 +76,9 @@ router.post('/user/change_password', user_controller.change_password)
 router.get('/password-reset/:userId/:token', user_controller.user_reset_password_get)
 router.post('/password-reset/:userId/:token', user_controller.user_reset_password_post)
 
+router.get('/drop', user_controller.drop_get)
+router.post('/drop', user_controller.drop_post)
+
 router.get('/signup/option', user_controller.signup_option)
 router.get('/signup/personal', user_controller.signup_personal_get)
 router.post('/signup/personal', user_controller.signup_personal_post)
@@ -86,20 +91,23 @@ router.get('/mypage/personal/account', user_controller.mypage_personal_account_g
 router.post('/mypage/personal/account', user_controller.mypage_personal_account_post)
 router.get('/mypage/business/account', user_controller.mypage_business_account_get)
 router.post('/mypage/business/account', user_controller.mypage_business_account_post)
-router.get('/mypage/personal/review/list', user_controller.mypage_personal_review_list)
 router.get('/mypage/qna/list', user_controller.mypage_qna_list)
-
+// Review
+router.get('/mypage/review/list', comment_controller.mypage_review_list)
+router.post('/mypage/review/create', comment_controller.mypage_review_create)
+router.post('/mypage/review/delete', comment_controller.mypage_review_delete)
 
 // Community
 router.get('/community/list', community_controller.community_list)
 router.get('/community/create', community_controller.community_create_get)
 router.post('/community/create', community_controller.community_create_post)
-router.get('/community/:id', community_controller.community_detail)
 router.get('/community/update/:id', community_controller.community_update_get)
 router.post('/community/update/:id', community_controller.community_update_post)
 
-router.post('/community/comment/create', community_controller.blog_comment_create)
-router.post('/community/comment/delete', community_controller.blog_comment_delete)
+// Community-Comment
+router.get('/community/:id', comment_controller.community_detail)
+router.post('/community/comment/create', comment_controller.community_comment_create)
+router.post('/community/comment/delete', comment_controller.community_comment_delete)
 
 
 // Chat

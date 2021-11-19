@@ -2,25 +2,42 @@ extends layout
 block header 
   include z_back_header.pug 
 block content 
-  //- h1= title 
+  //- h1= user_global.username
+
   .container
     ul.mypage_wrap
       li
         a(href="/mypage/account/access") 
           i.fa.fa-user(aria-hidden='true')
+        //- span #{user_global.username}
+      
+      //- Personal account
       if (user.account==='personal')
         li
           a(href="/mypage/personal/account") 나의 정보 수정 
+        li 
+          a(href="/mypage/review/list") 나의 후기
+
+      //- Business account
       if (user.account==='business')
         li
           a(href="/mypage/business/account") 나의 정보 수정 
+        li 
+          a(href="/mypage/review/list") 후기 관리
+      
+      //- Both account
       li
         a(href="/mypage/qna/list") 나의 문의 내역
-      li 
-        a(href="/mypage/personal/review/list") 나의 후기
-      li 
-        a(href="/user/access_password") 비밀번호 변경  
+
+      //- Social login no need password change field
+      if (user.social===false)
+        li 
+          a(href="/user/access_password") 비밀번호 변경
+
+      //- Both account
       li
         a(href="/logout") 로그아웃
+      li 
+        a(href="/drop") 회원탈퇴
 
       

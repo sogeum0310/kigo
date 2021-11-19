@@ -47,10 +47,11 @@ block content
         if (estimate_request[`field${y}`].length>0)
           li.clearfix
             h3 #{estimate_request[`field${y}`][0].item.name}
-            each checked_detail in estimate_request[`field${y}`]
-              p= checked_detail.name 
-              if (estimate_request.estimate_text[0].item && estimate_request.estimate_text[0].item.toString()===checked_detail.item._id.toString())
-                p #{estimate_request.estimate_text[0].text}
+            div 
+              each checked_detail in estimate_request[`field${y}`]
+                span= checked_detail.name 
+                if (estimate_request.estimate_text[0].item && estimate_request.estimate_text[0].item.toString()===checked_detail.item._id.toString())
+                  span #{estimate_request.estimate_text[0].text}
       li.clearfix.received_detail_last
         h3 추가 요청사항
         p= estimate_request.content
@@ -59,7 +60,10 @@ block content
 
     //- pre= estimate_responses 
   
-    h3.estimate_responses_title 제출된 견적서 목록
+    h3.estimate_responses_title.clearfix
+      span.request_detail_title 제출된 견적서 목록
+      .estimate_request_rank_info
+        a(href="/company/ranking") 등급제 확인
     each estimate_response in estimate_responses 
       ul.estimate_responses_wrap
         li

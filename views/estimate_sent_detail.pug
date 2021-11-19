@@ -38,10 +38,11 @@ block content
     h1= title 
   .container
     ul.received_detail_ul
+      //- pre= estimate_response.estimate_request
       li.clearfix.sent_detail_first
         p #{estimate_response.estimate_request.user.city}, #{estimate_response.estimate_request.user.name}
-        h2 #{estimate_request.topic.name}
-        p 견적요청일자 : #{estimate_request.reg_date.getFullYear()}.#{estimate_request.reg_date.getMonth() +1}.#{estimate_request.reg_date.getDate()}. #{estimate_request.reg_date.getHours()}:#{estimate_request.reg_date.getMinutes()}
+        h2 #{estimate_response.estimate_request.topic.name}
+        p 견적요청일자 : #{estimate_response.estimate_request.reg_date.getFullYear()}.#{estimate_response.estimate_request.reg_date.getMonth() +1}.#{estimate_response.estimate_request.reg_date.getDate()}. #{estimate_response.estimate_request.reg_date.getHours()}:#{estimate_response.estimate_request.reg_date.getMinutes()}
         
       
       -var x = 1
@@ -90,7 +91,7 @@ block content
       //- pre= estimate_response.note
 
     if (estimate_response.submit===false)
-      form(action="", method="POST", onsubmit="return confirm('y/n')") 
+      form(action="", method="POST", onsubmit="return confirm('계약서를 전송하시겠습니까?')") 
         button.submit_btn(type="submit") 키고에 계약서 전송하기
     else 
       p.submit_btn 키고에 계약서를 전송하셨습니다.

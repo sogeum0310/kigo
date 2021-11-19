@@ -74,11 +74,12 @@ block content
         if (estimate_request[`field${y}`].length>0)
           li.clearfix
             h3 #{estimate_request[`field${y}`][0].item.name}
-            each something in estimate_request[`field${y}`]
-              p= something.name 
-              if (estimate_request.estimate_text[0].text)
-                if (estimate_request.estimate_text[0].item.toString()===something.item._id.toString())
-                  p #{estimate_request.estimate_text[0].text}
+            div
+              each something in estimate_request[`field${y}`]
+                span= something.name 
+                if (estimate_request.estimate_text[0].text)
+                  if (estimate_request.estimate_text[0].item.toString()===something.item._id.toString())
+                    span #{estimate_request.estimate_text[0].text}
       li.clearfix.received_detail_last
         h3 추가 요청사항
         p= estimate_request.content
@@ -88,6 +89,7 @@ block content
       table.estimate_received_detail_form_stat 
         tbody#itemTable
           tr 
+            td.minus_btn 
             th 
               p 항목
             th 
@@ -95,26 +97,32 @@ block content
             th 
               p 비고 
           tr#itemRow 
+            td.minus_btn.minus_Btn 
+              i.fa.fa-minus-circle(aria-hidden='true')
             td 
-              input.frm_input.full_input(type="text", name="item")
+              input.frm_input.full_input(type="text", name="item", required, maxlength='10')
             td
-              input.frm_input.full_input(type="number", name="cost")
+              input.frm_input.full_input(type="number", name="cost", required, maxlength='10')
             td
-              input.frm_input.full_input(type="text", name="note")
+              input.frm_input.full_input(type="text", name="note", maxlength='10')
           tr 
+            td.minus_btn.minus_Btn
+              i.fa.fa-minus-circle(aria-hidden='true')
             td 
-              input.frm_input.full_input(type="text", name="item")
+              input.frm_input.full_input(type="text", name="item", maxlength='10')
             td
-              input.frm_input.full_input(type="number", name="cost")
+              input.frm_input.full_input(type="number", name="cost", maxlength='10')
             td
-              input.frm_input.full_input(type="text", name="note")
+              input.frm_input.full_input(type="text", name="note", maxlength='10')
           tr 
+            td.minus_btn.minus_Btn
+              i.fa.fa-minus-circle(aria-hidden='true')
             td 
-              input.frm_input.full_input(type="text", name="item")
+              input.frm_input.full_input(type="text", name="item", maxlength='10')
             td
-              input.frm_input.full_input(type="number", name="cost")
+              input.frm_input.full_input(type="number", name="cost", maxlength='10')
             td
-              input.frm_input.full_input(type="text", name="note")
+              input.frm_input.full_input(type="text", name="note", maxlength='10')
       p   
         button#addItem.received_plus_btn
           i.fa.fa-plus-circle(aria-hidden='true')
@@ -141,6 +149,9 @@ block content
         }
         itemTable.appendChild(newItem)
       })
+  block scripts 
+    script(src='/javascript/remove_table.js')
+
 
 
 

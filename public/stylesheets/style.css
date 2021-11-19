@@ -52,7 +52,9 @@ img{
   font-weight: 400;
   color: #999;
 }
-
+.sound_only{
+  display: none;
+}
 /* a {
   color: #00B7FF;
 } */
@@ -420,9 +422,11 @@ img{
 .blog_list_area li p{
   font-size: 16px;
   font-weight: 400;
-  padding-top: 5px;
-  border-top: 1px solid #ccc;
   display: none;
+}
+.blog_list_area li p:nth-child(2){
+  border-top: 1px solid #ccc;
+  padding-top: 5px;
 }
 .blog_list_area li.down p{
   display: block;
@@ -1291,11 +1295,17 @@ img{
   font-weight: bold;
   margin-bottom: 10px;
 }
+.estimate_responses_username span{
+  margin-left: 10px;
+}
 .estimate_responses_price{
   font-size: 12px;
   font-weight: 400;
+  margin-bottom: 10px;
 }
-
+.estimate_responses_bottominfo{
+  font-size: 14px;
+}
 /* 받은견적 디테일 */
 
 .chat_list_title{
@@ -1380,6 +1390,9 @@ img{
   white-space:nowrap;
   display: block;
 }
+.chat_list_last_message span img{
+  max-height: 100px;
+}
 .estimate_received_list_wrap li .estimate_received_left ,.estimate_received_list_wrap li .estimate_received_middle{
   display: inline-block;
   vertical-align: middle;
@@ -1460,7 +1473,7 @@ img{
   position: relative;
   padding: 20px;
   background: #EEF5FB;
-  height: calc(100vh - 64px);
+  height: calc(100vh - 111px);
   overflow: auto;
   border-radius: 10px;
   margin-bottom: 10px;
@@ -1475,13 +1488,16 @@ img{
   max-width: 50%;
   position: relative;
 }
-.send_chat_form > div{
+.send_chat_form > div, .chat_file_form > div{
   width: 80%;
   border: 1px solid #ccc;
   display: inline-block;
   position: relative;
 }
-.send_chat_form > div > i{
+.chat_file_form > div{
+  border-bottom: none;
+}
+.send_chat_form > div > i, .chat_file_form > div > i{
   font-size: 16px;
   position: absolute;
   top: 50%;
@@ -1489,8 +1505,9 @@ img{
   transform: translateY(-50%);
   cursor: pointer;
 }
+
 .send_chat_input{
-  width: 80%;
+  width: 100%;
   padding: 8px;
   outline: none;
   border: none;
@@ -1515,6 +1532,18 @@ img{
   font-weight: 400;
 
 }
+.chat_header_right{
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+}
+.chat_header_right button{
+  background: none;
+  outline: none;
+  border: 1px solid #ccc;
+}
+
 @media(max-width:767px){
   .estimate_request_detail_stat h3, .estimate_request_detail_stat p{
     font-size: 12px;
@@ -1688,34 +1717,7 @@ img{
 }
 
 
-.estimate_response_form_star{
-  display: inline-block; /* 하위 별점 이미지들이 있는 영역만 자리를 차지함.*/
-  direction: rtl; /* 이모지 순서 반전 */
-  border: 0; /* 필드셋 테두리 제거 */
-  text-align: right;
-  width: 100%;
-  height: auto;
-  margin-top: 15px;
-  margin-bottom: 5px;
-}
 
-.estimate_response_form_star input[type=radio]{
-  display: none; /* 라디오박스 감춤 */
-}
-.estimate_response_form_star label{
-  font-size: 20px; /* 이모지 크기 */
-  color: transparent; /* 기존 이모지 컬러 제거 */
-  text-shadow: 0 0 0 #f0f0f0; /* 새 이모지 색상 부여 */
-}
-.estimate_response_form_star label:hover{
-  text-shadow: 0 0 0 #a00; /* 마우스 호버 */
-}
-.estimate_response_form_star label:hover ~ label{
-  text-shadow: 0 0 0 #a00; /* 마우스 호버 뒤에오는 이모지들 */
-}
-.estimate_response_form_star input[type=radio]:checked ~ label{
-  text-shadow: 0 0 0 #a00; /* 마우스 클릭 체크 */
-}
 .business_review_list_wrap{
   width: 100%;
   height: auto;
@@ -1826,11 +1828,21 @@ img{
   height: auto;
   margin-top: 15px;
 }
+
 .estimate_received_detail_form_stat tr th, .estimate_received_detail_form_stat tr td{
   padding: 2px 0;
   text-align: center;
-  width: 33.33%;
+  width: calc(33.33% - 10px);
 }
+.estimate_received_detail_form_stat tr td.minus_btn{
+  width: 30px;
+  cursor: pointer;
+}
+.estimate_received_detail_form_stat tr td.minus_btn i{
+  font-size: 16px;
+}
+
+
 .estimate_received_detail_form_stat tr th{
   padding-left: 2px;
   padding-right: 2px;
@@ -1862,6 +1874,9 @@ img{
   background: #fff;
   border-radius: 10px;
   padding: 15px;
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.2);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.2);
+  box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.2);
 }
 .received_detail_ul li.received_detail_first h2{
   width: 100%;
@@ -1897,11 +1912,22 @@ img{
 .received_detail_ul li:last-child{
   margin-bottom: 0;
 }
-.received_detail_ul li p, .received_detail_ul li h3{
+.received_detail_ul li div, .received_detail_ul li h3{
   float: left;
   width: 50%;
   padding: 0 10px;
   font-size: 14px;
+}
+.received_detail_ul li div span{
+  display: inline-block;
+  position: relative;
+}
+.received_detail_ul li div span::after{
+  content: ",";
+  margin-right: 5px;
+}
+.received_detail_ul li div span:last-child::after{
+  display: none;
 }
 .received_detail_ul li h3:first-child{
   padding-left: 0;
@@ -1945,6 +1971,7 @@ img{
 .sent_detail_bottom_stat li p{
   height: 21px;
   overflow-y: auto;
+  font-size: 14px;
 }
 .sent_detail_response_date01{
   margin-top: 30px;
@@ -1958,8 +1985,24 @@ img{
   float: left;
   width: 50%;
 }
+.sent_detail_response_date p:first-child{
+  font-weight: bold;
+}
 .sent_detail_response_date p:last-child{
   text-align: right;
+}
+.sent_detail_bottom_stat li:first-child p{
+  font-weight: bold;
+}
+@media(max-width:360px){
+  .sent_detail_bottom_stat li p{
+    font-size: 12px;
+  }
+}
+@media(max-width:320px){
+  .sent_detail_bottom_stat li p{
+    height: 42px;
+  }
 }
 /* 업체 받은견적 상세 */
 
@@ -2246,21 +2289,23 @@ img{
   border-radius: 10px;
   padding: 10px;
   display: inline-block;
-  width: calc(100% - 20px);
+  max-width: calc(100% - 20px);
 }
 .chat_me span{
   /* display: none; */
 }
 .chat_file_form{
+  max-width: 767px;
   width: 100%;
   height: auto;
   position: fixed;
-  left: 0;
+  left: 50%;
   bottom: 37px;
+  transform: translateX(-50%);
   display: none;
 }
 .chat_file_form input{
-  width: 80%;
+  width: 100%;
   background: #fff;
 }
 .chat_file_form button{
@@ -2280,7 +2325,7 @@ img{
 .received_plus_btn{
   border: none;
   outline: none;
-  background: #fff;
+  background: none;
   display: block;
   text-align: center;
   outline: none;
@@ -2311,9 +2356,6 @@ img{
 }
 .send_chat_form{
   width: 100%;
-  position: fixed;
-  left: 0;
-  bottom: 0;
 }
 
 .change_password_label{
@@ -2392,4 +2434,343 @@ img{
 }
 .community_create_subject{
   margin-bottom: 1%;
+}
+
+.blog_detail_title{
+  font-size: 21px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.blog_detail_date{
+  font-size: 14px;
+  color: #888;
+}
+.community_tool_wrap > ul{
+  float: right;
+}
+.community_tool_wrap > ul > li{
+  float: left;
+}
+.community_tool_wrap > ul > li a{
+  padding: 5px;
+  font-size: 18px;
+}
+.commnunity_content{
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background: #fff;
+  min-height: 250px;
+}
+
+.comment_form_group, .comment_submit{
+  display: inline-block;
+  vertical-align: middle;
+}
+.comment_form_group{
+  width: calc(100% - 100px);
+}
+.comment_form_group textarea{
+  height: 31px;
+}
+.comment_submit{
+  width: 100px;
+  height: 31px;
+  line-height: 31px;
+  border: none;
+  background: none;
+  color: #fff;
+  background: #00012D;
+  font-size: 16px;
+  text-align: center;
+  position: relative;
+  bottom: 2px;
+}
+.create_comment_form{
+  position: fixed;
+  max-width: 767px;
+  width: 100%;
+  height: auto;
+  bottom: 66px;
+  left: 50%;
+  transform: translateX(-50%);
+  /* display: none; */
+  z-index: 2;
+}
+.create_comment_form.on{
+  display: block;
+}
+
+.create_comment_btn{
+  background: #fff;
+  width: 100%;
+  height: auto;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  outline: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 10px 0;
+  padding-left: 15px;
+}
+.page_wrap.community_on::after{
+  content: "";
+  display: block;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.5);
+}
+.page_bg{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.5);
+  z-index: 2;
+  display: none;
+}
+
+
+.comment_wrap, .commnet_re_box{
+  position: relative;
+  width: 100%;
+}
+.commnet_re_box{
+  padding: 15px 0;
+  border-bottom: 1px solid #ccc;
+}
+.comment_wrap{
+  padding: 15px 0;
+  border-bottom: 1px solid #ccc;
+}
+.commnet_tools_box{
+  position: absolute;
+  right: 15px;
+  top: 12px;
+}
+.commnet_tools_box button{
+  background: none;
+  outline: none;
+  border: 1px solid #00012D;
+  margin: 0 3px;
+  cursor: pointer;
+}
+.blog_comment_title{
+  font-size: 14px;
+  color: #888;
+  margin-bottom: 5px;
+  min-height: 22px;
+}
+.blog_comment_title i{
+  padding: 3px 10px;
+  background: #00012D;
+  color: #fff;
+  border-radius: 30px;
+  
+}
+.blog_comment_title span{
+  margin-left: 10px;
+}
+.blog_commnet_content{
+  font-size: 16px;
+}
+.comment_bites{
+  color: #4285f4;
+  margin-right: 5px;
+}
+
+.response_detatil_top_box{
+  width: 100%;
+  height: auto;
+  padding: 20px;
+  background: #fff;
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.2);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.2);
+  box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.2);
+  margin-bottom: 10px;
+}
+.response_detatil_top_box .sent_detail_bottom_stat{
+  margin-top: 0;
+  border-top: none;
+}
+.go_chat_btn{
+  position: fixed;
+  width: 100%;
+  max-width: 767px;
+  height: auto;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border: none;
+  background: #00012D;
+  color: #fff;
+  padding: 5px 0;
+  z-index: 3;
+  cursor: pointer;
+}
+
+.response_detail_commnet_form{
+  max-width: 767px;
+  width: 100%;
+  height: auto;
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  padding: 15px;
+  z-index: 3;
+  display: none;
+}
+.response_detail_middle_box{
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #ccc;
+  margin: 20px 0;
+}
+.response_detail_middle_box img{
+}
+/* .star_form_title{
+  float: left;
+  width: 50%;
+}
+.estimate_response_form_sta{
+  float: right;
+  width: 50%;
+} */
+.estimate_response_form_star fieldset{
+  display: inline-block; /* 하위 별점 이미지들이 있는 영역만 자리를 차지함.*/
+  direction: rtl; /* 이모지 순서 반전 */
+  border: 0; /* 필드셋 테두리 제거 */
+}
+.estimate_response_form_star fieldset legend{
+  text-align: left;
+}
+.estimate_response_form_star input[type=radio]{
+  display: none; /* 라디오박스 감춤 */
+}
+.estimate_response_form_star label{
+  font-size: 20px; /* 이모지 크기 */
+  color: transparent; /* 기존 이모지 컬러 제거 */
+  text-shadow: 0 0 0 #999 /* 새 이모지 색상 부여 */
+}
+.estimate_response_form_star label:hover{
+  text-shadow: 0 0 0 #a00; /* 마우스 호버 */
+}
+.estimate_response_form_star label:hover ~ label{
+  text-shadow: 0 0 0 #a00; /* 마우스 호버 뒤에오는 이모지들 */
+}
+.estimate_response_form_star input[type=radio]:checked ~ label{
+  text-shadow: 0 0 0 #a00; /* 마우스 클릭 체크 */
+}
+.star_form_title{
+  float: left;
+  font-size: 20px;
+}
+
+.estimate_response_form_star{
+  float: right;
+}
+
+.response_comment_form_group{
+  width: 100%;
+  margin: 10px 0;
+}
+.response_comment_form_group textarea{
+  height: auto;
+  min-height: 200px;
+}
+.response_detail_title{
+  font-size: 21px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.response_detail_company_info  .company_info_title{
+  font-size: 21px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+.response_detail_company_info .company_info_review{
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.response_detail_company_info .company_info_platform{
+  font-size: 12px;
+}
+.response_detail_company_info .company_info_platform span{
+  position: relative;
+}
+.response_detail_company_info .company_info_platform span::after{
+  content: ",";
+}
+.response_detail_company_info .company_info_platform span:last-child::after{
+  display: none;
+}
+
+.company_hello{
+  margin-top: 15px;
+}
+.company_hello h3{
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+.company_hello p{
+  font-size: 14px;
+}
+.request_detail_title{
+  float: left;
+}
+.estimate_request_rank_info{
+  float: right;
+  border: 1px solid #ccc;
+  padding: 5px;
+  font-size: 14px;
+}
+.response_detail_tab li{
+  float: left;
+  width: 33.33%;
+  margin-bottom: 20px;
+}
+.response_detail_tab li a{
+  display: block;
+  width: 100%;
+  height: auto;
+  padding: 10px 0;
+  font-size: 16px;
+  background: #f1f1f1;
+  text-align: center;
+}
+.response_detail_tab li.active a{
+  background: #00012D;
+  color: #fff;
+}
+
+.user_drop_message{
+  width: 100%;
+  height: auto;
+  position: relative;
+  background: #fff;
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.5);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.5);
+  box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.5);
+  padding: 15px;
+}
+.user_drop_message li{
+  color: #000;
+  font-size: 16px;
+  padding-bottom: 5px;
+}
+.user_drop_message li:first-child{
+  font-size: 21px;
+  font-weight: bold;
+  margin-bottom: 15px;
 }

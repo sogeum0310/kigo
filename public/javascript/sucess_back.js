@@ -9,3 +9,9 @@
 // });
 
 
+var success_alert = $(".success_title").text();
+var goto = $(".success_back a").attr("href");
+
+alert(success_alert);
+
+location.replace(goto);

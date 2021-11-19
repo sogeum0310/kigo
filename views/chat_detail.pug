@@ -1,6 +1,6 @@
 extends layout 
 block header 
-  include z_back_header.pug
+  include chat_back_header.pug
 block content 
   //- h1= title
   //- div(style="border:1px dashed grey; height:400px; overflow: auto")
@@ -61,15 +61,17 @@ block content
     button.send_chat_btn(type="submit") 보내기
 
   form#file_form.chat_file_form
-    input.frm_input(type="file" name="my_files" multiple required)
+    div
+      input.frm_input(type="file" name="my_files" multiple required)
+      i.fa.fa-minus.file_minus_btn(aria-hidden='true')
     button(type="submit") 이미지 전송
 
-  p
-    a(href="/chats") Back |  
-    form(action="/chat_out", method="POST")
-      input(type="hidden", name="room", value=room._id)
-      input(type="hidden", name="user", value=user_global.id) 
-      button(type="submit") 채팅방 나가기
+  //- p
+  //-   a(href="/chats") Back |  
+  //-   form(action="/chat_out", method="POST")
+  //-     input(type="hidden", name="room", value=room._id)
+  //-     input(type="hidden", name="user", value=user_global.id) 
+  //-     button(type="submit") 채팅방 나가기
 
 
   script.

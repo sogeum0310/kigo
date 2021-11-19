@@ -1,37 +1,109 @@
 extends layout 
 
 block content 
-  //- h1= title
-
-  //- ul 
-  //-   each user in users
-  //-     li 
-  //-       a(href="/admin/user/detail/" + user._id) #{user.username}
-  //-       if (user.auth===0)
-  //-         |  unauthorized
-
-  //- hr
-
-  //- pre= users
   h1.admin_con_title= title
+  
+  //- pre= users
 
-  table.admin_stat.admin_member_stat
-    tbody
-      tr
-        th
-          | 아이디
-        th
-          | 연락처
-        th
-          | 이메일
-        th 
-          | 관리
-      each user in users
-        tr 
-          td #{user.username}
-          td 
-            | #{user.phone}
-          td 
-            | #{user.email}
-          td 
-            a(href="/admin/user/detail/" + user._id) 상세보기
+  if (title == '일반사용자')
+    table.user_list_stat
+      tbody
+        tr
+          th.user_list_num
+            | 연번
+          th.user_list_id
+            | 아이디
+          th.user_list_name
+            | 이름
+          th.user_list_gender
+            | 성별
+          th.user_list_birth 
+            | 생년월일
+          th.user_list_place 
+            | 지역
+          th.user_list_tel 
+            | 연락처
+          th.user_list_mail 
+            | 이메일
+          th.user_list_state 
+            | 상태
+          th.user_list_mana 
+            | 탈퇴처리
+          th.user_list_tool
+            | 관리
+        
+        each user in users
+          tr 
+            td.user_list_num x
+            td.user_list_id #{user.username}
+            td.user_list_name #{user.name}
+            td.user_list_gender 
+              if(user.gender == 'male')
+                span 남
+              else 
+                span 여
+            td.user_list_birth #{user.date_of_birth.getFullYear()}.#{user.date_of_birth.getMonth() +1}.#{user.date_of_birth.getDate()}
+            td.user_list_place #{user.city[0].name}
+            td.user_list_tel #{user.phone}
+            td.user_list_mail #{user.email}
+            td.user_list_state
+              if(user.auth == '1')
+                span 사용
+              else 
+                span 정지
+            td.user_list_mana 
+              if(user.drop == '1')
+                span 탈퇴
+            td.user_list_tool
+              a(href="/admin/user/detail/" + user._id) 상세보기
+  if (title == '광고업체')
+    table.user_list_stat
+      tbody
+        tr
+          th.user_list_num
+            | 연번
+          th.user_list_id
+            | 아이디
+          th.user_list_name
+            | 회사명
+          th.user_list_mail 
+            | 이메일
+          th.user_list_joindate
+            | 승인요청
+          th.user_list_startdate 
+            | 서비스 시작
+          th.user_list_review_count
+            | 이용 후기
+          th.user_list_contract_count
+            | 계약서 관리
+          th.user_list_ranking 
+            | 회원 등급
+          th.user_list_state 
+            | 상태
+          th.user_list_mana 
+            | 탈퇴처리
+          th.user_list_tool 
+            | 관리
+        each user in users
+          tr 
+            td.user_list_num x
+            td.user_list_id #{user.username}
+            td.user_list_name #{user.name}
+            td.user_list_mail #{user.email}
+            td.user_list_joindate x
+            td.user_list_startdate x
+            td.user_list_review_count x
+            td.user_list_contract_count x
+            td.user_list_ranking x
+            td.user_list_state 
+              if(user.auth == '1')
+                span 사용
+              else 
+                span 정지
+            td.user_list_mana 
+              if(user.drop == '1')
+                  span 탈퇴
+            td.user_list_tool 
+              a(href="/admin/user/detail/" + user._id) 상세보기
+
+        

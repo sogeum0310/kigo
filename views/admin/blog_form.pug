@@ -4,23 +4,26 @@ block content
   link(rel="stylesheet", href="/summernote/summernote-lite.css")
   script(src="/summernote/summernote-lite.js") 
 
-<<<<<<< HEAD
-    if (url==='faq')
-      h3 account
-      div.form-group
-        label(for="") personal
-        input(type="radio", name="account", value="personal", checked=(blog_detail && blog_detail.account==='personal' ? 'checked' : false)) 
-        label(for="") business
-        input(type="radio", name="account", value="business", checked=(blog_detail && blog_detail.account==='business' ? 'checked' : false)) 
-=======
-  h1= title 
->>>>>>> 45624db1215acd510c1dda439cd4343bfe3281df
-
-  form(action="", method="POST")
-    input(type="text", name="title") 
-    textarea#summernote(name="content")
+  h1.admin_con_title= title 
+  if(blog)
+    p.sound_only.bolg_content_tool #{blog.content}
+  form(action="", method="POST", onsubmit="return confirm('글을 작성하시겠습니까?')")
+    input.frm_input.full_input(type="text", name="title", value=(undefined===blog? '' : blog.title), required) 
+    textarea#summernote.frm_input.full_input(name="content", required)
+    if (url === 'faq')
+      h3.admin_con_title 분류를 선택하세요.
+      div.form-group.admin_fqa_form_group
+        label(for="") 사업주
+        input.frm_input(type="radio", name="account", value="personal", checked=(blog_detail && blog_detail.account==='personal' ? 'checked' : false), required) 
+        label(for="") 광고업체 / 인플루언서
+        input.frm_input(type="radio", name="account", value="business", checked=(blog_detail && blog_detail.account==='business' ? 'checked' : false)) 
     p 
-      button(type="submit") confirm 
+      button.submit_btn(type="submit") 완료
+    
 
 
   script(src="/summernote/summernote.js") 
+  block scripts
+    script(src='/javascript/admin_create_check.js')
+  //-   if (url === 'faq')
+  //-     script(src='/javascript/admin_faq_create_check.js')

@@ -1,7 +1,7 @@
 $(document).ready(function(){
   $('.submit_btn').click(function() {
     if (!$("input[name='rating']:checked").val()) {
-       alert('선택사항을 체크해주세요.');
+       alert('별점을 체크해주세요.');
         return false;
     }
     else {

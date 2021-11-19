@@ -13,7 +13,7 @@ exports.index = async (req, res, next) => {
 // Success page
 exports.success = async (req, res, next) => {
   try {
-    res.render('admin/z_success', { title: req.query.message, go_to: req.query.go_to })
+    res.render('admin/success', { title: req.query.message, go_to: req.query.go_to })
   } catch (error) {
     res.render('error', { message: '', error: error })
   }
@@ -67,13 +67,6 @@ exports.mypage = async (req, res, next) => {
 // User
 exports.user_personal_list = async (req, res, next) => {
   try {
-    // var user_personals = Promise.resolve(Model.UserPersonal.find().exec())
-
-    // var user_personals = new Promise(function (resolve) {
-    //   Model.UserPersonal.find().exec(function (err, results) {
-    //     resolve(results)
-    //   })
-    // })
     var user_personals = Model.User.find({ account: 'personal' }).populate('city').exec()
     console.log(user_personals)
     user_personals.then(function (user_personals) {
@@ -108,7 +101,7 @@ exports.user_detail_get = async (req, res, next) => {
 
 exports.user_detail_post = async (req, res, next) => {
   try {
-    await Model.User.findByIdAndUpdate(req.params.id, { auth: 1 })
+    await Model.User.findByIdAndUpdate(req.params.id, { auth: req.body.auth, start_date: new Date() })
     res.redirect('/admin/user/detail/' + req.params.id)
   } catch (error) {
     res.render('error', { message: '', error: error })
@@ -395,70 +388,6 @@ exports.qna_list = async (req, res, next) => {
   }
 }
 
-exports.qna_detail_get = async (req, res, next) => {
-  try {
-    var qna_question = await Model.QnaQuestion.findById(req.params.id).exec()
-    var qna_answers = await Model.QnaAnswer.find({ parent: req.params.id }).exec()
-    for(qna_answer of qna_answers) {
-      qna_answer.comment = await Model.QnaAnswer.find({ parent: qna_answer._id }).populate('user')
-    }
-
-    res.render('admin/blog_detail', { title: '1:1 문의', blog: qna_question, blog_comments: qna_answers, url: 'qna' })
-  } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
-}
-
-exports.qna_detail_post = async (req, res, next) => {
-  try {
-    var qna_detail = new Model.QnaAnswer({
-      parent: req.params.id,
-      content: req.body.content
-    })
-    await qna_detail.save()
-
-    var message = '답변 등록이 완료되었습니다'
-    var url = '/admin/qna/' + req.params.id
-    res.redirect(`/admin/success/?message=${message}&go_to=${url}`)
-  } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
-}
-
-exports.qna_delete_get = async (req, res, next) => {
-  try {
-    console.log(req.params.id)
-  } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
-}
-
-exports.qna_comment_create = async (req, res, next) => {
-  try {
-    if (req.body.id==='0') {
-      var blog_comment = new Model.QnaAnswer({
-        parent: req.body.parent,
-        user: req.user.id,
-        content: req.body.content
-      })
-      await blog_comment.save()
-    } else {
-      await Model.QnaAnswer.findByIdAndUpdate(req.body.id, { content: req.body.content })
-    }
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-exports.qna_comment_delete = async (req, res, next) => {
-  try {
-    await Model.QnaAnswer.findByIdAndDelete(req.body.id)
-    res.send('success')
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 // Message
 exports.message_list = async (req, res, next) => {
   try {
@@ -488,11 +417,15 @@ exports.message_delete_get = async (req, res, next) => {
 
 // Summernote image upload
 exports.summernote_ajax = async (req, res, next) => {
-  var my_file = req.files.file
+  try {
+    var my_file = req.files.file
 
-  var new_file_name = my_file.md5 + '.' + my_file.name.split('.').pop()
-  upload_path = 'files/blog/' + new_file_name
-  await my_file.mv(upload_path)
+    var new_file_name = my_file.md5 + '.' + my_file.name.split('.').pop()
+    upload_path = 'files/blog/' + new_file_name
+    await my_file.mv(upload_path)
 
-  res.send('/files/blog/' + new_file_name)
+    res.send('/files/blog/' + new_file_name)
+  } catch (error) {
+    console.log(error)
+  }
 }

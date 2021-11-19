@@ -1,0 +1,10 @@
+header.clearfix 
+  .header_box.container
+    .header_back_btn
+      i.fa.fa-arrow-left(aria-hidden='true')
+    h1.header_title=title
+    .chat_header_right
+      form(action="/chat_out", method="POST")
+        input(type="hidden", name="room", value=room._id)
+        input(type="hidden", name="user", value=user_global.id) 
+        button(type="submit") 채팅방 나가기

@@ -17,8 +17,12 @@ passport.use(new Strategy( // new Strategy(function)
         return cb(null, false, { message: 'Incorrect password.' });
       }
       
-      if (user.auth===0) {
+      if (user.auth===false) {
         return cb(null, false, { message: 'Unauthorized' })
+      }
+
+      if (user.drop===true) {
+        return cb(null, false, { message: 'Dropped account' })
       }
 
       return cb(null, user); 

@@ -23,7 +23,7 @@ block content
         a(href=`/admin/${url}/${blog_item._id}`)= blog_item.title 
           if (blog_item.qna_answer)
             span.adm_completed 완료
-        p #{blog_item.reg_date}
+        p #{blog_item.reg_date.getFullYear()}.#{blog_item.reg_date.getMonth() +1}.#{blog_item.reg_date.getDate()}
 
   if (url==='notice' || url==='event' || url==='faq')
     a.admin_write_btn(href="/admin/"+url+"/create") 글 작성

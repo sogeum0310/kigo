@@ -1,13 +1,31 @@
 extends layout 
-
+block header 
+  include z_back_header.pug
 block content 
-  h1= title
+  //- h1= title
 
-  ul 
-    each blog in blogs 
-      li
-        a(href="/community/" + blog._id) #{blog.title} 
+  //- ul 
+  //-   each blog in blogs 
+  //-     li
+  //-       a(href="/community/" + blog._id) #{blog.title} 
 
   
 
-  a(href="/community/create") create  
+  //- a(href="/community/create") create  
+
+  .container 
+    h1.community_list_title= title
+
+    ul.community_list_ul 
+      li.clearfix
+        p.community_list_li_title 제목
+        p.community_list_date 날짜 
+      each blog in blogs 
+        li.clearfix
+          a.community_list_li_title(href="/community/" + blog._id) #{blog.title} 
+          p.community_list_date #{blog.reg_date.getFullYear()}.#{blog.reg_date.getMonth() +1}.#{blog.reg_date.getDate()}
+
+    
+
+    a.community_create_btn(href="/community/create") 글쓰기
+

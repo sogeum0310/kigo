@@ -23,5 +23,6 @@ async function handleSubmit(e) {
     var li = document.createElement('li')
     li.textContent = error
     errors.appendChild(li)
+    window.scrollTo(0,0)
   }
 }

@@ -22,23 +22,24 @@ block content
   .container
     ul.estimate_received_list_wrap
       each estimate_received in estimate_received_list 
-        li.clearfix  
-          .estimate_received_list_con_box
-            .estimate_received_left 
-              a(href="/estimate/received/" + estimate_received._id) 
-                p.estimate_received_left_topinfo #{estimate_received.user.city}, #{estimate_received.user.name}
-                div.estimate_received_left_topic #{estimate_received.topic.name}
-                p.estimate_received_list_reg_date 견적요청일자 : #{estimate_received.reg_date.getFullYear()}.#{estimate_received.reg_date.getMonth() +1}.#{estimate_received.reg_date.getDate()}. #{estimate_received.reg_date.getHours()}:#{estimate_received.reg_date.getMinutes()}
-            .estimate_received_middle
-              if (estimate_received.count < 11)
-                span  견적요청중
-              else 
-                span.received_finished  견적요청완료
-            .estimate_received_right 
-              form(action="/estimate/received/delete", method="POST", onsubmit="return confirm('견적요청을 삭제하시겠습니까?')") 
-                input(type="hidden", name="id", value=estimate_received._id)
-                button(type="submit")
-                 i.fa.fa-trash-o(aria-hidden='true')
+        if (estimate_received.matched)
+          li.clearfix  
+            .estimate_received_list_con_box
+              .estimate_received_left 
+                a(href="/estimate/received/" + estimate_received._id) 
+                  p.estimate_received_left_topinfo #{estimate_received.user.city}, #{estimate_received.user.name}
+                  div.estimate_received_left_topic #{estimate_received.topic.name}
+                  p.estimate_received_list_reg_date 견적요청일자 : #{estimate_received.reg_date.getFullYear()}.#{estimate_received.reg_date.getMonth() +1}.#{estimate_received.reg_date.getDate()}. #{estimate_received.reg_date.getHours()}:#{estimate_received.reg_date.getMinutes()}
+              .estimate_received_middle
+                if (estimate_received.count < 11)
+                  span  견적요청중
+                else 
+                  span.received_finished  견적요청완료
+              .estimate_received_right 
+                form(action="/estimate/received/delete", method="POST", onsubmit="return confirm('견적요청을 삭제하시겠습니까?')") 
+                  input(type="hidden", name="id", value=estimate_received._id)
+                  button(type="submit")
+                  i.fa.fa-trash-o(aria-hidden='true')
     if (message)
       h3.received_list_message= message
     .estimate_received_list_subtxt 

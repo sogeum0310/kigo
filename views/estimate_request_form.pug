@@ -20,7 +20,7 @@ block content
   //-               div
   //-                 label(for=detail._id) #{detail.name} 
   //-                 input(type=detail.input_type, id=detail._id, name=detail.input_name, value=detail._id)
-  //-                 if (detail._id.toString()==='618e4d9c2d34ac810ce995d8')
+  //-                 if (detail.name==='월')
   //-                   input(type="hidden", name='item', value=estimate_item._id)
   //-                   input(type="text", name="text", value="")
   //-           hr
@@ -64,22 +64,11 @@ block content
                     div
                       input(type=detail.input_type, id=detail._id, name=detail.input_name, value=detail._id)
                       label(for=detail._id) #{detail.name} 
-                      if (detail._id.toString()==='618dd7f65d55dd5e38d3d38c')
+                      if (detail.name==='월')
                         input(type="hidden", name='item', value=estimate_item._id)
-                        input.frm_input.request_txt_input.request_txt_input01(type="text", name="text", value="")
-                      //- 추가가능한부분인지?
-                      if (detail._id.toString()==='618c7d5266d3de2718257410')
-                        input(type="hidden", name='item', value=estimate_item._id)
-                        input.frm_input.request_txt_input.request_txt_input02(type="text", name="text", value="")
-                      if (detail._id.toString()==='618c7d5266d3de2718257458')
-                        input(type="hidden", name='item', value=estimate_item._id)
-                        input.frm_input.request_txt_input.request_txt_input03(type="text", name="text", value="")
-                      if (detail._id.toString()==='618c7d5266d3de2718257430')
-                        input(type="hidden", name='item', value=estimate_item._id)
-                        input.frm_input.request_txt_input.request_txt_input04(type="text", name="text", value="")
-                      if (detail._id.toString()==='618c7d5266d3de2718257432')
-                        input(type="hidden", name='item', value=estimate_item._id)
-                        input.frm_input.request_txt_input.request_txt_input05(type="text", name="text", value="")
+                        input(type="text", name="text", value="")
+
+
                     
                 .request_slide_btn
                   a.prev(href="") 이전
@@ -117,4 +106,4 @@ block content
     document.getElementById('demo_bar').style.width = Math.floor(- num / groups.length + x) + "%" ;
   block scripts 
     script(src='/javascript/request_slide.js')
-    script(src='/javascript/request_txtinput.js')
+    //- script(src='/javascript/request_txtinput.js')

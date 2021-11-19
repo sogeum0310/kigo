@@ -18,8 +18,7 @@ const mongoose = require('mongoose');
 var config = require('./config.js')
 const populate = require('./populate/populate')
 
-// kiwon git
-// temin best.
+
 const mongoUrl = config.mydb.url
 // mongoose connection 
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -60,10 +59,14 @@ app.use(function(req, res, next) {
 });
 
 app.use(async function (req, res, next) {
-  if (req.user) {
-    res.locals.user_global = req.user
-    var user_global = await Model.User.findById(req.user.id)
-    res.locals.user_global_account = user_global.account==='personal' ? 'personal' : 'business'
+  try {
+    if (req.user) {
+      res.locals.user_global = req.user
+      var user_global = await Model.User.findById(req.user.id)
+      res.locals.user_global_account = user_global.account==='personal' ? 'personal' : 'business'
+    }
+  } catch (error) {
+    console.log(error)
   }
   next()
 })

@@ -30,16 +30,23 @@ body {
     min-width: 1000px;
     width: calc(100% - 280px);
     vertical-align: top;
+    margin-bottom: 100px;
   }
 
   .admin_nav{
     border-bottom: none;
     background: #22282c;
     height: 100vh;
+    overflow-y: auto;
+    max-width: 280px;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
   }
   .admin_nav a{
     width: 100%;
-    padding: 30px 0;
+    padding: 25px 0;
     padding-left: 30px;
     color: #000;
     text-align: left;
@@ -76,7 +83,7 @@ body {
   }
   /* index */
   .admin_stat{
-    min-width: 1000px;
+    min-width: 1200px;
     width: 100%;
     height: auto;
     border-top-left-radius: 10px;
@@ -127,18 +134,10 @@ body {
     background: #f7f7f7;
   }
 
-  .admin_member_stat tr td{
-    width: 25%;
-  }
   .member_detail_stat{
     margin-bottom: 10px;
   }
-  .member_detail_stat tr th{
-    width: 25%;
-  }
-  .member_detail_stat tr td{
-    width: 75%;
-  }
+
 
   .admin_user_detail_review_list {
     width: 100%;
@@ -286,6 +285,7 @@ body {
   .admin_blog_detail_wrap h4{
     font-size: 14px;
     font-weight: 400;
+    margin-bottom: 5px;
   }
   .admin_blog_detail_wrap p{
     font-size: 14px;
@@ -355,3 +355,147 @@ body {
   }
 
   /* 공지사항 등 */
+
+
+
+  .user_list_stat{
+    min-width: 1200px;
+    width: 100%;
+    height: auto;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    overflow: hidden;
+  }
+  .user_list_stat tr{
+    border-bottom: 1px solid #ccc;
+  }
+  .user_list_stat tr:last-child{
+    /* border-bottom: #0099e8; */
+  }
+  .user_list_stat tr:hover td{
+    color: #4B37FF;
+    /* font-weight: bold; */
+  }
+  .user_list_stat tr:first-child:hover td{
+    color: #fff;
+
+  }
+
+  .user_list_stat tr:last-child{
+  }
+  .user_list_stat tr th{
+    font-weight: bold;
+    font-size: 16px;
+    background: #0099e8;
+    color: #fff;
+    font-weight: bold;
+    border-right: 1px solid rgba(255,255,255,0.4);
+  }
+  .user_list_stat tr th:last-child{
+    border-right: none;
+  }
+  .user_list_stat tr td,  .user_list_stat tr th{
+    text-align: center;
+    padding: 15px 0;
+  }
+  .user_list_stat tr td{
+    /* border-right: 1px solid #ccc; */
+  }
+  .user_list_stat tr td:last-child{
+    /* border-right: none; */
+  }
+  .user_list_stat tr:nth-child(even){
+    background: #f7f7f7;
+  }
+
+
+
+  .user_detail_stat {
+    width: 100%;
+    height: auto;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 50px;
+  }
+  .user_detail_stat  tr{
+    border-bottom: 1px solid #ccc;
+  }
+  .user_detail_stat  tr th{
+    width: 100px;
+    font-weight: bold;
+  }
+  .user_detail_stat  tr th, .user_detail_stat  tr td{
+    padding: 15px 0;
+    text-align: center;
+    font-size: 16px;
+  }
+  .user_detail_stat  tr th{
+    background: #0099c8;
+    color: #fff;
+    border-right: 1px solid rgba(255,255,255,0.4);
+  }
+  .user_detail_stat  tr td{
+    background: #f7f7f7;
+  }
+  .user_detail_auth_btn{
+    border: 1px solid #4B37FF;
+    background: #fff;
+    outline: none;
+    margin-left: 10px;
+  }
+  .user_detail_platform td span{
+    position: relative;
+  }
+  .user_detail_platform td span::after{
+    content: ",";
+  }
+  .user_detail_platform td span:last-child::after{
+    display: none;
+  }
+  .user_estimate_list{
+    min-width: 1200px;
+    width: 100%;
+    height: auto;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    overflow : hidden;
+  }
+  .user_estimate_list tr{
+    border: 1px solid #ccc;
+    border-bottom: none;
+  }
+  .user_estimate_list tr:first-child{
+    background: #0099e8;
+  }
+  .user_estimate_list tr:first-child th{
+    color: #fff;
+    font-weight: bold;
+  }
+  .user_estimate_list tr:last-child{
+    border-bottom: 1px solid #ccc;
+  }
+  .user_estimate_list tr td, .user_estimate_list tr th{
+    text-align: center;
+    padding: 15px 0;
+    font-size: 16px;
+    border-right: 1px solid #ccc;
+  }
+  .user_estimate_list tr td:last-child{
+    border-right: none;
+  }
+  .user_estimate_list tr td:hover{
+    /* color: #4B37FF; */
+  }
+  .user_estimate_list tr td a{
+    color: #000;
+    font-weight: bold;
+  }
+
+  .admin_comment_form{
+    position: relative;
+    max-width: initial;
+    bottom: initial;
+    left: initial;
+    transform: initial;
+  }

@@ -2,7 +2,7 @@ const Model = require('../models/model')
 const async = require('async')
 
 
-// Estimate request for Personal 
+// Estimate-Request
 exports.estimate_request_list = async (req, res, next) => {
   try {
     var estimate_requests = await Model.EstimateRequest.find({ 'user': req.user.id }).populate('topic').sort([[ 'reg_date', 'descending' ]])
@@ -43,7 +43,6 @@ exports.estimate_request_create_get = async (req, res, next) => {
 
 exports.estimate_request_create_post = async (req, res, next) => {
   try {
-    // return console.log(req.query.topic)
     var estimate = new Model.EstimateRequest({
       user: req.user.id,
       topic: req.query.topic,
@@ -60,9 +59,6 @@ exports.estimate_request_create_post = async (req, res, next) => {
       content: req.body.content,
       count: 0,
     })
-
-    // return console.log(estimate)
-
     estimate.save()
 
     var estimate_text = new Model.EstimateText({
@@ -112,35 +108,7 @@ exports.estimate_request_detail = async (req, res, next) => {
   }
 }
 
-// Estimate response for Personal
-exports.estimate_response_detail_get = async (req, res, next) => {
-  try {
-    var estimate_response = await Model.EstimateResponse.findById(req.params.id).populate('user').exec() 
-    var portfolios = await Model.File.find({ parent: estimate_response.user }).sort([[ 'reg_date', 'descending' ]]).exec()
-    var business_reviews = await Model.Review.find({ user_business: estimate_response.user }).exec()
-    res.render('estimate_response_detail', { title: '견적서', estimate_response: estimate_response, portfolios: portfolios, business_reviews: business_reviews })
-  } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
-}
-
-exports.estimate_response_detail_post = async (req, res, next) => {
-  try {
-    var review = new Model.Review({
-      user_personal: req.user.id,
-      user_business: req.body.user_business,
-      rating: req.body.rating,
-      content: req.body.content,
-    })
-    await review.save()
-
-    res.redirect('/estimate/response/' + req.params.id)
-  } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
-}
-
-// Estimate received for Business
+// Estimate-Received
 exports.estimate_received_list = async (req, res, next) => {
   var estimate_requests = await Model.EstimateRequest.find().populate('topic').populate('user').sort([['reg_date', 'descending']])
 
@@ -209,7 +177,8 @@ exports.estimate_received_detail_post = async (req, res, next) => {
     await Model.EstimateRequest.findByIdAndUpdate(req.params.id, { count: count })
 
     var message = '견적서 전송이 완료되었습니다'
-    var url = '/estimate/send/list'
+    // var url = '/estimate/send/list'
+    var url = '/estimate/sent/list'
     res.redirect(`/success/?message=${message}&go_to=${url}`)
   } catch (error) {
     res.render('error', { message: '', error: error })
@@ -226,7 +195,7 @@ exports.estimate_received_delete = async (req, res, next) => {
   }
 }
 
-// Estimate sent for Business
+// Estimate-Sent
 exports.estimate_sent_list = async (req, res, next) => {
   try {
     var estimate_responses = await Model.EstimateResponse.find({ user: req.user.id })

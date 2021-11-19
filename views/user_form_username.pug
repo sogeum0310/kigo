@@ -1,0 +1,49 @@
+extends layout 
+block header 
+  include z_back_header.pug
+block content 
+  //- h1= title 
+
+  //- form(action="")
+  //-   div.form-group
+  //-     label(for="") email 
+  //-     input(type="text", name="email") 
+  //-   p 
+  //-     button(type="submit") submit 
+
+  //- h3 results
+  //- p#demo
+  .container.lost_password_page_wrap 
+    h1.lost_password_title= title 
+
+    form(action="")
+      div.form-group
+        //- label(for="") email 
+        input.frm_input.full_input(type="text", name="email" , placeholder="이메일주소(필수)" , requied) 
+      p 
+        button.submit_btn.lost_id_btn(type="submit") 확인
+
+    p#demo.lost_id_result
+
+  script.
+    var form = document.querySelector('form')
+    var btn = document.querySelector('button')
+
+    btn.addEventListener('click', getUsername)
+
+    async function getUsername(e) {
+      e.preventDefault()
+
+      var formData = new FormData(form)
+
+      var results = await fetch('/user/lostusername', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData).toString()
+      }).then(res => res.text())
+
+      document.querySelector('#demo').textContent = results
+    }
+
+   
+

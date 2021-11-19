@@ -1,0 +1,22 @@
+extends layout 
+block header 
+  include z_back_header.pug 
+block content 
+  //- h1= title 
+
+  //- form(action="", method="POST")
+  //-   div.form-group
+  //-     label(for="") password 
+  //-     input(type="text", name="password")
+  //-   p 
+  //-     button(type="submit") confirm 
+  .container 
+
+    form(action="", method="POST")
+      div.form-group.change_password_form_group
+        label.change_password_label(for="") 비밀번호 변경
+        input.frm_input.full_input(type="text", name="password", placeholder="변경할 비밀번호를 입력하세요")
+      p 
+        button.submit_btn(type="submit") 변경하기
+
+      

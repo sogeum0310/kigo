@@ -1,0 +1,44 @@
+extends layout 
+block header 
+  include z_back_header.pug
+block content 
+  //- h1= title
+
+  .container 
+    .tab
+      button.tablinks.active(onclick="openCity(event, 'London')") 일반사용자
+      button.tablinks(onclick="openCity(event, 'Paris')") 광고업체<br>인플루언서
+    #London.tabcontent.first_tabcontent
+      .company_guide_imgbox 
+        img(src="/img/kigo_how_personal_img01.png", alt="")
+      if (user_global_account)
+        if (user_global_account==='personal')
+          .company_guide_btn 
+            a(href="/estimate/request/form") 견적 요청하기 <i class="fa fa-angle-right" aria-hidden="true"></i>
+        else 
+          .company_guide_btn 
+            p 견적 요청하기 <i class="fa fa-angle-right" aria-hidden="true"></i>
+      else 
+        .company_guide_btn 
+          a(href="/login") 견적 요청하기 <i class="fa fa-angle-right" aria-hidden="true"></i>
+      .company_guide_imgbox 
+        img(src="/img/kigo_how_personal_img02.png", alt="")
+    #Paris.tabcontent
+      .company_guide_imgbox 
+        img(src="/img/kigo_how_bus_img01.png", alt="")
+      if (user_global_account)
+        if (user_global_account==='business')
+          .company_guide_btn 
+            a(href="/estimate/received/list") 업체제휴 신청하기 <i class="fa fa-angle-right" aria-hidden="true"></i>
+        else 
+          .company_guide_btn 
+            p 업체제휴 신청하기 <i class="fa fa-angle-right" aria-hidden="true"></i>
+      else 
+        .company_guide_btn 
+          a(href="/login") 업체제휴 신청하기 <i class="fa fa-angle-right" aria-hidden="true"></i>
+      .company_guide_imgbox 
+        img(src="/img/kigo_how_bus_img02.png", alt="")
+
+
+block scripts 
+  script(src='/javascript/company_guide_tab.js')

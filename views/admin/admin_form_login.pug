@@ -1,0 +1,17 @@
+link(rel='stylesheet', href='/stylesheets/admin.css')
+link(rel='stylesheet', href='/stylesheets/style.css')
+.container
+  .adm_login_box
+    .adm_login_logo
+      img.logo_img(src='/img/logo.png' alt='')
+    h1.admin_login_title= title 
+
+    form(action="/admin/login", method="POST")
+      div.form-group.admin_login_form_group
+        label(for="")
+        input.frm_input.full_input(type="text", name="username", placeholder="아이디", required)
+      div.form-group
+        label(for="")
+        input.frm_input.full_input(type="password", name="password", placeholder="비밀번호")
+      p
+        button.submit_btn(type="submit") 로그인  

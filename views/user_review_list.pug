@@ -1,0 +1,152 @@
+extends layout 
+block header 
+  include z_back_header.pug
+block content 
+  //- h1= title
+
+  //- //- All comments
+  //- h3 comments
+  //- each blog_comment in blog_comments 
+  //-   //- Comments
+  //-   div(id="item-" + blog_comment._id)
+  //-     p(id="content-" + blog_comment._id) #{blog_comment.content} 
+  //-     if (blog_comment.user)
+  //-       p #[i - #{blog_comment.user.username}]
+  //-     if (user_global && blog_comment.user._id.toString()===user_global.id.toString())
+  //-       button(onclick=`createItem('${blog_comment.parent}', '${blog_comment._id}')`) update
+  //-       button(onclick=`deleteItem('${blog_comment._id}')`) delete
+  //-     if (user_global)
+  //-       button(onclick=`createItem('${blog_comment._id}', null, null, true)`) add
+  //-     //- More comments
+  //-     div(style="margin-left:25px")
+  //-       each comment in blog_comment.comment
+  //-         div(id="item-" + comment._id)
+  //-           if (comment.bites)
+  //-             span @#{comment.bites.username} 
+  //-           span(id="content-" + comment._id) #{comment.content} 
+  //-           if (blog_comment.user)
+  //-             p #[i - #{comment.user.username}]
+  //-           if (user_global && comment.user._id.toString()===user_global.id.toString())
+  //-             button(onclick=`createItem('${comment.parent}', '${comment._id}')`) update
+  //-             button(onclick=`deleteItem('${comment._id}')`) delete
+  //-           if (user_global)
+  //-             button(onclick=`createItem('${blog_comment._id}', null, '${comment.user._id}', true)`) add
+  //-     hr
+
+  //- //- Form to create or update the comment
+  //- h3 comment form
+  //- form(action="/mypage/review/create", method="POST") 
+  //-   div.form-group
+  //-     label(for="") redirect url 
+  //-     input(type="text", name="url", value="") 
+  //-   div.form-group
+  //-     label(for="") parent
+  //-     input(type="text", id="parent" name="parent", value="")
+  //-   div.form-group
+  //-     label(for="") coc 
+  //-     input(type="text", id="coc", name="coc", value="") 
+  //-   div.form-group
+  //-     label(for="") id
+  //-     input(type="text", id="id" name="id", value="")
+  //-   div.form-group
+  //-     label(for="") bites 
+  //-     input(type="text", id="bites" name="bites", value="") 
+  //-   div.form-group
+  //-     label(for="") 
+  //-     textarea(name="content")
+  //-   button(type="submit") confirm 
+
+
+
+  //- All comments
+  .page_bg
+  .container
+    h3.response_detail_title 후기
+    each blog_comment in blog_comments 
+      //- Comments
+      div(id="item-" + blog_comment._id)
+        .comment_wrap 
+          if (blog_comment.user)
+            p.blog_comment_title #[i #{blog_comment.user.name}]
+              //- span ★ #{blog_comment.rating}
+          p.blog_commnet_content(id="content-" + blog_comment._id) #{blog_comment.content} 
+          .commnet_tools_box.clearfix
+            if (user_global && blog_comment.user._id.toString()===user_global.id.toString())
+              button.commnet_fetch(onclick=`createItem('${blog_comment.parent}', '${blog_comment._id}')`) 수정
+              button(onclick=`deleteItem('${blog_comment._id}')`) 삭제
+            if (user_global)
+              button.commnet_fetch(onclick=`createItem('${blog_comment._id}', null, null, true)`) 답변
+            //- More comments
+        div.commnet_re_wrap(style="margin-left:25px")
+          each comment in blog_comment.comment
+            div.commnet_re_box
+              div(id="item-" + comment._id)
+                if (blog_comment.user)
+                  p.blog_comment_title #[i #{comment.user.name}]
+                if (comment.bites)
+                  span.comment_bites @#{comment.bites.name} 
+                span(id="content-" + comment._id) #{comment.content} 
+                .commnet_tools_box.clearfix
+                  if (user_global && comment.user._id.toString()===user_global.id.toString())
+                    button.commnet_fetch(onclick=`createItem('${comment.parent}', '${comment._id}')`) 수정
+                    button(onclick=`deleteItem('${comment._id}')`) 삭제
+                  if (user_global)
+                    button.commnet_fetch(onclick=`createItem('${blog_comment._id}', null, '${comment.user._id}', true)`) 답변
+
+    //- Form to create or update the comment
+    form.response_detail_commnet_form(action="/mypage/review/create", method="POST") 
+      div.form-group
+        label.sound_only(for="") redirect url 
+        input(type="hidden", name="url", value="") 
+      div.form-group
+        label.sound_only(for="") parent
+        input(type="hidden", id="parent" name="parent", value="")
+      div.form-group
+        label.sound_only(for="") coc 
+        input(type="hidden", id="coc", name="coc", value="") 
+      div.form-group
+        label.sound_only(for="") id
+        input(type="hidden", id="id" name="id", value="")
+      div.form-group
+        label.sound_only(for="") bites 
+        input(type="hidden", id="bites" name="bites", value="") 
+      div.form-group
+        label(for="") 
+        textarea.frm_input.full_input#estimate_response_text(name="content")
+      button.submit_btn(type="submit") 작성완료 
+
+
+  script.
+    var form = document.querySelector('form')
+
+    // For create or update the comment
+    function createItem(parent, id, bites, coc) {
+      // Fill input in the form
+      document.querySelector('#parent').value = parent
+      document.querySelector('#id').value = id
+      document.querySelector('#bites').value = bites
+      document.querySelector('#coc').value = coc
+      // Fill textarea in the form
+      var content = document.querySelector('#content-' + id) ? document.querySelector('#content-' + id).textContent : ''
+      document.querySelector('textarea').textContent = content
+    }
+
+    // For delete the comment
+    async function deleteItem(id) {
+      var res = confirm('y/n')
+      if (res===false) {
+        return console.log('false')
+      }
+      // Send to server
+      var results = await fetch('/mypage/review/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'id=' + id
+      }).then(res => res.text())
+      // Visually hidden
+      document.getElementById('item-' + id).style.display = 'none'
+    }
+
+
+block scripts 
+  script(src='/javascript/response_create_comment.js')

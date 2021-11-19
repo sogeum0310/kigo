@@ -1,0 +1,160 @@
+extends layout 
+block header 
+  include z_back_header.pug
+block content 
+  //- h1= title
+
+
+  //- h2 ## #{estimate_request.topic.name}
+  //- hr
+
+  //- -var x = 1
+  //- while (x < 11)
+  //-   -var y = x++
+  //-   if (estimate_request[`field${y}`].length>0)
+  //-     h3 # #{estimate_request[`field${y}`][0].item.name}
+  //-     each something in estimate_request[`field${y}`]
+  //-       p= something.name 
+  //-       if (estimate_request.estimate_text[0].text)
+  //-         if (estimate_request.estimate_text[0].item.toString()===something.item._id.toString())
+  //-           p #{estimate_request.estimate_text[0].text}
+  //-     hr
+
+  //- h3 # somethign to say 
+  //- p= estimate_request.content
+
+  //- form(action="", method="POST") 
+  //-   table 
+  //-     tbody#itemTable
+  //-       tr 
+  //-         th item 
+  //-         th cost 
+  //-         th note 
+  //-       tr#itemRow 
+  //-         td 
+  //-           input(type="text", name="item")
+  //-         td
+  //-           input(type="number", name="cost")
+  //-         td
+  //-           input(type="text", name="note")
+  //-       tr 
+  //-         td 
+  //-           input(type="text", name="item")
+  //-         td
+  //-           input(type="number", name="cost")
+  //-         td
+  //-           input(type="text", name="note")
+  //-       tr 
+  //-         td 
+  //-           input(type="text", name="item")
+  //-         td
+  //-           input(type="number", name="cost")
+  //-         td
+  //-           input(type="text", name="note")
+          
+  //-   p
+  //-     button(type="submit") confirm
+  //-   p   
+  //-     button#addItem add
+
+  //-   hr
+
+  //- p 
+  //-   a(href="/estimate/received/list") list
+
+  //- pre= estimate_request
+  .container
+    ul.received_detail_ul
+      li.clearfix.received_detail_first
+        h2 #{estimate_request.topic.name}
+        p 견적요청일자 : #{estimate_request.reg_date.getFullYear()}.#{estimate_request.reg_date.getMonth() +1}.#{estimate_request.reg_date.getDate()}. #{estimate_request.reg_date.getHours()}:#{estimate_request.reg_date.getMinutes()}
+      -var x = 1
+      while (x < 11)
+        -var y = x++
+        if (estimate_request[`field${y}`].length>0)
+          li.clearfix
+            h3 #{estimate_request[`field${y}`][0].item.name}
+            div
+              each something in estimate_request[`field${y}`]
+                span= something.name 
+                if (estimate_request.estimate_text[0].text)
+                  if (estimate_request.estimate_text[0].item.toString()===something.item._id.toString())
+                    span #{estimate_request.estimate_text[0].text}
+      li.clearfix.received_detail_last
+        h3 추가 요청사항
+        p= estimate_request.content
+
+
+    form(action="", method="POST") 
+      table.estimate_received_detail_form_stat 
+        tbody#itemTable
+          tr 
+            td.minus_btn 
+            th 
+              p 항목
+            th 
+              p 금액 
+            th 
+              p 비고 
+          tr#itemRow 
+            td.minus_btn.minus_Btn 
+              i.fa.fa-minus-circle(aria-hidden='true')
+            td 
+              input.frm_input.full_input(type="text", name="item", required, maxlength='10')
+            td
+              input.frm_input.full_input(type="number", name="cost", required, maxlength='10')
+            td
+              input.frm_input.full_input(type="text", name="note", maxlength='10')
+          tr 
+            td.minus_btn.minus_Btn
+              i.fa.fa-minus-circle(aria-hidden='true')
+            td 
+              input.frm_input.full_input(type="text", name="item", maxlength='10')
+            td
+              input.frm_input.full_input(type="number", name="cost", maxlength='10')
+            td
+              input.frm_input.full_input(type="text", name="note", maxlength='10')
+          tr 
+            td.minus_btn.minus_Btn
+              i.fa.fa-minus-circle(aria-hidden='true')
+            td 
+              input.frm_input.full_input(type="text", name="item", maxlength='10')
+            td
+              input.frm_input.full_input(type="number", name="cost", maxlength='10')
+            td
+              input.frm_input.full_input(type="text", name="note", maxlength='10')
+      p   
+        button#addItem.received_plus_btn
+          i.fa.fa-plus-circle(aria-hidden='true')
+      p
+        button.submit_btn(type="submit") 완료
+
+
+      hr
+
+
+
+ 
+    script.
+      var itemTable = document.getElementById('itemTable')
+      var itemRow = document.getElementById('itemRow')
+      var addItem = document.getElementById('addItem')
+
+      addItem.addEventListener('click', function (e) {
+        e.preventDefault()
+        var newItem = itemRow.cloneNode(true)
+        for (td of newItem.children) {
+          td.firstElementChild.value = ''
+          td.firstElementChild.required=false
+        }
+        itemTable.appendChild(newItem)
+      })
+  block scripts 
+    script(src='/javascript/remove_table.js')
+
+
+
+
+
+
+

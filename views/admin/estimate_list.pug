@@ -1,0 +1,28 @@
+extends layout 
+
+block content 
+  //- h1.admin_con_title= title
+  //- pre= estimate_responses
+  //- ul
+  //-   each estimate_response in estimate_responses
+  //-     li 
+  //-       a(href=estimate_response._id) Submitted estimate by #{estimate_response.user.username}
+  //-       |  #{estimate_response.reg_date}
+
+  h1.admin_con_title= title
+  //- pre= estimate_responses
+
+  table.user_estimate_list 
+    tr 
+      th 회사명
+      th 견적금
+      th 날짜
+      th 상세
+    each estimate_response in estimate_responses
+      tr 
+        td #{estimate_response.user.name}
+        td #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}원
+        td #{estimate_response.reg_date.getFullYear()}.#{estimate_response.reg_date.getMonth() +1}.#{estimate_response.reg_date.getDate()}. #{estimate_response.reg_date.getHours()}:#{estimate_response.reg_date.getMinutes()}
+        td 
+          a(href=estimate_response._id) 상세보기
+

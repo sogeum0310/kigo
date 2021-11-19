@@ -1,0 +1,214 @@
+extends layout 
+block header 
+  include z_back_header.pug 
+block content 
+  //- h1= title
+  //- //- Blog article
+  //- h3= blog.title
+  //- i= blog.reg_date
+  //- small  (#{blog.views})
+  //- div !{blog.content}
+  //- p
+  //-   a(href="/community/list") list / 
+  //-   a(href="") create / 
+  //-   a(href="/community/" + blog._id + '/update') update / 
+  //-   a(href="") delete 
+  //- hr
+
+  //- //- Create comment 
+  //- button(onclick=`createItem('${blog._id}', null, null, false)`) create comment
+
+  //- //- All comments
+  //- h3 comments
+  //- each blog_comment in blog_comments 
+  //-   //- Comments
+  //-   div(id="item-" + blog_comment._id)
+  //-     p(id="content-" + blog_comment._id) #{blog_comment.content} 
+  //-     if (blog_comment.user)
+  //-       p #[i - #{blog_comment.user.username}]
+  //-     if (user_global && blog_comment.user._id.toString()===user_global.id.toString())
+  //-       button(onclick=`createItem('${blog_comment.parent}', '${blog_comment._id}')`) update
+  //-       button(onclick=`deleteItem('${blog_comment._id}')`) delete
+  //-     if (user_global)
+  //-       button(onclick=`createItem('${blog_comment._id}', null, null, true)`) add
+  //-     //- More comments
+  //-     div(style="margin-left:25px")
+  //-       each comment in blog_comment.comment
+  //-         div(id="item-" + comment._id)
+  //-           if (comment.bites)
+  //-             span @#{comment.bites.username} 
+  //-           span(id="content-" + comment._id) #{comment.content} 
+  //-           if (blog_comment.user)
+  //-             p #[i - #{comment.user.username}]
+  //-           if (user_global && comment.user._id.toString()===user_global.id.toString())
+  //-             button(onclick=`createItem('${comment.parent}', '${comment._id}')`) update
+  //-             button(onclick=`deleteItem('${comment._id}')`) delete
+  //-           if (user_global)
+  //-             button(onclick=`createItem('${blog_comment._id}', null, '${comment.user._id}', true)`) add
+  //-     hr
+
+  //- //- Form to create or update the comment
+  //- h3 comment form
+  //- form(action="/community/comment/create", method="POST") 
+  //-   div.form-group
+  //-     label(for="") redirect url 
+  //-     input(type="text", name="url", value=blog._id) 
+  //-   div.form-group
+  //-     label(for="") parent
+  //-     input(type="text", id="parent" name="parent", value="")
+  //-   div.form-group
+  //-     label(for="") coc 
+  //-     input(type="text", id="coc", name="coc", value="") 
+  //-   div.form-group
+  //-     label(for="") id
+  //-     input(type="text", id="id" name="id", value="")
+  //-   div.form-group
+  //-     label(for="") bites 
+  //-     input(type="text", id="bites" name="bites", value="") 
+  //-   div.form-group
+  //-     label(for="") 
+  //-     textarea(name="content")
+  //-   button(type="submit") confirm 
+
+  //- Blog article
+
+
+
+  .container
+    h3.blog_detail_title= blog.title
+    p.blog_detail_date #{blog.reg_date.getFullYear()}.#{blog.reg_date.getMonth() +1}.#{blog.reg_date.getDate()}. #{blog.reg_date.getHours()}:#{blog.reg_date.getMinutes()}
+    //- small  (#{blog.views})
+    .clearfix.community_tool_wrap
+      ul.celarfix
+        li
+          a(href="/community/list") 
+            i.fa.fa-list(aria-hidden='true')
+        li
+          a(href="/community/create") 
+            i.fa.fa-pencil(aria-hidden='true')
+        li
+          a(href="/community/" + blog._id + '/update')
+            i.fa.fa-pencil-square-o(aria-hidden='true')
+        li
+          a(href="")
+            i.fa.fa-trash-o(aria-hidden='true')
+    div.commnunity_content !{blog.content}
+    
+
+    //- Create comment 
+    button.create_comment_btn(onclick=`createItem('${blog._id}', null, null, false)`) 댓글 작성하기
+
+    //- Form to create or update the comment
+    form.create_comment_form(action="/community/comment/create", method="POST") 
+      div.form-group
+        label.sound_only(for="") redirect url 
+        input(type="hidden", name="url", value=blog._id) 
+      div.form-group
+        label.sound_only(for="") parent
+        input(type="hidden", id="parent" name="parent", value="")
+      div.form-group
+        label.sound_only(for="") coc 
+        input(type="hidden", id="coc", name="coc", value="") 
+      div.form-group
+        label.sound_only(for="") id
+        input(type="hidden", id="id" name="id", value="")
+      div.form-group
+        label.sound_only(for="") bites 
+        input(type="hidden", id="bites" name="bites", value="") 
+      div.form-group.comment_form_group
+        label(for="") 
+        textarea.frm_input.full_input(name="content", required)
+      button.comment_submit(type="submit") 작성완료
+
+    //- All comments
+    
+    each blog_comment in blog_comments 
+      //- Comments
+      div(id="item-" + blog_comment._id)
+        div.comment_wrap
+          if (blog_comment.user)
+            p.blog_comment_title #[i #{blog_comment.user.name}]
+              span · #{blog_comment.reg_date.getFullYear()}.#{blog_comment.reg_date.getMonth() +1}.#{blog_comment.reg_date.getDate()} 
+          p.blog_commnet_content(id="content-" + blog_comment._id) #{blog_comment.content}
+
+          .commnet_tools_box.clearfix
+            if (user_global && blog_comment.user._id.toString()===user_global.id.toString())
+              button.commnet_fetch(onclick=`createItem('${blog_comment.parent}', '${blog_comment._id}')`) 수정
+              button(onclick=`deleteItem('${blog_comment._id}')`) 삭제
+            if (user_global)
+              button.commnet_fetch(onclick=`createItem('${blog_comment._id}', null, null, true)`) 답변
+          //- More comments\
+
+        div.commnet_re_wrap(style="margin-left:25px")
+          
+          each comment in blog_comment.comment
+            div.commnet_re_box
+              div(id="item-" + comment._id)
+                if (blog_comment.user)
+                  p.blog_comment_title #[i #{comment.user.name}]
+                    span · #{blog_comment.reg_date.getFullYear()}.#{blog_comment.reg_date.getMonth() +1}.#{blog_comment.reg_date.getDate()}
+                p.blog_commnet_content 
+                  if (comment.bites)
+                    span.comment_bites @#{comment.bites.username} 
+                  span(id="content-" + comment._id) #{comment.content} 
+
+                .commnet_tools_box.clearfix
+                  if (user_global && comment.user._id.toString()===user_global.id.toString())
+                    button.commnet_fetch(onclick=`createItem('${comment.parent}', '${comment._id}')`) 수정
+                    button(onclick=`deleteItem('${comment._id}')`) 삭제
+                  if (user_global)
+                    button.commnet_fetch(onclick=`createItem('${blog_comment._id}', null, '${comment.user._id}', true)`) 답변
+
+
+
+
+
+  script.
+    var form = document.querySelector('form')
+
+    // For create or update the comment
+    function createItem(parent, id, bites, coc) {
+      // Fill input in the form
+      //- var comment_show = document.querySelector('.create_comment_form')
+
+      document.querySelector('#parent').value = parent
+      document.querySelector('#id').value = id
+      document.querySelector('#bites').value = bites
+      document.querySelector('#coc').value = coc
+      // Fill textarea in the form
+      var content = document.querySelector('#content-' + id) ? document.querySelector('#content-' + id).textContent : ''
+      document.querySelector('textarea').textContent = content
+      //- comment_show.style.display =='block'
+    }
+
+
+    // For delete the comment
+    async function deleteItem(id) {
+      var res = confirm('y/n')
+      if (res===false) {
+        return console.log('false')
+      }
+      // Send to server
+      var results = await fetch('/community/comment/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'id=' + id
+      }).then(res => res.text())
+      // Visually hidden
+      document.getElementById('item-' + id).style.display = 'none'
+    }
+  block scripts
+    script(src='/javascript/create_comment.js')
+
+
+
+  
+
+    
+
+
+
+
+  
+
+  

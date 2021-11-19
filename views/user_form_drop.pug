@@ -1,0 +1,28 @@
+extends layout 
+block header 
+  include z_back_header.pug
+block content 
+  //- h1= title 
+
+  //- //- Some guide for dropping KIGO 
+  //- p Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae doloribus aliquam dolorum. Odio tempora quos ut rem quaerat ad delectus dolore aliquid doloribus, sequi nam enim, reiciendis adipisci? Corporis, fuga? 
+
+  //- br
+
+  //- form(action="", method="POST", onsubmit="return confirm('y/n')") 
+  //-   button drop
+    
+  .container 
+    //- h1.response_detail_title= title 
+
+    //- Some guide for dropping KIGO 
+
+    ul.user_drop_message 
+      li 회원탈퇴
+      li - KIGO가 제공하는 매칭 서비스의 오・남용 방지를 위해 탈퇴회원의 재가입은 불가합니다.
+      li - 향후 부득이한 이유로 재가입을 원하실 경우 고객센터 문의 바랍니다. (고객센터 : help@kigo1.co.kr)
+
+    br
+
+    form(action="", method="POST", onsubmit="return confirm('탈퇴하시겠습니까?')") 
+      button.submit_btn 회원탈퇴

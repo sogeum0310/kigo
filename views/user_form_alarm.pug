@@ -1,0 +1,24 @@
+extends layout 
+
+block content 
+  h1= title 
+
+  h3 Accept estimate request or not
+  //- Some CSS work to be like toggle switch 
+  input(type="checkbox", name="alarm", onchange="setAlarm(this)", checked=online) 
+    
+
+  script.
+    async function setAlarm(el) {
+      var results = await fetch('/mypage/alarm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'alarm=' + el.value
+      }).then(res => res.text())
+    }
+    
+
+
+
+
+    

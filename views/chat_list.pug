@@ -1,0 +1,67 @@
+extends layout 
+block header 
+  include z_back_header.pug
+block content  
+  .container
+    h3.chat_list_title 채팅 리스트
+    ul#ul.chat_list_wrap
+      each chat_room in chat_rooms 
+        li.chat_list_li.clearfix 
+          a(href="chat/" + chat_room._id)
+            .chat_list_icon 
+              i.fa.fa-user-circle(aria-hidden='true')
+            if (chat_room.user.length > 0)
+              each user in chat_room.user
+                p.chat_list_username #{user.username}
+                  if (chat_room.last_message)
+                    span.chat_list_last_message
+                      span(id=chat_room._id) #{chat_room.last_message.content} 
+                        .chat_list_count #{chat_room.count} 
+            else 
+              p.chat_list_username [알수없음]
+                if (chat_room.last_message)
+                  span.chat_list_last_message
+                    span(id=chat_room._id) #{chat_room.last_message.content} 
+                      .chat_list_count #{chat_room.count} 
+            //- if (chat_room.last_message) 
+            //-   p.chat_list_count
+            //-     span.chat_room_count #{chat_room.count}
+      p.no_chat_list_text 진행중인 채팅목록이 잆습니다.
+      
+  //- h2 Users 
+  //- each user in users 
+  //-   p
+  //-     button(onclick="handleSubmit(this)" value=user._id) #{user.username}
+  script.
+    var ul = document.querySelector('#ul')
+    
+    // Replace last massage and count
+    socket.on('last_message', function (chat_content, chat_contents) {
+      var n = 0
+      for (chat_content of chat_contents) {
+        if (!chat_content.read.includes(user_global.id)) {
+          n++
+        }
+      }
+      document.getElementById(chat_content.room).innerHTML =`${chat_content.content} <div class="chat_list_count chat_list_count02">${n}</div>`
+    })
+
+    // Make new room item in the list, only if when chat has first began
+    socket.on('addRoom', function (room, last_content) {  
+      room.user.map(function (value, index) {
+        if (user_global.id===value._id) {
+          room.user.splice(index, 1)
+          var li = document.createElement('li')
+          
+          li.innerHTML = 
+          `
+            <a href="chat/${room._id}">${room.user[0].username}</a>
+            <span id="${room._id}">${last_content.content} (1)</span>
+          `
+          ul.appendChild(li)
+        }
+      })
+    })
+    
+  block scripts 
+    script(src='/javascript/no_chat_list.js')

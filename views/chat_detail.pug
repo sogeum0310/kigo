@@ -1,0 +1,153 @@
+extends layout 
+block header 
+  include chat_back_header.pug
+block content 
+  style.
+    .wrap{
+    margin-bottom: 0;
+    }
+    .page_wrap{
+    padding-top: 64px;
+    }
+    .foot_icon_wrap{
+      display: none;
+    }
+  //- 채팅 페이지만 간격조정
+
+  div.chat_detail_wrap#chat_detail_wrap
+    ul#messages.chat_detail_ul
+      each chat_content in chat_contents 
+        if (chat_content.user._id.toString()===user_global.id.toString())
+          li.chat_me 
+            p.chat_num #[span.num]
+            .chat_content !{chat_content.content}
+           
+            //- #{chat_content.user.name}(나) :
+        else 
+          li.chat_you 
+            span.chat_username #{chat_content.user.username}
+            div.chat_content_box
+              .chat_content !{chat_content.content}
+              p.chat_num #[span.num]
+
+  form#form.send_chat_form(action="")
+    div 
+      input.send_chat_input(type="text" id="input")
+      i.fa.fa-plus.file_plus_btn(aria-hidden='true')
+    button.send_chat_btn(type="submit") 보내기
+
+  form#file_form.chat_file_form
+    div
+      input.frm_input(type="file" name="my_files" multiple required)
+      i.fa.fa-minus.file_minus_btn(aria-hidden='true')
+    button(type="submit") 이미지 전송
+
+  //- p
+  //-   a(href="/chats") Back |  
+  //-   form(action="/chat_out", method="POST")
+  //-     input(type="hidden", name="room", value=room._id)
+  //-     input(type="hidden", name="user", value=user_global.id) 
+  //-     button(type="submit") 채팅방 나가기
+
+
+  script.
+    var ul = document.querySelector('ul')
+    var form = document.getElementById('form')
+    var file_form = document.querySelector('#file_form')
+    var input = document.getElementById('input')
+    var messages = document.getElementById('messages')
+    var event = document.getElementById('event')
+    var room = JSON.parse('!{JSON.stringify(room)}')
+
+
+    // Send to the server when a user has join some room
+    socket.emit('join', room, user_global)
+
+    // Detect members remained in the room. It will sent with message to the server
+    var members
+
+    //  On join event
+    socket.on('join', function (arr, n, notification) {
+      console.log(arr)
+      members = arr
+      // Make count next to the message lower when a user join
+      var nums = document.querySelectorAll('.num')
+      for (i=0; i<nums.length; i++) {
+        nums[i].textContent = n[i]
+        if (nums[i].textContent == '0')
+          nums[i].classList.add('off')
+      }
+      // Replace notification count in the navigation bar when a user join the room
+      document.getElementById('notification').textContent = notification
+      console.log(notification)
+    })
+
+    // On bye event, to detect user remained in the room
+    socket.on('bye', function (arr) {
+      console.log(arr)
+      members = arr
+    })
+
+    // Send message to server
+    form.addEventListener('submit', function (e) {
+      e.preventDefault()
+      
+      var msg = { user: user_global, message: input.value, read: members }
+      // Emit the message event
+      socket.emit('message', room, msg)
+      input.value = ''
+
+      console.log(members)
+    })
+
+    // Add new message item arrived from server in the list 
+    socket.on('message', function (msg, read) {
+      var li = document.createElement('li')
+  
+      if (user_global.id===msg.me) {
+        li.innerHTML = `<div class="chat_content_box"><p class="chat_num"><span class="num">${read}</span></p><div class="chat_content">${msg.message}</div></div>`
+         li.classList.add('chat_me')
+      } else {
+         li.innerHTML = `<span class="chat_username">${msg.user.username}</span><div class="chat_content_box"><div class="chat_content">${msg.message}</div><p class="chat_num"><span class="num">${read}</span></p></div>`
+         li.classList.add('chat_you')
+      }
+
+
+      //- if (user_global.id===msg.me) {
+      //-   li.innerHTML = `${msg.user.username}(나) : ${msg.message} <span class="num">${read}</span>`
+      //- } else {
+      //-   li.innerHTML = `${msg.user.username} : ${msg.message} <span class="num">${read}</span>`
+      //- }
+      messages.appendChild(li)
+
+      var objDiv = document.getElementById("chat_detail_wrap");
+      objDiv.scrollTop = objDiv.scrollHeight
+
+    })
+
+    file_form.addEventListener('submit', async function (e) {
+      e.preventDefault()
+
+      var form_data = new FormData(file_form)
+
+      var results = await fetch('/chat_file', {
+        method: 'POST',
+        body: form_data
+      }).then(res => res.json())
+
+      var txt = ''
+
+      for (result of results) {
+        var img = `<img src="/files/chat/${result}">`
+        txt += img 
+      }
+
+      var msg = { user: user_global, message: txt, read: members }
+      // Emit the message event
+      socket.emit('message', room, msg)
+      input.value = ''
+
+      console.log(members)
+    })
+block scripts 
+  script(src='/javascript/chat_overflow.js')

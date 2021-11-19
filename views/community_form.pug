@@ -1,0 +1,29 @@
+extends layout 
+block header 
+  include z_back_header.pug 
+block content 
+  link(rel="stylesheet", href="/summernote/summernote-lite.css")
+  script(src="/summernote/summernote-lite.js") 
+  //- h1= title
+
+  //- form(action="", method="POST")
+  //-   input(type="text", name="title", value=(undefined===blog ? '' : blog.title))
+  //-   br
+  //-   textarea#summernote(name="content", cols="30", rows="10")=(undefined===blog ? '' : blog.content) 
+  //-   p 
+  //-     button(type="submit") confirm
+
+
+  //- script(src="/summernote/summernote.js") 
+  .container
+    h1.community_list_title= title
+
+    form(action="", method="POST")
+      input.frm_input.full_input.community_create_subject(type="text", name="title", value=(undefined===blog ? '' : blog.title), placeholder="제목을 입력하세요.", required)
+      br
+      textarea#summernote(name="content", required, cols="30", rows="10")=(undefined===blog ? '' : blog.content) 
+      p 
+        button.submit_btn(type="submit") 완료
+
+
+  script(src="/summernote/summernote.js") 

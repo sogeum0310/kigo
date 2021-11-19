@@ -9,9 +9,9 @@ link(rel='stylesheet', href='/stylesheets/style.css')
     form(action="/admin/login", method="POST")
       div.form-group.admin_login_form_group
         label(for="")
-        input.frm_input.full_input(type="text", name="admin", placeholder="아이디", required)
+        input.frm_input.full_input(type="text", name="username", placeholder="아이디", required)
       div.form-group
         label(for="")
-        input.frm_input.full_input(type="text", placeholder="비밀번호")
+        input.frm_input.full_input(type="password", name="password", placeholder="비밀번호")
       p
         button.submit_btn(type="submit") 로그인  

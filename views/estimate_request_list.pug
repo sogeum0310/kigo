@@ -4,18 +4,6 @@ block header
 block content 
   //- h1= title
 
-  //- ul.estimate_request_list_box
-  //-   each estimate_request in estimate_requests
-  //-     li 
-  //-       a(href=estimate_request._id) #{estimate_request.platform[0].name}
-  //-       |  (#{estimate_request.count})
-  //-       if (estimate_request.count < 3)
-  //-         span  견적요청중
-  //-       else 
-  //-         span  견적요청완료
-
-  //- pre= estimate_requests
-
   .container
     ul.estimate_request_list_wrap.clearfix
       each estimate_request in estimate_requests

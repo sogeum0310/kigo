@@ -25,7 +25,7 @@ exports.chat_list = async (req, res, next) => {
       chat_rooms: chat_rooms 
     })
   } catch (error) {
-    res.render('error', { message: 'something is wrong', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -41,7 +41,7 @@ exports.chat_detail = async (req, res, next) => {
     })
 
   } catch (error) {
-    res.render('error', { message: 'something is wrong', error: error })
+    res.render('error', { error: error })
   }
 }
 
@@ -68,7 +68,7 @@ exports.chat_file = async (req, res, next) => {
     res.send(new_file_names)
 
   } catch (error) {
-    console.log(error)
+    res.render('error', { error: error })
   }
 }
 
@@ -77,7 +77,7 @@ exports.chat_out = async (req, res, next) => {
     await Model.ChatRoom.findByIdAndUpdate(req.body.room, { $pull: { user: req.body.user } })
     res.redirect('/chats')
   } catch (error) {
-    console.log(error)
+    res.render('error', { error: error })
   }
 }
 

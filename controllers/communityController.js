@@ -7,7 +7,7 @@ exports.community_list = async (req, res, next) => {
     var blogs = await Model.Community.find()
     res.render('community_list', { title: 'Community list', blogs: blogs })
   } catch (error) {
-    console.log(error)
+    res.render('error', { error: error })
   }
 }
 
@@ -16,7 +16,7 @@ exports.community_create_get = async (req, res, next) => {
   try {
     res.render('community_form', { title: 'Community create' })
   } catch (error) {
-    console.log(error)
+    res.render('error', { error: error })
   }
 }
 
@@ -29,11 +29,9 @@ exports.community_create_post = async (req, res, next) => {
     })
     await blog.save()
 
-    var message = 'successfully posted'
-    var url = '/community/list'
-    res.redirect(`/success/?message=${message}&go_to=${url}`)
+    res.redirect('/community/' + blog._id)
   } catch (error) {
-    console.log(error)
+    res.render('error', { error: error })
   }
 }
 
@@ -43,7 +41,7 @@ exports.community_update_get = async (req, res, next) => {
     var blog = await Model.Community.findById(req.params.id)
     res.render('community_form', { title: 'Community form update', blog: blog })
   } catch (error) {
-    console.log(error)
+    res.render('error', { error: error })
   }
 }
 
@@ -56,10 +54,8 @@ exports.community_update_post = async (req, res, next) => {
     })
     await Model.Community.findByIdAndUpdate(req.params.id, blog)
 
-    var message = 'successfully updated'
-    var url = '/community/' + req.params.id
-    res.redirect(`/success/?message=${message}&go_to=${url}`)
+    res.redirect('/community/' + req.params.id)
   } catch (error) {
-    console.log(error)
+    res.render('error', { error: error })
   }
 }

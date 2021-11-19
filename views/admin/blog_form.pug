@@ -4,20 +4,19 @@ block content
   link(rel="stylesheet", href="/summernote/summernote-lite.css")
   script(src="/summernote/summernote-lite.js") 
 
-<<<<<<< HEAD
   h1.admin_con_title= title 
   if(blog)
     p.sound_only.bolg_content_tool #{blog.content}
   form(action="", method="POST", onsubmit="return confirm('글을 작성하시겠습니까?')")
     input.frm_input.full_input(type="text", name="title", value=(undefined===blog? '' : blog.title), required) 
-    textarea#summernote.frm_input.full_input(name="content", required)
+    textarea#summernote.frm_input.full_input(name="content", required)=(blog ? blog.content : '')
     if (url === 'faq')
       h3.admin_con_title 분류를 선택하세요.
       div.form-group.admin_fqa_form_group
         label(for="") 사업주
-        input.frm_input(type="radio", name="account", value="personal", checked=(blog_detail && blog_detail.account==='personal' ? 'checked' : false), required) 
+        input.frm_input(type="radio", name="account", value="personal", checked=true)
         label(for="") 광고업체 / 인플루언서
-        input.frm_input(type="radio", name="account", value="business", checked=(blog_detail && blog_detail.account==='business' ? 'checked' : false)) 
+        input.frm_input(type="radio", name="account", value="business", checked=(blog && blog.account==='business' ? true : false)) 
     p 
       button.submit_btn(type="submit") 완료
     

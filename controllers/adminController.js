@@ -6,16 +6,7 @@ exports.index = async (req, res, next) => {
   try {
     res.render('admin/index', { title: '관리자' });
   } catch (error) {
-    res.render('error', { message: '', error: error })
-  }
-}
-
-// Success page
-exports.success = async (req, res, next) => {
-  try {
-    res.render('admin/success', { title: req.query.message, go_to: req.query.go_to })
-  } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -28,30 +19,30 @@ exports.login_get = async (req, res, next) => {
       res.render('admin/admin_form_login', { title: '관리자 로그인' })
     }
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
 exports.login_post = async (req, res, next) => {
   try {
-    if (req.body.admin==='admin') {
+    if (req.body.username==='admin' && req.body.password==='1234') {
       req.session.admin = 'admin'
       res.redirect('/admin')
     } else {
-      res.send('something is wrong')
+      res.redirect('/admin')
     }
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
 // Logout
 exports.logout = async (req, res, next) => {
   try {
-    // req.session.destroy()
+    req.session.destroy()
     res.redirect('/admin')
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -60,7 +51,7 @@ exports.mypage = async (req, res, next) => {
   try {
     res.render('admin/admin_mypage', { title: '관리자 정보' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -74,7 +65,7 @@ exports.user_personal_list = async (req, res, next) => {
       res.render('admin/user_list', { title: '일반사용자', users: user_personals })
     })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -84,7 +75,7 @@ exports.user_business_list = async (req, res, next) => {
     res.render('admin/user_list', { title: '광고업체', users: user_businesses })
     console.log(user_businesses)
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -96,7 +87,7 @@ exports.user_detail_get = async (req, res, next) => {
     user.reviews = await Model.Review.find({ parent: req.params.id }).exec()
     res.render('admin/user_detail', { title: '회원 정보', user: user })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -105,7 +96,7 @@ exports.user_detail_auth = async (req, res, next) => {
     await Model.User.findByIdAndUpdate(req.body.user, { authorization: req.body.auth })
     res.redirect('/admin/user/detail/' + req.body.user)
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -114,7 +105,7 @@ exports.user_detail_service = async (req, res, next) => {
     await Model.User.findByIdAndUpdate(req.body.user, { service: true, start_date: new Date() })
     res.redirect('/admin/user/detail/' + req.body.user)
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -125,7 +116,7 @@ exports.estimate_list = async (req, res, next) => {
 
     res.render('admin/estimate_list', { title: 'Estimates', estimate_responses: estimate_responses })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -154,7 +145,7 @@ exports.estimate_detail = async (req, res, next) => {
     
     res.render('admin/estimate_detail', { title: '보낸 견적', estimate_response: estimate_response })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -164,15 +155,16 @@ exports.notice_list = async (req, res, next) => {
     var notice_list = await Model.Notice.find().exec()
     res.render('admin/blog_list', { title: '공지사항', blog_list: notice_list, url: 'notice' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
 exports.notice_create_get = async (req, res, next) => {
   try {
-  res.render('admin/blog_form', { title: '공지사항', url: 'notice' })
+  var notice = await Model.Notice.findById(req.params.id)
+  res.render('admin/blog_form', { title: '공지사항', blog: notice, url: 'notice' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -184,10 +176,9 @@ exports.notice_create_post = async (req, res, next) => {
     })
 
     await notice.save()
-    var message = 'A notice is successfully posted'
-    res.redirect('/admin/success/?message=' + message)
+    res.redirect('/admin/notice/' + notice._id)
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -196,7 +187,7 @@ exports.notice_detail = async (req, res, next) => {
     var notice_detail = await Model.Notice.findById(req.params.id).exec()
     res.render('admin/blog_detail', { title: '공지사항', blog: notice_detail, url: 'notice' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -205,7 +196,7 @@ exports.notice_update_get = async (req, res, next) => {
     var notice_detail = await Model.Notice.findById(req.params.id).exec()
     res.render('admin/blog_form', { title: '공지사항', blog: notice_detail, url: 'notice' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -217,19 +208,18 @@ exports.notice_update_post = async (req, res, next) => {
       _id: req.params.id
     })
     await Model.Notice.findByIdAndUpdate(req.params.id, notice_detail)
-    var message = '공지사항 수정이 완료되었습니다'
-    var url = '/admin/notice/' + req.params.id
-    res.redirect(`/admin/success/?message=${message}&go_to=${url}`)
+    res.redirect('/admin/notice/' + req.params.id)
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
-exports.notice_delete_get = async (req, res, next) => {
+exports.notice_delete = async (req, res, next) => {
   try {
-  console.log(req.params.id)
+    await Model.Notice.findByIdAndDelete(req.params.id)
+    res.redirect('/admin/notice/list')
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -239,7 +229,7 @@ exports.event_list = async (req, res, next) => {
     var event_list = await Model.Event.find().exec()
     res.render('admin/blog_list', { title: '이벤트', blog_list: event_list, url: 'event' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -247,7 +237,7 @@ exports.event_create_get = async (req, res, next) => {
   try {
     res.render('admin/blog_form', { title: '이벤트', url: 'event' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -257,12 +247,10 @@ exports.event_create_post = async (req, res, next) => {
       title: req.body.title,
       content: req.body.content
     })
-    event.save()
-    var message = '이벤트 등록이 완료되었습니다'
-    var url = '/admin/event/' + event._id
-    res.redirect(`/admin/success/?message=${message}&go_to=${url}`)
+    await event.save()
+    res.redirect('/admin/event/' + event._id)
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -271,7 +259,7 @@ exports.event_detail = async (req, res, next) => {
     var event_detail = await Model.Event.findById(req.params.id).exec()
     res.render('admin/blog_detail', { title: '이벤트', blog: event_detail, url: 'event' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -280,7 +268,7 @@ exports.event_update_get = async (req, res, next) => {
     var event_detail = await Model.Event.findById(req.params.id).exec()
     res.render('admin/blog_form', { title: '이벤트', blog: event_detail, url: 'event' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -292,19 +280,18 @@ exports.event_update_post = async (req, res, next) => {
       _id: req.params.id
     })
     await Model.Event.findByIdAndUpdate(req.params.id, event_detail)
-    var message = '이벤트 등록이 완료되었습니다'
-    var url = '/admin/event/' + req.params.id
-    res.redirect(`/admin/success/?message=${message}&go_to=${url}`)
+    res.redirect('/admin/event/' + req.params.id)
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
-exports.event_delete_get = async (req, res, next) => {
+exports.event_delete = async (req, res, next) => {
   try {
-    console.log(req.params.id)
+    await Model.Event.findByIdAndDelete(req.params.id)
+    res.redirect('/admin/event/list')
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -314,7 +301,7 @@ exports.faq_list = async (req, res, next) => {
     var faq_list = await Model.Faq.find().exec()
     res.render('admin/blog_list', { title: '자주묻는 질문', blog_list: faq_list, url: 'faq' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -322,7 +309,7 @@ exports.faq_create_get = async (req, res, next) => {
   try {
     res.render('admin/blog_form', { title: '자주묻는 질문', url: 'faq' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -333,12 +320,10 @@ exports.faq_create_post = async (req, res, next) => {
       content: req.body.content,
       account: req.body.account
     })
-    faq.save()
-    var message = '자주묻는 질문 등록이 완료되었습니다'
-    var url = '/admin/faq/' + faq._id
-    res.redirect(`/admin/success/?message=${message}&go_to=${url}`)
+    await faq.save()
+    res.redirect('/admin/faq/' + faq._id)
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -347,7 +332,7 @@ exports.faq_detail = async (req, res, next) => {
     var faq_detail = await Model.Faq.findById(req.params.id).exec()
     res.render('admin/blog_detail', { title: '자주묻는 질문', blog: faq_detail, url: 'faq' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -356,7 +341,7 @@ exports.faq_update_get = async (req, res, next) => {
     var faq_detail = await Model.Faq.findById(req.params.id).exec()
     res.render('admin/blog_form', { title: '자주묻는 질문', blog: faq_detail, url: 'faq' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -369,19 +354,18 @@ exports.faq_update_post = async (req, res, next) => {
       _id: req.params.id
     })
     await Model.Faq.findByIdAndUpdate(req.params.id, faq_detail)
-    var message = '자주묻는 질문 수정이 완료되었습니다'
-    var url = '/admin/faq/' + req.params.id
-    res.redirect(`/admin/success/?message=${message}&go_to=${url}`)
+    res.redirect('/admin/faq/' + req.params.id)
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
-exports.faq_delete_get = async (req, res, next) => {
+exports.faq_delete = async (req, res, next) => {
   try {
-    console.log(req.params.id)
+    await Model.Faq.findByIdAndDelete(req.params.id)
+    res.redirect('/admin/faq/list')
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -394,7 +378,7 @@ exports.qna_list = async (req, res, next) => {
     }
     res.render('admin/blog_list', { title: '1:1 문의', blog_list: qna_questions, url: 'qna' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -404,7 +388,7 @@ exports.message_list = async (req, res, next) => {
     var message_list = await Model.Message.find().exec()
     res.render('admin/blog_list', { title: '의견', blog_list: message_list, url: 'message' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -413,15 +397,16 @@ exports.message_detail = async (req, res, next) => {
     var message_detail = await Model.Message.findById(req.params.id).exec()
     res.render('admin/blog_detail', { title: '의견', blog: message_detail, url: 'message' })
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
-exports.message_delete_get = async (req, res, next) => {
+exports.message_delete = async (req, res, next) => {
   try {
-    console.log(req.params.id)
+    await Model.Faq.findByIdAndDelete(req.params.id)
+    res.redirect('/admin/faq/list')
   } catch (error) {
-    res.render('error', { message: '', error: error })
+    res.render('admin/error', { error: error })
   }
 }
 
@@ -436,6 +421,44 @@ exports.summernote_ajax = async (req, res, next) => {
 
     res.send('/files/blog/' + new_file_name)
   } catch (error) {
-    console.log(error)
+    res.render('admin/error', { error: error })
   }
 }
+
+
+// //// rabbit, admin
+// {
+//   // cookie
+//   "cookie": {
+//     "originalMaxAge": null,
+//     "expires": null,
+//     "httpOnly": true,
+//     "path": "/"
+//   },
+//   //  message
+//   "messages": [],
+
+//   // req.session.admin
+//   "admin": "admin",
+
+//   // passport
+//   "passport": {
+//     "user": {
+//       "id": "618e4f9ccd74f18159034e96",
+//       "username": "rabbit"
+//     }
+//   }
+// }
+
+// //// no user
+// {
+//   // cookie
+//   "cookie": {
+//     "originalMaxAge": null,
+//     "expires": null,
+//     "httpOnly": true,
+//     "path": "/"
+//   },
+//   // message
+//   "messages": []
+// }

@@ -10,7 +10,6 @@ const comment_controller = require('../controllers/commentController')
 
 // Index
 router.get('/', company_controller.index)
-router.get('/success', company_controller.success)
 
 
 // Company
@@ -63,29 +62,29 @@ router.get('/auth/kakao', user_controller.auth_kakao)
 router.get('/auth/kakao/callback', user_controller.auth_kakao_callback)
 router.post('/login', user_controller.login_post)
 router.get('/logout', user_controller.logout)
-
+// Lost password
 router.get('/user/lostpassword', user_controller.lost_password_get)
 router.post('/user/lostpassword', user_controller.lost_password_post)
 router.get('/user/lostusername', user_controller.lost_username_get)
 router.post('/user/lostusername', user_controller.lost_username_post)
-
+// Change password
 router.get('/user/access_password', user_controller.access_password_get)
 router.post('/user/access_password', user_controller.access_password_post)
 router.post('/user/change_password', user_controller.change_password)
-
+// Reset password
 router.get('/password-reset/:userId/:token', user_controller.user_reset_password_get)
 router.post('/password-reset/:userId/:token', user_controller.user_reset_password_post)
-
+// Drop
 router.get('/drop', user_controller.drop_get)
 router.post('/drop', user_controller.drop_post)
-
+// Sign up
 router.get('/signup/option', user_controller.signup_option)
 router.get('/signup/personal', user_controller.signup_personal_get)
 router.post('/signup/personal', user_controller.signup_personal_post)
 router.get('/signup/business', user_controller.signup_business_get)
 router.post('/signup/business', user_controller.signup_business_post)
 router.post('/validity', user_controller.validity)
-
+// My page, Account
 router.get('/mypage', user_controller.mypage)
 router.get('/mypage/personal/account', user_controller.mypage_personal_account_get)
 router.post('/mypage/personal/account', user_controller.mypage_personal_account_post)
@@ -100,13 +99,13 @@ router.get('/mypage/review/list', comment_controller.mypage_review_list)
 router.post('/mypage/review/create', comment_controller.mypage_review_create)
 router.post('/mypage/review/delete', comment_controller.mypage_review_delete)
 
+
 // Community
 router.get('/community/list', community_controller.community_list)
 router.get('/community/create', community_controller.community_create_get)
 router.post('/community/create', community_controller.community_create_post)
 router.get('/community/update/:id', community_controller.community_update_get)
 router.post('/community/update/:id', community_controller.community_update_post)
-
 // Community-Comment
 router.get('/community/:id', comment_controller.community_detail)
 router.post('/community/comment/create', comment_controller.community_comment_create)

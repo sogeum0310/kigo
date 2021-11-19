@@ -12,10 +12,9 @@ block content
       a(href=`/admin/${url}/${blog._id}/update`) 
        i.fa.fa-pencil-square-o(aria-hidden='true')
        | 수정
-      a(href=`/admin/${url}/${blog._id}/delete`) 
-        i.fa.fa-trash-o(aria-hidden='true')
-        | 삭제
-  
+      form(action=`/admin/${url}/${blog._id}/delete`, method="POST", onsubmit="return confirm('y/n')") 
+        button(type="submit") delete
+
   .admin_blog_wrap
     .admin_blog_detail_wrap
       h3 제목 : #{blog.title}

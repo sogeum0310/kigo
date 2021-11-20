@@ -1,7 +1,10 @@
 doctype html
 html
   head
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="content-type" content="text/html; charset=euc-kr">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     title= title
     link(rel='stylesheet', href='/stylesheets/reset.css')
     link(rel='stylesheet', href='/stylesheets/font-awesome/css/font-awesome.min.css')
@@ -47,9 +50,10 @@ html
                   p 보낸 견적
             li 
               a(href="/chats")
-                img(src='/img/foot_icon06.svg' alt='')
+                div.foot_iconbox 
+                  img(src='/img/foot_icon06.svg' alt='')
+                  span#notification.foot_count #{chat_notification}
                 p 채팅
-                  span#notification #{chat_notification}
             li 
               a(href="/mypage")
                 img(src='/img/foot_icon02.svg' alt='')
@@ -60,6 +64,7 @@ html
               a(href="/login") 회원가입 및 로그인
     script(src='/javascript/navi.js')
     script(src='/javascript/back.js')
+    script(src='/javascript/money_comma.js')
     block scripts 
     
     script.

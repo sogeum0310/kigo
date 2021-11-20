@@ -46,17 +46,22 @@ block content
         -var y = x++
         if (estimate_request[`field${y}`].length>0)
           li.clearfix
-            h3 #{estimate_request[`field${y}`][0].item.name}
-            div 
+            //- Estimate item
+            h3.request_question_title #{estimate_request[`field${y}`][0].item.name}
+              span.sound_only #{estimate_request[`field${y}`][0].item._id}
+            //- Estimate item detail
+            div.hello
               each checked_detail in estimate_request[`field${y}`]
-                span= checked_detail.name 
-                if (estimate_request.estimate_text[0].item && estimate_request.estimate_text[0].item.toString()===checked_detail.item._id.toString())
-                  span #{estimate_request.estimate_text[0].text}
+                span  #{checked_detail.name }
+                //- Custom text detail
+                if (checked_detail.text_content)
+                  span (#{checked_detail.text_content})
+                
+
       li.clearfix.received_detail_last
         h3 추가 요청사항
         p= estimate_request.content
 
-  
 
     //- pre= estimate_responses 
   
@@ -69,8 +74,24 @@ block content
         li
           a(href="/estimate/response/" + estimate_response._id)
             p.estimate_responses_username #{estimate_response.user.name}
-              span 메달이미지
-            p.estimate_responses_price 견적금: #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}원
+              span.user_level
+                if (estimate_response.user.level == '1')
+                  span.user_level_1 신규
+                if (estimate_response.user.level == '2')
+                  span  
+                    img(src="/img/level_bronze.png", alt="")
+                if (estimate_response.user.level == '3')
+                  span
+                    img(src="/img/level_silver.png", alt="")
+                if (estimate_response.user.level == '4')
+                  span
+                    img(src="/img/level_gold.png", alt="")
+            p.estimate_responses_price 견적금: 
+              span.money_comma #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}
+              | 원
             p.estimate_responses_bottominfo 평점 | 리뷰개수
 
+  //- pre= estimate_request
 
+block scripts 
+  script(src='/javascript/question_title.js')

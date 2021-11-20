@@ -10,26 +10,33 @@ passport.use(new NaverStrategy(
     clientSecret: config.ids.naver.clientSecret,
     callbackURL: config.ids.naver.callbackURL
   },
-  function(accessToken, refreshToken, profile, done) {
-    console.log(profile)
-    Model.User.findOne({ username : profile.provider + profile.id }, function(err, user) {
-      if (!user) {
-        user = new Model.User({
-          username: profile.provider + profile.id,
-          name: profile.displayName,
-          email: profile.emails[0].value,
-          auth: true,
-          account: 'personal',
-          social: true
-        });
-        user.save(function(err) {
-          if (err) console.log(err);
+  async function(accessToken, refreshToken, profile, done) {
+    try {
+      console.log(profile)
+      var city = await Model.EstimateItemDetail.findOne({ input_name: 'field9' })
+      Model.User.findOne({ username : profile.provider + profile.id }, function(err, user) {
+        if (!user) {
+          user = new Model.User({
+            username: profile.provider + profile.id,
+            name: profile.displayName,
+            email: profile.emails[0].value,
+            authorization: true,
+            account: 'personal',
+            social: true,
+            service: true,
+            city: city
+          });
+          user.save(function(err) {
+            if (err) console.log(err);
+            return done(err, user);
+          });
+        } else {
           return done(err, user);
-        });
-      } else {
-        return done(err, user);
-      }
-    });
+        }
+      });
+    } catch (error) {
+      return done(error, null)
+    }
   }
 ));
 

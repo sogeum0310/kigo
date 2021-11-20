@@ -50,7 +50,8 @@ block content
             td 
               label(for="") 생년월일
             td 
-              input.full_input(type="text" name="birth_date" value=(undefined===user_personal ? '' : user_personal.date_of_birth_yyyy_mm_dd), required) 
+              input.full_input(type="number" name="birth_date" value=(undefined===user_personal ? '' : user_personal.date_of_birth), required, oninput='handleOnInput(this, 6)', placeholder="예)960107") 
+              
           tr 
             td 
               label(for="") 지역
@@ -73,5 +74,10 @@ block content
       button.signup_btn(type="submit") 확인
 
   script.
-    var url = '/validity'
+    function handleOnInput(el, maxlength) {
+      if(el.value.length > maxlength)  {
+        el.value 
+          = el.value.substr(0, maxlength);
+      }
+    }
   script(src="/scripts/form.js") 

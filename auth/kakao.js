@@ -10,25 +10,33 @@ passport.use(new KakaoStrategy(
     clientSecret: config.ids.kakao.clientSecret,
     callbackURL: config.ids.kakao.callbackURL,
   },
-  function(accessToken, refreshToken, profile, done) {
-    console.log(profile)
-    Model.User.findOne({ username: profile.provider + profile.id,}, function(err, user) {
-      if (err) { return done(err) }
-      if (!user) {
-        user = new Model.User({
-          username: profile.provider + profile.id,
-          auth: true,
-          account: 'personal',
-          social: true
-        })
-        user.save(function(err) {
-          if (err) { console.log(err) }
+  async function(accessToken, refreshToken, profile, done) {
+    try {
+      console.log(profile)
+      var city = await Model.EstimateItemDetail.findOne({ input_name: 'field9' })
+      Model.User.findOne({ username: profile.provider + profile.id,}, function(err, user) {
+        if (err) { return done(err) }
+        if (!user) {
+          user = new Model.User({
+            username: profile.provider + profile.id,
+            name: 'kakao_user',
+            authorization: true,
+            account: 'personal',
+            social: true,
+            service: true,
+            city: city
+          })
+          user.save(function(err) {
+            if (err) { console.log(err) }
+            return done(err, user)
+          })
+        } else {
           return done(err, user)
-        })
-      } else {
-        return done(err, user)
-      }
-    })
+        }
+      })
+    } catch (error) {
+      return done(error)
+    }
   }
 ))
 

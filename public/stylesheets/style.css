@@ -1051,14 +1051,33 @@ img{
 }
 .estimate_form_group_s_box div{
   font-size: 16px;
-  border: 1px solid #ccc;
-  border-bottom: none;
-  padding: 8px 15px;
+  /* border: 1px solid #ccc; */
+  /* border-bottom: none; */
+  padding: 0 15px;
+  margin: 0.5%;
+  background: #f1f1f1;
+}
 
+
+.estimate_form_group_s_box div label{
+  padding: 13px 0;
+  display: inline-block;
 }
-.estimate_form_group_s_box div:last-child{
+.toggle_input{
+  margin-left: 5px;
+}
+
+.estimate_form_group_s_box div.field9{
+  width: 49%;
+  float: left;
+}
+/* .estimate_form_group_s_box div.field9:nth-child(18){
   border-bottom: 1px solid #ccc;
-}
+} */
+
+/* .estimate_form_group_s_box div:last-child{
+  border-bottom: 1px solid #ccc;
+} */
 .estimate_form_group_s_box div input{
   margin-right: 10px;
 }
@@ -1397,7 +1416,7 @@ img{
   vertical-align: middle;
 } 
 .estimate_received_list_wrap li .estimate_received_left{
-  width: 70%;
+  width:70%;
 }
 .estimate_received_list_wrap li .estimate_received_middle{
   width: 30%;
@@ -1829,12 +1848,12 @@ img{
 .estimate_received_detail_form_stat tr th, .estimate_received_detail_form_stat tr td{
   padding: 2px 0;
   text-align: center;
-  width: calc(33.33% - 10px);
+  width: 33.33%;
 }
-.estimate_received_detail_form_stat tr td.minus_btn{
+/* .estimate_received_detail_form_stat tr td.minus_btn{
   width: 30px;
   cursor: pointer;
-}
+} */
 .estimate_received_detail_form_stat tr td.minus_btn i{
   font-size: 16px;
 }
@@ -2770,4 +2789,58 @@ img{
   font-size: 21px;
   font-weight: bold;
   margin-bottom: 15px;
+}
+
+.user_form_portfolio > div{
+  float: left;
+  width: 50%;
+  padding: 0 15px;
+  padding-bottom: 10px;
+  height: 230px;
+  text-align: center;
+  position: relative;
+}
+
+.user_form_portfolio > div > div{
+  display: inline-block;
+  position: relative;
+}
+.user_form_portfolio div .delete_portfolio{
+  position: absolute;
+  top: 10px;
+  right: 10px; 
+  cursor: pointer;
+}
+.user_form_portfolio div .delete_portfolio i{
+  font-size: 20px;
+}
+.user_form_portfolio div img{
+  max-height: 220px;
+}
+
+.foot_iconbox{
+  display: inline-block;
+  position: relative;
+}
+
+.foot_count{
+  padding: 2px 5px;
+  line-height: 15px;
+  border-radius: 20px;
+  background: red;
+  color: #fff;
+  position: absolute;
+  top: 0;
+  right: -5px;
+  transform: translateY(-50%);
+  font-size: 10px;
+}
+.user_level_1{
+  background: #3a8afd;
+  color: #fff;
+  width: auto;
+  height: auto;
+  padding: 2px 5px;
+  text-align: center;
+  border-radius: 5px;
 }

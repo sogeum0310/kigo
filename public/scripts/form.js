@@ -9,7 +9,7 @@ async function handleSubmit(e) {
 
   var formData = new FormData(form)
 
-  var results = await fetch(url, {
+  var results = await fetch('/validity', {
     method: 'POST',
     headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
     body: new URLSearchParams(formData).toString()

@@ -58,18 +58,18 @@ block content
           form.form_container(action="", method="POST") 
             each estimate_item in estimate_items 
               div.form-group.estimate_form_group
-                div.estimate_form_group_s_box
+                div.estimate_form_group_s_box.clearfix
                   h3.estimate_form_title #{estimate_item.name}
                   each detail in estimate_item.details
-                    div
+                    div.frm_request_ss(class=detail.input_name)
                       input(type=detail.input_type, id=detail._id, name=detail.input_name, value=detail._id)
                       label(for=detail._id) #{detail.name} 
-                      if (detail.name==='월')
+                      //- Some text input
+                      if (detail.text===true)
                         input(type="hidden", name='item', value=estimate_item._id)
-                        input(type="text", name="text", value="")
+                        input(type="hidden", name='detail', value=detail._id)
+                        input.frm_input.toggle_input(type="text", name="text", value="", id='txt-' + detail._id)
 
-
-                    
                 .request_slide_btn
                   a.prev(href="") 이전
                   a.next(href="") 다음
@@ -85,6 +85,7 @@ block content
             
             //- 임시 버튼
             //- button(type="submit") submit
+    
   script.
 
     var container = document.querySelector('.form_container')
@@ -106,4 +107,4 @@ block content
     document.getElementById('demo_bar').style.width = Math.floor(- num / groups.length + x) + "%" ;
   block scripts 
     script(src='/javascript/request_slide.js')
-    //- script(src='/javascript/request_txtinput.js')
+    script(src='/javascript/request_txtinput.js')

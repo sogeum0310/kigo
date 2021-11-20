@@ -25,14 +25,18 @@ block content
         li
           each blog_cost in blog.cost
             if (blog_cost.length>0)
-              p #{blog_cost}원
+              p 
+                span.money_comma #{blog_cost}
+                | 원
         li
           each blog_note in blog.note
             if (blog_note.length>0)
               p #{blog_note}
       div.sent_detail_response_date.sent_detail_response_date02.clearfix
         p 견적가
-        p #{blog.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}원
+        p 
+          span.money_comma #{blog.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}
+          | 원
       .response_detail_company_info 
         h2.company_info_title #{blog.user.name}
         p.company_info_review ★4.9 | 누적거래 30건 | 리뷰 30건

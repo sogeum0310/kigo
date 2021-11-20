@@ -14,30 +14,36 @@ passport.use(new GoogleStrategy( // new GoogleStrategy(object, function)
   },
   
   // Parameter - Function
-  function(accessToken, refreshToken, profile, done) {
-    console.log(profile)
-    var searchQuery = {
-      username: profile.provider + profile.id
-    };
-    var updates = {
-      username: profile.provider + profile.id,
-      name: profile.displayName,
-      auth: true,
-      account: 'personal',
-      social: true
-    };
-    var options = {
-      upsert: true
-    };
-    Model.User.findOneAndUpdate(searchQuery, updates, options, function(err, user) {
-      if(err) {
-        return done(err);
-      } else {
-        return done(null, user);
-      }
-    });
+  async function(accessToken, refreshToken, profile, done) {
+    try {
+      console.log(profile)
+      var city = await Model.EstimateItemDetail.findOne({ input_name: 'field9' })
+      var searchQuery = {
+        username: profile.provider + profile.id
+      };
+      var updates = {
+        username: profile.provider + profile.id,
+        name: profile.displayName,
+        authorization: true,
+        account: 'personal',
+        social: true,
+        service: true,
+        city: city
+      };
+      var options = {
+        upsert: true
+      };
+      Model.User.findOneAndUpdate(searchQuery, updates, options, function(err, user) {
+        if(err) {
+          return done(err);
+        } else {
+          return done(null, user);
+        }
+      });
+    } catch (error) {
+      return done(error)
+    }
   }
-
 ));
 
 // serialize user into the session

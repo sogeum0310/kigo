@@ -63,10 +63,9 @@ block content
               input.full_input#file_portfolio(type="file", name="portfolio", accept="image/*")
               input.full_input#file_portfolio(type="file", name="portfolio", accept="image/*")
               input.full_input#file_portfolio(type="file", name="portfolio", accept="image/*")
-              if (user_business)
-                //- pre= files
+              if (user_business && files)
                 each file in files 
-                  img(src="/files/user/" + file.md_name, alt="")
+                  p= file
           tr 
             td 
               label(for="") 계신지역
@@ -85,7 +84,5 @@ block content
       p 
         button.signup_btn(type="submit") 확인
 
-  script.
-    var url = '/validity'
   script(src="/javascript/business_sign_required.js")
   script(src="/scripts/form.js") 

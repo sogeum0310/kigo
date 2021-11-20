@@ -62,16 +62,19 @@ exports.estimate_request_create_post = async (req, res, next) => {
       drop: users,
       count: 0,
     })
+
     await estimate.save()
 
-    var estimate_text = new Model.EstimateText({
-      estimate_result: estimate._id,
-      item: req.body.item,
-      text: req.body.text
-    })
-
-    await estimate_text.save()
-
+    for (i=0; i<req.body.item.length; i++) {
+      var estimate_text = new Model.EstimateText({
+        estimate_result: estimate._id,
+        item: req.body.item[i],
+        detail: req.body.detail[i],
+        text: req.body.text[i]
+      })
+      await estimate_text.save()
+    }
+    
     res.redirect('/estimate/request/' + estimate._id)
   } catch (error) {
     res.render('error', { error: error })
@@ -94,9 +97,20 @@ exports.estimate_request_detail = async (req, res, next) => {
       { path: 'field10', populate: 'item' }, 
       { path: 'topic' }
     ])
-  
-    var estimate_text = await Model.EstimateText.find({ estimate_result: req.params.id })
-    estimate_request.estimate_text = estimate_text
+
+    var estimate_texts = await Model.EstimateText.find({ estimate_result: estimate_request._id })
+
+    var x = 1
+    while (x < 11) {
+      var y = x++ 
+      if (estimate_request[`field${y}`].length > 0) {
+        for (estimate_text of estimate_texts) {
+          if(estimate_request[`field${y}`][0]._id.toString()===estimate_text.detail.toString()) {
+            estimate_request[`field${y}`][0].text_content = estimate_text.text
+          }
+        }
+      }
+    }
 
     var estimate_responses = await Model.EstimateResponse.find({ estimate_request: req.params.id }).populate('user')
     
@@ -120,11 +134,16 @@ exports.estimate_received_list = async (req, res, next) => {
         var message = ms + ' 분 뒤에 견적서를 작성할 수 있습니다'
       }
     }
+
     var user_business = await Model.User.findById(req.user.id)
 
     for (estimate_request of estimate_requests) {
       if  (user_business.platform.includes(estimate_request.topic._id) && estimate_request.count < 10 && !estimate_request.drop.includes(req.user.id)) {
         estimate_request.matched = true
+      }
+      var estimate_response = await Model.EstimateResponse.findOne({ estimate_request: estimate_request._id, user:req.user.id })
+      if (estimate_response) {
+        estimate_request.done = true
       }
     }
 
@@ -151,10 +170,19 @@ exports.estimate_received_detail_get = async (req, res, next) => {
       { path: 'topic' }
     ])
   
-    var estimate_text = await Model.EstimateText.find({ estimate_result: req.params.id })
-    console.log(estimate_text)
-  
-    estimate_request.estimate_text = estimate_text
+    var estimate_texts = await Model.EstimateText.find({ estimate_result: estimate_request._id })
+
+    var x = 1
+    while (x < 11) {
+      var y = x++ 
+      if (estimate_request[`field${y}`].length > 0) {
+        for (estimate_text of estimate_texts) {
+          if(estimate_request[`field${y}`][0]._id.toString()===estimate_text.detail.toString()) {
+            estimate_request[`field${y}`][0].text_content = estimate_text.text
+          }
+        }
+      }
+    }
 
     res.render('estimate_received_detail', { title: '견적서', estimate_request: estimate_request })
   } catch (error) {
@@ -198,7 +226,7 @@ exports.estimate_received_delete = async (req, res, next) => {
 exports.estimate_sent_list = async (req, res, next) => {
   try {
     var estimate_responses = await Model.EstimateResponse.find({ user: req.user.id })
-    .populate({ path: 'estimate_request', populate: [{ path: 'user' }, { path: 'topic' }] })
+    .populate({ path: 'estimate_request', populate: [{ path: 'user', populate: { path: 'city' } }, { path: 'topic' }] })
     .exec()
     res.render('estimate_sent_list', { title: '보낸 견적', estimate_responses: estimate_responses })
   } catch (error) {
@@ -210,7 +238,7 @@ exports.estimate_sent_detail_get = async (req, res, next) => {
   try {
     var estimate_response = await Model.EstimateResponse.findById(req.params.id)
     .populate('user').populate({ path: 'estimate_request', populate: [
-      { path: 'user' }, 
+      { path: 'user', populate: { path: 'city' } }, 
       { path: 'field1', populate: 'item' }, 
       { path: 'field2', populate: 'item' }, 
       { path: 'field3', populate: 'item' }, 
@@ -224,10 +252,19 @@ exports.estimate_sent_detail_get = async (req, res, next) => {
       { path: 'topic' }
     ]})
 
-    var estimate_text = await Model.EstimateText.find({ estimate_result: estimate_response.estimate_request._id })
-    console.log(estimate_text)
-  
-    estimate_response.estimate_request.estimate_text = estimate_text
+    var estimate_texts = await Model.EstimateText.find({ estimate_result: estimate_response.estimate_request._id })
+
+    var x = 1
+    while (x < 11) {
+      var y = x++ 
+      if (estimate_response.estimate_request[`field${y}`].length > 0) {
+        for (estimate_text of estimate_texts) {
+          if(estimate_response.estimate_request[`field${y}`][0]._id.toString()===estimate_text.detail.toString()) {
+            estimate_response.estimate_request[`field${y}`][0].text_content = estimate_text.text
+          }
+        }
+      }
+    }
 
     res.render('estimate_sent_detail', { title: '보낸 견적', estimate_response: estimate_response })
   } catch (error) {

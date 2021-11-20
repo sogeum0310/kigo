@@ -73,13 +73,15 @@ block content
         -var y = x++
         if (estimate_request[`field${y}`].length>0)
           li.clearfix
-            h3 #{estimate_request[`field${y}`][0].item.name}
+            h3.request_question_title #{estimate_request[`field${y}`][0].item.name}
+              span.sound_only #{estimate_request[`field${y}`][0].item._id}
+            
             div
-              each something in estimate_request[`field${y}`]
-                span= something.name 
-                if (estimate_request.estimate_text[0].text)
-                  if (estimate_request.estimate_text[0].item.toString()===something.item._id.toString())
-                    span #{estimate_request.estimate_text[0].text}
+              each checked_detail in estimate_request[`field${y}`]
+                span= checked_detail.name 
+                //- Custom text detail
+                if (checked_detail.text_content)
+                  span (#{checked_detail.text_content})
       li.clearfix.received_detail_last
         h3 추가 요청사항
         p= estimate_request.content
@@ -89,7 +91,6 @@ block content
       table.estimate_received_detail_form_stat 
         tbody#itemTable
           tr 
-            td.minus_btn 
             th 
               p 항목
             th 
@@ -97,32 +98,30 @@ block content
             th 
               p 비고 
           tr#itemRow 
-            td.minus_btn.minus_Btn 
-              i.fa.fa-minus-circle(aria-hidden='true')
             td 
               input.frm_input.full_input(type="text", name="item", required, maxlength='10')
             td
               input.frm_input.full_input(type="number", name="cost", required, maxlength='10')
             td
               input.frm_input.full_input(type="text", name="note", maxlength='10')
-          tr 
-            td.minus_btn.minus_Btn
-              i.fa.fa-minus-circle(aria-hidden='true')
-            td 
-              input.frm_input.full_input(type="text", name="item", maxlength='10')
-            td
-              input.frm_input.full_input(type="number", name="cost", maxlength='10')
-            td
-              input.frm_input.full_input(type="text", name="note", maxlength='10')
-          tr 
-            td.minus_btn.minus_Btn
-              i.fa.fa-minus-circle(aria-hidden='true')
-            td 
-              input.frm_input.full_input(type="text", name="item", maxlength='10')
-            td
-              input.frm_input.full_input(type="number", name="cost", maxlength='10')
-            td
-              input.frm_input.full_input(type="text", name="note", maxlength='10')
+          //- tr 
+          //-   td.minus_btn.minus_Btn
+          //-     i.fa.fa-minus-circle(aria-hidden='true')
+          //-   td 
+          //-     input.frm_input.full_input(type="text", name="item", maxlength='10')
+          //-   td
+          //-     input.frm_input.full_input(type="number", name="cost", maxlength='10')
+          //-   td
+          //-     input.frm_input.full_input(type="text", name="note", maxlength='10')
+          //- tr 
+          //-   td.minus_btn.minus_Btn
+          //-     i.fa.fa-minus-circle(aria-hidden='true')
+          //-   td 
+          //-     input.frm_input.full_input(type="text", name="item", maxlength='10')
+          //-   td
+          //-     input.frm_input.full_input(type="number", name="cost", maxlength='10')
+          //-   td
+          //-     input.frm_input.full_input(type="text", name="note", maxlength='10')
       p   
         button#addItem.received_plus_btn
           i.fa.fa-plus-circle(aria-hidden='true')
@@ -151,6 +150,7 @@ block content
       })
   block scripts 
     script(src='/javascript/remove_table.js')
+    script(src='/javascript/question_title.js')
 
 
 

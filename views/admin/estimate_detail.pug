@@ -35,6 +35,7 @@ block content
     li.clearfix.received_detail_first 
       h2 #{estimate_response.estimate_request.user.name}
         span (#{estimate_response.estimate_request.user.username})
+        span  / 연락처 : #{estimate_response.estimate_request.user.phone}
       p 견적요청일자 : #{estimate_response.estimate_request.reg_date.getFullYear()}.#{estimate_response.estimate_request.reg_date.getMonth() +1}.#{estimate_response.estimate_request.reg_date.getDate()} #{estimate_response.estimate_request.reg_date.getHours()}:#{estimate_response.estimate_request.reg_date.getMinutes()}
 
     -var x = 1
@@ -42,7 +43,8 @@ block content
       -var y = x++
       if (estimate_response.estimate_request[`field${y}`].length>0)
         li.clearfix
-          h3 #{estimate_response.estimate_request[`field${y}`][0].item.name}
+          h3.request_question_title #{estimate_response.estimate_request[`field${y}`][0].item.name}
+            span.sound_only #{estimate_response.estimate_request[`field${y}`][0].item._id}
           div
             each checked_detail in estimate_response.estimate_request[`field${y}`]
               span= checked_detail.name 
@@ -56,6 +58,10 @@ block content
   
 
 
+  div.sent_detail_response_date.sent_detail_response_date02.clearfix
+    p #{estimate_response.user.name}
+      span (#{estimate_response.user.username})
+    p #{estimate_response.user.phone}
   ul.sent_detail_bottom_stat.clearfix
     li 
       each estimate_response_item in estimate_response.item
@@ -64,14 +70,18 @@ block content
     li 
       each estimate_response_cost in estimate_response.cost
         if (estimate_response_cost.length>0)
-          p #{estimate_response_cost}원
+          p 
+            span.money_comma #{estimate_response_cost}
+            | 원
     li 
       each estimate_response_note in estimate_response.note
         if (estimate_response_note.length>0)
           p #{estimate_response_note}
   div.sent_detail_response_date.sent_detail_response_date02.clearfix
     p 견적가
-    p #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}원
+    p 
+      span.money_comma #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}
+      | 원
   //- pre= estimate_response.item
   //- pre= estimate_response.cost
   //- pre= estimate_response.note
@@ -79,3 +89,5 @@ block content
   //- a(href="/admin/estimate/list") list 
  
   
+  block scripts 
+    script(src='/javascript/question_title.js')

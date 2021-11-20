@@ -25,12 +25,13 @@ async function createEstimateForm() {
     items.push(item)
   }
 
-  async function createEstimateItemDetail(item, name, input_type, input_name) {
+  async function createEstimateItemDetail(item, name, input_type, input_name, text) {
     var item_detail = new Model.EstimateItemDetail({
       item: item,
       name: name,
       input_type: input_type,
-      input_name: input_name
+      input_name: input_name,
+      text: text
     })
     await item_detail.save()
     item_details.push(item_detail)
@@ -117,7 +118,7 @@ async function createEstimateForm() {
   await createEstimateItemDetail(items[3]._id, '뷰티', 'checkbox', 'field4')
   await createEstimateItemDetail(items[3]._id, '렌탈', 'checkbox', 'field4')
   await createEstimateItemDetail(items[3]._id, '제조', 'checkbox', 'field4')
-  await createEstimateItemDetail(items[3]._id, '기타', 'checkbox', 'field4')
+  await createEstimateItemDetail(items[3]._id, '기타', 'checkbox', 'field4', true)
     
   await createEstimateItemDetail(items[4]._id, '매출향상', 'checkbox', 'field5')
   await createEstimateItemDetail(items[4]._id, '브랜드 인지도', 'checkbox', 'field5')
@@ -137,8 +138,8 @@ async function createEstimateForm() {
   await createEstimateItemDetail(items[6]._id, '1년 이상', 'radio', 'field7')
   await createEstimateItemDetail(items[6]._id, '상담 후 결정', 'radio', 'field7')
     
-  await createEstimateItemDetail(items[7]._id, '일시불', 'radio', 'field8')
-  await createEstimateItemDetail(items[7]._id, '월', 'radio', 'field8')
+  await createEstimateItemDetail(items[7]._id, '일시불', 'radio', 'field8', true)
+  await createEstimateItemDetail(items[7]._id, '월', 'radio', 'field8', true)
   await createEstimateItemDetail(items[7]._id, '상담 후 결정', 'radio', 'field8')
     
   await createEstimateItemDetail(items[8]._id, '서울', 'checkbox', 'field9')
@@ -158,11 +159,15 @@ async function createEstimateForm() {
   await createEstimateItemDetail(items[8]._id, '전북', 'checkbox', 'field9')
   await createEstimateItemDetail(items[8]._id, '전남', 'checkbox', 'field9')
   await createEstimateItemDetail(items[8]._id, '제주', 'checkbox', 'field9')
-  await createEstimateItemDetail(items[8]._id, '기타', 'checkbox', 'field9')
+  await createEstimateItemDetail(items[8]._id, '기타', 'checkbox', 'field9', true)
     
   await createEstimateItemDetail(items[9]._id, '전화상담', 'checkbox', 'field10')
   await createEstimateItemDetail(items[9]._id, '채팅상담', 'checkbox', 'field10')
   await createEstimateItemDetail(items[9]._id, '방문상담', 'checkbox', 'field10')
 }
 
+try {
 // createEstimateForm()
+} catch (error) {
+  console.log(error)
+}

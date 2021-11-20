@@ -29,6 +29,9 @@ passport.use(new Strategy( // new Strategy(function)
       }
 
       if (user.account==='business') {
+        // Counting reviews
+        var review_count = await Model.Review.countDocuments({ parent: user._id })
+        user.reviews = review_count
         // Scoring reviews
         var num = 0
         var reviews = await Model.Review.find({ parent: user._id })
@@ -36,23 +39,23 @@ passport.use(new Strategy( // new Strategy(function)
           num += review.rating
         }
         user.score = num
-        await user.save()
         // Counting a number of contracts
         var contracts = await Model.EstimateResponse.countDocuments({ user: user._id, submit: true })
         user.contract = contracts
-        await user.save()
         // Level
-        var m = 1000 * 60 * 60 * 24 * 30
-        if (user.level===1 && new Date() - user.start_date > m) {
-          user.level = 2
-          await user.save()
+        if (user.start_date) {
+          var m = 1000 * 60 * 60 * 24 * 30
+          if (user.level===1 && new Date() - user.start_date > m) {
+            user.level = 2
+          }
         }
+        await user.save()
       }
 
       return cb(null, user); 
 
     } catch (error) {
-      console.log(error)
+      return cb(null, false, { message: 'error' })
     }
   }
 

@@ -21,7 +21,9 @@ block content
     each estimate_response in estimate_responses
       tr 
         td #{estimate_response.user.name}
-        td #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}원
+        td 
+          span.money_comma #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}
+          | 원
         td #{estimate_response.reg_date.getFullYear()}.#{estimate_response.reg_date.getMonth() +1}.#{estimate_response.reg_date.getDate()}. #{estimate_response.reg_date.getHours()}:#{estimate_response.reg_date.getMinutes()}
         td 
           a(href=estimate_response._id) 상세보기

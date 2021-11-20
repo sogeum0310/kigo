@@ -20,11 +20,13 @@ const EstimateItemDetailSchema = new Schema({
   item: { type: Schema.ObjectId, ref: 'EstimateItem' },
   input_type: { type: String },
   input_name: { type: String },
+  text: { type: Boolean, default: false },
 })
 
 const EstimateTextSchema = new Schema({
   estimate_result: { type: Schema.ObjectId },
   item: { type: Schema.ObjectId },
+  detail: { type: Schema.ObjectId },
   text: { type: String }
 })
 
@@ -37,7 +39,7 @@ const UserSchema = new Schema({
   salt: { type: String },
   name: { type: String },
   gender: { type: String },
-  date_of_birth: { type: Date },
+  date_of_birth: { type: String },
   phone: { type: String },
   email: { type: String },
   about: { type: String },
@@ -55,6 +57,7 @@ const UserSchema = new Schema({
   drop: { type: Boolean, default: false },
   // Level
   level: { type: Number, default: 1 },
+  review: { type: Number, default: 0 },
   score: { type: Number, default: 0 },
   contract: { type: Number, default: 0 }
 })

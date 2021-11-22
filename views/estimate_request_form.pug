@@ -54,6 +54,7 @@ block content
         h3#demo
     
     if (estimate_items)
+
       div.wrap
           form.form_container(action="", method="POST") 
             each estimate_item in estimate_items 
@@ -62,31 +63,72 @@ block content
                   h3.estimate_form_title #{estimate_item.name}
                   each detail in estimate_item.details
                     div.frm_request_ss(class=detail.input_name)
-                      input(type=detail.input_type, id=detail._id, name=detail.input_name, value=detail._id)
+                      input.first_input(type=detail.input_type, id=detail._id, class='_' + detail._id, name=detail.input_name, value=detail._id)
                       label(for=detail._id) #{detail.name} 
                       //- Some text input
                       if (detail.text===true)
                         input(type="hidden", name='item', value=estimate_item._id)
                         input(type="hidden", name='detail', value=detail._id)
-                        input.frm_input.toggle_input(type="text", name="text", value="", id='txt-' + detail._id)
+                        input.frm_input.toggle_input(type="text", name="text", value="", id='txt-' + detail._id, class='txt-' + detail._id)
 
                 .request_slide_btn
                   a.prev(href="") 이전
                   a.next(href="") 다음
 
             div.form-group.estimate_form_group
+              ul.received_detail_ul.request_m_box
+                li.clearfix.received_detail_first
+                  h2.request_m_title
+                  p.request_m_date 현재날짜
+                li.clearfix
+                  h3.request_question_title 원하시는 채널
+                  .hello.channel_txt
+                li.clearfix
+                  h3.request_question_title 월간 작업(포스팅) 횟수
+                  .hello.posting_txt 
+                    span
+                li.clearfix
+                  h3.request_question_title 광고 업종(상품)
+                  .hello.sectors
+                li.clearfix
+                  h3.request_question_title 광고 목적
+                  .hello.purpose 
+                li.clearfix
+                  h3.request_question_title 광고 시작 날짜
+                  .hello.start_date
+                li.clearfix
+                  h3.request_question_title 광고 집행 기간
+                  .hello.ing_date_box 
+                    span.ing_date
+                li.clearfix
+                  h3.request_question_title 예상 금액
+                  .hello.money
+                    span.money_span
+                    span.f8_1 
+                    span.f8_2
+                li.clearfix
+                  h3.request_question_title 고객님이 계신 지역
+                  .hello.place 
+                li.clearfix
+                  h3.request_question_title 피드백 서비스방식
+                  .hello.feedback 
               h3.request_comment 추가사항
               textarea.frm_input.full_input.request_commentbox(name="content") 
               .request_slide_btn
                 a.prev(href="") 이전
                 a.next(href="") 다음
+
               
 
             
             //- 임시 버튼
             //- button(type="submit") submit
+    //- pre= estimate_items
     
   script.
+
+    var estimate_items = '!{JSON.stringify(estimate_items)}'
+
 
     var container = document.querySelector('.form_container')
     var prev = document.querySelector('.prev')
@@ -105,6 +147,5 @@ block content
     prev.style.display = 'none'
 
     document.getElementById('demo_bar').style.width = Math.floor(- num / groups.length + x) + "%" ;
-  block scripts 
-    script(src='/javascript/request_slide.js')
-    script(src='/javascript/request_txtinput.js')
+  script(src='/javascript/request_slide.js')
+  script(src='/javascript/request_txtinput.js')

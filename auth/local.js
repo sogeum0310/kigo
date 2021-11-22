@@ -10,28 +10,28 @@ passport.use(new Strategy( // new Strategy(function)
   async function(username, password, cb) {
     try {
       var user = await Model.User.findOne({ username: username })
-      if (!user) { return cb(null, false, { message: 'Incorrect username.' }); }
+      if (!user) { return cb(null, false, { message: '아이디와 비밀번호를 확인하세요.' }); }
       var hashedPassword = crypto.pbkdf2Sync(password, user.salt, 310000, 32, 'sha256').toString('hex')
       if (user.password!==hashedPassword) {
-        return cb(null, false, { message: 'Incorrect password.' });
+        return cb(null, false, { message: '아이디와 비밀번호를 확인하세요.' });
       }
       
       if (user.service===false) {
-        return cb(null, false, { message: 'service off' })
+        return cb(null, false, { message: '승인 대기중입니다' })
       }
 
       if (user.authorization===false) {
-        return cb(null, false, { message: 'Unauthorized' })
+        return cb(null, false, { message: '사용 정지된 회원입니다' })
       }
 
       if (user.drop===true) {
-        return cb(null, false, { message: 'Dropped account' })
+        return cb(null, false, { message: '탈퇴한 회원입니다' })
       }
 
       if (user.account==='business') {
         // Counting reviews
         var review_count = await Model.Review.countDocuments({ parent: user._id })
-        user.reviews = review_count
+        user.review = review_count
         // Scoring reviews
         var num = 0
         var reviews = await Model.Review.find({ parent: user._id })

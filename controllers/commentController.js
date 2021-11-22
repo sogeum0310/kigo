@@ -11,7 +11,7 @@ exports.community_detail = async (req, res, next) => {
       blog_comment.comment = await Model.CommunityComment.find({ parent: blog_comment._id, coc: true }).populate('user').populate('bites')
     }
 
-    res.render('community_detail', { title: 'Community detail', blog: blog, blog_comments: blog_comments })
+    res.render('community_detail', { title: '커뮤니티', blog: blog, blog_comments: blog_comments })
   } catch (error) {
     res.render('error', { error: error })
   }
@@ -59,7 +59,7 @@ exports.qna_detail = async (req, res, next) => {
       blog_comment.comment = await Model.QnaAnswer.find({ parent: blog_comment._id, coc: true }).populate('user').populate('bites')
     }
 
-    res.render('admin/blog_detail', { title: 'Qna detail', blog: blog, blog_comments: blog_comments, url: 'qna' })
+    res.render('admin/blog_detail', { title: 'Qna', blog: blog, blog_comments: blog_comments, url: 'qna' })
   } catch (error) {
     res.render('error', { error: error })
   }
@@ -108,7 +108,7 @@ exports.estimate_response_detail = async (req, res, next) => {
       blog_comment.comment = await Model.Review.find({ parent: blog_comment._id, coc: true }).populate('user').populate('bites')
     }
   
-    res.render('estimate_response_detail', { title: 'Estimate response detail', blog: blog, files: files, blog_comments: blog_comments })
+    res.render('estimate_response_detail', { title: '견적서 상세보기', blog: blog, files: files, blog_comments: blog_comments })
   } catch (error) {
     res.render('error', { error: error })
   }
@@ -163,7 +163,7 @@ exports.mypage_review_list = async (req, res, next) => {
       blog_comment.comment = await Model.Review.find({ parent: blog_comment._id, coc: true }).populate('user').populate('bites')
     }
 
-    res.render('user_review_list', { title: 'User review', blog_comments: blog_comments })
+    res.render('user_review_list', { title: '리뷰', blog_comments: blog_comments })
   } catch (error) {
     res.render('error', { error: error })
   }

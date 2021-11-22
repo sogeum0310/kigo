@@ -37,9 +37,21 @@ block content
         p 
           span.money_comma #{blog.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}
           | 원
+      //- pre= blog.user
       .response_detail_company_info 
         h2.company_info_title #{blog.user.name}
-        p.company_info_review ★4.9 | 누적거래 30건 | 리뷰 30건
+        p.company_info_review 
+          span ★
+            //- if (blog.user.review !="0")
+            //-   span.blog_user_score.sound_only #{blog.user.score}
+            //-   span.blog_user_review.sound_only #{blog.user.review}
+            //-   span.blog_user_division  
+            //- else 
+            //-   | 없음 
+          if (blog.user.review > 0)
+            span.blog_user_score #{blog.user.score / blog.user.review} 
+          span | 누적거래 #{blog.user.contract}건 
+          span | 리뷰 #{blog.user.review}건
         p.company_info_platform 주요업무 : 
           each blog_user_platform in blog.user.platform
             span  #{blog_user_platform.name}
@@ -173,7 +185,7 @@ block content
 
     // For delete the comment
     async function deleteItem(id) {
-      var res = confirm('y/n')
+      var res = confirm('제출하시겠습니까?')
       if (res===false) {
         return console.log('false')
       }
@@ -198,6 +210,6 @@ block content
 block scripts 
   script(src='/javascript/response_star.js')
   script(src='/javascript/response_create_comment.js')
-
+  script(src='/javascript/division.js')
 
 

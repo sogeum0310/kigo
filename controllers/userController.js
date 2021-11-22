@@ -149,8 +149,10 @@ exports.signup_business_post = async (req, res, next) => {
     await user_business.save()
 
     if (req.files) {
-      var portfolios = req.files.portfolio
-
+      var data = req.files.portfolio
+      
+      var portfolios = data instanceof Array ? data : [data]
+      
       for (portfolio of portfolios) {
         var new_file_name = portfolio.md5 + '.' + portfolio.name.split('.').pop()
         upload_path = 'files/user/' + new_file_name
@@ -176,7 +178,7 @@ exports.signup_business_post = async (req, res, next) => {
 exports.mypage = async (req, res, next) => {
   try { 
     var user = await Model.User.findById(req.user.id)
-    res.render('user_mypage', { title: 'My page', user: user })
+    res.render('user_mypage', { title: '마이페이지', user: user })
   } catch (error) {
     res.render('error', { error: error })
   }
@@ -291,7 +293,7 @@ exports.mypage_qna_list = async (req, res, next) => {
 // Change password
 exports.access_password_get = async (req, res, next) => {
   try {
-    res.render('user_form_access', { title: 'Access password' })
+    res.render('user_form_access', { title: '비밀번호 변경' })
   } catch (error) {
     res.render('error', { error: error })
   }
@@ -306,7 +308,7 @@ exports.access_password_post = async (req, res, next) => {
       return res.redirect('access_password')
     }
 
-    res.render('user_form_password', { title: 'Change password', password_change: true })
+    res.render('user_form_password', { title: '비밀번호 변경', password_change: true })
   } catch (error) {
     res.render('error', { error: error })
   }
@@ -324,7 +326,7 @@ exports.change_password = async (req, res, rext) => {
     var salt = crypto.randomBytes(16).toString('hex');
     var hashedPassword = crypto.pbkdf2Sync(req.body.password, salt, 310000, 32, 'sha256').toString('hex')
 
-    await Model.User.findByIdAndUpdate(req.user.id, { password: hashedPassword })
+    await Model.User.findByIdAndUpdate(req.user.id, { password: hashedPassword, salt: salt })
 
     res.redirect('/mypage')
 
@@ -336,7 +338,7 @@ exports.change_password = async (req, res, rext) => {
 // Lost username
 exports.lost_username_get = async (req, res, next) => {
   try {
-    res.render('user_form_username', { title: 'Lost username' })
+    res.render('user_form_username', { title: '아이디 찾기' })
   } catch (error) {
     res.render('error', { error: error })
   }
@@ -367,8 +369,11 @@ exports.lost_password_get = async (req, res, next ) => {
 exports.lost_password_post = async (req, res, next) => {
   try {
     const user = await Model.User.findOne({ email: req.body.email });
-    if (user.social===true) {
-      return res.send('Registered account via social login has no password!')
+    if (user && user.social===true) {
+      return res.send('소셜로그인 회원입니다')
+    }
+    if (!user) {
+      return res.send('회원정보를 찾을 수 없습니다.')
     }
     let token = await Model.Token.findOne({ userId: user.id });
     if (!token) {
@@ -412,8 +417,10 @@ exports.user_reset_password_post = async (req, res, next) => {
 
     var salt = crypto.randomBytes(16).toString('hex');
     var hashedPassword = crypto.pbkdf2Sync(req.body.password, salt, 310000, 32, 'sha256').toString('hex')
-    
+
     user.password = hashedPassword
+    user.salt = salt
+
     await user.save();
     await token.delete();
     res.send("비밀번호 재설정이 완료되었습니다");
@@ -474,7 +481,7 @@ exports.validity = async (req, res, next) => {
 
 exports.drop_get = async (req, res, next) => {
   try {
-    res.render('user_form_drop', { title: 'User drop' })
+    res.render('user_form_drop', { title: '회원탈퇴' })
   } catch (error) {
     res.render('error', { error: error })
   }
@@ -493,7 +500,7 @@ exports.drop_post = async (req, res, next) => {
 exports.mypage_alarm_get = async (req, res, next) => {
   try {
     var user = await Model.User.findById(req.user.id)
-    res.render('user_form_alarm', { title: 'Alarm', online: user.online })
+    res.render('user_form_alarm', { title: '알람설정', online: user.online })
   } catch (error) {
     res.render('error', { error: error })
   }

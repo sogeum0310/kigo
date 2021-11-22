@@ -1,11 +1,23 @@
 extends layout 
-
+block header 
+  include z_back_header.pug 
 block content 
-  h1= title 
+  //- h1= title 
 
-  h3 Accept estimate request or not
-  //- Some CSS work to be like toggle switch 
-  input(type="checkbox", name="alarm", onchange="setAlarm(this)", checked=online) 
+  //- h3 Accept estimate request or not
+  //- //- Some CSS work to be like toggle switch 
+  //- input(type="checkbox", name="alarm", onchange="setAlarm(this)", checked=online) 
+
+  .container 
+    ul.alarm_wrap 
+      li.clearfix 
+        div 
+          span 견적요청서 받기 
+        div.alarm_btn_wrap
+          div.alarm_btn_box 
+            input(type="checkbox", name="alarm", onchange="setAlarm(this)", checked=online, id="alarm")
+            label(for="alarm") 
+
     
 
   script.
@@ -16,6 +28,7 @@ block content
         body: 'alarm=' + el.value
       }).then(res => res.text())
     }
+  script(src='/javascript/alarm_check.js')
     
 
 

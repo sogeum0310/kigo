@@ -65,7 +65,7 @@ block content
               input.full_input#file_portfolio(type="file", name="portfolio", accept="image/*")
               if (user_business && files)
                 each file in files 
-                  p= file
+                  p #{file.name}
           tr 
             td 
               label(for="") 계신지역

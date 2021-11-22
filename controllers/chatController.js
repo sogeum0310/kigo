@@ -20,7 +20,7 @@ exports.chat_list = async (req, res, next) => {
     }
 
     res.render('chat_list', { 
-      title: 'Chat list', 
+      title: '채팅', 
       users: users, 
       chat_rooms: chat_rooms 
     })
@@ -35,7 +35,7 @@ exports.chat_detail = async (req, res, next) => {
     var room = await Model.ChatRoom.findById(req.params.room)
 
     res.render('chat_detail', { 
-      title: 'Chat detail', 
+      title: '채팅', 
       chat_contents: chat_contents,
       room: room,
     })

@@ -88,6 +88,7 @@ block content
           th.user_list_tool 
             | 관리
         -var num = 1
+        //- pre= users
         each user in users
           tr 
             td.user_list_num #{num++}
@@ -99,7 +100,7 @@ block content
               if (user.start_date) 
                 span #{user.start_date.getFullYear()}.#{user.start_date.getMonth() +1}.#{user.start_date.getDate()}. #{user.start_date.getHours()}:#{user.start_date.getMinutes()}
             td.user_list_review_count
-              #{user.rivew}
+              span= user.review
             td.user_list_contract_count #{user.contract}
             td.user_list_ranking 
               if (user.level == '1')

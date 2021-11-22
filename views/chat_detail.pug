@@ -21,6 +21,7 @@ block content
           li.chat_me 
             p.chat_num #[span.num]
             .chat_content !{chat_content.content}
+            .chat_date #{chat_content.reg_date.getFullYear()}.#{chat_content.reg_date.getMonth() +1}.#{chat_content.reg_date.getDate()}. #{chat_content.reg_date.getHours()}:#{chat_content.reg_date.getMinutes()}
            
             //- #{chat_content.user.name}(나) :
         else 
@@ -29,6 +30,7 @@ block content
             div.chat_content_box
               .chat_content !{chat_content.content}
               p.chat_num #[span.num]
+              .chat_date #{chat_content.reg_date.getFullYear()}.#{chat_content.reg_date.getMonth() +1}.#{chat_content.reg_date.getDate()}. #{chat_content.reg_date.getHours()}:#{chat_content.reg_date.getMinutes()}
 
   form#form.send_chat_form(action="")
     div 
@@ -105,7 +107,7 @@ block content
       var li = document.createElement('li')
   
       if (user_global.id===msg.me) {
-        li.innerHTML = `<div class="chat_content_box"><p class="chat_num"><span class="num">${read}</span></p><div class="chat_content">${msg.message}</div></div>`
+        li.innerHTML = `<div class="chat_content_box"><p class="chat_num"><span class="num">${read}</span></p><div class="chat_content">${msg.message}</div></div><span></span>`
          li.classList.add('chat_me')
       } else {
          li.innerHTML = `<span class="chat_username">${msg.user.username}</span><div class="chat_content_box"><div class="chat_content">${msg.message}</div><p class="chat_num"><span class="num">${read}</span></p></div>`

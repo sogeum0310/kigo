@@ -96,13 +96,14 @@ img{
   margin-bottom: 15px;
   background: #fff;
   z-index: 9;
+  border-bottom: 1px solid #ccc;
 }
-.header_box .header_back_btn, .header_box .header_title{
+.header_box .header_back_btn, .header_box .header_title, .chat_header_back_btn{
   font-size: 18px;
   font-weight: bold;
   position: absolute;
 }
-.header_box .header_back_btn{
+.header_box .header_back_btn, .chat_header_back_btn{
   top: 50%;
   left: 15px;
   transform: translateY(-50%);
@@ -422,16 +423,23 @@ img{
 .blog_list_area li p{
   font-size: 16px;
   font-weight: 400;
-  display: none;
+  /* display: none; */
 }
 .blog_list_area li p:nth-child(2){
+  /* border-top: 1px solid #ccc; */
+  /* padding-top: 5px; */
+}
+.blog_list_area li .blog_content{
+  display: none;
   border-top: 1px solid #ccc;
-  padding-top: 5px;
+}
+.blog_list_area li:first-child div{
+  display: block;
 }
 .blog_list_area li.down p{
   display: block;
 }
-.blog_list_area li.down h2 i{
+.blog_list_area li h2 i.on{
   transform: translateY(-50%) rotate(180deg);
   -webkit-transform: translateY(-50%) rotate(180deg);
 }
@@ -739,6 +747,12 @@ img{
   .select_user_type li a{
     font-size: 12px;
   }
+  .signup_form tr td{
+    font-size: 10px;
+  }
+  .signup_form tr td{
+    padding: 10px 3px;
+  }
 }
 
 /* 로그인, 회원가입 */
@@ -989,6 +1003,14 @@ img{
   font-size: 16px;
   margin-bottom: 12px;
 }
+.request_topics_wrap li:nth-child(8) a{
+  position: relative;
+}
+.request_topics_wrap li:nth-child(8) a::after{
+  content: "옥외광고, 버스광고, 지하철광고, 라디오광고, 잡지 광고 등";
+  display: block;
+  font-size: 12px;
+}
 .form_page_container #demo{
   width: 30px;
   font-size: 16px;
@@ -1065,6 +1087,10 @@ img{
 }
 .toggle_input{
   margin-left: 5px;
+  display: none;
+}
+.toggle_input.on{
+  display: inline-block;
 }
 
 .estimate_form_group_s_box div.field9{
@@ -1451,16 +1477,31 @@ img{
 .estimate_received_list_wrap li .estimate_received_middle span{
   width: 100%;
   display: block;
-  font-size: 16px;
+  font-size: 14px;
 }
 .estimate_received_list_wrap li .estimate_received_right i{
   font-size: 30px;
   text-align: center;
 }
-.estimate_received_list_con_box.on{
+.estimate_received_list_con_box.on, .estimate_received_list_con_box.on2, .estimate_received_list_con_box.on3{
   position: relative;
 }
-.estimate_received_list_con_box.on::after{
+.estimate_received_list_con_box .on3{
+  position: relative;
+}
+.estimate_received_list_con_box .on3::after{
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% + 50px);
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  border-radius: 10px;
+}
+
+.estimate_received_list_con_box.on::after, .estimate_received_list_con_box.on2::after, .estimate_received_list_con_box.on3::after{
   content: "";
   display: block;
   position: absolute;
@@ -1824,7 +1865,7 @@ img{
     font-size: 10px;
   }
   .estimate_received_list_wrap li .estimate_received_middle span{
-    font-size: 14px;
+    font-size: 12px;
   }
   .estimate_received_list_wrap li .estimate_received_right i{
     font-size: 18px;
@@ -2843,4 +2884,113 @@ img{
   padding: 2px 5px;
   text-align: center;
   border-radius: 5px;
+}
+
+.received_detail_ul li div span.f8_1, .received_detail_ul li div span.f8_2, .received_detail_ul li div span.money_span{
+  display: none;
+}
+.received_detail_ul li div span.f8_1::after, .received_detail_ul li div span.f8_2::after{
+  display: none;
+}
+.request_m_box{
+  margin-bottom: 20px;
+}
+
+/* .alarm_btn_box{
+  position: relative;
+  width: 50px;
+  height: 10px;
+  border-radius: 30px;
+  background: #3a8afd;
+} */
+
+ul.alarm_wrap{
+  width: 100%;
+  height: auto;
+  padding: 20px;
+  border-radius: 20px;
+  background: #fff;
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.5);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.5);
+  box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.5);
+}
+ul.alarm_wrap li div{
+  display: inline-block;
+  vertical-align: middle;
+}
+ul.alarm_wrap li div:first-child{
+  width: calc(100% - 60px);
+}
+ul.alarm_wrap li div:first-child span{
+  font-size: 16px;
+}
+ul.alarm_wrap li div:last-child{
+  width: 50px;
+}
+.alarm_btn_box input[type="checkbox"]{
+  display: none;
+}
+.alarm_btn_box input[type="checkbox"] + label{
+  width: 50px;
+  height: 10px;
+  display: block;
+  border-radius: 30px;
+  background: #ccc;
+  position: relative;
+}
+.alarm_btn_box input[type="checkbox"] + label::after{
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  background: #888;
+  border-radius: 100%;
+  transition: all 0.3s;
+}
+.alarm_btn_box input[type="checkbox"]:checked + label{
+  background: #3a8afd;
+}
+.alarm_btn_box input[type="checkbox"]:checked + label::after{
+  left: 100%;
+  transform: translate(-100%,-50%);
+  background: #00012D;
+}
+.chat_date{
+  font-size: 12px;
+  color: #888;
+  margin-top: 3px;
+}
+
+.has_message li{
+  text-align: center;
+  font-size: 16px;
+  color: red;
+  padding: 10px 0;
+  border: 1px solid #ccc;
+}
+
+.new_txt{
+  background: red;
+  font-size: 12px;
+  border-radius: 30px;
+  padding: 5px 10px;
+  color: #fff;
+}
+
+
+.estimate_received_list_wrap .on3 .estimate_received_right{
+  right: -50px;
+}
+
+@media(max-width:360px){
+  .estimate_received_list_wrap .on3 .estimate_received_right{
+    right: -30px;
+  }
+  .estimate_received_list_con_box .on3::after{
+    width: calc(100% + 30px);
+  }
 }

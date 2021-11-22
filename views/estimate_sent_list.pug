@@ -22,7 +22,7 @@ block content
         li.clearfix.sent_list_li
           .estimate_received_left
             a(href="/estimate/sent/" + estimate_sent._id)
-              p #{estimate_sent.estimate_request.user.city}, #{estimate_sent.estimate_request.user.name}
+              p #{estimate_sent.estimate_request.user.city[0].name}, #{estimate_sent.estimate_request.user.name}
               div.estimate_received_left_topic #{estimate_sent.estimate_request.topic.name}
               p.estimate_received_list_reg_date 견적요청일자 : #{estimate_sent.estimate_request.reg_date.getFullYear()}.#{estimate_sent.estimate_request.reg_date.getMonth() +1}.#{estimate_sent.estimate_request.reg_date.getDate()}. #{estimate_sent.estimate_request.reg_date.getHours()}:#{estimate_sent.estimate_request.reg_date.getMinutes()}
           .estimate_received_middle

@@ -82,6 +82,7 @@ const EstimateRequestSchema = new Schema({
   field10: [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   content: { type: String },
   count:  { type: Number, default: 0 },
+  views: [{ type: Schema.ObjectId }],
   drop: [{ type: Schema.ObjectId }],
   reg_date: { type: Date, default: Date.now }
 });

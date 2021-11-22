@@ -6,7 +6,7 @@ block content
   .container
     ul.mypage_wrap
       li
-        a(href="/mypage/account/access") 
+        a(href="/mypage/personal/account") 
           i.fa.fa-user(aria-hidden='true')
         //- span #{user_global.username}
       
@@ -23,10 +23,12 @@ block content
           a(href="/mypage/business/account") 나의 정보 수정 
         li 
           a(href="/mypage/review/list") 후기 관리
-      
-      //- Both account
+        li 
+          a(href="/mypage/alarm") 알람설정
       li
         a(href="/mypage/qna/list") 나의 문의 내역
+      //- Both account
+
 
       //- Social login no need password change field
       if (user.social===false)

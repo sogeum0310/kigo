@@ -8,7 +8,7 @@
   for(var i=0; i < prevallLength; i++){
     prevall[i].addEventListener('click', function (e) {
       e.preventDefault()
-      num += 50
+      num += 100
       container.style.transform = `translateX(${num}%)`
 
     
@@ -29,7 +29,7 @@
     nextall[i].addEventListener('click', function (e) {
       e.preventDefault()
     
-      num -= 50
+      num -= 100
       container.style.transform = `translateX(${num}%)`
     
     

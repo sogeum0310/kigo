@@ -5,7 +5,7 @@ const Model = require('../models/model')
 exports.community_list = async (req, res, next) => {
   try {
     var blogs = await Model.Community.find()
-    res.render('community_list', { title: 'Community list', blogs: blogs })
+    res.render('community_list', { title: '커뮤니티', blogs: blogs })
   } catch (error) {
     res.render('error', { error: error })
   }
@@ -14,7 +14,7 @@ exports.community_list = async (req, res, next) => {
 // Community create
 exports.community_create_get = async (req, res, next) => {
   try {
-    res.render('community_form', { title: 'Community create' })
+    res.render('community_form', { title: '커뮤니티 글작성' })
   } catch (error) {
     res.render('error', { error: error })
   }
@@ -39,7 +39,7 @@ exports.community_create_post = async (req, res, next) => {
 exports.community_update_get = async (req, res, next) => {
   try {
     var blog = await Model.Community.findById(req.params.id)
-    res.render('community_form', { title: 'Community form update', blog: blog })
+    res.render('community_form', { title: '커뮤니티 글수정', blog: blog })
   } catch (error) {
     res.render('error', { error: error })
   }

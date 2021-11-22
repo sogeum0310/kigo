@@ -16,7 +16,7 @@ exports.estimate_request_create_get = async (req, res, next) => {
   try {
     if (!req.query.topic) {
       var topics = await Model.EstimateTopic.find()
-      res.render('estimate_request_form', { title: 'Choose topic', topics: topics })
+      res.render('estimate_request_form', { title: '견적 요청하기', topics: topics })
     }
 
     if (req.query.topic) {
@@ -34,7 +34,7 @@ exports.estimate_request_create_get = async (req, res, next) => {
           }
         }
       }
-      res.render('estimate_request_form', { title: 'Estimate form', estimate_items: estimate_items })
+      res.render('estimate_request_form', { title: '견적 요청하기', estimate_items: estimate_items })
     } 
   } catch (error) {
     res.render('error', { error: error })
@@ -45,6 +45,44 @@ exports.estimate_request_create_post = async (req, res, next) => {
   try {
     // Except for some users that doesn't want to receive estimate requests
     var users = await Model.User.find({ online: false }, '_id')
+    var topics = await Model.EstimateTopic.find()
+
+    console.log(topics)
+
+    if (req.query.topic===topics[1]._id.toString()) {
+      if (!req.body.field1) {
+        return res.send('필수값이 넘어오지 않았습니다.')
+      }
+    } 
+    if (req.query.topic===topics[2]._id.toString()) {
+      if (!req.body.field2) {
+        return res.send('필수값이 넘어오지 않았습니다.')
+      }
+      if (!req.body.field3) {
+        return res.send('필수값이 넘어오지 않았습니다.')
+      }
+    } 
+    if (!req.body.field4) {
+      return res.send('필수값이 넘어오지 않았습니다.')
+    }
+    if (!req.body.field5) {
+      return res.send('필수값이 넘어오지 않았습니다.')
+    }
+    if (!req.body.field6) {
+      return res.send('필수값이 넘어오지 않았습니다.')
+    }
+    if (!req.body.field7) {
+      return res.send('필수값이 넘어오지 않았습니다.')
+    }
+    if (!req.body.field8) {
+      return res.send('필수값이 넘어오지 않았습니다.')
+    }
+    if (!req.body.field9) {
+      return res.send('필수값이 넘어오지 않았습니다.')
+    }
+    if (!req.body.field10) {
+      return res.send('필수값이 넘어오지 않았습니다.')
+    }
     var estimate = new Model.EstimateRequest({
       user: req.user.id,
       topic: req.query.topic,
@@ -138,12 +176,18 @@ exports.estimate_received_list = async (req, res, next) => {
     var user_business = await Model.User.findById(req.user.id)
 
     for (estimate_request of estimate_requests) {
+      //  Display valid estimate request to some user
       if  (user_business.platform.includes(estimate_request.topic._id) && estimate_request.count < 10 && !estimate_request.drop.includes(req.user.id)) {
         estimate_request.matched = true
       }
+      // Responsed estimate request
       var estimate_response = await Model.EstimateResponse.findOne({ estimate_request: estimate_request._id, user:req.user.id })
       if (estimate_response) {
         estimate_request.done = true
+      }
+
+      if (!estimate_request.views.includes(req.user.id)) {
+        estimate_request.new = true
       }
     }
 
@@ -182,6 +226,12 @@ exports.estimate_received_detail_get = async (req, res, next) => {
           }
         }
       }
+    }
+
+    // Add to views
+    if (!estimate_request.views.includes(req.user.id)) {
+      estimate_request.views.push(req.user.id)
+      await estimate_request.save()
     }
 
     res.render('estimate_received_detail', { title: '견적서', estimate_request: estimate_request })

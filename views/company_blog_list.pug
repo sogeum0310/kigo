@@ -9,7 +9,6 @@ block content
       h1.header_title=title
 
   //- pre= blog_list
-
   .container
     ul.blog_list_tab.clearfix 
       li 
@@ -26,7 +25,7 @@ block content
         li 
           h2 #{blog_post.title}
             i.fa.fa-angle-down(aria-hidden='true')
-          p !{blog_post.content}
+          div.blog_content !{blog_post.content}
 
 
 block scripts

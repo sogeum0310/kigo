@@ -318,6 +318,17 @@ body {
     margin-right: 5px;
     font-size: 18px;
   }
+  .admin_tool_wrap button{
+    background: none;
+    outline: none;
+    background: red;
+    border: none;
+    color: #fff;
+    padding: 10px 0;
+    width: 100px;
+    text-align: center;
+    font-size: 14px;
+  }
   .admin_blog_form_group label, .admin_blog_form_group p{
     font-size: 16px;
     font-weight: bold;
@@ -350,9 +361,9 @@ body {
     margin-top: 15px;
     display: inline-block;
   }
-  .admin_nav img{
+  /* .admin_nav img{
     max-width: ;
-  }
+  } */
 
   /* 공지사항 등 */
 
@@ -430,10 +441,11 @@ body {
     text-align: center;
     font-size: 16px;
   }
-  .user_detail_stat  tr th{
+  .user_detail_stat tr th{
     background: #0099c8;
     color: #fff;
     border-right: 1px solid rgba(255,255,255,0.4);
+    width: 150px;
   }
   .user_detail_stat  tr td{
     background: #f7f7f7;
@@ -499,3 +511,36 @@ body {
     left: initial;
     transform: initial;
   }
+.user_list_num{
+  width: 50px;
+}
+.user_list_id{
+  width: 200px;
+}
+.user_list_name{
+  width: 100px;
+}
+.user_list_gender{
+  width: 40px;
+}
+.user_list_birth{
+  width: 200px;
+}
+.user_list_place{
+  width: 60px;
+}
+.user_list_tel{
+  width: 130px;
+}
+.user_list_mail{
+  width: 230px;
+}
+.user_list_state{
+  width: 50px;
+}
+.user_list_mana{
+  width: 100px;
+}
+.user_list_tool{
+  width: 80px;
+}

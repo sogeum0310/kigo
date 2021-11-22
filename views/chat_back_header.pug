@@ -1,7 +1,8 @@
 header.clearfix 
   .header_box.container
-    .header_back_btn
-      i.fa.fa-arrow-left(aria-hidden='true')
+    .chat_header_back_btn
+      a(href="/chats") 
+        i.fa.fa-arrow-left(aria-hidden='true')
     h1.header_title=title
     .chat_header_right
       form(action="/chat_out", method="POST")

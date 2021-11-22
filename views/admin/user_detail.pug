@@ -5,7 +5,7 @@ block content
 
   //- hr
 
-  pre= user 
+  //- pre= user 
 
   //- h1 auth status
   //- form(action="", method="POST", onsubmit="return confirm('y/n')") 
@@ -76,7 +76,7 @@ block content
         td #{user.about}
       tr.user_detail_review_count
         th 이용후기
-        td 
+        td #{user.review}개
       tr.user_detail_contract_count 
         th 계약수
         td #{user.contract}개

@@ -64,11 +64,11 @@ block content
 
 
     //- pre= estimate_responses 
-  
     h3.estimate_responses_title.clearfix
       span.request_detail_title 제출된 견적서 목록
       .estimate_request_rank_info
         a(href="/company/ranking") 등급제 확인
+    //- pre= estimate_responses
     each estimate_response in estimate_responses 
       ul.estimate_responses_wrap
         li
@@ -89,9 +89,20 @@ block content
             p.estimate_responses_price 견적금: 
               span.money_comma #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}
               | 원
-            p.estimate_responses_bottominfo 평점 | 리뷰개수
+            p.estimate_responses_bottominfo 
+             span 평점 : 
+              //- if (estimate_response.user.review !="0")
+              //-   span.blog_user_score.sound_only #{estimate_response.user.score}
+              //-   span.blog_user_review.sound_only #{estimate_response.user.review}
+              //-   span.blog_user_division  
+              if (estimate_response.user.review > 0)
+                span.blog_user_score #{estimate_response.user.score/estimate_response.user.review}점 
+              else 
+               | 없음 
+             span | 리뷰개수 : #{estimate_response.user.review}개
 
   //- pre= estimate_request
 
 block scripts 
   script(src='/javascript/question_title.js')
+  script(src='/javascript/division.js')

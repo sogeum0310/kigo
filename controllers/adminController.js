@@ -114,7 +114,7 @@ exports.estimate_list = async (req, res, next) => {
   try {
     var estimate_responses = await Model.EstimateResponse.find({ submit: true }).populate('user')
 
-    res.render('admin/estimate_list', { title: 'Estimates', estimate_responses: estimate_responses })
+    res.render('admin/estimate_list', { title: '계약서 목록', estimate_responses: estimate_responses })
   } catch (error) {
     res.render('admin/error', { error: error })
   }

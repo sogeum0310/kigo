@@ -24,3 +24,6 @@ $(document).ready(function(){
 
 // textarea 3글자 이하 입력시 전송 x
 
+
+
+

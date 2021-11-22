@@ -13,7 +13,8 @@ block content
        i.fa.fa-pencil-square-o(aria-hidden='true')
        | 수정
       form(action=`/admin/${url}/${blog._id}/delete`, method="POST", onsubmit="return confirm('y/n')") 
-        button(type="submit") delete
+        button(type="submit") 
+          i.fa.fa-trash-o(aria-hidden='true')  삭제
 
   .admin_blog_wrap
     .admin_blog_detail_wrap

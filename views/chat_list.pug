@@ -12,11 +12,13 @@ block content
               i.fa.fa-user-circle(aria-hidden='true')
             if (chat_room.user.length > 0)
               each user in chat_room.user
+                //- pre= chat_room
                 p.chat_list_username #{user.username}
                   if (chat_room.last_message)
                     span.chat_list_last_message
                       span(id=chat_room._id) #{chat_room.last_message.content} 
                         .chat_list_count #{chat_room.count} 
+                    span.chat_date #{chat_room.reg_date.getFullYear()}.#{chat_room.reg_date.getMonth() +1}.#{chat_room.reg_date.getDate()}. #{chat_room.reg_date.getHours()}:#{chat_room.reg_date.getMinutes()}
             else 
               p.chat_list_username [알수없음]
                 if (chat_room.last_message)

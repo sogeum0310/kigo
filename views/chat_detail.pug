@@ -40,7 +40,7 @@ block content
 
   form#file_form.chat_file_form
     div
-      input.frm_input(type="file" name="my_files" multiple required)
+      input.frm_input(type="file" name="my_files" multiple required accept="image/*")
       i.fa.fa-minus.file_minus_btn(aria-hidden='true')
     button(type="submit") 이미지 전송
 
@@ -105,6 +105,12 @@ block content
     // Add new message item arrived from server in the list 
     socket.on('message', function (msg, read) {
       var li = document.createElement('li')
+
+      //- 0 노출 x
+      if (read == '0'){
+        read = ''
+      }
+      
   
       if (user_global.id===msg.me) {
         li.innerHTML = `<div class="chat_content_box"><p class="chat_num"><span class="num">${read}</span></p><div class="chat_content">${msg.message}</div></div><span></span>`

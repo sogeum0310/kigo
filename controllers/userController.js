@@ -514,6 +514,7 @@ exports.mypage_alarm_post = async (req, res, next) => {
       
       await Model.User.findByIdAndUpdate(req.user.id, { online: results })
       console.log(user.online)
+      res.send('so good')
     } 
   } catch (error) {
     res.render('error', { error: error })

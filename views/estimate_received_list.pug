@@ -30,8 +30,8 @@ block content
                   .estimate_received_left 
                     p.estimate_received_left_topinfo #{estimate_received.user.city[0].name}, #{estimate_received.user.name}
                     div.estimate_received_left_topic #{estimate_received.topic.name} 
-                      if (estimate_received.new)
-                        span.new_txt New
+                      //- if (estimate_received.new)
+                      //-   span.new_txt New
                     p.estimate_received_list_reg_date 견적요청일자 : #{estimate_received.reg_date.getFullYear()}.#{estimate_received.reg_date.getMonth() +1}.#{estimate_received.reg_date.getDate()}. #{estimate_received.reg_date.getHours()}:#{estimate_received.reg_date.getMinutes()}
                   .estimate_received_middle
                     if (estimate_received.count < 10)
@@ -44,7 +44,7 @@ block content
                       input(type="hidden", name="id", value=estimate_received._id)
                       button(type="submit")
                         i.fa.fa-trash-o(aria-hidden='true')
-            script(src='/javascript/received_done.js')
+          
           else if (estimate_received.done != "1")
 
             li.clearfix  
@@ -94,6 +94,6 @@ block content
       p ※ 견적요청완료 : 견적요청을 한 고객이 광고업체, 인플루언서로부터 견적서 10개를 받은 경우<br>(고객은 견적서를 10개까지 받아볼 수 있음)
 
     script(src='/javascript/received_list.js')
-
+    script(src='/javascript/received_done.js')
 
 

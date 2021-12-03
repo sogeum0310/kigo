@@ -191,7 +191,7 @@ exports.estimate_received_list = async (req, res, next) => {
       }
     }
 
-    res.render('estimate_received_list', { title: '', estimate_received_list: estimate_requests, message: message })
+    res.render('estimate_received_list', { title: '받은 견적요청', estimate_received_list: estimate_requests, message: message })
   } catch (error) {
     res.render('error', { error: error })
   }

@@ -455,6 +455,7 @@ body {
     background: #fff;
     outline: none;
     margin-left: 10px;
+    cursor: pointer;
   }
   .user_detail_platform td span{
     position: relative;

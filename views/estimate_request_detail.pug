@@ -67,7 +67,9 @@ block content
     h3.estimate_responses_title.clearfix
       span.request_detail_title 제출된 견적서 목록
       .estimate_request_rank_info
-        a(href="/company/ranking") 등급제 확인
+        a(href="/company/ranking") 
+         i.fa.fa-info-circle(aria-hidden='true')
+         | 등급제 확인
     //- pre= estimate_responses
     each estimate_response in estimate_responses 
       ul.estimate_responses_wrap

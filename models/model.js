@@ -1,9 +1,11 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const { DateTime } = require("luxon");  //for date handling
-// var moment = require('moment-timezone')
-// moment().tz('Asia/Seoul').format()
 
+// Timezone
+const moment = require('moment-timezone');
+const dateThailand = moment.tz(Date.now(), "Asia/Seoul");
+console.log(dateThailand); // "2018-08-20T16:35:14.033+07:00"
 
 // Estimate form 
 const EstimateTopicSchema = new Schema({

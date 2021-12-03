@@ -35,7 +35,8 @@ block content
     li.clearfix.received_detail_first 
       h2 #{estimate_response.estimate_request.user.name}
         span (#{estimate_response.estimate_request.user.username})
-        span  / 연락처 : #{estimate_response.estimate_request.user.phone}
+        if (estimate_response.estimate_request.user.phone)
+          span  / 연락처 : #{estimate_response.estimate_request.user.phone}
       p 견적요청일자 : #{estimate_response.estimate_request.reg_date.getFullYear()}.#{estimate_response.estimate_request.reg_date.getMonth() +1}.#{estimate_response.estimate_request.reg_date.getDate()} #{estimate_response.estimate_request.reg_date.getHours()}:#{estimate_response.estimate_request.reg_date.getMinutes()}
 
     -var x = 1
@@ -61,7 +62,8 @@ block content
   div.sent_detail_response_date.sent_detail_response_date02.clearfix
     p #{estimate_response.user.name}
       span (#{estimate_response.user.username})
-    p #{estimate_response.user.phone}
+    if (estimate_response.user.phone)
+      p #{estimate_response.user.phone}
   ul.sent_detail_bottom_stat.clearfix
     li 
       each estimate_response_item in estimate_response.item

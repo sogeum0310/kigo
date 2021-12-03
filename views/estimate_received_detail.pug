@@ -63,7 +63,54 @@ block content
   //-   a(href="/estimate/received/list") list
 
   //- pre= estimate_request
-  .container
+  .received_detail_modal 
+    header.clearfix 
+      .header_box.container
+        .received_detail_close_btn
+          i.fa.fa-arrow-left(aria-hidden='true')
+        h1.header_title=title
+    .container
+      form.received_detail_form_wrap(action="", method="POST", onsubmit="return confirm('견적서를 보내겠습니까?');") 
+        table.estimate_received_detail_form_stat 
+          tbody#itemTable
+            tr 
+              th 
+                p 항목
+              th 
+                p 금액 
+              th 
+                p 비고 
+            tr#itemRow 
+              td 
+                input.frm_input.full_input(type="text", name="item", required, maxlength='10')
+              td
+                input.frm_input.full_input(type="number", name="cost", required, maxlength='10')
+              td
+                input.frm_input.full_input(type="text", name="note", maxlength='10')
+            //- tr 
+            //-   td.minus_btn.minus_Btn
+            //-     i.fa.fa-minus-circle(aria-hidden='true')
+            //-   td 
+            //-     input.frm_input.full_input(type="text", name="item", maxlength='10')
+            //-   td
+            //-     input.frm_input.full_input(type="number", name="cost", maxlength='10')
+            //-   td
+            //-     input.frm_input.full_input(type="text", name="note", maxlength='10')
+            //- tr 
+            //-   td.minus_btn.minus_Btn
+            //-     i.fa.fa-minus-circle(aria-hidden='true')
+            //-   td 
+            //-     input.frm_input.full_input(type="text", name="item", maxlength='10')
+            //-   td
+            //-     input.frm_input.full_input(type="number", name="cost", maxlength='10')
+            //-   td
+            //-     input.frm_input.full_input(type="text", name="note", maxlength='10')
+        p   
+          button#addItem.received_plus_btn
+            i.fa.fa-plus-circle(aria-hidden='true')
+        p
+          button.submit_btn(type="submit") 완료
+  .container.received_detail_container
     ul.received_detail_ul
       li.clearfix.received_detail_first
         h2 #{estimate_request.topic.name}
@@ -86,50 +133,12 @@ block content
         h3 추가 요청사항
         p= estimate_request.content
 
-
-    form(action="", method="POST") 
-      table.estimate_received_detail_form_stat 
-        tbody#itemTable
-          tr 
-            th 
-              p 항목
-            th 
-              p 금액 
-            th 
-              p 비고 
-          tr#itemRow 
-            td 
-              input.frm_input.full_input(type="text", name="item", required, maxlength='10')
-            td
-              input.frm_input.full_input(type="number", name="cost", required, maxlength='10')
-            td
-              input.frm_input.full_input(type="text", name="note", maxlength='10')
-          //- tr 
-          //-   td.minus_btn.minus_Btn
-          //-     i.fa.fa-minus-circle(aria-hidden='true')
-          //-   td 
-          //-     input.frm_input.full_input(type="text", name="item", maxlength='10')
-          //-   td
-          //-     input.frm_input.full_input(type="number", name="cost", maxlength='10')
-          //-   td
-          //-     input.frm_input.full_input(type="text", name="note", maxlength='10')
-          //- tr 
-          //-   td.minus_btn.minus_Btn
-          //-     i.fa.fa-minus-circle(aria-hidden='true')
-          //-   td 
-          //-     input.frm_input.full_input(type="text", name="item", maxlength='10')
-          //-   td
-          //-     input.frm_input.full_input(type="number", name="cost", maxlength='10')
-          //-   td
-          //-     input.frm_input.full_input(type="text", name="note", maxlength='10')
-      p   
-        button#addItem.received_plus_btn
-          i.fa.fa-plus-circle(aria-hidden='true')
-      p
-        button.submit_btn(type="submit") 완료
+    
+    .received_detail_modal_btn 
+      p.submit_btn 견적서 작성하기 
 
 
-      hr
+
 
 
 
@@ -151,6 +160,7 @@ block content
   block scripts 
     script(src='/javascript/remove_table.js')
     script(src='/javascript/question_title.js')
+    script(src='/javascript/received_detail_modal.js')
 
 
 

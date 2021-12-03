@@ -98,12 +98,12 @@ img{
   z-index: 9;
   border-bottom: 1px solid #ccc;
 }
-.header_box .header_back_btn, .header_box .header_title, .chat_header_back_btn{
+.header_box .header_back_btn, .header_box .header_title, .chat_header_back_btn, .received_detail_close_btn{
   font-size: 18px;
   font-weight: bold;
   position: absolute;
 }
-.header_box .header_back_btn, .chat_header_back_btn{
+.header_box .header_back_btn, .chat_header_back_btn, .received_detail_close_btn{
   top: 50%;
   left: 15px;
   transform: translateY(-50%);
@@ -987,7 +987,7 @@ img{
 .estimate_request_form_title{
   font-size: 21px;
   font-weight: bold;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   text-align: center;
 }
 .request_topics_wrap{
@@ -1025,9 +1025,9 @@ img{
   width: 100%;
   height: auto;
   position: relative;
-  margin-bottom: 30px;
-  padding-left: 30px;
-  padding-right: 30px;
+  margin-bottom: 15px;
+  padding-left: 9px;
+  padding-right:9px;
 }
 .demo_box .demobar_box, .demo_box #demo{
   display: inline-block;
@@ -1078,21 +1078,35 @@ img{
   padding: 0 15px;
   margin: 0.5%;
   background: #f1f1f1;
+  height: 35px;
+  line-height: 35px;
 }
 
 
 .estimate_form_group_s_box div label{
-  padding: 13px 0;
+  font-size: 16px;
+  /* padding: 13px 0; */
   display: inline-block;
+  position: relative;
+  top: -2px;
+}
+
+.estimate_form_group_s_box div .first_input{
+  position: relative;
+  top: -1px;
 }
 .toggle_input{
   margin-left: 5px;
   display: none;
+  width: calc(100% - 60px);
 }
 .toggle_input.on{
   display: inline-block;
 }
-
+.estimate_form_group_s_box .field4{
+  width: 49%;
+  float: left;
+}
 .estimate_form_group_s_box div.field9{
   width: 49%;
   float: left;
@@ -1115,16 +1129,19 @@ img{
 }
 .request_slide_btn a{
   display: block;
+  float: left;
+  width: 49%;
   text-align: center;
   color: #fff;
   font-weight: bold;
   font-size: 16px;
   background: #00012D;
   padding: 10px 0;
+  margin: 0 0.5%;
 }
-.request_slide_btn .prev{
+/* .request_slide_btn .prev{
   margin-bottom: 1%;
-}
+} */
 .request_comment{
   font-size: 18px;
   font-weight: bold;
@@ -1159,13 +1176,29 @@ img{
     font-size: 14px;
   }
 }
+@media(max-width:540px){
+  .estimate_form_group{
+    padding: 0 5px;
+  }
+  .estimate_form_group_s_box{
+    padding: 15px 5px;
+  }
+  .estimate_form_title{
+    font-size: 18px;
+  }
+  .estimate_form_group_s_box div label{
+    font-size: 14px;
+  }
+}
 @media(max-width:360px){
   .estimate_request_box .half-form-group{
     width: 100%;
     display: block;
   }
 }
+@media(max-width:330px){
 
+}
 
 /* 견적요청하기 */
 
@@ -1489,7 +1522,7 @@ img{
 .estimate_received_list_con_box .on3{
   position: relative;
 }
-.estimate_received_list_con_box .on3::after{
+/* .estimate_received_list_con_box .on3::after{
   content: "";
   display: block;
   position: absolute;
@@ -1511,6 +1544,9 @@ img{
   height: 100%;
   background: rgba(0,0,0,0.4);
   border-radius: 10px;
+} */
+.estimate_received_list_con_box .on3 *, .estimate_received_list_con_box.on2 *, .estimate_received_list_con_box.on *{
+  color: #888;
 }
 .estimate_received_right button{
   background: none;
@@ -1523,6 +1559,12 @@ img{
   color: #6F27E8;
   font-weight: bold;
   text-align: center;
+}
+
+@media(max-width:420px){
+  .estimate_request_list_con_box li .esti_date{
+    font-size: 10px;
+  }
 }
 
 /* 채팅 리스트 */
@@ -1567,7 +1609,7 @@ img{
 
 .send_chat_input{
   width: 100%;
-  padding: 8px;
+  padding: 8.5px 8px;
   outline: none;
   border: none;
 }
@@ -1860,7 +1902,7 @@ img{
   color: #999;
 }
 
-@media(max-width:360px){
+@media(max-width:380px){
   .estimate_received_left_topinfo, .estimate_received_list_reg_date{
     font-size: 10px;
   }
@@ -1879,11 +1921,27 @@ img{
 }
 
 /* 업체 받은견적요청 리스트 */
-
+.received_detail_modal {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255);
+}
+.received_detail_modal_btn {
+  margin-top: 15px;
+  cursor: pointer;
+}
 .estimate_received_detail_form_stat{
   width: 100%;
   height: auto;
-  margin-top: 15px;
+}
+.received_detail_form_wrap{
+  background: #fff;
+  margin-top: 80px;
 }
 
 .estimate_received_detail_form_stat tr th, .estimate_received_detail_form_stat tr td{
@@ -2009,8 +2067,8 @@ img{
 .sent_detail_bottom_stat{
   width: 100%;
   height: auto;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 15px;
+  padding-bottom: 15px;
   margin-top: 15px;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
@@ -2038,6 +2096,9 @@ img{
   padding-bottom: 15px;
   border-bottom: 1px solid #ccc;
 }
+.sent_detail_response_date02:first-child{
+  margin-top: 0;
+}
 .sent_detail_response_date p{
   float: left;
   width: 50%;
@@ -2051,6 +2112,10 @@ img{
 .sent_detail_bottom_stat li:first-child p{
   font-weight: bold;
 }
+.tablinks.estimate_response_tablinks{
+  width: 33.333%;
+}
+
 @media(max-width:360px){
   .sent_detail_bottom_stat li p{
     font-size: 12px;
@@ -2370,7 +2435,8 @@ img{
   background: #fff;
   border: 1px solid #6F27E8;
   outline: none;
-  padding: 8px;
+  padding: 8px 0;
+  font-size: 14px;
 }
 
 .no_chat_list_text, .no_recevied_list_text{
@@ -2570,6 +2636,7 @@ img{
   text-align: left;
   padding: 10px 0;
   padding-left: 15px;
+  margin-bottom: 15px;
 }
 .page_wrap.community_on::after{
   content: "";
@@ -2604,13 +2671,14 @@ img{
   border-bottom: 1px solid #ccc;
 }
 .comment_wrap{
-  padding: 15px 0;
+  padding: 20px;
   border-bottom: 1px solid #ccc;
+  background: #fff;
 }
 .commnet_tools_box{
   position: absolute;
   right: 15px;
-  top: 12px;
+  top: 20px;
 }
 .commnet_tools_box button{
   background: none;
@@ -2642,6 +2710,33 @@ img{
   color: #4285f4;
   margin-right: 5px;
 }
+.response_detail_tab_title{
+  font-size: 21px;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+.response_detail_tab_title span{
+  display: inline-block;
+  min-width: 120px;
+  text-align: center;
+  padding: 5px 20px;
+  border-radius: 50px;
+  background: #fff;
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.2);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.2);
+  box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.2);
+
+}
+/* .response_detail_tab_title span::after{
+  content: "";
+  width: 100%;
+  height: 2px;
+  background: #4B37FF;
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+} */
 
 .response_detatil_top_box{
   width: 100%;
@@ -2658,19 +2753,21 @@ img{
   border-top: none;
 }
 .go_chat_btn{
-  position: fixed;
+  /* position: fixed;
   width: 100%;
   max-width: 767px;
   height: auto;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 3; */
+  width: 100%;
   border: none;
   background: #00012D;
   color: #fff;
   padding: 5px 0;
-  z-index: 3;
   cursor: pointer;
+  margin: 20px 0;
 }
 
 .response_detail_commnet_form{
@@ -2691,6 +2788,7 @@ img{
   padding: 20px;
   border: 1px solid #ccc;
   margin: 20px 0;
+  background: #fff;
 }
 .response_detail_middle_box img{
 }
@@ -2748,12 +2846,20 @@ img{
   font-size: 21px;
   font-weight: bold;
   margin-bottom: 15px;
+  margin-top: 15px;
 }
-
+.response_detail_company_info{
+  width: 100%;
+  height: auto;
+  padding: 20px;
+  background: #fff;
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.2);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.2);
+  box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.2);
+}
 .response_detail_company_info  .company_info_title{
   font-size: 21px;
   font-weight: bold;
-  margin-top: 20px;
   margin-bottom: 10px;
 }
 .response_detail_company_info .company_info_review{
@@ -2785,12 +2891,23 @@ img{
 }
 .request_detail_title{
   float: left;
+  position: relative;
+  top: 5px;
 }
 .estimate_request_rank_info{
-  float: right;
+  float: left;
   border: 1px solid #ccc;
-  padding: 5px;
+  padding: 5px 10px;
   font-size: 14px;
+  margin-left: 10px;
+  background: #fff;
+  border-radius: 50px;
+  -webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.2);
+  -moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.2);
+  box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.2);
+}
+.estimate_request_rank_info i{
+  margin-right: 5px;
 }
 .response_detail_tab li{
   float: left;
@@ -2985,7 +3102,14 @@ ul.alarm_wrap li div:last-child{
 .estimate_received_list_wrap .on3 .estimate_received_right{
   right: -50px;
 }
-
+@media(max-width:400px){
+  .chat_file_form button{
+    padding: 10.5px 0;
+    font-size: 10px;
+    position: relative;
+    top: -1px;
+  }
+}
 @media(max-width:360px){
   .estimate_received_list_wrap .on3 .estimate_received_right{
     right: -30px;

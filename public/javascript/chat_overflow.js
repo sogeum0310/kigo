@@ -22,3 +22,4 @@ $(".file_plus_btn").click(function(){
 $(".file_minus_btn").click(function(){
   $(".chat_file_form").slideToggle("on");
 })
+

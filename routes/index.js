@@ -6,11 +6,18 @@ const company_controller = require('../controllers/companyController')
 const community_controller = require('../controllers/communityController')
 const chat_controller = require('../controllers/chatController')
 const comment_controller = require('../controllers/commentController')
+const { Test } = require('../models/model')
 
 
 // Index
 router.get('/', company_controller.index)
+router.get('/test', async (req, res, next) => {
 
+  var tests = await Test.findOne()
+  var x = Date.now() + 32400000 - tests.reg_date
+  console.log(x)
+  res.render('test', { tests: tests })
+})
 
 // Company
 router.get('/company/about', company_controller.company_about)
@@ -90,6 +97,7 @@ router.get('/mypage/personal/account', user_controller.mypage_personal_account_g
 router.post('/mypage/personal/account', user_controller.mypage_personal_account_post)
 router.get('/mypage/business/account', user_controller.mypage_business_account_get)
 router.post('/mypage/business/account', user_controller.mypage_business_account_post)
+router.post('/mypage/ajax/file/delete', user_controller.ajax_file_delete)
 router.get('/mypage/qna/list', user_controller.mypage_qna_list)
 // Alarm
 router.get('/mypage/alarm', user_controller.mypage_alarm_get)

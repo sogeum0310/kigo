@@ -93,8 +93,11 @@ block content
       //- pre= estimate_response.note
 
     if (estimate_response.submit===false)
-      form(action="", method="POST", onsubmit="return confirm('계약서를 전송하시겠습니까?')") 
-        button.submit_btn(type="submit") 키고에 계약서 전송하기
+      form(action="", method="POST", enctype="multipart/form-data", onsubmit="return confirm('계약서를 전송하시겠습니까?')") 
+        div.form-group
+          label(for="") Choose contracts
+          input(type="file", name="my_files", multiple="true", required="true")
+        button(type="submit") 키고에 계약서 전송하기
     else 
       p.submit_btn 키고에 계약서를 전송하셨습니다.
 

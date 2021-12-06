@@ -19,7 +19,7 @@ block content
   .admin_blog_wrap
     .admin_blog_detail_wrap
       h3 제목 : #{blog.title}
-      h4 #{blog.reg_date.getFullYear()}.#{blog.reg_date.getMonth() +1}.#{blog.reg_date.getDate()}
+      h4 #{blog.reg_date.toLocaleString()}
       p !{blog.content}
   
 

@@ -83,7 +83,7 @@ exports.user_business_list = async (req, res, next) => {
 exports.user_detail_get = async (req, res, next) => {
   try {
     var user = await Model.User.findById(req.params.id).populate('city').populate('platform').exec()
-    user.file = await Model.File.findOne({ parent: req.params.id }).exec()
+    user.file = await Model.File.findOne({ table: 'user', parent: req.params.id }).exec()
     user.reviews = await Model.Review.find({ parent: req.params.id }).exec()
     res.render('admin/user_detail', { title: '회원 정보', user: user })
   } catch (error) {
@@ -102,9 +102,18 @@ exports.user_detail_auth = async (req, res, next) => {
 
 exports.user_detail_service = async (req, res, next) => {
   try {
-    await Model.User.findByIdAndUpdate(req.body.user, { service: true, start_date: new Date() })
+    await Model.User.findByIdAndUpdate(req.body.user, { service: true, start_date: Date.now() + 32400000 })
     res.redirect('/admin/user/detail/' + req.body.user)
   } catch (error) {
+    res.render('admin/error', { error: error })
+  }
+}
+
+exports.user_detail_level = async (req, res, next) => {
+  try {
+    await Model.User.findByIdAndUpdate(req.body.user, { level: req.body.level })
+    res.redirect('/admin/user/detail/' + req.body.user)
+  } catch(error) {
     res.render('admin/error', { error: error })
   }
 }
@@ -142,8 +151,10 @@ exports.estimate_detail = async (req, res, next) => {
     console.log(estimate_text)
   
     estimate_response.estimate_request.estimate_text = estimate_text
+
+    var files = await Model.File.find({ table: 'estimate', parent: req.params.id })
     
-    res.render('admin/estimate_detail', { title: '보낸 견적', estimate_response: estimate_response })
+    res.render('admin/estimate_detail', { title: '보낸 견적', estimate_response: estimate_response, files: files })
   } catch (error) {
     res.render('admin/error', { error: error })
   }

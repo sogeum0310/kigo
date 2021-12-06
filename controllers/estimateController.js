@@ -55,32 +55,11 @@ exports.estimate_request_create_post = async (req, res, next) => {
       }
     } 
     if (req.query.topic===topics[2]._id.toString()) {
-      if (!req.body.field2) {
-        return res.send('필수값이 넘어오지 않았습니다.')
-      }
-      if (!req.body.field3) {
+      if (!req.body.field2 || !req.body.field3) {
         return res.send('필수값이 넘어오지 않았습니다.')
       }
     } 
-    if (!req.body.field4) {
-      return res.send('필수값이 넘어오지 않았습니다.')
-    }
-    if (!req.body.field5) {
-      return res.send('필수값이 넘어오지 않았습니다.')
-    }
-    if (!req.body.field6) {
-      return res.send('필수값이 넘어오지 않았습니다.')
-    }
-    if (!req.body.field7) {
-      return res.send('필수값이 넘어오지 않았습니다.')
-    }
-    if (!req.body.field8) {
-      return res.send('필수값이 넘어오지 않았습니다.')
-    }
-    if (!req.body.field9) {
-      return res.send('필수값이 넘어오지 않았습니다.')
-    }
-    if (!req.body.field10) {
+    if (!req.body.field4 || !req.body.field5 || !req.body.field6 || !req.body.field7 || !req.body.field8 || !req.body.field9 || !req.body.field10) {
       return res.send('필수값이 넘어오지 않았습니다.')
     }
     var estimate = new Model.EstimateRequest({
@@ -99,6 +78,7 @@ exports.estimate_request_create_post = async (req, res, next) => {
       content: req.body.content,
       drop: users,
       count: 0,
+      reg_date: Date.now() + 32400000
     })
 
     await estimate.save()
@@ -247,7 +227,9 @@ exports.estimate_received_detail_post = async (req, res, next) => {
       user: req.user.id,
       item: req.body.item,
       cost: req.body.cost,
-      note: req.body.note
+      note: req.body.note,
+      submit: false,
+      reg_date: Date.now() + 32400000
     })
 
     var estimate_request = await Model.EstimateRequest.findById({ _id: req.params.id }, 'count').exec()
@@ -324,6 +306,24 @@ exports.estimate_sent_detail_get = async (req, res, next) => {
 
 exports.estimate_sent_detail_post = async (req, res, next) => {
   try {
+    if (req.files) {
+      var data = req.files.my_files
+      var items = data instanceof Array ? data : [data]
+      
+      for (item of items) {
+        var new_file_name = item.md5 + '.' + item.name.split('.').pop()
+        upload_path = 'files/estimate/' + new_file_name
+        item.mv(upload_path)
+
+        var file = new Model.File({
+          table: 'estimate',
+          parent: req.params.id,
+          name: item.name,
+          md_name: new_file_name
+        })
+        await file.save()
+      }
+    }
     await Model.EstimateResponse.findByIdAndUpdate(req.params.id, { submit: true })
     res.redirect('/estimate/sent/' + req.params.id)
   } catch (error) {

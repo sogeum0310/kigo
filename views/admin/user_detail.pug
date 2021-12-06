@@ -84,13 +84,14 @@ block content
       tr.user_detail_level
         th 회원 등급
         td 
-          if (user.level == '1')
-            span 신규
-          if (user.level == '2')
-            span 동메달
-          if (user.level == '3')
-            span 은메달
-          if (user.level == '4')
+          form(action="/admin/user/detail/level", method="POST", onsubmit="return confirm('y/n')") 
+            input(type="hidden", name="user", value=user._id)
+            select(name="level") 
+              option(value="1", selected=(user.level===1 ? true : false)) level1
+              option(value="2", selected=(user.level===2 ? true : false)) level2
+              option(value="3", selected=(user.level===3 ? true : false)) level3  
+              option(value="4", selected=(user.level===4 ? true : false)) level4
+            button(type="submit") submit
     else 
       tr.user_detail_birth 
         th 생년월일

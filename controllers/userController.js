@@ -97,11 +97,15 @@ exports.signup_personal_post = async (req, res, next) => {
       name: req.body.name,
       gender: req.body.gender,
       date_of_birth: req.body.birth_date,
-      city: req.body.city,
       phone: req.body.phone,
       email: req.body.email,
+      city: req.body.city,
       service: true,
-      account: 'personal'
+      reg_date: Date.now() + 32400000,
+      account: 'personal',
+      social: false,
+      authorization: true,
+      drop: false,
     })
 
     await user_personal.save()
@@ -143,7 +147,16 @@ exports.signup_business_post = async (req, res, next) => {
       city: req.body.city,
       platform: req.body.platform,
       service: false,
-      account: 'business'
+      reg_date: Date.now() + 32400000,
+      account: 'business',
+      social: false,
+      authorization: true,
+      online: true,
+      drop: false,
+      level: 1,
+      review: 0,
+      score: 0,
+      contract: 0
     })
 
     await user_business.save()
@@ -159,6 +172,7 @@ exports.signup_business_post = async (req, res, next) => {
         portfolio.mv(upload_path)
 
         var file = new Model.File({
+          table: 'user',
           parent: user_business._id,
           name: portfolio.name,
           md_name: new_file_name
@@ -209,7 +223,7 @@ exports.mypage_personal_account_post = async (req, res, next) => {
       email: req.body.email,
       _id: req.user.id
     })
-    await Model.User.findByIdAndUpdate(req.user.id, user_personal, {})
+    await Model.User.findByIdAndUpdate(req.user.id, user_personal)
 
     res.redirect('/mypage')
   } catch (error) {
@@ -223,7 +237,7 @@ exports.mypage_business_account_get = async (req, res, next) => {
     var estimate_items = await Model.EstimateItem.find().exec()
     var cities = await Model.EstimateItemDetail.find({ item: estimate_items[8]._id }).exec()
     var platforms = await Model.EstimateTopic.find()
-    var files = await Model.File.find({ parent: req.user.id }).sort([[ 'reg_date', 'descending' ]]).exec()
+    var files = await Model.File.find({ table: 'user', parent: req.user.id }).sort([[ 'reg_date', 'descending' ]]).exec()
     var user_business = await Model.User.findById(req.user.id).exec()
 
     for (platform of platforms) {
@@ -250,7 +264,7 @@ exports.mypage_business_account_post = async (req, res, next) => {
       platform: req.body.platform,
       _id: req.user.id
     })
-    await Model.User.findByIdAndUpdate(req.user.id, user_business, {}) 
+    await Model.User.findByIdAndUpdate(req.user.id, user_business) 
 
     if (req.files) {
       var data = req.files.portfolio
@@ -263,6 +277,7 @@ exports.mypage_business_account_post = async (req, res, next) => {
         portfolio.mv(upload_path)
   
         var file = new Model.File({
+          table: 'user',
           parent: user_business._id,
           name: portfolio.name,
           md_name: new_file_name
@@ -274,6 +289,15 @@ exports.mypage_business_account_post = async (req, res, next) => {
     res.redirect('/mypage')
   } catch (error) {
     res.render('error', { error: error })
+  }
+}
+
+exports.ajax_file_delete = async (req, res, next) => {
+  try {
+    await Model.File.findByIdAndDelete(req.body.id)
+    res.send('ok')
+  } catch (error) {
+    console.log(error)
   }
 }
 

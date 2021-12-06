@@ -12,10 +12,11 @@ const adminRouter = require('./routes/admin');
 const Model = require('./models/model')
 const app = express();
 const chat_notification = require('./utils/chat_notification')
+const user_util = require('./utils/user_util')
 const passport = require('passport');
 const mongoose = require('mongoose');
 const config = require('./config.js')
-const populate = require('./populate/populate')
+// const populate = require('./populate/populate')
 
 // 11-17 금요일 4시50분
 const mongoUrl = config.mydb.url
@@ -74,6 +75,7 @@ app.use(fileUpload())
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/files', express.static('files'));
 
+app.use(user_util)
 app.use(chat_notification)
 
 app.use('/', indexRouter);

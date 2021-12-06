@@ -2,10 +2,11 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const { DateTime } = require("luxon");  //for date handling
 
-// Timezone
-const moment = require('moment-timezone');
-const dateThailand = moment.tz(Date.now(), "Asia/Seoul");
-console.log(dateThailand); // "2018-08-20T16:35:14.033+07:00"
+
+// Test 
+exports.Test = mongoose.model('Test', new Schema({
+  name: { type: String }, reg_date: { type: Date, default: Date.now() + 32400000 } 
+}))
 
 // Estimate form 
 const EstimateTopicSchema = new Schema({
@@ -49,24 +50,23 @@ const UserSchema = new Schema({
   platform: [{ type: Schema.ObjectId, ref: 'EstimateTopic' }],
   // Date data
   service: { type: Boolean },
-  reg_date: { type: Date, default: Date.now },
-  start_date: { type: Date, default: null },
+  reg_date: { type: Date },
+  start_date: { type: Date },
   // Account
   account: { type: String },
-  social: { type: Boolean, default: false },
-  authorization: { type: Boolean, default: true },
-  online: { type: Boolean, default: true },
-  drop: { type: Boolean, default: false },
+  social: { type: Boolean },
+  authorization: { type: Boolean },
+  online: { type: Boolean },
+  drop: { type: Boolean },
   // Level
-  level: { type: Number, default: 1 },
-  review: { type: Number, default: 0 },
-  score: { type: Number, default: 0 },
-  contract: { type: Number, default: 0 }
+  level: { type: Number },
+  review: { type: Number },
+  score: { type: Number },
+  contract: { type: Number }
 })
 UserSchema.virtual('date_of_birth_yyyy_mm_dd').get(function() {
   return DateTime.fromJSDate(this.date_of_birth).toISODate(); //format 'YYYY-MM-DD'
 });
-
 
 // Estimate request and response
 const EstimateRequestSchema = new Schema({
@@ -83,10 +83,10 @@ const EstimateRequestSchema = new Schema({
   field9: [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   field10: [{ type: Schema.ObjectId, ref: 'EstimateItemDetail' }],
   content: { type: String },
-  count:  { type: Number, default: 0 },
+  count:  { type: Number },
   views: [{ type: Schema.ObjectId }],
   drop: [{ type: Schema.ObjectId }],
-  reg_date: { type: Date, default: Date.now }
+  reg_date: { type: Date }
 });
 
 const EstimateResponseSchema = new Schema({
@@ -95,15 +95,15 @@ const EstimateResponseSchema = new Schema({
   item: [{ type: String }],
   cost: [{ type: String }],
   note: [{ type: String }],
-  submit: { type: Boolean, default: false },
-  reg_date: { type: Date, default: Date.now }
+  submit: { type: Boolean },
+  reg_date: { type: Date }
 }) 
 
 // Chat
 var ChatRoomSchema = new Schema({
   user: [{ type: Schema.ObjectId, ref: 'User' }],
-  active: { type: Number, default: 0 },
-  reg_date: { type: Date, default: Date.now }
+  active: { type: Boolean },
+  reg_date: { type: Date }
 })
 
 var ChatContentSchema = new Schema({
@@ -111,15 +111,16 @@ var ChatContentSchema = new Schema({
   content: { type: String },
   room: { type: Schema.ObjectId },
   read: [{ type: Schema.ObjectId }],
-  reg_date: { type: Date, default: Date.now }
+  reg_date: { type: Date }
 })
 
 // File 
 const FileSchema = new Schema({
+  table: { type: String },
   parent: { type: Schema.ObjectId },
   name: { type: String },
   md_name: { type: String },
-  reg_date: { type: Date, default: Date.now }
+  reg_date: { type: Date, default: Date.now() + 32400000 }
 }) 
 
 // Blog
@@ -128,7 +129,7 @@ const BlogPostSchema = new Schema({
   title: { type: String },
   content: { type: String },
   account: { type: String },
-  reg_date: { type: Date, default: Date.now },
+  reg_date: { type: Date, default: Date.now() + 32400000 },
 })
 
 const BlogCommentSchema = new Schema({
@@ -137,8 +138,8 @@ const BlogCommentSchema = new Schema({
   bites: { type: Schema.ObjectId, ref: 'User' },
   user: { type: Schema.ObjectId, ref: 'User' },
   content: { type: String },
-  rating: { type: Number, default: null },
-  reg_date: { type: Date, default: Date.now }
+  rating: { type: Number },
+  reg_date: { type: Date, default: Date.now() + 32400000 }
 })
 
 
@@ -146,7 +147,7 @@ const BlogCommentSchema = new Schema({
 const tokenSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, required: true, ref: 'User'},
   token: { type: String, required: true, },
-  createdAt: { type: Date, default: Date.now, expires: 3600}
+  createdAt: { type: Date, default: Date.now() + 32400000, expires: 3600}
 })
 
 

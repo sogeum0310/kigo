@@ -1,7 +1,6 @@
 const Model = require('../models/model')
 var MongoStore = require('connect-mongo')
 var session = require('express-session')
-const { default: strictTransportSecurity } = require('helmet/dist/middlewares/strict-transport-security')
 var config = require('../config.js')
 const mongoUrl = config.mydb.url
 
@@ -46,6 +45,8 @@ my_space.on('connection', async (socket) => {
       } else {
         chat_room = new Model.ChatRoom({
           user: users.sort(),
+          active: false,
+          reg_date: Date.now() + 32400000
         })
         await chat_room.save()
       }
@@ -112,13 +113,14 @@ my_space.on('connection', async (socket) => {
         user: msg.user.id,
         content: msg.message,
         room: room._id,
-        read: msg.read
+        read: msg.read,
+        reg_date: Date.now() + 32400000
       })
 
       await chat_content.save()
       
       // Activate room with first message, Only works when first message
-      await Model.ChatRoom.findByIdAndUpdate(room._id, { active: 1 })
+      await Model.ChatRoom.findByIdAndUpdate(room._id, { active: true })
 
       // Emit to naviagtion - Replace chat notification count when new message
       var chat_rooms_for_notification = await Model.ChatRoom.find()

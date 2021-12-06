@@ -1,7 +1,7 @@
 $('#summernote').summernote({
   height: 400,
   lang : 'ko-KR',
-  placeholder: 'click image if you want to resize',
+  placeholder: '',
 
   callbacks: {
     onImageUpload: function(files, editor, welEditable) {

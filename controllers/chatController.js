@@ -1,10 +1,11 @@
+const { TooManyRequests } = require('http-errors')
 var Model = require('../models/model')
 
 
 exports.chat_list = async (req, res, next) => {
   try {
     var users = await Model.User.find()
-    var chat_rooms = await Model.ChatRoom.find({ user: req.user.id, active: 1 }).populate('user')
+    var chat_rooms = await Model.ChatRoom.find({ user: req.user.id, active: true }).populate('user')
 
     for (chat_room of chat_rooms) {
       var chat_content = await Model.ChatContent.findOne({ room: chat_room._id }).sort([[ 'reg_date', 'descending' ]])
@@ -47,21 +48,14 @@ exports.chat_detail = async (req, res, next) => {
 
 exports.chat_file = async (req, res, next) => {
   try {
-    var my_files = req.files.my_files
+    var data = req.files.my_files
+    var items = data instanceof Array ? data : [data]
     var new_file_names = []
 
-    if (my_files instanceof Array) {
-      for (my_file of my_files) {
-        var new_file_name = my_file.md5 + '.' + my_file.name.split('.').pop()
-        upload_path = 'files/chat/' + new_file_name
-        await my_file.mv(upload_path)
-        new_file_names.push(new_file_name)
-      }
-    } else {
-      var my_file = my_files
-      var new_file_name = my_file.md5 + '.' + my_file.name.split('.').pop()
+    for (item of items) {
+      var new_file_name = item.md5 + '.' + item.name.split('.').pop()
       upload_path = 'files/chat/' + new_file_name
-      await my_file.mv(upload_path)
+      await item.mv(upload_path)
       new_file_names.push(new_file_name)
     }
 

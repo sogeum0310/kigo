@@ -89,7 +89,13 @@ block content
   //- pre= estimate_response.note
 
   //- a(href="/admin/estimate/list") list 
- 
+  
+  h3 Files
+  ul
+    each file in files 
+      li 
+        a(href="/files/estimate/" + file.md_name) #{file.name}
+    
   
   block scripts 
     script(src='/javascript/question_title.js')

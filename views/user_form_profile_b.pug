@@ -60,12 +60,14 @@ block content
             td 
               label(for="") 포트폴리오(image)
             td 
-              input.full_input#file_portfolio(type="file", name="portfolio", accept="image/*")
-              input.full_input#file_portfolio(type="file", name="portfolio", accept="image/*")
-              input.full_input#file_portfolio(type="file", name="portfolio", accept="image/*")
+              input.full_input#file_portfolio(type="file", name="portfolio", accept="image/*", multiple="true")
+              p # My portfolios
               if (user_business && files)
-                each file in files 
-                  p #{file.name}
+                ul
+                  each file in files 
+                    li(id=file._id) #{file.name} 
+                      a(href="javascript:void(0)", onclick=`deleteFile('${file._id}')`) &times;  
+                    
           tr 
             td 
               label(for="") 계신지역
@@ -86,3 +88,15 @@ block content
 
   script(src="/javascript/business_sign_required.js")
   script(src="/scripts/form.js") 
+  script.
+    async function deleteFile(id) {
+      var res = confirm('y/n')
+      if (res===true) {
+        await fetch('/mypage/ajax/file/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: 'id=' + id
+        })
+        document.getElementById(id).style.display = 'none'
+      } 
+    }

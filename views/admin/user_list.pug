@@ -4,7 +4,11 @@ block content
   h1.admin_con_title= title
   
   //- pre= users
+        
+  //- Ordering user number
+  -var num = (users.page-1) * users.limit + 1
 
+  //- Personal users
   if (title == '일반사용자')
     table.user_list_stat
       tbody
@@ -31,9 +35,8 @@ block content
             | 탈퇴여부
           th.user_list_tool
             | 관리
-        
-        -var num = 1
-        each user in users
+
+        each user in users.docs
           tr 
             td.user_list_num #{num++}
             td.user_list_id #{user.username}
@@ -49,16 +52,14 @@ block content
                 span #{user.city[0].name}
             td.user_list_tel #{user.phone}
             td.user_list_mail #{user.email}
-            td.user_list_state
-              if (user.authorization == '1')
-                span 사용
-              else 
-                span 정지
+            td.user_list_state 
+              span=(user.authorization===true ? '사용' : '정지')
             td.user_list_mana 
-              if (user.drop == '1')
-                span 탈퇴
+              span=(user.drop===true ? 'O' : 'X')
             td.user_list_tool
               a(href="/admin/user/detail/" + user._id) 상세보기
+
+  //- Business users
   if (title == '광고업체')
     table.user_list_stat
       tbody
@@ -87,18 +88,17 @@ block content
             | 탈퇴여부
           th.user_list_tool 
             | 관리
-        -var num = 1
-        //- pre= users
-        each user in users
+
+        each user in users.docs
           tr 
             td.user_list_num #{num++}
             td.user_list_id #{user.username}
             td.user_list_name #{user.name}
             td.user_list_mail #{user.email}
-            td.user_list_joindate #{user.reg_date.getFullYear()}.#{user.reg_date.getMonth() +1}.#{user.reg_date.getDate()}. #{user.reg_date.getHours()}:#{user.reg_date.getMinutes()}
+            td.user_list_joindate #{user.reg_date.toLocaleDateString()}
             td.user_list_startdate 
               if (user.start_date) 
-                span #{user.start_date.getFullYear()}.#{user.start_date.getMonth() +1}.#{user.start_date.getDate()}. #{user.start_date.getHours()}:#{user.start_date.getMinutes()}
+                span #{user.start_date.toLocaleDateString()}
             td.user_list_review_count
               span= user.review
             td.user_list_contract_count #{user.contract}
@@ -112,14 +112,21 @@ block content
               if (user.level == '4')
                 span 금메달
             td.user_list_state 
-              if(user.authorization == '1')
-                span 사용
-              else 
-                span 정지
+                span=(user.authorization===true ? '사용' : '정지')
             td.user_list_mana 
-              if(user.drop == '1')
-                  span 탈퇴
+              span=(user.drop===true ? 'O' : 'X')
             td.user_list_tool 
               a(href="/admin/user/detail/" + user._id) 상세보기
+  
+  br
 
+  //- Pagination
+  div 
+    -var p = 1
+    while (p < users.totalPages + 1) 
+      if (users.docs[0].account==='personal')
+        a(href="/admin/user/personal/list?page=" + p) #{p++} / 
+      else
+        a(href="/admin/user/business/list?page=" + p) #{p++} / 
         
+          

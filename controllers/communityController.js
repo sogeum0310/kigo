@@ -4,7 +4,7 @@ const Model = require('../models/model')
 // Community list
 exports.community_list = async (req, res, next) => {
   try {
-    var blogs = await Model.Community.find()
+    var blogs = await Model.Community.find().populate('user')
     res.render('community_list', { title: '커뮤니티', blogs: blogs })
   } catch (error) {
     res.render('error', { error: error })

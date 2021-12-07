@@ -22,6 +22,7 @@ router.get('/user/detail/:id', admin_controller.user_detail_get)
 router.post('/user/detail/auth', admin_controller.user_detail_auth)
 router.post('/user/detail/service', admin_controller.user_detail_service)
 router.post('/user/detail/level', admin_controller.user_detail_level)
+router.post('/user/detail/drop', admin_controller.user_detail_drop)
 
 // Estimate 
 router.get('/estimate/list', admin_controller.estimate_list)

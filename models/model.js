@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const mongoosePaginate = require('mongoose-paginate-v2')
 const { DateTime } = require("luxon");  //for date handling
 
 
@@ -68,6 +69,8 @@ UserSchema.virtual('date_of_birth_yyyy_mm_dd').get(function() {
   return DateTime.fromJSDate(this.date_of_birth).toISODate(); //format 'YYYY-MM-DD'
 });
 
+UserSchema.plugin(mongoosePaginate)
+
 // Estimate request and response
 const EstimateRequestSchema = new Schema({
   user: { type: Schema.ObjectId, ref: 'User' },
@@ -125,7 +128,7 @@ const FileSchema = new Schema({
 
 // Blog
 const BlogPostSchema = new Schema({
-  user: { type: Schema.ObjectId },
+  user: { type: Schema.ObjectId, ref: 'User' },
   title: { type: String },
   content: { type: String },
   account: { type: String },

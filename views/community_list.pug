@@ -22,7 +22,7 @@ block content
         p.community_list_date 날짜 
       each blog in blogs 
         li.clearfix
-          a.community_list_li_title(href="/community/" + blog._id) #{blog.title} 
+          a.community_list_li_title(href="/community/" + blog._id) #{blog.title} / #{blog.user.username}
           p.community_list_date #{blog.reg_date.getFullYear()}.#{blog.reg_date.getMonth() +1}.#{blog.reg_date.getDate()}
 
     

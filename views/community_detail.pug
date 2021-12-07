@@ -2,80 +2,9 @@ extends layout
 block header 
   include z_back_header.pug 
 block content 
-  //- h1= title
-  //- //- Blog article
-  //- h3= blog.title
-  //- i= blog.reg_date
-  //- small  (#{blog.views})
-  //- div !{blog.content}
-  //- p
-  //-   a(href="/community/list") list / 
-  //-   a(href="") create / 
-  //-   a(href="/community/" + blog._id + '/update') update / 
-  //-   a(href="") delete 
-  //- hr
-
-  //- //- Create comment 
-  //- button(onclick=`createItem('${blog._id}', null, null, false)`) create comment
-
-  //- //- All comments
-  //- h3 comments
-  //- each blog_comment in blog_comments 
-  //-   //- Comments
-  //-   div(id="item-" + blog_comment._id)
-  //-     p(id="content-" + blog_comment._id) #{blog_comment.content} 
-  //-     if (blog_comment.user)
-  //-       p #[i - #{blog_comment.user.username}]
-  //-     if (user_global && blog_comment.user._id.toString()===user_global.id.toString())
-  //-       button(onclick=`createItem('${blog_comment.parent}', '${blog_comment._id}')`) update
-  //-       button(onclick=`deleteItem('${blog_comment._id}')`) delete
-  //-     if (user_global)
-  //-       button(onclick=`createItem('${blog_comment._id}', null, null, true)`) add
-  //-     //- More comments
-  //-     div(style="margin-left:25px")
-  //-       each comment in blog_comment.comment
-  //-         div(id="item-" + comment._id)
-  //-           if (comment.bites)
-  //-             span @#{comment.bites.username} 
-  //-           span(id="content-" + comment._id) #{comment.content} 
-  //-           if (blog_comment.user)
-  //-             p #[i - #{comment.user.username}]
-  //-           if (user_global && comment.user._id.toString()===user_global.id.toString())
-  //-             button(onclick=`createItem('${comment.parent}', '${comment._id}')`) update
-  //-             button(onclick=`deleteItem('${comment._id}')`) delete
-  //-           if (user_global)
-  //-             button(onclick=`createItem('${blog_comment._id}', null, '${comment.user._id}', true)`) add
-  //-     hr
-
-  //- //- Form to create or update the comment
-  //- h3 comment form
-  //- form(action="/community/comment/create", method="POST") 
-  //-   div.form-group
-  //-     label(for="") redirect url 
-  //-     input(type="text", name="url", value=blog._id) 
-  //-   div.form-group
-  //-     label(for="") parent
-  //-     input(type="text", id="parent" name="parent", value="")
-  //-   div.form-group
-  //-     label(for="") coc 
-  //-     input(type="text", id="coc", name="coc", value="") 
-  //-   div.form-group
-  //-     label(for="") id
-  //-     input(type="text", id="id" name="id", value="")
-  //-   div.form-group
-  //-     label(for="") bites 
-  //-     input(type="text", id="bites" name="bites", value="") 
-  //-   div.form-group
-  //-     label(for="") 
-  //-     textarea(name="content")
-  //-   button(type="submit") confirm 
-
-  //- Blog article
-
-
-
   .container
     h3.blog_detail_title= blog.title
+    pre= blog.user.username
     p.blog_detail_date #{blog.reg_date.getFullYear()}.#{blog.reg_date.getMonth() +1}.#{blog.reg_date.getDate()}. #{blog.reg_date.getHours()}:#{blog.reg_date.getMinutes()}
     //- small  (#{blog.views})
     .clearfix.community_tool_wrap
@@ -146,7 +75,7 @@ block content
               div(id="item-" + comment._id)
                 if (blog_comment.user)
                   p.blog_comment_title #[i #{comment.user.name}]
-                    span · #{blog_comment.reg_date.getFullYear()}.#{blog_comment.reg_date.getMonth() +1}.#{blog_comment.reg_date.getDate()}
+                    span · #{blog_comment.reg_date.getFullYear()}.#{blog_comment.reg_date.getMonth() + 1}.#{blog_comment.reg_date.getDate()}
                 p.blog_commnet_content 
                   if (comment.bites)
                     span.comment_bites @#{comment.bites.username} 
@@ -181,7 +110,6 @@ block content
       //- comment_show.style.display =='block'
     }
 
-
     // For delete the comment
     async function deleteItem(id) {
       var res = confirm('제출하시겠습니까?')
@@ -197,6 +125,7 @@ block content
       // Visually hidden
       document.getElementById('item-' + id).style.display = 'none'
     }
+    
   block scripts
     script(src='/javascript/create_comment.js')
 

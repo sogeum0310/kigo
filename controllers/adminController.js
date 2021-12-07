@@ -58,12 +58,32 @@ exports.mypage = async (req, res, next) => {
 // User list
 exports.user_personal_list = async (req, res, next) => {
   try {
-    var user_personals = Model.User.find({ account: 'personal' }).populate('city').exec()
+    var page = req.query.page
+    if (!req.query.page) {
+      page = 1
+    }
+
+    const options = {
+      page: page,
+      limit: 10,
+      collation: {
+        locale: 'en',
+      }
+    }
+
+    var user_personals = await Model.User.paginate({ account: 'personal' }, options)
     console.log(user_personals)
-    user_personals.then(function (user_personals) {
-      console.log(user_personals)
-      res.render('admin/user_list', { title: '일반사용자', users: user_personals })
-    })
+    res.render('admin/user_list', { title: '일반사용자', users: user_personals })
+    // result.docs
+    // result.totalDocs = 100
+    // result.limit = 10
+    // result.page = 1
+    // result.totalPages = 10
+    // result.hasNextPage = true
+    // result.nextPage = 2
+    // result.hasPrevPage = false
+    // result.prevPage = null
+    // result.pagingCounter = 1
   } catch (error) {
     res.render('admin/error', { error: error })
   }
@@ -71,7 +91,22 @@ exports.user_personal_list = async (req, res, next) => {
 
 exports.user_business_list = async (req, res, next) => {
   try {
-    var user_businesses = await Model.User.find({ account: 'business' }).populate('city').populate('platform').exec()
+    var page = req.query.page
+    if (!req.query.page) {
+      page = 1
+    }
+
+    const options = {
+      page: page,
+      limit: 10,
+      collation: {
+        locale: 'en',
+      }
+    }
+
+    var user_businesses = await Model.User.paginate({ account: 'business' }, options)
+    console.log(user_businesses)
+
     res.render('admin/user_list', { title: '광고업체', users: user_businesses })
     console.log(user_businesses)
   } catch (error) {
@@ -112,6 +147,15 @@ exports.user_detail_service = async (req, res, next) => {
 exports.user_detail_level = async (req, res, next) => {
   try {
     await Model.User.findByIdAndUpdate(req.body.user, { level: req.body.level })
+    res.redirect('/admin/user/detail/' + req.body.user)
+  } catch(error) {
+    res.render('admin/error', { error: error })
+  }
+}
+
+exports.user_detail_drop = async (req, res, next) => {
+  try {
+    await Model.User.findByIdAndUpdate(req.body.user, { drop: true })
     res.redirect('/admin/user/detail/' + req.body.user)
   } catch(error) {
     res.render('admin/error', { error: error })

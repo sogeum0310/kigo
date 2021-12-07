@@ -2,40 +2,6 @@ extends layout
 block header 
   include z_back_header.pug
 block content
-  //- h1= title 
-
-  //- if (topics)
-  //-   ul 
-  //-     each topic in topics 
-  //-       li 
-  //-         a(href="/estimate/request/form?topic=" + topic._id) #{topic.name} 
-  
-  //- if (estimate_items)
-  //-   div.wrap
-  //-       form.container(action="", method="POST") 
-  //-         each estimate_item in estimate_items 
-  //-           div.form-group
-  //-             h3 #{estimate_item.name}
-  //-             each detail in estimate_item.details
-  //-               div
-  //-                 label(for=detail._id) #{detail.name} 
-  //-                 input(type=detail.input_type, id=detail._id, name=detail.input_name, value=detail._id)
-  //-                 if (detail.name==='월')
-  //-                   input(type="hidden", name='item', value=estimate_item._id)
-  //-                   input(type="text", name="text", value="")
-  //-           hr
-
-  //-         div.form-group
-  //-           h3 something to say 
-  //-           textarea(name="content") 
-          
-  //-         //- 임시 버튼
-  //-         button(type="submit") submit 
-
-  //-   a.prev(href="") < | 
-  //-   a.next(href="") > 
-
-
   .form_page_container
     //- h1.estimate_request_form_title= title 
     style.

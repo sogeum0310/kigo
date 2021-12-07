@@ -45,7 +45,7 @@ exports.community_comment_delete = async (req, res, next) => {
     await Model.CommunityComment.deleteMany({ parent: req.body.id })
     res.send('success')
   } catch (error) {
-    res.render('error', { error: error })
+    console.log(error)
   }
 }
 
@@ -94,7 +94,7 @@ exports.qna_comment_delete = async (req, res, next) => {
     await Model.QnaAnswer.deleteMany({ parent: req.body.id })
     res.send('success')
   } catch (error) {
-    res.render('error', { error: error })
+    console.log(error)
   }
 }
 
@@ -145,7 +145,7 @@ exports.estimate_review_delete = async (req, res, next) => {
     await Model.Review.deleteMany({ parent: req.body.id })
     res.send('success')
   } catch (error) {
-    res.render('error', { error: error })
+    console.log(error)
   }
 }
 
@@ -200,6 +200,6 @@ exports.mypage_review_delete = async (req, res, next) => {
     await Model.Review.deleteMany({ parent: req.body.id })
     res.send('success')
   } catch (error) {
-    res.render('error', { error: error })
+    console.log(error)
   }
 }

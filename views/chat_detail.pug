@@ -13,13 +13,18 @@ block content
       display: none;
     }
   //- 채팅 페이지만 간격조정
-
   div.chat_detail_wrap#chat_detail_wrap
+    if (room.user.length < 2)
+      p 상대방이 채팅방을 나갔습니다
+      hr
     ul#messages.chat_detail_ul
       each chat_content in chat_contents 
         if (chat_content.user._id.toString()===user_global.id.toString())
           li.chat_me 
-            p.chat_num #[span.num]
+            if (room.user.length > 1)
+              p.chat_num #[span.num]
+            else 
+              p.chat_num 
             .chat_content !{chat_content.content}
             .chat_date #{chat_content.reg_date.getFullYear()}.#{chat_content.reg_date.getMonth() +1}.#{chat_content.reg_date.getDate()}. #{chat_content.reg_date.getHours()}:#{chat_content.reg_date.getMinutes()}
            
@@ -29,7 +34,10 @@ block content
             span.chat_username #{chat_content.user.username}
             div.chat_content_box
               .chat_content !{chat_content.content}
-              p.chat_num #[span.num]
+              if (room.user.length > 1)
+                p.chat_num #[span.num]
+              else 
+                p.chat_num 
               .chat_date #{chat_content.reg_date.getFullYear()}.#{chat_content.reg_date.getMonth() +1}.#{chat_content.reg_date.getDate()}. #{chat_content.reg_date.getHours()}:#{chat_content.reg_date.getMinutes()}
 
   form#form.send_chat_form(action="")

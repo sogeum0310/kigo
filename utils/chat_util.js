@@ -4,6 +4,7 @@ var session = require('express-session')
 var config = require('../config.js')
 const mongoUrl = config.mydb.url
 
+
 const sessionMiddleware = session({
   secret: 'Keyboard cat',
   resave: false,

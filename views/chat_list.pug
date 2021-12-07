@@ -20,7 +20,7 @@ block content
                         .chat_list_count #{chat_room.count} 
                     span.chat_date #{chat_room.reg_date.getFullYear()}.#{chat_room.reg_date.getMonth() +1}.#{chat_room.reg_date.getDate()}
             else 
-              p.chat_list_username [알수없음]
+              p.chat_list_username [상대방이 채팅방을 나갔습니다]
                 if (chat_room.last_message)
                   span.chat_list_last_message
                     span(id=chat_room._id) #{chat_room.last_message.content} 

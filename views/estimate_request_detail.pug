@@ -2,38 +2,6 @@ extends layout
 block header 
   include z_back_header.pug
 block content 
-  //- h1= title
-
-  //- h2 #{estimate_request.topic.name}
-  //- hr
-
-  //- //- Estimate request item and checked item details
-  //- -var x = 1
-  //- while (x < 11)
-  //-   -var y = x++
-  //-   if (estimate_request[`field${y}`].length>0)
-  //-     h3 # #{estimate_request[`field${y}`][0].item.name}
-  //-     each checked_detail in estimate_request[`field${y}`]
-  //-       p= checked_detail.name 
-  //-       if (estimate_request.estimate_text[0].item && estimate_request.estimate_text[0].item.toString()===checked_detail.item._id.toString())
-  //-         p #{estimate_request.estimate_text[0].text}
-  
-  //- //- Text input
-  //- h3 # Something to say 
-  //- p= estimate_request.content
-
-  //- hr
-  //- //- Estimate_request 
-  //- //- pre= estimate_request
-
-  //- h3.estimate_responses_title 제출된 견적서 목록
-  //- each estimate_response in estimate_responses 
-  //-   ul.estimate_responses_wrap
-  //-     li
-  //-       a(href="/estimate/response/" + estimate_response._id)
-  //-         p.estimate_responses_username #{estimate_response.user.username}
-  //-         p.estimate_responses_price 견적금: #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}원
-
   .container 
     ul.received_detail_ul
       li.clearfix.received_detail_first

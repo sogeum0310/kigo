@@ -377,7 +377,7 @@ exports.lost_username_post = async (req, res, next) => {
       res.send('no user')
     }
   } catch (error) {
-    res.render('error', { error: error })
+    console.log(error)
   }
 }
 
@@ -499,7 +499,7 @@ exports.validity = async (req, res, next) => {
       res.send({ errors: null })
     }
   } catch (error) {
-    res.render('error', { error: error })
+    console.log(error)
   }
 }
 
@@ -541,6 +541,6 @@ exports.mypage_alarm_post = async (req, res, next) => {
       res.send('so good')
     } 
   } catch (error) {
-    res.render('error', { error: error })
+    console.log(error)
   }
 }

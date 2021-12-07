@@ -2,19 +2,6 @@ extends layout
 block header 
   include z_back_header.pug
 block content
-  //- h1= title 
-
-  //- pre= estimate_responses
-
-  //- ul
-  //-   each estimate_sent in estimate_responses
-  //-     li
-  //-       a(href="/estimate/sent/" + estimate_sent._id) # #{estimate_sent.estimate_request.topic.name}
-  //-       |  (#{estimate_sent.estimate_request.user.username})
-  //-       if (estimate_sent.estimate_request.count < 10)
-  //-         span  견적요청중
-  //-       else 
-  //-         span  견적요청완료
 
   .container
     ul.estimate_received_list_wrap

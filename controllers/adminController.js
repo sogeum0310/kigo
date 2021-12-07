@@ -131,7 +131,7 @@ exports.user_detail_auth = async (req, res, next) => {
     await Model.User.findByIdAndUpdate(req.body.user, { authorization: req.body.auth })
     res.redirect('/admin/user/detail/' + req.body.user)
   } catch (error) {
-    res.render('admin/error', { error: error })
+    console.log(error)
   }
 }
 
@@ -140,7 +140,7 @@ exports.user_detail_service = async (req, res, next) => {
     await Model.User.findByIdAndUpdate(req.body.user, { service: true, start_date: Date.now() + 32400000 })
     res.redirect('/admin/user/detail/' + req.body.user)
   } catch (error) {
-    res.render('admin/error', { error: error })
+    console.log(error)
   }
 }
 
@@ -149,7 +149,7 @@ exports.user_detail_level = async (req, res, next) => {
     await Model.User.findByIdAndUpdate(req.body.user, { level: req.body.level })
     res.redirect('/admin/user/detail/' + req.body.user)
   } catch(error) {
-    res.render('admin/error', { error: error })
+    console.log(error)
   }
 }
 
@@ -158,7 +158,7 @@ exports.user_detail_drop = async (req, res, next) => {
     await Model.User.findByIdAndUpdate(req.body.user, { drop: true })
     res.redirect('/admin/user/detail/' + req.body.user)
   } catch(error) {
-    res.render('admin/error', { error: error })
+    console.log(error)
   }
 }
 
@@ -166,7 +166,6 @@ exports.user_detail_drop = async (req, res, next) => {
 exports.estimate_list = async (req, res, next) => {
   try {
     var estimate_responses = await Model.EstimateResponse.find({ submit: true }).populate('user')
-
     res.render('admin/estimate_list', { title: '계약서 목록', estimate_responses: estimate_responses })
   } catch (error) {
     res.render('admin/error', { error: error })
@@ -468,15 +467,20 @@ exports.message_delete = async (req, res, next) => {
 // Summernote image upload
 exports.summernote_ajax = async (req, res, next) => {
   try {
-    var my_file = req.files.file
+    var data = req.files.my_files
+    var new_file_names = []
+    var my_files = data instanceof Array ? data : [data]
 
-    var new_file_name = my_file.md5 + '.' + my_file.name.split('.').pop()
-    upload_path = 'files/blog/' + new_file_name
-    await my_file.mv(upload_path)
+    for (my_file of my_files) {
+      var new_file_name = my_file.md5 + '.' + my_file.name.split('.').pop()
+      upload_path = 'files/blog/' + new_file_name
+      await my_file.mv(upload_path)
+      new_file_names.push(new_file_name)
+    }
 
-    res.send('/files/blog/' + new_file_name)
+    res.send(new_file_names)
   } catch (error) {
-    res.render('admin/error', { error: error })
+    console.log(error)
   }
 }
 

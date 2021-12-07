@@ -62,7 +62,7 @@ exports.chat_file = async (req, res, next) => {
     res.send(new_file_names)
 
   } catch (error) {
-    res.render('error', { error: error })
+    console.log(error)
   }
 }
 

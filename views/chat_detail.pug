@@ -21,12 +21,9 @@ block content
       each chat_content in chat_contents 
         if (chat_content.user._id.toString()===user_global.id.toString())
           li.chat_me 
-            if (room.user.length > 1)
-              p.chat_num #[span.num]
-            else 
-              p.chat_num 
+            p.chat_num #[span.num]
             .chat_content !{chat_content.content}
-            .chat_date #{chat_content.reg_date.getFullYear()}.#{chat_content.reg_date.getMonth() +1}.#{chat_content.reg_date.getDate()}. #{chat_content.reg_date.getHours()}:#{chat_content.reg_date.getMinutes()}
+            .chat_date #{chat_content.reg_date.getFullYear()}.#{chat_content.reg_date.getMonth() + 1}.#{chat_content.reg_date.getDate()}. #{chat_content.reg_date.getHours()}:#{chat_content.reg_date.getMinutes()}
            
             //- #{chat_content.user.name}(나) :
         else 
@@ -34,11 +31,8 @@ block content
             span.chat_username #{chat_content.user.username}
             div.chat_content_box
               .chat_content !{chat_content.content}
-              if (room.user.length > 1)
-                p.chat_num #[span.num]
-              else 
-                p.chat_num 
-              .chat_date #{chat_content.reg_date.getFullYear()}.#{chat_content.reg_date.getMonth() +1}.#{chat_content.reg_date.getDate()}. #{chat_content.reg_date.getHours()}:#{chat_content.reg_date.getMinutes()}
+              p.chat_num #[span.num]
+              .chat_date #{chat_content.reg_date.getFullYear()}.#{chat_content.reg_date.getMonth() + 1}.#{chat_content.reg_date.getDate()}. #{chat_content.reg_date.getHours()}:#{chat_content.reg_date.getMinutes()}
 
   form#form.send_chat_form(action="")
     div 

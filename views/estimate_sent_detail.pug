@@ -59,14 +59,61 @@ block content
       //- pre= estimate_response.note
 
     if (estimate_response.submit===false)
-      form(action="", method="POST", enctype="multipart/form-data", onsubmit="return confirm('계약서를 전송하시겠습니까?')") 
+      form(name="contract-form", enctype="multipart/form-data") 
+        div.form-group(style="display:none")
+          label(for="") id 
+          input(type="text", name="id", value=estimate_response._id) 
         div.form-group
           label(for="") Choose contracts
-          input(type="file", name="my_files", multiple="true", required="true")
+          input#fileField(type="file", name="my_files", multiple="true")
         button(type="submit") 키고에 계약서 전송하기
     else 
       p.submit_btn 키고에 계약서를 전송하셨습니다.
 
+
+  script.
+    var form = document.forms["contract-form"]
+    var fileField = document.forms["contract-form"]["my_files"]
+    var id = document.forms["contract-form"]["id"]
+
+    form.addEventListener('submit', handleSubmit)
+
+    async function handleSubmit(e) {
+      e.preventDefault()
+
+      if (fileField.files.length < 1) {
+        return alert('한개 이상의 계약서를 업로드하세요')
+      }
+
+      var res = confirm('제출하시겠습니까?')
+      if (res===false) {
+        return
+      }
+
+      for (file of fileField.files) {
+        if (file.size > 5000000) {
+          return alert('5MB 이하의 파일만 업로드할 수 있습니다.')
+        }
+      }
+
+      var form_data = new FormData()
+      form_data.append('id', id.value)
+      for (file of fileField.files) {
+        form_data.append('my_files', file)
+      }
+
+      var data = await fetch ('/estimate/sent/ajax', {
+        method: 'POST',
+        //- headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: form_data
+      }).then(res => res.text())
+
+      if (data) {
+        alert('제출되었습니다')
+        form.style.display = 'none'
+      }
+    }
+    
 
   block scripts 
     script(src='/javascript/question_title.js')

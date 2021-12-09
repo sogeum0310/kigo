@@ -9,6 +9,16 @@ async function handleSubmit(e) {
 
   var formData = new FormData(form)
 
+  if (document.getElementById('file_portfolio')) {
+    var files = document.getElementById('file_portfolio').files
+    
+    for (file of files) {
+      if (file.size > 5000000) {
+        return alert('5MB 이하의 파일만 업로드할 수 있습니다.')
+      } 
+    }
+  }
+
   var results = await fetch('/validity', {
     method: 'POST',
     headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },

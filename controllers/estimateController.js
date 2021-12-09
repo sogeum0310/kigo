@@ -1,5 +1,6 @@
 const Model = require('../models/model')
 const async = require('async')
+const { default: xFrameOptions } = require('helmet/dist/middlewares/x-frame-options')
 
 
 // Estimate-Request
@@ -306,7 +307,7 @@ exports.estimate_sent_detail_get = async (req, res, next) => {
   }
 }
 
-exports.estimate_sent_detail_post = async (req, res, next) => {
+exports.estimate_sent_detail_ajax = async (req, res, next) => {
   try {
     if (req.files) {
       var data = req.files.my_files
@@ -319,17 +320,19 @@ exports.estimate_sent_detail_post = async (req, res, next) => {
 
         var file = new Model.File({
           table: 'estimate',
-          parent: req.params.id,
+          parent: req.body.id,
           name: item.name,
           md_name: new_file_name
         })
         await file.save()
       }
     }
-    await Model.EstimateResponse.findByIdAndUpdate(req.params.id, { submit: true })
-    res.redirect('/estimate/sent/' + req.params.id)
+
+    // Estimate response has been submitted 
+    await Model.EstimateResponse.findByIdAndUpdate(req.body.id, { submit: true })
+    res.send('ok')
   } catch (error) {
-    res.render('error', { error: error })
+    console.log(error)
   }
 }
 

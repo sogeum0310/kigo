@@ -13,6 +13,12 @@ $('#summernote').summernote({
 
 function sendFile(file, editor, welEditable) {
   var fileField = document.querySelector('input[type="file"][multiple]')
+  
+  for (file of fileField.files) {
+    if (file.size > 5000000) {
+      return alert('5MB 이하의 파일만 업로드할 수 있습니다.')
+    } 
+  }
 
   var form_data = new FormData()
   for (file of fileField.files) {

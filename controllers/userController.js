@@ -3,6 +3,7 @@ const async = require('async')
 const crypto = require('crypto')
 const sendEmail = require('../utils/sendEmail')
 const config = require('../config')
+const path = require('path');
 
 var passport = require('passport')
 var passportLocal = require('../auth/local');
@@ -162,8 +163,7 @@ exports.signup_business_post = async (req, res, next) => {
     await user_business.save()
 
     if (req.files) {
-      var data = req.files.portfolio
-      
+      var data = req.files.my_files
       var portfolios = data instanceof Array ? data : [data]
       
       for (portfolio of portfolios) {
@@ -180,9 +180,7 @@ exports.signup_business_post = async (req, res, next) => {
         await file.save()
       }
     }
-    
     res.redirect('/')
-
   } catch (error) {
     res.render('error', { error: error })
   }
@@ -237,7 +235,7 @@ exports.mypage_business_account_get = async (req, res, next) => {
     var estimate_items = await Model.EstimateItem.find().exec()
     var cities = await Model.EstimateItemDetail.find({ item: estimate_items[8]._id }).exec()
     var platforms = await Model.EstimateTopic.find()
-    var files = await Model.File.find({ table: 'user', parent: req.user.id }).sort([[ 'reg_date', 'descending' ]]).exec()
+    var files = await Model.File.find({ table: 'user', parent: req.user.id })
     var user_business = await Model.User.findById(req.user.id).exec()
 
     for (platform of platforms) {
@@ -264,13 +262,13 @@ exports.mypage_business_account_post = async (req, res, next) => {
       platform: req.body.platform,
       _id: req.user.id
     })
+
     await Model.User.findByIdAndUpdate(req.user.id, user_business) 
 
     if (req.files) {
-      var data = req.files.portfolio
-
+      var data = req.files.my_files
       var portfolios = data instanceof Array ? data : [data]
-    
+
       for (portfolio of portfolios) {
         var new_file_name = portfolio.md5 + '.' + portfolio.name.split('.').pop()
         upload_path = 'files/user/' + new_file_name
@@ -340,11 +338,20 @@ exports.access_password_post = async (req, res, next) => {
 
 exports.change_password = async (req, res, rext) => {
   try {
+    var errors = []
+    var error
+
     if (!req.body.password.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)) {
-      return res.send('비밀번호는 최소 1개 이상의 영어 대문자 및 소문자, 숫자가 있어야합니다. 길이는 최소 8자 이상이어야 합니다')
+      error = '비밀번호는 최소 1개 이상의 영어 대문자 및 소문자, 숫자가 있어야합니다. 길이는 최소 8자 이상이어야 합니다'
+      errors.push(error)
     }
     if (req.body.password!==req.body.password_confirm) {
-      return res.send('비밀번호가 일치하지 않습니다')
+      error = '비밀번호가 일치하지 않습니다'
+      errors.push(error)
+    }
+
+    if (errors.length > 0) {
+      return res.render('user_form_password', { errors: errors })
     }
 
     var salt = crypto.randomBytes(16).toString('hex');
@@ -424,29 +431,46 @@ exports.user_reset_password_get = async (req, res, next) => {
 
 exports.user_reset_password_post = async (req, res, next) => {
   try {
+    // Check user
     const user = await Model.User.findById(req.params.userId);
     if (!user) return res.status(400).send("회원이 존재하지 않습니다");
+    
+    // Check token
     const token = await Model.Token.findOne({
       userId: user.id,
       token: req.params.token,
     });
     if (!token) return res.status(400).send("유효하지 않거나 만료된 링크입니다");
     
+    // Check password
+    var errors = []
+    var error
+
     if (!req.body.password.match(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/)) {
-      return res.send('비밀번호는 최소 1개 이상의 영어 대문자 및 소문자, 숫자가 있어야합니다. 길이는 최소 8자 이상이어야 합니다')
+      error = '비밀번호는 최소 1개 이상의 영어 대문자 및 소문자, 숫자가 있어야합니다. 길이는 최소 8자 이상이어야 합니다'
+      errors.push(error)
     }
     if (req.body.password!==req.body.password_confirm) {
-      return res.send('비밀번호가 일치하지 않습니다')
+      error = '비밀번호가 일치하지 않습니다'
+      errors.push(error)
     }
 
+    if (errors.length > 0) {
+      return res.render('user_form_password', { errors: errors })
+    }
+
+    // Success, save new password
     var salt = crypto.randomBytes(16).toString('hex');
     var hashedPassword = crypto.pbkdf2Sync(req.body.password, salt, 310000, 32, 'sha256').toString('hex')
 
     user.password = hashedPassword
     user.salt = salt
-
     await user.save();
+    
+    // Delete token
     await token.delete();
+
+    // -
     res.send("비밀번호 재설정이 완료되었습니다");
   } catch (error) {
     res.render('error', { error: error })
@@ -456,7 +480,7 @@ exports.user_reset_password_post = async (req, res, next) => {
 // Validation check
 exports.validity = async (req, res, next) => {
   try {
-    // Validatio check for Signup only
+    // Validation check for Signup only
     if (req.body.update==="false") {
       var user = await Model.User.findOne({ username: req.body.username })
     }
@@ -464,7 +488,7 @@ exports.validity = async (req, res, next) => {
     var errors = []
     var error
 
-    // Validatio check for Signup only
+    // Validation check for Signup only
     if (req.body.update==="false") {
       if (user) {
         error = '이미 사용중인 아이디입니다'

@@ -56,7 +56,7 @@ router.post('/estimate/received/:id', estimate_controller.estimate_received_deta
 // Estimate-Sent
 router.get('/estimate/sent/list', estimate_controller.estimate_sent_list)
 router.get('/estimate/sent/:id', estimate_controller.estimate_sent_detail_get)
-router.post('/estimate/sent/:id', estimate_controller.estimate_sent_detail_post)
+router.post('/estimate/sent/ajax', estimate_controller.estimate_sent_detail_ajax)
 
 
 // User

@@ -39,7 +39,7 @@ exports.login_post = async (req, res, next) => {
 // Logout
 exports.logout = async (req, res, next) => {
   try {
-    req.session.destroy()
+    delete req.session.admin
     res.redirect('/admin')
   } catch (error) {
     res.render('admin/error', { error: error })

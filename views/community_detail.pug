@@ -15,15 +15,17 @@ block content
         li
           a(href="/community/create") 
             i.fa.fa-pencil(aria-hidden='true')
-        li
-          a(href="/community/" + blog._id + '/update')
-            i.fa.fa-pencil-square-o(aria-hidden='true')
-        li
-          a(href="")
-            i.fa.fa-trash-o(aria-hidden='true')
+        if (user_global.id===blog.user._id.toString())
+          li
+            a(href="/community/" + blog._id + "/update")
+              i.fa.fa-pencil-square-o(aria-hidden='true')
+          li
+            form(action="/community/delete", method="POST", onsubmit="return confirm('삭제하시겠습니까?')")
+              input(type="hidden", name="id", value=blog._id) 
+              button(type="submit") 
+                i.fa.fa-trash-o(aria-hidden='true')
     div.commnunity_content !{blog.content}
     
-
     //- Create comment 
     button.create_comment_btn(onclick=`createItem('${blog._id}', null, null, false)`) 댓글 작성하기
 
@@ -89,42 +91,9 @@ block content
                     button.commnet_fetch(onclick=`createItem('${blog_comment._id}', null, '${comment.user._id}', true)`) 답변
 
 
-
-
-
   script.
-    var form = document.querySelector('form')
-
-    // For create or update the comment
-    function createItem(parent, id, bites, coc) {
-      // Fill input in the form
-      //- var comment_show = document.querySelector('.create_comment_form')
-
-      document.querySelector('#parent').value = parent
-      document.querySelector('#id').value = id
-      document.querySelector('#bites').value = bites
-      document.querySelector('#coc').value = coc
-      // Fill textarea in the form
-      var content = document.querySelector('#content-' + id) ? document.querySelector('#content-' + id).textContent : ''
-      document.querySelector('textarea').textContent = content
-      //- comment_show.style.display =='block'
-    }
-
-    // For delete the comment
-    async function deleteItem(id) {
-      var res = confirm('제출하시겠습니까?')
-      if (res===false) {
-        return console.log('false')
-      }
-      // Send to server
-      var results = await fetch('/community/comment/delete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'id=' + id
-      }).then(res => res.text())
-      // Visually hidden
-      document.getElementById('item-' + id).style.display = 'none'
-    }
+    var deleteUrl = '/community/comment/delete'
+  script(src="/scripts/comment.js")
     
   block scripts
     script(src='/javascript/create_comment.js')

@@ -1,16 +1,17 @@
 const Model = require('../models/model')
 
 
+// Polling to track for user business data
 const something = function (req, res, next) {
-  try {
+  try { 
     setInterval(async () => {
-      if (!user) { return }
+      if (!req.user) { return }      
       var user = await Model.User.findById(req.user.id)
 
       if (user.account==='business') {
         // Level
         if (user.start_date) {
-          var m = 1000 * 60 * 60 * 24 * 30
+          var m = 3600000 * 24 * 30 // 1 month 
           if (user.level===1 && Date.now() + 32400000 - user.start_date > m) {
             user.level = 2
           }

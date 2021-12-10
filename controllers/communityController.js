@@ -59,3 +59,12 @@ exports.community_update_post = async (req, res, next) => {
     res.render('error', { error: error })
   }
 }
+
+exports.community_delete = async (req, res, next) => {
+  try {
+    await Model.Community.findByIdAndDelete(req.body.id)
+    res.redirect('/community/list')
+  } catch (error) {
+    res.render('error', { error: error })
+  }
+}

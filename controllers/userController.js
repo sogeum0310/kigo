@@ -5,7 +5,6 @@ const sendEmail = require('../utils/sendEmail')
 const config = require('../config')
 const path = require('path');
 
-var passport = require('passport')
 var passportLocal = require('../auth/local');
 var passportGoogle = require('../auth/google')
 var passportNaver = require('../auth/naver')
@@ -25,7 +24,7 @@ exports.login_get = (req, res, next) => {
   }
 }
 
-exports.login_post = passport.authenticate('local', {
+exports.login_post = passportLocal.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/login',
   failureMessage: true
@@ -312,10 +311,32 @@ exports.mypage_qna_list = async (req, res, next) => {
   }
 }
 
+// Lost username
+exports.lost_username_get = async (req, res, next) => {
+  try {
+    res.render('user_form_username', { title: '아이디 찾기' })
+  } catch (error) {
+    res.render('error', { error: error })
+  }
+}
+
+exports.lost_username_post = async (req, res, next) => {
+  try {
+    var user = await Model.User.findOne({ email: req.body.email })
+    if (user) {
+      res.send(user.username)
+    } else {
+      res.send('일치하는 회원 정보를 찾을 수 없습니다')
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 // Change password
 exports.access_password_get = async (req, res, next) => {
   try {
-    res.render('user_form_access', { title: '비밀번호 변경' })
+    res.render('user_form_access', { title: '비밀번호 변경', message: req.session.my_message })
   } catch (error) {
     res.render('error', { error: error })
   }
@@ -349,7 +370,7 @@ exports.change_password = async (req, res, rext) => {
       error = '비밀번호가 일치하지 않습니다'
       errors.push(error)
     }
-
+    
     if (errors.length > 0) {
       return res.render('user_form_password', { errors: errors })
     }
@@ -366,28 +387,6 @@ exports.change_password = async (req, res, rext) => {
   }
 }
 
-// Lost username
-exports.lost_username_get = async (req, res, next) => {
-  try {
-    res.render('user_form_username', { title: '아이디 찾기' })
-  } catch (error) {
-    res.render('error', { error: error })
-  }
-}
-
-exports.lost_username_post = async (req, res, next) => {
-  try {
-    var user = await Model.User.findOne({ email: req.body.email })
-    if (user) {
-      res.send(user.username)
-    } else {
-      res.send('no user')
-    }
-  } catch (error) {
-    console.log(error)
-  }
-}
-
 // Lost password
 exports.lost_password_get = async (req, res, next ) => {
   try {
@@ -400,11 +399,11 @@ exports.lost_password_get = async (req, res, next ) => {
 exports.lost_password_post = async (req, res, next) => {
   try {
     const user = await Model.User.findOne({ email: req.body.email });
-    if (user && user.social===true) {
-      return res.send('소셜로그인 회원입니다')
-    }
     if (!user) {
-      return res.send('회원정보를 찾을 수 없습니다.')
+      return res.render('user_form_email', { title: '비밀번호 찾기', error: '일치하는 회원정보를 찾을 수 없습니다.' })
+    }
+    if (user && user.social===true) {
+      return res.render('user_form_email', { title: '비밀번호 찾기', error: '소셜로그인 회원입니다' })
     }
     let token = await Model.Token.findOne({ userId: user.id });
     if (!token) {

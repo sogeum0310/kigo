@@ -1,10 +1,10 @@
 var passport = require('passport');
-var Strategy = require('passport-local');
+var LocalStrategy = require('passport-local');
 var Model = require('../models/model');
 var crypto = require('crypto');
 
 
-passport.use(new Strategy( // new Strategy(function)
+passport.use(new LocalStrategy( // new Strategy(function)
   // Parameter - Function
   async function(username, password, cb) {
     try {

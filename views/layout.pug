@@ -14,7 +14,9 @@ html
     script(src="/socket.io/socket.io.js") 
     script.
       var socket = io()
-      var user_global = JSON.parse('!{JSON.stringify(user_global)}')
+      if ('!{user_global}') {
+        var user_global = JSON.parse('!{JSON.stringify(user_global)}')
+      }
     
   body
     .page_wrap
@@ -24,6 +26,7 @@ html
         block content
   
       footer 
+        //- login status
         if (user_global_account)
           ul.foot_icon_wrap.clearfix 
             li 
@@ -58,6 +61,8 @@ html
               a(href="/mypage")
                 img(src='/img/foot_icon02.svg' alt='')
                 p 마이페이지
+        
+        //- logout status                  
         else
           ul.foot_icon_wrap.clearfix 
             h3 

@@ -34,7 +34,7 @@ passport.use(new GoogleStrategy( // new GoogleStrategy(object, function)
         upsert: true
       };
       Model.User.findOneAndUpdate(searchQuery, updates, options, function(err, user) {
-        if(err) {
+        if (err) {
           return done(err);
         } else {
           return done(null, user);

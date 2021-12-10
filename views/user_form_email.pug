@@ -2,13 +2,6 @@ extends layout
 block header 
   include z_back_header.pug
 block content 
-  //- h1= title
-
-  //- form(action="", method="POST")
-  //-   input(type="text", name="email") 
-  //-   button(type="submit") confirm
-  //-   p We sent verification to your email.
-
   .container.lost_password_page_wrap 
     h1.lost_password_title= title
 
@@ -16,3 +9,6 @@ block content
       input.frm_input.full_input(type="text", name="email") 
       button.submit_btn(type="submit") 확인
       p.lost_password_subtxt 이메일로 비밀번호 변경 링크를 발송해드립니다
+
+    if (error)
+      p #{error}

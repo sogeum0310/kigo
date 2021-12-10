@@ -82,43 +82,11 @@ block content
 
 
 
-
-    script.
-      var form = document.querySelector('form')
-
-      // For create or update the comment
-      function createItem(parent, id, bites, coc) {
-        // Fill input in the form
-        document.querySelector('#parent').value = parent
-        document.querySelector('#id').value = id
-        document.querySelector('#bites').value = bites
-        document.querySelector('#coc').value = coc
-        // Fill textarea in the form
-        var content = document.querySelector('#content-' + id) ? document.querySelector('#content-' + id).textContent : ''
-        document.querySelector('textarea').textContent = content
-      }
-
-      // For delete the comment
-      async function deleteItem(id) {
-        var res = confirm('y/n')
-        if (res===false) {
-          return console.log('false')
-        }
-        // Send to server
-        var results = await fetch('/admin/qna/comment/delete', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: 'id=' + id
-        }).then(res => res.text())
-        // Visually hidden
-        document.getElementById('item-' + id).style.display = 'none'
-      }
+  script.
+    var deleteUrl = '/admin/qna/comment/delete'
+  script(src="/scripts/comment.js")
 
 
-
-    
-
-      
   block scripts
     script(src='/javascript/create_comment.js')
 

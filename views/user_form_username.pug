@@ -41,7 +41,7 @@ block content
         body: formData
       }).then(res => res.text())
 
-      document.querySelector('#demo').textContent = results
+      document.querySelector('#demo').textContent = `회원님의 아이디는 ${results}입니다`
     }
   script(src='/javascript/lost_id.js')
    

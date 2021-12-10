@@ -38,8 +38,7 @@ block content
 
       var results = await fetch('/user/lostusername', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData).toString()
+        body: formData
       }).then(res => res.text())
 
       document.querySelector('#demo').textContent = results

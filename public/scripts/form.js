@@ -21,8 +21,7 @@ async function handleSubmit(e) {
 
   var results = await fetch('/validity', {
     method: 'POST',
-    headers: { 'Content-Type' : 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams(formData).toString()
+    body: formData
   }).then(obj => obj.json())
   
   if (results.errors===null) {

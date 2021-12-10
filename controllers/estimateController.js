@@ -147,8 +147,8 @@ exports.estimate_received_list = async (req, res, next) => {
     var last_estimate_response = await Model.EstimateResponse.findOne({ user: req.user.id }).sort([['reg_date', 'descending']])
     if (last_estimate_response) {
       var long = new Date() - last_estimate_response.reg_date
-      if (long < 1000*60*60) {
-        var ms = 1000*60*60 - long
+      if (long < 3600000) { // 1 hour
+        var ms = 3600000 - long
         ms = Math.floor(ms/60000)
         var message = ms + ' 분 뒤에 견적서를 작성할 수 있습니다'
       }
@@ -158,21 +158,19 @@ exports.estimate_received_list = async (req, res, next) => {
 
     for (estimate_request of estimate_requests) {
       //  Display valid estimate request to some user
-      if  (user_business.platform.includes(estimate_request.topic._id) && estimate_request.count < 10 && !estimate_request.drop.includes(req.user.id)) {
+      if  (user_business.platform.includes(estimate_request.topic._id) && estimate_request.count < 10 && !estimate_request.drop.includes(req.user.id) && estimate_request.reg_date > user_business.start_date ) {
         estimate_request.matched = true
       }
-      // Responsed estimate request
+      // estimate request that is done
       var estimate_response = await Model.EstimateResponse.findOne({ estimate_request: estimate_request._id, user:req.user.id })
       if (estimate_response) {
         estimate_request.done = true
       }
-
+      // New estimate 
       if (!estimate_request.views.includes(req.user.id)) {
         estimate_request.new = true
       }
     }
-
-    console.log(estimate_requests)
 
     res.render('estimate_received_list', { title: '받은 견적요청', estimate_received_list: estimate_requests, message: message })
   } catch (error) {

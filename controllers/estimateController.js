@@ -147,8 +147,8 @@ exports.estimate_received_list = async (req, res, next) => {
     var last_estimate_response = await Model.EstimateResponse.findOne({ user: req.user.id }).sort([['reg_date', 'descending']])
     if (last_estimate_response) {
       var long = new Date() - last_estimate_response.reg_date
-      if (long < 3600000) { // 1 hour
-        var ms = 3600000 - long
+      if (long < 360000) { // 1 hour 
+        var ms = 360000 - long
         ms = Math.floor(ms/60000)
         var message = ms + ' 분 뒤에 견적서를 작성할 수 있습니다'
       }

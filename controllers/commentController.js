@@ -35,7 +35,7 @@ exports.community_comment_create = async (req, res, next) => {
       res.redirect('/community/' + req.body.url)
     }
   } catch (error) {
-    res.render('error', { error: error })
+    console.log(error)
   }
 }
 // Community-Comment delete
@@ -84,7 +84,7 @@ exports.qna_comment_create = async (req, res, next) => {
       res.redirect('/admin/qna/' + req.body.url)
     }
   } catch (error) {
-    res.render('error', { error: error })
+    console.log(error)
   }
 }
 // Qna-Answer delete
@@ -135,7 +135,7 @@ exports.estimate_review_create = async (req, res, next) => {
       res.redirect('/estimate/response/' + req.body.url)
     }
   } catch (error) {
-    res.render('error', { error: error })
+    console.log(error)
   }
 }
 // Review delete
@@ -174,6 +174,7 @@ exports.mypage_review_list = async (req, res, next) => {
 // Review create
 exports.mypage_review_create = async (req, res, next) => {
   try {
+
     if (!req.body.id) { // Create
       var bites = req.body.bites ? req.body.bites : null
       var blog_comment = new Model.Review({
@@ -190,7 +191,7 @@ exports.mypage_review_create = async (req, res, next) => {
       res.redirect('/mypage/review/list')
     }
   } catch (error) {
-    res.render('error', { error: error })
+    console.log(error)
   }
 }
 // Review delete

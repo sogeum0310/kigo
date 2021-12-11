@@ -1,4 +1,5 @@
 const Model = require('../models/model');
+const crypto = require('crypto')
 
 
 // Index
@@ -25,14 +26,15 @@ exports.login_get = async (req, res, next) => {
 
 exports.login_post = async (req, res, next) => {
   try {
-    if (req.body.username==='admin' && req.body.password==='1234') {
-      req.session.admin = 'admin'
-      res.redirect('/admin')
-    } else {
-      res.redirect('/admin')
-    }
+    var admin = await Model.KigoAdmin.findOne({ username: req.body.username }) 
+    if (!admin) { return res.redirect('/admin') }
+    var hashedPassword = crypto.pbkdf2Sync(req.body.password, admin.salt, 310000, 32, 'sha256').toString('hex')
+    if (admin.password!==hashedPassword) { return res.redirect('/admin') }
+    // If admin want to change password, send token-based password reset form
+    req.session.admin = 'admin'
+    res.redirect('/admin')
   } catch (error) {
-    res.render('admin/error', { error: error })
+    console.log(error)
   }
 }
 

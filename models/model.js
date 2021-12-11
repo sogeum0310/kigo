@@ -34,6 +34,11 @@ const EstimateTextSchema = new Schema({
   text: { type: String }
 })
 
+const KigoAdminSchema = new Schema({
+  username: { type: String },
+  password: { type: String },
+  salt: { type: String }
+})
 
 // User 
 const UserSchema = new Schema({
@@ -155,6 +160,7 @@ const tokenSchema = new Schema({
 
 
 // User
+exports.KigoAdmin = mongoose.model('KigoAdmin', KigoAdminSchema)
 exports.User = mongoose.model('User', UserSchema)
 
 // Estimate form

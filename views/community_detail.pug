@@ -3,27 +3,27 @@ block header
   include z_back_header.pug 
 block content 
   .container
-    h3.blog_detail_title= blog.title
-    pre= blog.user.username
-    p.blog_detail_date #{blog.reg_date.getFullYear()}.#{blog.reg_date.getMonth() +1}.#{blog.reg_date.getDate()}. #{blog.reg_date.getHours()}:#{blog.reg_date.getMinutes()}
+    //- h3.blog_detail_title= blog.title
+    //- pre= blog.user.username
+    //- p.blog_detail_date #{blog.reg_date.getFullYear()}.#{blog.reg_date.getMonth() +1}.#{blog.reg_date.getDate()}. #{blog.reg_date.getHours()}:#{blog.reg_date.getMinutes()}
     //- small  (#{blog.views})
-    .clearfix.community_tool_wrap
-      ul.celarfix
-        li
-          a(href="/community/list") 
-            i.fa.fa-list(aria-hidden='true')
-        li
-          a(href="/community/create") 
-            i.fa.fa-pencil(aria-hidden='true')
-        if (user_global.id===blog.user._id.toString())
-          li
-            a(href="/community/" + blog._id + "/update")
-              i.fa.fa-pencil-square-o(aria-hidden='true')
-          li
-            form(action="/community/delete", method="POST", onsubmit="return confirm('삭제하시겠습니까?')")
-              input(type="hidden", name="id", value=blog._id) 
-              button(type="submit") 
-                i.fa.fa-trash-o(aria-hidden='true')
+    //- .clearfix.community_tool_wrap
+    //-   ul.celarfix
+    //-     li
+    //-       a(href="/community/list") 
+    //-         i.fa.fa-list(aria-hidden='true')
+    //-     li
+    //-       a(href="/community/create") 
+    //-         i.fa.fa-pencil(aria-hidden='true')
+    //-     if (user_global.id===blog.user._id.toString())
+    //-       li
+    //-         a(href="/community/" + blog._id + "/update")
+    //-           i.fa.fa-pencil-square-o(aria-hidden='true')
+    //-       li
+    //-         form(action="/community/delete", method="POST", onsubmit="return confirm('삭제하시겠습니까?')")
+    //-           input(type="hidden", name="id", value=blog._id) 
+    //-           button(type="submit") 
+    //-             i.fa.fa-trash-o(aria-hidden='true')
     div.commnunity_content !{blog.content}
     
     //- Create comment 

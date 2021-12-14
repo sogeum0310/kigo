@@ -1,3 +1,13 @@
+function request_confirm(){
+  if (!confirm("견적요청서를 보내겠습니까?")) {
+    return false;
+} else {
+    alert("견적요청서를 보냈습니다.");
+}
+}
+
+
+
 $("#619886a13d51db1799238adb").click(function(){
   if($("#txt-619886a13d51db1799238adb").hasClass("on")){
     $("#txt-619886a13d51db1799238adb").removeClass("on");

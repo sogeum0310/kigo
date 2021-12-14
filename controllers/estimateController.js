@@ -13,6 +13,24 @@ exports.estimate_request_list = async (req, res, next) => {
   }
 }
 
+// 견적문의 first
+
+exports.estimate_request_first_list = async (req, res, next) => {
+  try {
+    res.render('estimate_request_first_list', { title: '견적요청' })
+  } catch (error) {
+    res.render('error', { error: error })
+  }
+}
+
+exports.estimate_request_online_list = async (req, res, next) => {
+  try {
+    res.render('estimate_request_online_list', { title: '견적요청' })
+  } catch (error) {
+    res.render('error', { error: error })
+  }
+}
+
 exports.estimate_request_create_get = async (req, res, next) => {
   try {
     if (!req.query.topic) {

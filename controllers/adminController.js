@@ -74,7 +74,7 @@ exports.user_personal_list = async (req, res, next) => {
     }
 
     var user_personals = await Model.User.paginate({ account: 'personal' }, options)
-    console.log(user_personals)
+    // console.log(user_personals)
     res.render('admin/user_list', { title: '일반사용자', users: user_personals })
     // result.docs
     // result.totalDocs = 100
@@ -167,7 +167,7 @@ exports.user_detail_drop = async (req, res, next) => {
 // Estimate request
 exports.estimate_list = async (req, res, next) => {
   try {
-    var estimate_responses = await Model.EstimateResponse.find({ submit: true }).populate('user')
+    var estimate_responses = await Model.EstimateResponse.find({ user: req.params.user, submit: true }).populate('user')
     res.render('admin/estimate_list', { title: '계약서 목록', estimate_responses: estimate_responses })
   } catch (error) {
     res.render('admin/error', { error: error })

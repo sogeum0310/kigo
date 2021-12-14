@@ -60,13 +60,21 @@ block content
             td 
               label(for="") 포트폴리오(image)
             td 
-              input.full_input#file_portfolio(type="file", name="my_files", accept="image/*", multiple="true")
-              //- Portfolio list 
+              #file_portfolio_wrap 
+                input.full_input#file_portfolio(type="file", name="my_files", accept="image/*", multiple="true")
+                //- Portfolio list 
+                //- pre= files
+              p   
+                button#addItem.received_plus_btn
+                  i.fa.fa-plus-circle(aria-hidden='true')
               if (user_business && files)
                 ul#file_list
                   each file in files 
-                    li(id=file._id) #{file.name} 
-                      a(href="javascript:void(0)", onclick=`deleteFile('${file._id}')`) &times;  
+                    li(id=file._id)
+                      img(src="/files/user/" + file.md_name, alt="")
+                      a(href="javascript:void(0)", onclick=`deleteFile('${file._id}')`) 
+                        i.fa.fa-times-circle(aria-hidden='true')
+
                     
           tr 
             td 
@@ -85,13 +93,26 @@ block content
 
       p 
         button.signup_btn(type="submit") 확인
+  script.
+    var itemTable = document.getElementById('file_portfolio_wrap')
+    var itemRow = document.getElementById('file_portfolio')
+    var addItem = document.getElementById('addItem')
 
+    addItem.addEventListener('click', function (e) {
+      e.preventDefault()
+      var newItem = itemRow.cloneNode(true)
+      for (td of newItem.children) {
+        td.firstElementChild.value = ''
+        td.firstElementChild.required=false
+      }
+      itemTable.appendChild(newItem)
+    })
   script(src="/javascript/business_sign_required.js")
   script(src="/scripts/form.js") 
   script.
     // Delete portfolio with AJAX
     async function deleteFile(id) {
-      var res = confirm('y/n')
+      var res = confirm('삭제하시겠습니까?')
       if (res===true) {
         await fetch('/mypage/ajax/file/delete', {
           method: 'POST',

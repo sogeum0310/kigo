@@ -17,9 +17,14 @@ file_btn.click(function(){
 });
 
 $(".file_plus_btn").click(function(){
+  $(".file_send_input").val("");
   $(".chat_file_form").slideToggle("on");
 })
 $(".file_minus_btn").click(function(){
+  $(".chat_file_form").slideToggle("on");
+})
+
+$(".chat_file_submit").click(function(){
   $(".chat_file_form").slideToggle("on");
 })
 

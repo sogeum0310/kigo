@@ -3,6 +3,7 @@ extends layout
 block content 
   h1.admin_detail_con_title= title 
   //- pre= user
+  //- pre= user.file
 
   table.user_detail_stat 
     //- Both business and personal user
@@ -30,6 +31,16 @@ block content
     
     //- Business user
     if (user.account==="business")
+      if (user.file)
+        tr.user_detail_files 
+          th 포트폴리오
+          td
+            div 
+              img(src="/files/user/" + user.file.md_name, alt="")
+      else 
+        tr.user_detail_files 
+          th 포트폴리오
+          td 없음
       tr.user_detail_auth
         th 승인상태
         td 
@@ -64,14 +75,14 @@ block content
       tr.user_detail_level
         th 회원 등급
         td 
-          form(action="/admin/user/detail/level", method="POST", onsubmit="return confirm('y/n')") 
+          form(action="/admin/user/detail/level", method="POST", onsubmit="return confirm('변경하시겠습니까?')") 
             input(type="hidden", name="user", value=user._id)
-            select(name="level") 
-              option(value="1", selected=(user.level===1 ? true : false)) level1
-              option(value="2", selected=(user.level===2 ? true : false)) level2
-              option(value="3", selected=(user.level===3 ? true : false)) level3  
-              option(value="4", selected=(user.level===4 ? true : false)) level4
-            button(type="submit") submit
+            select.frm_input(name="level" style="margin-right:10px") 
+              option(value="1", selected=(user.level===1 ? true : false)) 신규
+              option(value="2", selected=(user.level===2 ? true : false)) 동메달
+              option(value="3", selected=(user.level===3 ? true : false)) 은메달  
+              option(value="4", selected=(user.level===4 ? true : false)) 금메달
+            button.frm_input(type="submit") 변경
     
     //- Personal user
     else 
@@ -97,14 +108,14 @@ block content
             option(value="false", selected=(user.authorization===false ? true : false)) 이용정지
           button.user_detail_auth_btn(type="submit") 확인
     tr 
-      th drop 
+      th 탈퇴여부
       if (user.drop===false)
         td 
-          form(action="/admin/user/detail/drop", method="POST", onsubmit="return confirm('y/n')") 
+          form(action="/admin/user/detail/drop", method="POST", onsubmit="return confirm('제출하시겠습니까?')") 
             input(type="hidden", name="user", value=user._id)
-            button(type="submit") submit
+            button.frm_input(type="submit") 탈퇴처리
       else 
-        td dead
+        td 탈퇴한 회원입니다.
 
   //- TAKE A BREAK
   //- ...

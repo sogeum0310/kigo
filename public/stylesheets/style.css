@@ -118,6 +118,7 @@ img{
 .page_wrap > nav{
   margin-bottom: 15px;
 }
+
 @media(max-width:767px){
   .header_box{
     border-bottom: 1px solid #ccc;
@@ -1003,10 +1004,10 @@ img{
   font-size: 16px;
   margin-bottom: 12px;
 }
-.request_topics_wrap li:nth-child(8) a{
+.request_topics_wrap li.offline_list a{
   position: relative;
 }
-.request_topics_wrap li:nth-child(8) a::after{
+.request_topics_wrap li.offline_list  a::after{
   content: "옥외광고, 버스광고, 지하철광고, 라디오광고, 잡지 광고 등";
   display: block;
   font-size: 12px;
@@ -1026,8 +1027,8 @@ img{
   height: auto;
   position: relative;
   margin-bottom: 15px;
-  padding-left: 9px;
-  padding-right:9px;
+  padding-left: 30px;
+  padding-right:30px;
 }
 .demo_box .demobar_box, .demo_box #demo{
   display: inline-block;
@@ -1155,8 +1156,8 @@ img{
   color: #fff;
   font-size: 16px;
   text-align: center;
-  width: 100%;
-  padding: 10px 0;
+  width: 50%;
+  padding: 7.5px 0;
 }
 .request_commentbox{
   min-height: 200px;
@@ -1188,6 +1189,10 @@ img{
   }
   .estimate_form_group_s_box div label{
     font-size: 14px;
+  }
+  .demo_box{
+    padding-left: 9px;
+    padding-right: 9px;
   }
 }
 @media(max-width:360px){
@@ -1307,6 +1312,17 @@ img{
   height: auto;
   position: relative;
   margin-bottom: 10px;
+}
+#file_list li{
+  position: relative;
+}
+#file_list li a{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  color: #000;
+  z-index: 1;
 }
 
 .estimate_request_detail_stat h3{
@@ -1591,7 +1607,7 @@ img{
 }
 .send_chat_form > div, .chat_file_form > div{
   width: 80%;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   display: inline-block;
   position: relative;
 }
@@ -1607,15 +1623,27 @@ img{
   cursor: pointer;
 }
 
-.send_chat_input{
+.send_chat_input, .file_send_input{
   width: 100%;
   padding: 8.5px 8px;
   outline: none;
   border: none;
+  position: relative;
+}
+.file_send_input::after{
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: #ccc;
 }
 .send_chat_btn{
   width: 20%;
-  padding: 8px 0;
+  height: 36px;
+  line-height: 36px;
   border: none;
   outline: none;
   background: #4B37FF;
@@ -2432,10 +2460,11 @@ img{
 }
 .chat_file_form button{
   width: 20%;
-  background: #fff;
-  border: 1px solid #6F27E8;
+  background: #6F27E8;
+  border: none;
+  color: #fff;
   outline: none;
-  padding: 8px 0;
+  padding: 11.25px 0;
   font-size: 14px;
 }
 
@@ -3104,7 +3133,7 @@ ul.alarm_wrap li div:last-child{
 }
 @media(max-width:400px){
   .chat_file_form button{
-    padding: 10.5px 0;
+    padding: 13px 0;
     font-size: 10px;
     position: relative;
     top: -1px;

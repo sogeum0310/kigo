@@ -25,7 +25,7 @@ router.post('/user/detail/level', admin_controller.user_detail_level)
 router.post('/user/detail/drop', admin_controller.user_detail_drop)
 
 // Estimate 
-router.get('/estimate/list', admin_controller.estimate_list)
+router.get('/estimate/list/:user', admin_controller.estimate_list)
 router.get('/estimate/:id', admin_controller.estimate_detail)
 
 // Notice

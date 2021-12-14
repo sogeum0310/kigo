@@ -22,7 +22,7 @@ block content
     if (estimate_items)
 
       div.wrap
-          form.form_container(action="", method="POST", onsubmit="return confirm('견적요청서를 보내겠습니까?');") 
+          form.form_container(action="", method="POST", onsubmit="return request_confirm();") 
             each estimate_item in estimate_items 
               div.form-group.estimate_form_group
                 div.estimate_form_group_s_box.clearfix
@@ -113,5 +113,7 @@ block content
     prev.style.display = 'none'
 
     document.getElementById('demo_bar').style.width = Math.floor(- num / groups.length + x) + "%" ;
+  
   script(src='/javascript/request_slide.js')
   script(src='/javascript/request_txtinput.js')
+

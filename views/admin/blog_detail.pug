@@ -60,9 +60,12 @@ block content
           p.blog_commnet_content(id="content-" + blog_comment._id) #{blog_comment.content} 
 
           .commnet_tools_box.clearfix
-            if (user_global && blog_comment.user._id.toString()===user_global.id.toString())
-              button(onclick=`createItem('${blog_comment.parent}', '${blog_comment._id}')`) 수정
-              button(onclick=`deleteItem('${blog_comment._id}')`) 삭제
+            //- if (user_global && blog_comment.user._id.toString()===user_global.id.toString())
+            //-   button(onclick=`createItem('${blog_comment.parent}', '${blog_comment._id}')`) 수정
+            //-   button(onclick=`deleteItem('${blog_comment._id}')`) 삭제
+
+            button.create_comment_btn.adm_btn(onclick=`createItem('${blog_comment.parent}', '${blog_comment._id}')`) 수정
+            button.create_comment_btn.adm_btn(onclick=`deleteItem('${blog_comment._id}')`) 삭제
             //- if (user_global)
             //-   button(onclick=`createItem('${blog_comment._id}', null, null, true)`) add
             //- More comments

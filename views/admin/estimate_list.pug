@@ -26,5 +26,5 @@ block content
           | 원
         td #{estimate_response.reg_date.getFullYear()}.#{estimate_response.reg_date.getMonth() +1}.#{estimate_response.reg_date.getDate()}. #{estimate_response.reg_date.getHours()}:#{estimate_response.reg_date.getMinutes()}
         td 
-          a(href=estimate_response._id) 상세보기
+          a(href="/admin/estimate/" + estimate_response._id) 상세보기
 

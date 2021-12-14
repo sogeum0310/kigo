@@ -40,6 +40,10 @@ router.post('/company/contact/message/create', company_controller.company_messag
 
 
 // Estimate-Request
+router.get('/estimate/request/first_list', estimate_controller.estimate_request_first_list)
+router.get('/estimate/request/online_list', estimate_controller.estimate_request_online_list)
+// 견적문의 페이지분리
+
 router.get('/estimate/request/list', estimate_controller.estimate_request_list)
 router.get('/estimate/request/form', estimate_controller.estimate_request_create_get)
 router.post('/estimate/request/form', estimate_controller.estimate_request_create_post)

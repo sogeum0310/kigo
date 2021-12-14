@@ -78,6 +78,28 @@
 }
 .navi_wrap.on .navi_top{
 }
+
+.navi a.kakao_consulting_btn{
+  background: #ffeb00;
+  color: #3c1e1e;
+}
+.navi a.kakao_consulting_btn span{
+  position: relative;
+  padding-left: 30px;
+}
+.navi a.kakao_consulting_btn span::before{
+  content: "";
+  display: block;
+  width: 30px;
+  height: 30px;
+  background: url(/img/sns_kakao_s.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
 /* 메뉴 클릭시 */
 
 @media(max-width:767px){

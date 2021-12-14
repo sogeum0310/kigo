@@ -90,33 +90,38 @@ block content
             | 관리
 
         each user in users.docs
-          tr 
-            td.user_list_num #{num++}
-            td.user_list_id #{user.username}
-            td.user_list_name #{user.name}
-            td.user_list_mail #{user.email}
-            td.user_list_joindate #{user.reg_date.toLocaleDateString()}
-            td.user_list_startdate 
-              if (user.start_date) 
-                span #{user.start_date.toLocaleDateString()}
-            td.user_list_review_count
-              span= user.review
-            td.user_list_contract_count #{user.contract}
-            td.user_list_ranking 
-              if (user.level == '1')
-                span 신규
-              if (user.level == '2')
-                span 동메달
-              if (user.level == '3')
-                span 은메달
-              if (user.level == '4')
-                span 금메달
-            td.user_list_state 
-                span=(user.authorization===true ? '사용' : '정지')
-            td.user_list_mana 
-              span=(user.drop===true ? 'O' : 'X')
-            td.user_list_tool 
-              a(href="/admin/user/detail/" + user._id) 상세보기
+          //- 탈퇴한 회원은 보이지 않게
+          if (user.drop === false)
+            tr 
+              td.user_list_num #{num++}
+              td.user_list_id #{user.username}
+              td.user_list_name #{user.name}
+              td.user_list_mail #{user.email}
+              td.user_list_joindate #{user.reg_date.toLocaleDateString()}
+              td.user_list_startdate 
+                if (user.start_date) 
+                  span #{user.start_date.toLocaleDateString()}
+              td.user_list_review_count
+                span= user.review
+              //- Contract
+              td.user_list_contract_count 
+                a(href="/admin/estimate/list/" + user._id) #{user.contract}
+              //- Ranking
+              td.user_list_ranking 
+                if (user.level == '1')
+                  span 신규
+                if (user.level == '2')
+                  span 동메달
+                if (user.level == '3')
+                  span 은메달
+                if (user.level == '4')
+                  span 금메달
+              td.user_list_state 
+                  span=(user.authorization===true ? '사용' : '정지')
+              td.user_list_mana 
+                span=(user.drop===true ? 'O' : 'X')
+              td.user_list_tool 
+                a(href="/admin/user/detail/" + user._id) 상세보기
   
   br
 

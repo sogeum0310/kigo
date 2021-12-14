@@ -46,7 +46,7 @@ block content
         each estimate_response_note in estimate_response.note
           if (estimate_response_note.length>0)
             p #{estimate_response_note}
-    div.sent_detail_response_date.sent_detail_response_date02.clearfix
+    div.sent_detail_response_date.sent_detail_response_date02.clearfix(style="margin-bottom:30px")
       p 견적가
       p
        span.money_comma #{estimate_response.cost.reduce(function (sum, value) { return sum + Number(value) }, 0)}
@@ -64,9 +64,9 @@ block content
           label(for="") id 
           input(type="text", name="id", value=estimate_response._id) 
         div.form-group
-          label(for="") Choose contracts
-          input#fileField(type="file", name="my_files", multiple="true")
-        button(type="submit") 키고에 계약서 전송하기
+          label.sound_only(for="") Choose contracts
+          input#fileField.full_input.frm_input(type="file", name="my_files", multiple="true", requied)
+        button.submit_btn(type="submit") 키고에 계약서 전송하기
     else 
       p.submit_btn 키고에 계약서를 전송하셨습니다.
 
@@ -85,10 +85,10 @@ block content
         return alert('한개 이상의 계약서를 업로드하세요')
       }
 
-      var res = confirm('제출하시겠습니까?')
+      var res = confirm('견적서를 보내겠습니까?')
       if (res===false) {
         return
-      }
+      } 
 
       for (file of fileField.files) {
         if (file.size > 5000000) {
@@ -109,7 +109,7 @@ block content
       }).then(res => res.text())
 
       if (data) {
-        alert('제출되었습니다')
+        alert('견적서를 보냈습니다.')
         form.style.display = 'none'
       }
     }
